@@ -1,0 +1,183 @@
+= ilo
+
+ilo is a link:https://github.com/containers/toolbox[toolbox] inspired tool to create/manage link:https://reproducible-builds.org/[reproducible build environments] based on link:https://www.opencontainers.org/[OCI] container images.
+It defaults to run with link:https://podman.io/[podman] but can work with link:https://www.docker.com/products/container-runtime[docker] as well.
+
+== Usage
+
+Make sure that `ilo` is installed in your path or otherwise accessible from your terminal.
+
+[source:shell]
+----
+[you@hostname project-dir]$ ilo
+[root@container project-dir]#
+----
+
+By default, `ilo` will use `fedora:latest` as container image and execute `/bin/bash` inside the running container in an interactive tty session.
+Both can be configured, as well as the runtime used by `ilo` (podman or docker) and other options.
+A list of available options can be seen by calling `ilo --help`.
+
+[source:shell]
+----
+[you@hostname project-dir]$ ilo --help
+ilo - manage reproducible build environments
+
+Usage
+  ilo [OPTIONS]
+
+Options
+  --help        Show help information (you are reading them right now). Defaults to [false]
+  --debug       Show extra debug information. Defaults to [false]
+  --runtime     Picks the container runtime. Possible values are 'podman' and 'docker'. Defaults to [podman]
+  --image       Selects the container image to run. Defaults to [fedora:latest]
+  --command     Defines the command to run. Defaults to [/bin/bash]
+----
+
+== Customize Build Environment
+
+In most cases `fedora:latest` will not be enough to compile/test/package/run your software.
+While you can install additional packages inside the container, those changes will be lost once the container is removed.
+Instead define your build environment either in a link:https://docs.docker.com/engine/reference/builder/[Dockerfile] or any other link:https://github.com/opencontainers/image-spec/blob/master/spec.md[OCI Image] compliant way.
+Make sure that this image can be accessed by everyone in your team and use `ilo --image your.image.here:latest` to open a new instance of your build environment.
+
+One easy way to accomplish this for open source projects, is to use the link:https://docs.docker.com/docker-hub/builds/[automated build system] from Docker Hub.
+Make sure that Docker Hub rebuilds your build environment on every change to master (or any other branch) and have your contributors pull the resulting images to their machines.
+
+== .rc Files
+
+`ilo` reads multiple `.rc` files during startup which can be used to store/share commonly used options for `ilo`.
+The following list of locations is processed by `ilo` sequentially from top to bottom.
+Options can be specified multiple times, however only the first specified option will used.
+
+1. `<project-dir>/.ilo/ilo.user.rc`
+2. `<project-dir>/.ilo.user.rc`
+3. `<project-dir>/.ilo/ilo.rc`
+4. `<project-dir>/.ilo.rc`
+
+The `.user.rc` files should contain options that are specific to a single user.
+Thus those files should not be shared amongst the team, e.g. by adding them to your `.gitignore`.
+The other files should be shared with the team in order to make sure that everyone gets exactly the same build environment.
+
+== `direnv` Integration
+
+link:https://direnv.net/[direnv] can be used to automatically execute a command once you enter a directory.
+Together with `ilo`, you can do the following:
+
+[source,shell]
+----
+[you@hostname ~]$ cd path/to/your/project
+[root@container project-dir]#
+----
+
+As soon as you enter the directory of your project, `direnv` will call `ilo` which in turn will open your build environment for you.
+In order to create a setup like this, first link:https://direnv.net/#basic-installation[install direnv] and then place a `.envrc` file in the root of your project which just contains `ilo` as its contents.
+
+[source,txt]
+----
+[you@hostname project-dir]$ cat .envrc
+ilo
+----
+
+== Tooling Support
+
+`ilo` is able to speak with the following tools.
+
+|===
+|Tool |Status
+
+|link:https://podman.io/[podman]
+|Used since 1.0.0
+
+|link:https://github.com/containers/podman-compose[podman-compose]
+|Integrated since 1.0.0
+
+|link:https://github.com/containers/buildah[buildah]
+|Integrated since 1.0.0
+
+|link:https://www.docker.com/products/container-runtime[docker]
+|Used since 1.0.0
+
+|link:https://docs.docker.com/compose/[docker-compose]
+|Integrated since 1.0.0
+
+|link:https://kubernetes.io/docs/reference/kubectl/overview/[kubectl]
+|Integrated since 1.0.0
+|===
+
+Not all of them are really used by `ilo` yet, but might be in the future.
+See the list of open tickets to improve tooling support:
+
++ link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1359&milestone=0&assignee=0[builda]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1357&milestone=0&assignee=0[docker]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1358&milestone=0&assignee=0[docker-compose]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1369&milestone=0&assignee=0[kubectl]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1355&milestone=0&assignee=0[podman]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1356&milestone=0&assignee=0[podman-compose]
+
+In order to see tooling support on your own system, run `ilo --help --debug`.
+
+[source:shell]
+----
+[you@hostname project-dir]$ ilo --help --debug
+ilo - manage reproducible build environments
+
+Usage
+  ilo [OPTIONS]
+
+Options
+  ...
+
+This following tools are supported/installed on this system:
+  docker: v19.03.5 [/usr/bin/docker]
+  docker-compose: v1.22.0 [/usr/bin/docker-compose]
+----
+
+The additional output at the bottom shows those tools, that are both supported by `ilo` and installed on your system.
+In case that list is empty, make sure to check the installation guide of the tools listed above.
+
+== Installation
+
+There is no binary distribution of `ilo` yet, however you can build it easily from source.
+If that is not something you want to do, you can download the preview relases for systems that link:https://bintray.com/metio/generic/ilo/1.0.0-preview#files/ilo-1.0.0-preview.zip[have Java 13 installed] or linux systems that link:https://bintray.com/metio/generic/ilo/1.0.0-with-jre-linux-preview#files/ilo-with-jre-linux-1.0.0-preview.zip[don't have Java installed] at all.
+
+== Building
+
+`ilo` currently needs **Java 13** to build.
+Version 14 is not link:https://github.com/gradle/gradle/issues/10248[yet supported].
+Earlier versions can be used to build `ilo`, just make sure to replace `TARGET_JAVA_VERSION` with the version you want in the root link:build.gradle.kts[build.gradle.kts] file.
+**Java 11** is the minimal supported version.
+
+[source,shell]
+----
+[you@hostname ~]$ git clone <upstream> # see mirrors at bottom
+[you@hostname ~]$ cd ilo
+[you@hostname ~/ilo]$ ./gradlew build
+----
+
+The binary distribution will be located in `modules/app/cli/build/distributions`.
+In case you want to help package `ilo` for your preferred operating system, take a look at the link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1361&milestone=0&assignee=0[open packaging issues].
+
+== Alternatives
+
+In case `ilo` does not offer what you are looking for, take a look at the following tools:
+
+* link:https://github.com/containers/toolbox[toolbox]
+* link:https://gitian.org/[gitian]
+* link:https://rbm.torproject.org/[rbm]
+
+== License
+
+To the extent possible under law, the author(s) have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide.
+This software is distributed without any warranty.
+
+You should have received a copy of the CC0 Public Domain Dedication along with this software.
+If not, see http://creativecommons.org/publicdomain/zero/1.0/.
+
+== Mirrors
+
+`ilo` is mirrored across several git repositories.
+Use any of the following to get a copy of the source.
+
+* https://codeberg.org/metio.wtf/ilo
+* https://github.com/metio.wtf/ilo
+* https://gitlab.com/metio.wtf/ilo

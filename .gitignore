@@ -1,0 +1,9 @@
+.idea/
+.gradle/
+out/
+build/
+!.idea/codeStyles
+!.idea/inspectionProfiles
+!.idea/runConfigurations
+!.idea/gradle.xml
+.bash_history

@@ -1,0 +1,14 @@
+= Changelog
+
+All user facing changes are documented in this file.
+For a developer/contributor oriented changelog, take a look at the link:https://codeberg.org/metio.wtf/ilo/commits/[commit history].
+
+== link:https://codeberg.org/metio.wtf/ilo/compare/v1.0.0...HEAD[Unreleased]
+
+=== Features
+
+- Start single container
+- Specify which image to use
+- Specify which command to run
+- Persist those settings in .rc files
+- Support podman/docker
