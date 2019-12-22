@@ -43,7 +43,7 @@ The end result should look like this:
 ----
 $ git remote -v
 mirrors DISABLED (fetch)
-mirrors github:metio.wtf/ilo.git (push)
+mirrors github:metio/ilo.git (push)
 mirrors gitlab:metio.wtf/ilo.git (push)
 mirrors bitbucket:metio-wtf/ilo.git (push)
 origin  codeberg:metio.wtf/ilo.git (fetch)
