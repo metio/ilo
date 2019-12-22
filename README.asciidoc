@@ -137,24 +137,13 @@ In case that list is empty, make sure to check the installation guide of the too
 
 == Installation
 
-There is no binary distribution of `ilo` yet, however you can build it easily from source.
-If that is not something you want to do, you can download the preview relases for systems that link:https://bintray.com/metio/generic/ilo/1.0.0-preview#files/ilo-1.0.0-preview.zip[have Java 13 installed] or linux systems that link:https://bintray.com/metio/generic/ilo/1.0.0-with-jre-linux-preview#files/ilo-with-jre-linux-1.0.0-preview.zip[don't have Java installed] at all.
+Use the following locations in order to download the binary distribution of `ilo`:
 
-== Building
+* https://github.com/metio/ilo/releases
+* https://codeberg.org/metio.wtf/ilo/releases
+* https://bintray.com/metio/generic/ilo/
 
-`ilo` currently needs **Java 13** to build.
-Version 14 is not link:https://github.com/gradle/gradle/issues/10248[yet supported].
-Earlier versions can be used to build `ilo`, just make sure to replace `TARGET_JAVA_VERSION` with the version you want in the root link:build.gradle.kts[build.gradle.kts] file.
-**Java 11** is the minimal supported version.
-
-[source,shell]
-----
-[you@hostname ~]$ git clone <upstream> # see mirrors at bottom
-[you@hostname ~]$ cd ilo
-[you@hostname ~/ilo]$ ./gradlew build
-----
-
-The binary distribution will be located in `modules/app/cli/build/distributions`.
+None of the widely used package managers have `ilo` in their repository yet.
 In case you want to help package `ilo` for your preferred operating system, take a look at the link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1361&milestone=0&assignee=0[open packaging issues].
 
 == User Support

@@ -1,3 +1,59 @@
+= Contributor Guide
+
+Thank you so much for improving `ilo`!
+Without a healthy community, any open source project is doomed.
+
+== Git Branching Model
+
+We are using the so called link:https://github.com/nvie/gitflow[git-flow] branching model.
+The `master` branch always contains the latest public stable release.
+The next release can be found inside a branch called `release/x.y.z`.
+While working on a new feature or bugfix, branch off the `develop` branch which always contains the latest development snapshot.
+Release branches should be created in order to finalize a release & help us maintain that version in the future, e.g. by backporting fixes/features.
+
+== Issue Management
+
+We are using the issue tracker over at link:https://codeberg.org/metio.wtf/ilo/issues[codeberg] to track issues.
+Make generous use of labels in order to make issues easier to find.
+Each release has a corresponding milestone on codeberg.
+
+== Release Process
+
+1. Create a new release branch (if it does not exist yet): `git checkout -b release/x.y.z`
+2. Update the `PROJECT_VERSION` variable inside the root link:build.gradle.kts[build.gradle.kts] file to the release version
+3. Update the link:CHANGELOG.asciidoc[changelog] for the new release
+4. Build the project: `./gradlew build`
+5. Commit all changes: `git commit -S -m 'version x.y.z'`
+6. Push all changes to codeberg.org
+7. Open a pull request on codeberg.org that merges `release./x.y.z` into `master`
+8. Do a final review of everything and merge the changes into master
+9. Create a new release on codeberg.org, use the changelog entries for this release as description, upload the distribution archives
+10. Create a new release on github.com, use the changelog entries for this release as description, upload the distribution archives
+11. Create a new release on bintray, use the changelog entries for this release as description, upload the distribution archives
+12. Update the matrix chat room title with a link to the new release
+13. Send an announcement to the mailing list
+
+== Project Layout
+
+This project is split into multiple link:https://gradle.org/[Gradle] subprojects.
+Each project provides a small part of the overall functionality of `ilo`.
+
+== Building the Project
+
+`ilo` currently needs **Java 13** to build.
+Version 14 is not link:https://github.com/gradle/gradle/issues/10248[yet supported].
+Earlier versions can be used to build `ilo`, just make sure to replace `TARGET_JAVA_VERSION` with the version you want in the root link:build.gradle.kts[build.gradle.kts] file.
+**Java 11** is the minimal supported version.
+
+[source,shell]
+----
+[you@hostname ~]$ git clone <upstream> # see mirrors at bottom
+[you@hostname ~]$ cd ilo
+[you@hostname ~/ilo]$ ./gradlew build
+----
+
+The binary distribution will be located in `modules/app/cli/build/distributions`.
+
 == SSH Setup
 
 Use the following example config as reference and adapt according to your needs:
