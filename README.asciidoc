@@ -163,6 +163,7 @@ In case you need help, don't panic - we've all been there!
 Try the following resources in order to get help:
 
 * link:https://codeberg.org/metio.wtf/ilo/issues/new[open a new ticket]
+* link:https://matrix.to/#/#ilo:matrix.org[join the chat room]
 * link:https://metio.groups.io/g/ilo[send an email to the mailing list]
 * link:https://stackoverflow.com/questions/tagged/ilo[ask on stackoverflow]
 * Take a walk outside & come back to your issue with a fresh mind
