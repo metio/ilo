@@ -7,7 +7,7 @@ Use the following example config as reference and adapt according to your needs:
 Host github
         HostName github.com
         User git
-        IdentityFile ~/.ssh/gitlab
+        IdentityFile ~/.ssh/github
 
 Host gitlab
         HostName gitlab.com
@@ -32,7 +32,7 @@ In order to have all mirrors in sync, do the following:
 [source,shell]
 ----
 $ git remote add mirrors DISABLED
-$ git remote set-url --add --push mirrors github:metio.wtf/ilo.git
+$ git remote set-url --add --push mirrors github:metio/ilo.git
 $ git remote set-url --add --push mirrors gitlab:metio.wtf/ilo.git
 $ git remote set-url --add --push mirrors bitbucket:metio-wtf/ilo.git
 ----
