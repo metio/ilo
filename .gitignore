@@ -3,6 +3,7 @@
 out/
 build/
 !.idea/codeStyles
+!.idea/copyright
 !.idea/inspectionProfiles
 !.idea/runConfigurations
 !.idea/gradle.xml
