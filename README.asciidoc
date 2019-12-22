@@ -192,3 +192,4 @@ Use any of the following to get a copy of the source.
 * https://codeberg.org/metio.wtf/ilo
 * https://github.com/metio.wtf/ilo
 * https://gitlab.com/metio.wtf/ilo
+* https://bitbucket.org/metio-wtf/ilo

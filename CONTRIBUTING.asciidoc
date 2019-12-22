@@ -1,0 +1,53 @@
+== SSH Setup
+
+Use the following example config as reference and adapt according to your needs:
+
+[source]
+----
+Host github
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/gitlab
+
+Host gitlab
+        HostName gitlab.com
+        User git
+        IdentityFile ~/.ssh/gitlab
+
+Host bitbucket
+        HostName bitbucket.org
+        User git
+        IdentityFile ~/.ssh/bitbucket
+
+Host codeberg
+        HostName codeberg.org
+        User git
+        IdentityFile ~/.ssh/codeberg
+----
+
+== Git Mirrors
+
+In order to have all mirrors in sync, do the following:
+
+[source,shell]
+----
+$ git remote add mirrors DISABLED
+$ git remote set-url --add --push mirrors github:metio.wtf/ilo.git
+$ git remote set-url --add --push mirrors gitlab:metio.wtf/ilo.git
+$ git remote set-url --add --push mirrors bitbucket:metio-wtf/ilo.git
+----
+
+The end result should look like this:
+
+[source,shell]
+----
+$ git remote -v
+mirrors DISABLED (fetch)
+mirrors github:metio.wtf/ilo.git (push)
+mirrors gitlab:metio.wtf/ilo.git (push)
+mirrors bitbucket:metio-wtf/ilo.git (push)
+origin  codeberg:metio.wtf/ilo.git (fetch)
+origin  codeberg:metio.wtf/ilo.git (push)
+----
+
+Use `git push mirrors` in order to keep the mirrors up to date.
