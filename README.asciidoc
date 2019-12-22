@@ -107,7 +107,7 @@ ilo
 Not all of them are really used by `ilo` yet, but might be in the future.
 See the list of open tickets to improve tooling support:
 
-+ link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1359&milestone=0&assignee=0[builda]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1359&milestone=0&assignee=0[builda]
 * link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1357&milestone=0&assignee=0[docker]
 * link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1358&milestone=0&assignee=0[docker-compose]
 * link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1369&milestone=0&assignee=0[kubectl]
@@ -156,6 +156,16 @@ Earlier versions can be used to build `ilo`, just make sure to replace `TARGET_J
 
 The binary distribution will be located in `modules/app/cli/build/distributions`.
 In case you want to help package `ilo` for your preferred operating system, take a look at the link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1361&milestone=0&assignee=0[open packaging issues].
+
+== User Support
+
+In case you need help, don't panic - we've all been there!
+Try the following resources in order to get help:
+
+* link:https://codeberg.org/metio.wtf/ilo/issues/new[open a new ticket]
+* link:https://metio.groups.io/g/ilo[send an email to the mailing list]
+* link:https://stackoverflow.com/questions/tagged/ilo[ask on stackoverflow]
+* Take a walk outside & come back to your issue with a fresh mind
 
 == Alternatives
 
