@@ -3,7 +3,18 @@
 All user facing changes are documented in this file.
 For a developer/contributor oriented changelog, take a look at the link:https://codeberg.org/metio.wtf/ilo/commits/[commit history].
 
-== link:https://codeberg.org/metio.wtf/ilo/compare/v1.0.0...HEAD[Unreleased]
+== link:https://codeberg.org/metio.wtf/ilo/compare/master...develop[Unreleased]
+
+- nothing new yet
+
+== link:https://codeberg.org/metio.wtf/ilo/compare/release/1.0.0...release/1.1.0[1.1.0]
+
+- nothing new yet
+
+== link:https://codeberg.org/metio.wtf/ilo/src/tag/1.0.0[1.0.0]
+
+The first public release of `ilo`.
+Therefore neither changes nor bugfixes, but rather an initial feature set, that seems to work fine (using podman) and is portable (as portable as podman/docker).
 
 === Features
 
