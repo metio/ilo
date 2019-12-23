@@ -107,12 +107,12 @@ ilo
 Not all of them are really used by `ilo` yet, but might be in the future.
 See the list of open tickets to improve tooling support:
 
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1359&milestone=0&assignee=0[builda]
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1357&milestone=0&assignee=0[docker]
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1358&milestone=0&assignee=0[docker-compose]
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1369&milestone=0&assignee=0[kubectl]
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1355&milestone=0&assignee=0[podman]
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1356&milestone=0&assignee=0[podman-compose]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1359&milestone=0&assignee=0[open builda tickets]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1357&milestone=0&assignee=0[open docker tickets]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1358&milestone=0&assignee=0[open docker-compose tickets]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1369&milestone=0&assignee=0[open kubectl tickets]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1355&milestone=0&assignee=0[open podman tickets]
+* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1356&milestone=0&assignee=0[open podman-compose tickets]
 
 In order to see tooling support on your own system, run `ilo --help --debug`.
 
