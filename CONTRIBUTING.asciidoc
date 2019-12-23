@@ -3,6 +3,28 @@
 Thank you so much for improving `ilo`!
 Without a healthy community, any open source project is doomed.
 
+== How to become a contributor
+
+In order to become a contributor for `ilo`, you have to complete these steps:
+
+* Fork the project on codeberg/github/gitlab/bitbucket
+* Sign the waiver
+* Create a pull-/merge-request
+* Celebrate \o/
+
+In order to sign the waiver follow these steps.
+They assume, that you have cloned your fork locally (or added another remote) to an existing clone.
+
+[source]
+----
+$ git checkout -b contributor/$(id -u -n)
+$ gpg2 --no-version --armor --sign AUTHORS/WAIVER
+$ mv AUTHORS/WAIVER.asc AUTHORS/WAIVER-signed-by-$(id -u -n)-$(date "+%Y-%m-%d").asc
+$ git add AUTHORS/WAIVER-signed-by-$(id -u -n)-$(date "+%Y-%m-%d").asc
+$ git commit -s -S -m 'sign CLA'
+$ git push -u origin contributor/$(id -u -n)
+----
+
 == Git Branching Model
 
 We are using the so called link:https://github.com/nvie/gitflow[git-flow] branching model.
