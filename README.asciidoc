@@ -140,8 +140,9 @@ In case that list is empty, make sure to check the installation guide of the too
 Use the following locations in order to download the binary distribution of `ilo`:
 
 * https://github.com/metio/ilo/releases
-* https://codeberg.org/metio.wtf/ilo/releases
+* https://bitbucket.org/metio-wtf/ilo/downloads/
 * https://bintray.com/metio/generic/ilo/
+* https://codeberg.org/metio.wtf/ilo/releases
 
 None of the widely used package managers have `ilo` in their repository yet.
 In case you want to help package `ilo` for your preferred operating system, take a look at the link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1361&milestone=0&assignee=0[open packaging issues].
