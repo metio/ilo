@@ -73,7 +73,7 @@ val jpackageLocation: String by extra(
 
 //region Versions
 val PROJECT_VERSION = "1.0.0"
-val TARGET_JAVA_VERSION = JavaVersion.VERSION_13
+val TARGET_JAVA_VERSION = JavaVersion.VERSION_11
 val JUNIT5_VERSION = "5.6.0-M1"
 val JUNIT5_PLATFORM_VERSION = "1.5.2"
 //endregion
