@@ -83,6 +83,7 @@ configure(subprojects) {
     //region Plugins
     apply(plugin = "java")
     apply(plugin = "org.javamodularity.moduleplugin")
+    apply(plugin = "jacoco")
     //endregion
 
     //region Metadata
@@ -114,6 +115,12 @@ configure(subprojects) {
         "testImplementation"("org.junit.jupiter:junit-jupiter-api:$JUNIT5_VERSION")
         "testRuntimeOnly"("org.junit.jupiter:junit-jupiter-engine:$JUNIT5_VERSION")
         "testRuntimeOnly"("org.junit.platform:junit-platform-launcher:$JUNIT5_PLATFORM_VERSION")
+    }
+    //endregion
+
+    //region Test Coverage
+    configure<JacocoPluginExtension> {
+        toolVersion = "0.8.5"
     }
     //endregion
 }

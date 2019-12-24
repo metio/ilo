@@ -23,11 +23,19 @@ public final class ExecutablePaths {
   }
 
   public static Optional<Path> of(final String exec) {
-    return Stream.of(System.getenv("PATH").split(Pattern.quote(File.pathSeparator)))
-        .map(Paths::get)
-        .map(path -> path.resolve(exec))
-        .filter(binary -> Files.exists(binary) && Files.isExecutable(binary))
+    return allPaths().map(path -> path.resolve(exec))
+        .filter(ExecutablePaths::canExecute)
         .findFirst();
+  }
+
+  static Stream<Path> allPaths() {
+    return Stream.of(System.getenv("PATH")
+        .split(Pattern.quote(File.pathSeparator)))
+        .map(Paths::get);
+  }
+
+  static boolean canExecute(final Path binary) {
+    return Files.exists(binary) && Files.isExecutable(binary);
   }
 
 }
