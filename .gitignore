@@ -8,3 +8,4 @@ build/
 !.idea/runConfigurations
 !.idea/gradle.xml
 .bash_history
+.jdk

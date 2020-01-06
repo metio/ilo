@@ -44,8 +44,5 @@ include(":modules:tools:docker-compose-impl")
 //endregion
 
 //region App
-include(":modules:app:orchestration")
-include(":modules:app:usage-help")
-include(":modules:app:user-input")
 include(":modules:app:cli")
 //endregion

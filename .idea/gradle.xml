@@ -15,9 +15,6 @@
             <option value="$PROJECT_DIR$/modules" />
             <option value="$PROJECT_DIR$/modules/app" />
             <option value="$PROJECT_DIR$/modules/app/cli" />
-            <option value="$PROJECT_DIR$/modules/app/orchestration" />
-            <option value="$PROJECT_DIR$/modules/app/usage-help" />
-            <option value="$PROJECT_DIR$/modules/app/user-input" />
             <option value="$PROJECT_DIR$/modules/exec" />
             <option value="$PROJECT_DIR$/modules/exec/exec-api" />
             <option value="$PROJECT_DIR$/modules/exec/process-builder" />

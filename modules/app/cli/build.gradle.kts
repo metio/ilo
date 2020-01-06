@@ -80,12 +80,6 @@ if (enableJpackage) {
 
 //region Dependencies
 dependencies {
-    //region App
-    implementation(project(":modules:app:user-input"))
-    implementation(project(":modules:app:orchestration"))
-    implementation(project(":modules:app:usage-help"))
-    //endregion
-
     //region Exec
     implementation(project(":modules:exec:exec-api"))
     implementation(project(":modules:exec:process-builder"))
@@ -116,8 +110,8 @@ dependencies {
     //endregion
 
     //region externals
-    implementation("org.tinylog:tinylog-api:2.0.1")
-    implementation("org.tinylog:tinylog-impl:2.0.1")
+    implementation("info.picocli:picocli:4.1.4")
+    annotationProcessor("info.picocli:picocli-codegen:4.1.4")
     //endregion
 }
 //endregion

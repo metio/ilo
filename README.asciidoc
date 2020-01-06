@@ -15,23 +15,7 @@ Make sure that `ilo` is installed in your path or otherwise accessible from your
 
 By default, `ilo` will use `fedora:latest` as container image and execute `/bin/bash` inside the running container in an interactive tty session.
 Both can be configured, as well as the runtime used by `ilo` (podman or docker) and other options.
-A list of available options can be seen by calling `ilo --help`.
-
-[source:shell]
-----
-[you@hostname project-dir]$ ilo --help
-ilo - manage reproducible build environments
-
-Usage
-  ilo [OPTIONS]
-
-Options
-  --help        Show help information (you are reading them right now). Defaults to [false]
-  --debug       Show extra debug information. Defaults to [false]
-  --runtime     Picks the container runtime. Possible values are 'podman' and 'docker'. Defaults to [podman]
-  --image       Selects the container image to run. Defaults to [fedora:latest]
-  --command     Defines the command to run. Defaults to [/bin/bash]
-----
+A list of available options can be seen by calling `ilo --help` (or `ilo -h` for short).
 
 == Customize Build Environment
 
@@ -114,27 +98,6 @@ See the list of open tickets to improve tooling support:
 * link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1355&milestone=0&assignee=0[open podman tickets]
 * link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1356&milestone=0&assignee=0[open podman-compose tickets]
 
-In order to see tooling support on your own system, run `ilo --help --debug`.
-
-[source:shell]
-----
-[you@hostname project-dir]$ ilo --help --debug
-ilo - manage reproducible build environments
-
-Usage
-  ilo [OPTIONS]
-
-Options
-  ...
-
-This following tools are supported/installed on this system:
-  docker: v19.03.5 [/usr/bin/docker]
-  docker-compose: v1.22.0 [/usr/bin/docker-compose]
-----
-
-The additional output at the bottom shows those tools, that are both supported by `ilo` and installed on your system.
-In case that list is empty, make sure to check the installation guide of the tools listed above.
-
 == Installation
 
 Use the following locations in order to download the binary distribution of `ilo`:
@@ -146,6 +109,18 @@ Use the following locations in order to download the binary distribution of `ilo
 
 None of the widely used package managers have `ilo` in their repository yet.
 In case you want to help package `ilo` for your preferred operating system, take a look at the link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1361&milestone=0&assignee=0[open packaging issues].
+
+== CLI Autocomplete
+
+In order to get autocomplete working in your shell, run the following after installing `ilo`:
+
+[source]
+----
+$ source <(ilo generate-completion)
+----
+
+Place the same line in your `.bashrc` or similar file.
+Otherwise autocomplete will only work in your current shell.
 
 == User Support
 
@@ -165,6 +140,8 @@ In case `ilo` does not offer what you are looking for, take a look at the follow
 * link:https://github.com/containers/toolbox[toolbox]
 * link:https://gitian.org/[gitian]
 * link:https://rbm.torproject.org/[rbm]
+* link:https://github.com/nerdvegas/rez[rez]
+* link:https://github.com/mottosso/bleeding-rez[bleeding-rez]
 
 == License
 

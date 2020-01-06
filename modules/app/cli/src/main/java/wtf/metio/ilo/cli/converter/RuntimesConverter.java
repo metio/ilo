@@ -6,10 +6,16 @@
  *
  */
 
-plugins {
-    `java-library`
-}
+package wtf.metio.ilo.cli.converter;
 
-dependencies {
-    implementation("net.sf.jopt-simple:jopt-simple:6.0-alpha-3")
+import picocli.CommandLine;
+import wtf.metio.ilo.cli.model.Runtimes;
+
+public final class RuntimesConverter implements CommandLine.ITypeConverter<Runtimes> {
+
+  @Override
+  public Runtimes convert(final String value) {
+    return Runtimes.fromAlias(value);
+  }
+
 }

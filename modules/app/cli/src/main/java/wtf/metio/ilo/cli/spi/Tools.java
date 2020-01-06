@@ -38,7 +38,7 @@ public final class Tools {
     // utility class
   }
 
-  public static List<? extends CliTool> detectedTools(final Executables executables) {
+  public static Stream<? extends CliTool> detectedTools(final Executables executables) {
     final var podman = getPodmanCli(executables);
     final var podmanCompose = getPodmanComposeCli(executables);
     final var buildah = getBuildahCli(executables);
@@ -57,7 +57,7 @@ public final class Tools {
       HandleErrors.handleMissingRuntime(SUPPORTED_RUNTIMES);
     }
 
-    return tools;
+    return tools.stream();
   }
 
   private static Optional<PodmanCli> getPodmanCli(final Executables executables) {

@@ -8,6 +8,7 @@
 
 package wtf.metio.ilo.exec.api;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface Executables {
@@ -15,5 +16,7 @@ public interface Executables {
   Optional<String> runAndReadOutput(String... args);
 
   int runAndAttach(String... args);
+
+  int runAndAttach(List<String> args);
 
 }

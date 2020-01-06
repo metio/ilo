@@ -13,6 +13,7 @@ import wtf.metio.ilo.exec.api.Executables;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Optional;
 
 final class ProcessBuilderExecutables implements Executables {
@@ -44,6 +45,12 @@ final class ProcessBuilderExecutables implements Executables {
     } catch (final IOException | InterruptedException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public int runAndAttach(final List<String> args) {
+    // return runAndAttach(args.toArray(String[]::new));
+    return 0;
   }
 
 }
