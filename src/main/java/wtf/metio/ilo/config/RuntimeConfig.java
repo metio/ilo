@@ -3,7 +3,6 @@
  * directory of this distribution and at http://creativecommons.org/publicdomain/zero/1.0/. No part of ilo,
  * including this file, may be copied, modified, propagated, or distributed except according to the terms contained
  * in the LICENSE file.
- *
  */
 
 package wtf.metio.ilo.config;
