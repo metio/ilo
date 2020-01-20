@@ -6,4 +6,20 @@
  *
  */
 
-rootProject.name = "ilo"
+package wtf.metio.ilo.utils;
+
+import java.util.List;
+
+public final class Debug {
+
+  private Debug() {
+    // utility class
+  }
+
+  public static void showExecutedCommand(final boolean debugEnabled, final List<String> arguments) {
+    if (debugEnabled) {
+      System.out.println("ilo executes: " + String.join(" ", arguments));
+    }
+  }
+
+}

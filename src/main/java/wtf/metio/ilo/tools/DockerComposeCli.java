@@ -6,4 +6,16 @@
  *
  */
 
-rootProject.name = "ilo"
+package wtf.metio.ilo.tools;
+
+/**
+ * Represents the docker-compose CLI and its commands.
+ */
+public interface DockerComposeCli extends CliTool {
+
+    @Override
+    default String name() {
+        return "docker-compose";
+    }
+
+}

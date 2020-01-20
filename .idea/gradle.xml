@@ -8,35 +8,10 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="13" />
+        <option name="gradleJvm" value="11" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/modules" />
-            <option value="$PROJECT_DIR$/modules/app" />
-            <option value="$PROJECT_DIR$/modules/app/cli" />
-            <option value="$PROJECT_DIR$/modules/exec" />
-            <option value="$PROJECT_DIR$/modules/exec/exec-api" />
-            <option value="$PROJECT_DIR$/modules/exec/process-builder" />
-            <option value="$PROJECT_DIR$/modules/formats" />
-            <option value="$PROJECT_DIR$/modules/formats/formats-api" />
-            <option value="$PROJECT_DIR$/modules/formats/ilo-rc-format" />
-            <option value="$PROJECT_DIR$/modules/os" />
-            <option value="$PROJECT_DIR$/modules/os/generic" />
-            <option value="$PROJECT_DIR$/modules/tools" />
-            <option value="$PROJECT_DIR$/modules/tools/buildah" />
-            <option value="$PROJECT_DIR$/modules/tools/buildah-impl" />
-            <option value="$PROJECT_DIR$/modules/tools/docker" />
-            <option value="$PROJECT_DIR$/modules/tools/docker-compose" />
-            <option value="$PROJECT_DIR$/modules/tools/docker-compose-impl" />
-            <option value="$PROJECT_DIR$/modules/tools/docker-impl" />
-            <option value="$PROJECT_DIR$/modules/tools/kubectl" />
-            <option value="$PROJECT_DIR$/modules/tools/kubectl-impl" />
-            <option value="$PROJECT_DIR$/modules/tools/podman" />
-            <option value="$PROJECT_DIR$/modules/tools/podman-compose" />
-            <option value="$PROJECT_DIR$/modules/tools/podman-compose-impl" />
-            <option value="$PROJECT_DIR$/modules/tools/podman-impl" />
-            <option value="$PROJECT_DIR$/modules/tools/tools-api" />
           </set>
         </option>
         <option name="useAutoImport" value="true" />

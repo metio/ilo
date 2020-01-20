@@ -6,4 +6,16 @@
  *
  */
 
-rootProject.name = "ilo"
+package wtf.metio.ilo.converter;
+
+import picocli.CommandLine;
+import wtf.metio.ilo.model.ComposeRuntime;
+
+public final class ComposeRuntimeConverter implements CommandLine.ITypeConverter<ComposeRuntime> {
+
+  @Override
+  public ComposeRuntime convert(final String value) {
+    return ComposeRuntime.fromAlias(value);
+  }
+
+}

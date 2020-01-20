@@ -6,4 +6,16 @@
  *
  */
 
-rootProject.name = "ilo"
+package wtf.metio.ilo.exec;
+
+public final class Exec {
+
+  private Exec() {
+    // utility class
+  }
+
+  public static Executables executables() {
+    return new ProcessBuilderExecutables();
+  }
+
+}

@@ -6,4 +6,13 @@
  *
  */
 
-rootProject.name = "ilo"
+package wtf.metio.ilo.config;
+
+import java.util.List;
+import java.util.Map;
+
+public interface RuntimeConfig {
+
+  Map<String, List<String>> readConfig();
+
+}

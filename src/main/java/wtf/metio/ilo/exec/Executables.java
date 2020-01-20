@@ -6,4 +6,15 @@
  *
  */
 
-rootProject.name = "ilo"
+package wtf.metio.ilo.exec;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface Executables {
+
+  Optional<String> runAndReadOutput(String... args);
+
+  int runAndWaitForExit(List<String> args);
+
+}

@@ -9,7 +9,7 @@ Make sure that `ilo` is installed in your path or otherwise accessible from your
 
 [source:shell]
 ----
-[you@hostname project-dir]$ ilo
+[you@hostname project-dir]$ ilo shell
 [root@container project-dir]#
 ----
 
@@ -142,6 +142,8 @@ In case `ilo` does not offer what you are looking for, take a look at the follow
 * link:https://rbm.torproject.org/[rbm]
 * link:https://github.com/nerdvegas/rez[rez]
 * link:https://github.com/mottosso/bleeding-rez[bleeding-rez]
+* link:http://rbld.io/[rebuild]
+* link:https://github.com/jasonwhite/ducible[ducible]
 
 == License
 

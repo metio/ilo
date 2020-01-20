@@ -6,4 +6,16 @@
  *
  */
 
-rootProject.name = "ilo"
+package wtf.metio.ilo.tools;
+
+/**
+ * Represents the podman-compose CLI and its commands.
+ */
+public interface PodmanComposeCli extends CliTool {
+
+  @Override
+  default String name() {
+    return "podman-compose";
+  }
+
+}

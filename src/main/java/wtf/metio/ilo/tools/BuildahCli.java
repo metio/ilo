@@ -6,4 +6,16 @@
  *
  */
 
-rootProject.name = "ilo"
+package wtf.metio.ilo.tools;
+
+/**
+ * Represents the buildah CLI and its commands.
+ */
+public interface BuildahCli extends CliTool {
+
+    @Override
+    default String name() {
+        return "buildah";
+    }
+
+}

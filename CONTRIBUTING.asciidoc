@@ -62,10 +62,10 @@ Each project provides a small part of the overall functionality of `ilo`.
 
 == Building the Project
 
-`ilo` currently needs **Java 13** to build.
+`ilo` currently needs **Java 11** to build.
 Version 14 is not link:https://github.com/gradle/gradle/issues/10248[yet supported].
-Earlier versions can be used to build `ilo`, just make sure to replace `TARGET_JAVA_VERSION` with the version you want in the root link:build.gradle.kts[build.gradle.kts] file.
-**Java 11** is the minimal supported version.
+Earlier versions cannot be used to build `ilo`.
+Newer versions like 12 and 13 can be used, just make sure to replace `TARGET_JAVA_VERSION` with the version you want in the root link:build.gradle.kts[build.gradle.kts] file.
 
 [source,shell]
 ----
@@ -75,6 +75,17 @@ Earlier versions can be used to build `ilo`, just make sure to replace `TARGET_J
 ----
 
 The binary distribution will be located in `modules/app/cli/build/distributions`.
+
+=== Use `ilo` to build `ilo`
+
+In case you already have `ilo` installed on your system, do the following:
+
+[source,shell]
+----
+[you@hostname ~]$ git clone <upstream> # see mirrors at bottom
+[you@hostname ~]$ cd ilo
+[you@hostname ~/ilo]$ ilo run "./gradlew build"
+----
 
 == SSH Setup
 
