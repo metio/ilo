@@ -1,3 +1,0 @@
-shell --image openjdk:latest
-shell --volume .jdk:/opt/openjdk-13
-shell /bin/bash -- -c "cp --recursive --update /usr/java/openjdk-13 /opt/; /bin/bash"

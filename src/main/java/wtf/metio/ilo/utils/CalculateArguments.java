@@ -44,13 +44,13 @@ public final class CalculateArguments {
         .flatMap(identity());
     final var command = Stream.concat(
         Stream.of(options.image),
-        formatCommands(options.commands));
+        options.commands.stream());
     return Stream.of(run, tty, extras, command)
         .flatMap(identity())
         .collect(toList());
   }
 
-  public static List<String> composeArguments(final ComposeOptions options, final String tool) {
+  public static List<String> composeRunArguments(final ComposeOptions options, final String tool) {
     final var run = Stream.of(
         tool,
         "--file", options.composeFile,
@@ -61,6 +61,14 @@ public final class CalculateArguments {
     return Stream.of(run, service)
         .flatMap(identity())
         .collect(toList());
+  }
+
+  public static List<String> composeCleanupArguments(final ComposeOptions options, final String tool) {
+    return List.of(
+        tool,
+        "--file", options.composeFile,
+        "down"
+    );
   }
 
   private static Stream<String> optional(final String option, final String prefix) {

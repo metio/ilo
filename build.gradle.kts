@@ -34,7 +34,7 @@ val jpackageLocation: String by extra(
         if (project.hasProperty(JPACKAGE_HOME))
             project.property(JPACKAGE_HOME) as String
         else file(System.getProperty("user.home")).toPath()
-                .resolve(".sdkman/candidates/java/14.ea.27-open/")
+                .resolve(".sdkman/candidates/java/14.ea.33-open/")
                 .toAbsolutePath().toString())
 //endregion
 
@@ -43,17 +43,22 @@ val PROJECT_VERSION = "2.0.0"
 val TARGET_JAVA_VERSION = JavaVersion.VERSION_11
 val JUNIT5_VERSION = "5.6.0-RC1"
 val JUNIT5_PLATFORM_VERSION = "1.5.2"
+val PICOCLI_VERSION = "4.1.4"
+val JACOCO_VERSION = "0.8.5"
+val GRAAL_VERSION = "19.3.1"
 //endregion
 
 //region Project
 version = PROJECT_VERSION
 group = "wtf.metio.ilo"
+val MAIN_CLASS = "wtf.metio.ilo.Ilo"
+val BINARY_NAME = "ilo"
 //endregion
 
 //region Application
 application {
-    mainClassName = "wtf.metio.ilo/wtf.metio.ilo.Ilo"
-    applicationName = "ilo"
+    mainClassName = "$group/$MAIN_CLASS"
+    applicationName = BINARY_NAME
 }
 tasks.named<Tar>("distTar") {
     enabled = false
@@ -84,30 +89,31 @@ tasks {
 }
 //endregion
 
+//region Dependencies
 dependencies {
-    implementation("info.picocli:picocli:4.1.4")
-    annotationProcessor("info.picocli:picocli-codegen:4.1.4")
+    implementation("info.picocli:picocli:$PICOCLI_VERSION")
+    annotationProcessor("info.picocli:picocli-codegen:$PICOCLI_VERSION")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$JUNIT5_VERSION")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$JUNIT5_VERSION")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$JUNIT5_PLATFORM_VERSION")
 }
+//endregion
 
 //region Test Coverage
 jacoco {
-    toolVersion = "0.8.5"
+    toolVersion = JACOCO_VERSION
 }
 //endregion
 
 //region GraalVM
 graal {
-    mainClass("wtf.metio.ilo.Ilo")
-    outputName("ilo")
+    mainClass(MAIN_CLASS)
+    outputName(BINARY_NAME)
     // https://github.com/palantir/gradle-graal/issues/239
-    // graalVersion("19.3.1")
+    graalVersion(GRAAL_VERSION)
 }
 //endregion
-
 
 //region JPackage
 jlink {
@@ -142,7 +148,6 @@ if (enableJpackage) {
     }
 }
 //endregion
-
 
 //region Gradle
 tasks.wrapper {

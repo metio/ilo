@@ -29,7 +29,7 @@ import java.util.concurrent.Callable;
 public class Shell implements Callable<Integer> {
 
   @CommandLine.Mixin
-  private ShellOptions options;
+  public ShellOptions options;
 
   @Override
   public Integer call() {

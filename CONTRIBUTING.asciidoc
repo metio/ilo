@@ -74,7 +74,7 @@ Newer versions like 12 and 13 can be used, just make sure to replace `TARGET_JAV
 [you@hostname ~/ilo]$ ./gradlew build
 ----
 
-The binary distribution will be located in `modules/app/cli/build/distributions`.
+The binary distribution will be located in `build/distributions`.
 
 === Use `ilo` to build `ilo`
 
@@ -84,7 +84,7 @@ In case you already have `ilo` installed on your system, do the following:
 ----
 [you@hostname ~]$ git clone <upstream> # see mirrors at bottom
 [you@hostname ~]$ cd ilo
-[you@hostname ~/ilo]$ ilo run "./gradlew build"
+[you@hostname ~/ilo]$ ilo @build-once
 ----
 
 == SSH Setup

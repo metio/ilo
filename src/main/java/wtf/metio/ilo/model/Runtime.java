@@ -33,4 +33,9 @@ public enum Runtime {
         .anyMatch(candidate::equalsIgnoreCase);
   }
 
+  @Override
+  public String toString() {
+    return aliases[0];
+  }
+
 }

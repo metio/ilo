@@ -6,6 +6,7 @@ It defaults to run with link:https://podman.io/[podman] but can work with link:h
 == Usage
 
 Make sure that `ilo` is installed in your path or otherwise accessible from your terminal.
+Currently two commands are provided: `shell` to run a single container and `compose` to run multiple containers defined in a link:https://docs.docker.com/compose/compose-file/[docker-compose.yml] file.
 
 [source:shell]
 ----
@@ -15,7 +16,7 @@ Make sure that `ilo` is installed in your path or otherwise accessible from your
 
 By default, `ilo` will use `fedora:latest` as container image and execute `/bin/bash` inside the running container in an interactive tty session.
 Both can be configured, as well as the runtime used by `ilo` (podman or docker) and other options.
-A list of available options can be seen by calling `ilo --help` (or `ilo -h` for short).
+A list of available commands and their options can be seen by calling `ilo --help` (or `ilo -h` for short).
 
 == Customize Build Environment
 
@@ -27,20 +28,14 @@ Make sure that this image can be accessed by everyone in your team and use `ilo 
 One easy way to accomplish this for open source projects, is to use the link:https://docs.docker.com/docker-hub/builds/[automated build system] from Docker Hub.
 Make sure that Docker Hub rebuilds your build environment on every change to master (or any other branch) and have your contributors pull the resulting images to their machines.
 
-== .rc Files
+== Argument Files
 
-`ilo` reads multiple `.rc` files during startup which can be used to store/share commonly used options for `ilo`.
-The following list of locations is processed by `ilo` sequentially from top to bottom.
-Options can be specified multiple times, however only the first specified option will used.
-
-1. `<project-dir>/.ilo/ilo.user.rc`
-2. `<project-dir>/.ilo.user.rc`
-3. `<project-dir>/.ilo/ilo.rc`
-4. `<project-dir>/.ilo.rc`
-
-The `.user.rc` files should contain options that are specific to a single user.
-Thus those files should not be shared amongst the team, e.g. by adding them to your `.gitignore`.
-The other files should be shared with the team in order to make sure that everyone gets exactly the same build environment.
+In order to share the same options/commands across your team, `ilo` supports argument files which contain the options (like which image to use) for your project.
+Create an empty text file and put all options in there with their corresponding values.
+You can specify all options in a single line, separated by whitespace or use a new line for every option.
+Use that argument file by calling `ilo @file-name`.
+You can mix argument files with regular CLI options as well, e.g. `ilo shell --image=openjdk:latest @some-file`.
+The argument file used by `ilo` developers can be seen link:build-env[here] and is used like this `ilo @build-env`
 
 == `direnv` Integration
 
@@ -54,12 +49,12 @@ Together with `ilo`, you can do the following:
 ----
 
 As soon as you enter the directory of your project, `direnv` will call `ilo` which in turn will open your build environment for you.
-In order to create a setup like this, first link:https://direnv.net/#basic-installation[install direnv] and then place a `.envrc` file in the root of your project which just contains `ilo` as its contents.
+In order to create a setup like this, first link:https://direnv.net/#basic-installation[install direnv] and then place a `.envrc` file in the root of your project which contains `ilo` and its arguments as its contents.
 
 [source,txt]
 ----
 [you@hostname project-dir]$ cat .envrc
-ilo
+ilo @build-env
 ----
 
 == Tooling Support
@@ -70,31 +65,23 @@ ilo
 |Tool |Status
 
 |link:https://podman.io/[podman]
-|Used since 1.0.0
+|Since 1.0.0
 
 |link:https://github.com/containers/podman-compose[podman-compose]
-|Integrated since 1.0.0
-
-|link:https://github.com/containers/buildah[buildah]
-|Integrated since 1.0.0
+|Since 2.0.0
 
 |link:https://www.docker.com/products/container-runtime[docker]
-|Used since 1.0.0
+|Since 1.0.0
 
 |link:https://docs.docker.com/compose/[docker-compose]
-|Integrated since 1.0.0
-
-|link:https://kubernetes.io/docs/reference/kubectl/overview/[kubectl]
-|Integrated since 1.0.0
+|Since 2.0.0
 |===
 
 Not all of them are really used by `ilo` yet, but might be in the future.
 See the list of open tickets to improve tooling support:
 
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1359&milestone=0&assignee=0[open builda tickets]
 * link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1357&milestone=0&assignee=0[open docker tickets]
 * link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1358&milestone=0&assignee=0[open docker-compose tickets]
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1369&milestone=0&assignee=0[open kubectl tickets]
 * link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1355&milestone=0&assignee=0[open podman tickets]
 * link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1356&milestone=0&assignee=0[open podman-compose tickets]
 
@@ -144,6 +131,7 @@ In case `ilo` does not offer what you are looking for, take a look at the follow
 * link:https://github.com/mottosso/bleeding-rez[bleeding-rez]
 * link:http://rbld.io/[rebuild]
 * link:https://github.com/jasonwhite/ducible[ducible]
+* link:https://buildpacks.io/[buildpacks]
 
 == License
 

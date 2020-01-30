@@ -11,11 +11,9 @@ import picocli.AutoComplete;
 import picocli.CommandLine;
 import wtf.metio.ilo.commands.Compose;
 import wtf.metio.ilo.commands.Shell;
-import wtf.metio.ilo.config.Formats;
+import wtf.metio.ilo.errors.ExecutionExceptionHandler;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Main entry point for Ilo - a little tool to manage reproducible build environments
@@ -26,9 +24,7 @@ import java.util.stream.Stream;
     version = "2.0.0",
     mixinStandardHelpOptions = true,
     usageHelpAutoWidth = true,
-    customSynopsis = {
-        "ilo [OPTIONS] [COMMANDS...]",
-    },
+    synopsisSubcommandLabel = "COMMAND",
     descriptionHeading = "%n",
     parameterListHeading = "%n",
     optionListHeading = "%nOptions:%n",
@@ -40,26 +36,25 @@ import java.util.stream.Stream;
     },
     showDefaultValues = true
 )
-public final class Ilo {
+public final class Ilo implements Runnable {
 
-  private static final List<String> COMMANDS = List.of("shell", "compose");
+  @CommandLine.Spec
+  CommandLine.Model.CommandSpec spec;
 
   public static void main(final String[] args) {
-    final var command = determineCommand(args);
-    final var config = Formats.runtimeConfig();
-    final var rcValues = config.getOrDefault(command, List.of());
-
-    final var arguments = Stream.concat(Arrays.stream(args), rcValues.stream())
+    final var arguments = Arrays.stream(args)
         .filter(arg -> !Ilo.class.getCanonicalName().equalsIgnoreCase(arg)) // workaround for IntelliJ
         .toArray(String[]::new);
 
     final var commandLine = new CommandLine(new Ilo());
     commandLine.setUnmatchedArgumentsAllowed(true); // workaround for IntelliJ
+    commandLine.setExecutionExceptionHandler(new ExecutionExceptionHandler());
     System.exit(commandLine.execute(arguments));
   }
 
-  private static String determineCommand(final String[] args) {
-    return Arrays.stream(args).filter(COMMANDS::contains).findFirst().orElse("UNKNOWN");
+  @Override
+  public void run() {
+    throw new CommandLine.ParameterException(spec.commandLine(), "ERROR: Missing required subcommand" + System.lineSeparator());
   }
 
 }

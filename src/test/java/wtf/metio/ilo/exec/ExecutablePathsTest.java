@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
+import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -53,6 +54,7 @@ class ExecutablePathsTest {
     // given
     final var tool = ExecutablePaths.allPaths()
         .map(path -> path.resolve("/usr/bin/ls"))
+        .filter(Files::exists)
         .findFirst()
         .orElse(Paths.get("ls"));
 
