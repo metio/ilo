@@ -53,10 +53,10 @@ class ExecutablePathsTest {
   void shouldBeAbleToExecuteLs() {
     // given
     final var tool = ExecutablePaths.allPaths()
-        .map(path -> path.resolve("/usr/bin/ls"))
+        .map(path -> path.resolve("ls"))
         .filter(Files::exists)
         .findFirst()
-        .orElse(Paths.get("ls"));
+        .orElseThrow();
 
     // when
     final var canExecute = ExecutablePaths.canExecute(tool);
