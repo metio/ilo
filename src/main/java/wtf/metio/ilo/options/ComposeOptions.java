@@ -22,14 +22,6 @@ public class ComposeOptions {
   public ComposeRuntime runtime;
 
   @CommandLine.Option(
-      names = {"--interactive"},
-      description = "Open interactive shell or just run a single command",
-      defaultValue = "true",
-      negatable = true
-  )
-  public boolean interactive;
-
-  @CommandLine.Option(
       names = {"--debug"},
       description = "Show additional debug information"
   )
