@@ -84,10 +84,4 @@ public final class CalculateArguments {
         .flatMap(value -> Stream.of(prefix, value));
   }
 
-  private static Stream<String> formatCommands(final List<String> commands) {
-    return commands.stream()
-        .map(command -> command.split("\\s+"))
-        .flatMap(Stream::of);
-  }
-
 }
