@@ -58,8 +58,9 @@ public final class CalculateArguments {
         "run",
         "--rm"
     );
+    final var tty = options.interactive ? Stream.<String>empty() : Stream.of("-T");
     final var service = Stream.of(options.service);
-    return Stream.of(run, service)
+    return Stream.of(run, tty, service)
         .flatMap(identity())
         .collect(toList());
   }

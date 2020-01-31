@@ -23,7 +23,7 @@ public class ComposeOptions {
 
   @CommandLine.Option(
       names = {"--interactive"},
-      description = "Open interactive shell or just run a single command",
+      description = "Allocate a pseudo TTY or not",
       defaultValue = "true",
       negatable = true
   )
