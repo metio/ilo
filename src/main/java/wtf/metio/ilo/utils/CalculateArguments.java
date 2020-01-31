@@ -11,6 +11,7 @@ import wtf.metio.ilo.options.ComposeOptions;
 import wtf.metio.ilo.options.ShellOptions;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.function.Function.identity;
@@ -40,7 +41,7 @@ public final class CalculateArguments {
         optional(options.name, "--name"),
         optional(options.hostname, "--hostname"),
         asStringWithPrefix(options.labels, "--label"),
-        asStringWithPrefix(options.volumes, "--volume"))
+        asStringWithPrefix(expandHomeDirectory(options.volumes), "--volume"))
         .flatMap(identity());
     final var command = Stream.concat(
         Stream.of(options.image),
@@ -82,6 +83,14 @@ public final class CalculateArguments {
         .flatMap(List::stream)
         .filter(not(String::isBlank))
         .flatMap(value -> Stream.of(prefix, value));
+  }
+
+  private static List<String> expandHomeDirectory(final List<String> values) {
+    final var userHome = System.getProperty("user.home");
+    return values.stream()
+        .map(value -> value.replace("$HOME", userHome))
+        .map(value -> value.replace("~", userHome))
+        .collect(Collectors.toList());
   }
 
 }
