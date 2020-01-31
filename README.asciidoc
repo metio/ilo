@@ -99,7 +99,7 @@ Follow these steps in case you are on a linux system and want to use the link:ht
 
 [source,shell]
 ----
-$ curl --location https://github.com/metio/ilo/releases/download/2.0.0/ilo-linux --output ilo
+$ curl --location https://github.com/metio/ilo/releases/download/2.1.0/ilo-linux --output ilo
 $ mv ilo ~/bin/ilo
 $ chmod +x ~/bin/ilo
 ----
@@ -108,9 +108,9 @@ In case you don't want to (or cannot) use the native version, make sure that you
 
 [source,shell]
 ----
-$ curl --location https://github.com/metio/ilo/releases/download/2.0.0/ilo-2.0.0.zip --output ilo.zip
+$ curl --location https://github.com/metio/ilo/releases/download/2.1.0/ilo-2.1.0.zip --output ilo.zip
 $ unzip ilo.zip
-$ ln --symbolic --relative ilo-2.0.0/bin/ilo ~/bin/ilo
+$ ln --symbolic --relative ilo-2.1.0/bin/ilo ~/bin/ilo
 ----
 
 Windows users have to use `ilo.bat` instead of `ilo` and put that `.bat` file in their `PATH`.
