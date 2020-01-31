@@ -58,7 +58,7 @@ native-image: ##@hacking Create a native image using GraalVM
 
 .PHONY: jpackage
 jpackage: ##@hacking Create a custom JRE & binary using jpackage
-	./gradlew build -PenableJpackage
+	./gradlew build -Penable-jpackage=true
 
 .PHONY: clean
 clean: ##@hacking Clean build artifacts
