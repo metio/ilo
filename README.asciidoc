@@ -90,12 +90,31 @@ See the list of open tickets to improve tooling support:
 Use the following locations in order to download the binary distribution of `ilo`:
 
 * https://github.com/metio/ilo/releases
-* https://bitbucket.org/metio-wtf/ilo/downloads/
-* https://bintray.com/metio/generic/ilo/
 * https://codeberg.org/metio.wtf/ilo/releases
 
 None of the widely used package managers have `ilo` in their repository yet.
 In case you want to help package `ilo` for your preferred operating system, take a look at the link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1361&milestone=0&assignee=0[open packaging issues].
+
+Follow these steps in case you are on a linux system and want to use the link:https://www.graalvm.org/[GraalVM] compiled link:https://www.graalvm.org/docs/reference-manual/native-image/[native image]:
+
+[source,shell]
+----
+$ curl --location https://github.com/metio/ilo/releases/download/2.0.0/ilo-linux --output ilo
+$ mv ilo ~/bin/ilo
+$ chmod +x ~/bin/ilo
+----
+
+In case you don't want to (or cannot) use the native version, make sure that you have Java 11 installed and follow these steps:
+
+[source,shell]
+----
+$ curl --location https://github.com/metio/ilo/releases/download/2.0.0/ilo-2.0.0.zip --output ilo.zip
+$ unzip ilo.zip
+$ ln --symbolic --relative ilo-2.0.0/bin/ilo ~/bin/ilo
+----
+
+Windows users have to use `ilo.bat` instead of `ilo` and put that `.bat` file in their `PATH`.
+Take a look at link:https://codeberg.org/metio.wtf/ilo/issues/65[this ticket] in case you want to help extend the installation instructions for Windows.
 
 == CLI Autocomplete
 
