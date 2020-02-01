@@ -1,0 +1,40 @@
+# see https://aka.ms/yaml for file reference
+
+trigger:
+  - master
+
+variables:
+  graalVersion: 19.3.1
+
+jobs:
+  - job: Linux
+    timeoutInMinutes: 30
+    pool:
+      vmImage: ubuntu-18.04
+    container:
+      image: oracle/graalvm-ce:${graalVersion}-java11
+    steps:
+      - displayName: Install native-image
+        script: |
+          gu install native-image
+      - displayName: Build artifacts
+        script: |
+          ./mvnw verify
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: '$(Pipeline.Workspace)/s/target/ilo-*.jar'
+          artifact: 'ilo.jar'
+          publishLocation: 'pipeline'
+          - task: PublishPipelineArtifact@2
+            inputs:
+              targetPath: '$(Pipeline.Workspace)/s/target/ilo'
+              artifact: 'ilo'
+              publishLocation: 'pipeline'
+      - task: CopyFiles@1
+        inputs:
+          contents: "ilo.jar"
+          TargetFolder: "$(Build.ArtifactStagingDirectory)"
+      - task: CopyFiles@2
+        inputs:
+          contents: "ilo"
+          TargetFolder: "$(Build.ArtifactStagingDirectory)"
