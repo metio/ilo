@@ -12,6 +12,7 @@ import picocli.CommandLine;
 import wtf.metio.ilo.commands.Compose;
 import wtf.metio.ilo.commands.Shell;
 import wtf.metio.ilo.errors.ExecutionExceptionHandler;
+import wtf.metio.ilo.version.VersionProvider;
 
 import java.util.Arrays;
 
@@ -21,7 +22,7 @@ import java.util.Arrays;
 @CommandLine.Command(
     name = "ilo",
     description = "Manage reproducible build environments",
-    version = "2.1.0",
+    versionProvider = VersionProvider.class,
     mixinStandardHelpOptions = true,
     usageHelpAutoWidth = true,
     synopsisSubcommandLabel = "COMMAND",

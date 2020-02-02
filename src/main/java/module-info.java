@@ -7,5 +7,6 @@ module wtf.metio.ilo {
   opens wtf.metio.ilo.converter to info.picocli;
   opens wtf.metio.ilo.model to info.picocli;
   opens wtf.metio.ilo.options to info.picocli;
+  opens wtf.metio.ilo.version to info.picocli;
 
 }

@@ -50,19 +50,15 @@ help: ##@other Show this help
 
 .PHONY: build
 build: ##@hacking Build everything
-	./gradlew build
+	./mvnw verify
 
 .PHONY: native-image
 native-image: ##@hacking Create a native image using GraalVM
-	./gradlew build nativeImage
-
-.PHONY: jpackage
-jpackage: ##@hacking Create a custom JRE & binary using jpackage
-	./gradlew build -Penable-jpackage=true
+	./mvnw verify -Dskip.graal=false
 
 .PHONY: clean
 clean: ##@hacking Clean build artifacts
-	./gradlew clean
+	./mvnw clean
 
 .PHONY: example-redis-java11
 example-redis-java11: ##@example Example shell using compose w/ redis & java 11

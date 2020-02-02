@@ -1,3 +1,2 @@
 shell
 --image openjdk:11
---volume $HOME/.gradle/wrapper:/root/.gradle/wrapper:Z

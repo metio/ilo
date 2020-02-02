@@ -5,4 +5,10 @@
  * in the LICENSE file.
  */
 
-rootProject.name = "ilo"
+package wtf.metio.ilo.version;
+
+public final class Version {
+
+  public static final String VERSION = "${project.version}";
+
+}

@@ -1,4 +1,4 @@
 shell
 --image openjdk:11
 --no-interactive
-./gradlew build
+./mvnw verify

@@ -42,39 +42,31 @@ Each release has a corresponding milestone on codeberg.
 == Release Process
 
 1. Create a new release branch (if it does not exist yet): `git checkout -b release/x.y.z`
-2. Update the `PROJECT_VERSION` variable inside the root link:build.gradle.kts[build.gradle.kts] file to the release version
-3. Update the link:CHANGELOG.asciidoc[changelog] for the new release
-4. Build the project: `./gradlew build`
-5. Commit all changes: `git commit -S -m 'version x.y.z'`
-6. Push all changes to codeberg.org
-7. Open a pull request on codeberg.org that merges `release./x.y.z` into `master`
-8. Do a final review of everything and merge the changes into master
-9. Create a new release on codeberg.org, use the changelog entries for this release as description, upload the distribution archives
-10. Create a new release on github.com, use the changelog entries for this release as description, upload the distribution archives
-11. Create a new release on bintray, use the changelog entries for this release as description, upload the distribution archives
-12. Update the matrix chat room title with a link to the new release
-13. Send an announcement to the mailing list
-
-== Project Layout
-
-This project is split into multiple link:https://gradle.org/[Gradle] subprojects.
-Each project provides a small part of the overall functionality of `ilo`.
+2. Update the link:CHANGELOG.asciidoc[changelog] for the new release
+3. Build the project: `./mvnw verify -Dskip.graal=false -Drevisoin=x.y.z`
+4. Commit all changes: `git commit -S -m 'version x.y.z'`
+5. Push all changes to codeberg.org
+6. Open a pull request on codeberg.org that merges `release./x.y.z` into `master`
+7. Do a final review of everything and merge the changes into master
+8. Create a new release on codeberg.org, use the changelog entries for this release as description, upload the distribution archives
+9. Create a new release on github.com, use the changelog entries for this release as description, upload the distribution archives
+10. Create a new release on bintray, use the changelog entries for this release as description, upload the distribution archives
+11. Update the matrix chat room title with a link to the new release
+12. Send an announcement to the mailing list
 
 == Building the Project
 
 `ilo` currently needs **Java 11** to build.
-Version 14 is not link:https://github.com/gradle/gradle/issues/10248[yet supported].
 Earlier versions cannot be used to build `ilo`.
-Newer versions like 12 and 13 can be used, just make sure to replace `TARGET_JAVA_VERSION` with the version you want in the root link:build.gradle.kts[build.gradle.kts] file.
 
 [source,shell]
 ----
 [you@hostname ~]$ git clone <upstream> # see mirrors at bottom
 [you@hostname ~]$ cd ilo
-[you@hostname ~/ilo]$ ./gradlew build
+[you@hostname ~/ilo]$ ./mvnw verify
 ----
 
-The binary distribution will be located in `build/distributions`.
+The binary distribution will be located in `target/`.
 
 === Use `ilo` to build `ilo`
 
