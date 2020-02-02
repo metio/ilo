@@ -88,7 +88,8 @@ public final class CalculateArguments {
 
   private static List<String> expandHomeDirectory(final List<String> values) {
     final var userHome = System.getProperty("user.home");
-    return values.stream()
+    return Stream.ofNullable(values)
+        .flatMap(List::stream)
         .map(value -> value.replace("$HOME", userHome))
         .map(value -> value.replace("~", userHome))
         .collect(Collectors.toList());
