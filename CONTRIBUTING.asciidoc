@@ -43,8 +43,8 @@ Each release has a corresponding milestone on codeberg.
 
 1. Create a new release branch (if it does not exist yet): `git checkout -b release/x.y.z`
 2. Update the link:CHANGELOG.asciidoc[changelog] for the new release
-3. Build the project: `./mvnw verify -Dskip.graal=false -Drevisoin=x.y.z`
-4. Commit all changes: `git commit -S -m 'version x.y.z'`
+3. Commit all changes: `git commit -S -m 'version x.y.z'`
+4. Build the project: `./mvnw verify -Dskip.graal=false -Drevisoin=x.y.z`
 5. Push all changes to codeberg.org
 6. Open a pull request on codeberg.org that merges `release./x.y.z` into `master`
 7. Do a final review of everything and merge the changes into master
