@@ -41,10 +41,13 @@ public class ExecutionExceptionHandler implements CommandLine.IExecutionExceptio
       commandLine.getErr().println("  1) Install the specified runtime");
       commandLine.getErr().println("  2) Specify a different runtime using --runtime ...");
       // TODO: detect available runtimes and print them
+    } else {
+      commandLine.getErr().println(exception.getMessage());
+      exception.printStackTrace();
     }
     return null != commandLine.getExitCodeExceptionMapper()
         ? commandLine.getExitCodeExceptionMapper().getExitCode(exception)
-        : 1;
+        : CommandLine.ExitCode.SOFTWARE;
   }
 
 }
