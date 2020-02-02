@@ -60,6 +60,9 @@
         <version.picocli>4.1.4</version.picocli>
         <version.junit5>5.6.0</version.junit5>
         <version.graal>19.3.1</version.graal>
+        <version.checksum-m-p>1.8</version.checksum-m-p>
+        <version.m-assembly-p>3.2.0</version.m-assembly-p>
+
         <skip.graal>true</skip.graal>
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
     </properties>
@@ -203,16 +206,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>${version.m-assembly-p}</version>
                 <executions>
                     <execution>
+                        <id>jre-assembly</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
                         </goals>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/main/assembly/java11.xml</descriptor>
+                                <descriptor>${project.basedir}/src/main/assembly/java11.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>
@@ -221,33 +225,15 @@
             <plugin>
                 <groupId>net.nicoulaj.maven.plugins</groupId>
                 <artifactId>checksum-maven-plugin</artifactId>
-                <version>1.8</version>
+                <version>${version.checksum-m-p}</version>
                 <executions>
                     <execution>
-                        <id>jre-checksum</id>
                         <goals>
                             <goal>artifacts</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>native-image-checksum</id>
-                        <goals>
-                            <goal>files</goal>
-                        </goals>
-                        <configuration>
-                            <fileSets>
-                                <fileSet>
-                                    <directory>${project.build.directory}</directory>
-                                    <includes>
-                                        <include>ilo</include>
-                                    </includes>
-                                </fileSet>
-                            </fileSets>
-                        </configuration>
-                    </execution>
                 </executions>
                 <configuration>
-                    <csvSummary>false</csvSummary>
                     <algorithms>
                         <algorithm>SHA-512</algorithm>
                     </algorithms>
@@ -255,5 +241,78 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>native-unix</id>
+            <activation>
+                <property>
+                    <name>skip.graal</name>
+                    <value>false</value>
+                </property>
+                <os>
+                    <family>unix</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>${version.m-assembly-p}</version>
+                        <executions>
+                            <execution>
+                                <id>native-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <descriptors>
+                                        <descriptor>src/main/assembly/native-unix.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>native-windows</id>
+            <activation>
+                <property>
+                    <name>skip.graal</name>
+                    <value>false</value>
+                </property>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>${version.m-assembly-p}</version>
+                        <executions>
+                            <execution>
+                                <id>native-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <descriptors>
+                                        <descriptor>src/main/assembly/native-windows.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
