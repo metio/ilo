@@ -62,28 +62,26 @@ ilo @build-env
 `ilo` is able to speak with the following tools.
 
 |===
-|Tool |Status
+|Tool
+|Status
+|Issues
 
 |link:https://podman.io/[podman]
 |Since 1.0.0
+|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1355&milestone=0&assignee=0[Open Tickets]
 
 |link:https://github.com/containers/podman-compose[podman-compose]
 |Since 2.0.0
+|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1356&milestone=0&assignee=0[Open Tickets]
 
 |link:https://www.docker.com/products/container-runtime[docker]
 |Since 1.0.0
+|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1357&milestone=0&assignee=0[Open Tickets]
 
 |link:https://docs.docker.com/compose/[docker-compose]
 |Since 2.0.0
+|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1358&milestone=0&assignee=0[Open Tickets]
 |===
-
-Not all of them are really used by `ilo` yet, but might be in the future.
-See the list of open tickets to improve tooling support:
-
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1357&milestone=0&assignee=0[open docker tickets]
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1358&milestone=0&assignee=0[open docker-compose tickets]
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1355&milestone=0&assignee=0[open podman tickets]
-* link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1356&milestone=0&assignee=0[open podman-compose tickets]
 
 == Installation
 
@@ -95,7 +93,7 @@ Use the following locations in order to download the binary distribution of `ilo
 None of the widely used package managers have `ilo` in their repository yet.
 In case you want to help package `ilo` for your preferred operating system, take a look at the link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1361&milestone=0&assignee=0[open packaging issues].
 
-Follow these steps in case you are on a linux system and want to use the link:https://www.graalvm.org/[GraalVM] compiled link:https://www.graalvm.org/docs/reference-manual/native-image/[native image]:
+Follow these steps in case you are on a unix (linux/mac) system and want to use the link:https://www.graalvm.org/[GraalVM] compiled link:https://www.graalvm.org/docs/reference-manual/native-image/[native image]:
 
 [source,shell]
 ----
