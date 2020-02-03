@@ -68,6 +68,12 @@ Earlier versions cannot be used to build `ilo`.
 
 The binary distribution will be located in `target/`.
 
+=== GraalVM native-image
+
+In case you want to build a native executable of `ilo`, make sure that Graal 19.3 is installed and the `native-image` command is available.
+Since 19.3 Graal no longer ships `native-image` in their base distribution, thus you have to install it manually using `gu install native-image`.
+Take a look at the link:https://www.graalvm.org/docs/reference-manual/native-image/[reference documentation] for more information.
+
 === Use `ilo` to build `ilo`
 
 In case you already have `ilo` installed on your system, do the following:
