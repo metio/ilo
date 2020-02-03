@@ -79,9 +79,7 @@ ilo @build-env
 `ilo` is able to speak with the following tools.
 
 |===
-|Tool
-|Status
-|Issues
+|Tool |Status |Issues
 
 |link:https://podman.io/[podman]
 |Since 1.0.0
