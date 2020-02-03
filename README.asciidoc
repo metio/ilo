@@ -8,24 +8,41 @@ It defaults to run with link:https://podman.io/[podman] but can work with link:h
 Make sure that `ilo` is installed in your path or otherwise accessible from your terminal.
 Currently two commands are provided: `shell` to run a single container and `compose` to run multiple containers defined in a link:https://docs.docker.com/compose/compose-file/[docker-compose.yml] file.
 
-[source:shell]
+=== shell
+
+The `ilo shell` command can be used to run a single container either in interactive mode (default) or non-interactive mode (e.g. for CI builds).
+It defaults to use the `fedora:latest` image and executes `/bin/bash` inside the running container to get a running shell.
+It automatically mounts the current working directory (e.g. your project directory) and stops/removes the container once you exit the shell. `ilo shell` can be used with either podman (default) or docker by using the `--runtime` switch.
+Use `ilo shell --help` to get a list of all options and their default values.
+
+[source,shell]
 ----
 [you@hostname project-dir]$ ilo shell
 [root@container project-dir]#
 ----
 
-By default, `ilo` will use `fedora:latest` as container image and execute `/bin/bash` inside the running container in an interactive tty session.
-Both can be configured, as well as the runtime used by `ilo` (podman or docker) and other options.
-A list of available commands and their options can be seen by calling `ilo --help` (or `ilo -h` for short).
+=== compose
+
+The `ilo compose` command can be used for more complex build environments based on docker-compose.yml files.
+Use this command in case your project requires e.g. a database in order to be build. `ilo compose` does not mount any directories by default, nor does it automatically execute a specific command.
+It defaults to run with podman-compose but can be used with docker-compose as well by using the `--runtime` switch.
+Use `ilo compose --help` to get a list of all options and their default values.
+
+[source,shell]
+----
+[you@hostname project-dir]$ ilo compose
+[root@container project-dir]#
+----
 
 == Customize Build Environment
 
 In most cases `fedora:latest` will not be enough to compile/test/package/run your software.
 While you can install additional packages inside the container, those changes will be lost once the container is removed.
 Instead define your build environment either in a link:https://docs.docker.com/engine/reference/builder/[Dockerfile] or any other link:https://github.com/opencontainers/image-spec/blob/master/spec.md[OCI Image] compliant way.
-Make sure that this image can be accessed by everyone in your team and use `ilo --image your.image.here:latest` to open a new instance of your build environment.
+Make sure that this image can be accessed by everyone in your team and use `ilo shell --image your.image.here:latest` to open a new instance of your build environment.
+If you are using `ilo compose`, make sure to specify `your.image.here:latest` as the image in your docker-compose.yml file.
 
-One easy way to accomplish this for open source projects, is to use the link:https://docs.docker.com/docker-hub/builds/[automated build system] from Docker Hub.
+One easy way to share build environments for open source projects, is to use the link:https://docs.docker.com/docker-hub/builds/[automated build system] from Docker Hub.
 Make sure that Docker Hub rebuilds your build environment on every change to master (or any other branch) and have your contributors pull the resulting images to their machines.
 
 == Argument Files
@@ -51,7 +68,7 @@ Together with `ilo`, you can do the following:
 As soon as you enter the directory of your project, `direnv` will call `ilo` which in turn will open your build environment for you.
 In order to create a setup like this, first link:https://direnv.net/#basic-installation[install direnv] and then place a `.envrc` file in the root of your project which contains `ilo` and its arguments as its contents.
 
-[source,txt]
+[source,shell]
 ----
 [you@hostname project-dir]$ cat .envrc
 ilo @build-env
