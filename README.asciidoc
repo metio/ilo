@@ -114,18 +114,18 @@ Follow these steps in case you are on a unix (linux/mac) system and want to use 
 
 [source,shell]
 ----
-$ curl --location https://github.com/metio/ilo/releases/download/2.1.0/ilo-linux --output ilo
-$ mv ilo ~/bin/ilo
-$ chmod +x ~/bin/ilo
+$ curl --location https://github.com/metio/ilo/releases/download/2.2.0/ilo-2.2.0-native-unix.zip --output ilo.zip
+$ unzip ilo.zip
+$ ln --symbolic --relative ilo-2.2.0/ilo ~/bin/ilo
 ----
 
 In case you don't want to (or cannot) use the native version, make sure that you have Java 11 installed and follow these steps:
 
 [source,shell]
 ----
-$ curl --location https://github.com/metio/ilo/releases/download/2.1.0/ilo-2.1.0.zip --output ilo.zip
+$ curl --location https://github.com/metio/ilo/releases/download/2.2.0/ilo-2.2.0-java11.zip --output ilo.zip
 $ unzip ilo.zip
-$ ln --symbolic --relative ilo-2.1.0/bin/ilo ~/bin/ilo
+$ ln --symbolic --relative ilo-2.2.0/bin/ilo ~/bin/ilo
 ----
 
 Windows users have to use `ilo.bat` instead of `ilo` and put that `.bat` file in their `PATH`.
@@ -135,7 +135,7 @@ Take a look at link:https://codeberg.org/metio.wtf/ilo/issues/65[this ticket] in
 
 In order to get autocomplete working in your shell, run the following after installing `ilo`:
 
-[source]
+[source,shell]
 ----
 $ source <(ilo generate-completion)
 ----
