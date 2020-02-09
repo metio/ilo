@@ -74,6 +74,12 @@ public class ShellOptions {
   )
   public List<String> environmentVariables;
 
+  @CommandLine.Option(
+      names = {"--publish"},
+      description = "Specify container ports to publish."
+  )
+  public List<String> ports;
+
   @CommandLine.Parameters(
       defaultValue = "/bin/bash"
   )
