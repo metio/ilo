@@ -112,21 +112,23 @@ Follow these steps in case you are on a unix (linux/mac) system and want to use 
 
 [source,shell]
 ----
-$ curl --location https://github.com/metio/ilo/releases/download/2.2.0/ilo-2.2.0-native-unix.zip --output ilo.zip
+$ curl --location https://github.com/metio/ilo/releases/download/2.3.0/ilo-2.3.0-native-unix.zip --output ilo.zip
 $ unzip ilo.zip
-$ ln --symbolic --relative ilo-2.2.0/ilo ~/bin/ilo
+$ ln --symbolic --relative ilo-2.3.0/ilo ~/bin/ilo
 ----
+
+Make sure that `~/bin` is in your `PATH`, or adapt the location to your own needs.
 
 In case you don't want to (or cannot) use the native version, make sure that you have Java 11 installed and follow these steps:
 
 [source,shell]
 ----
-$ curl --location https://github.com/metio/ilo/releases/download/2.2.0/ilo-2.2.0-java11.zip --output ilo.zip
+$ curl --location https://github.com/metio/ilo/releases/download/2.3.0/ilo-2.3.0-java11.zip --output ilo.zip
 $ unzip ilo.zip
-$ ln --symbolic --relative ilo-2.2.0/bin/ilo ~/bin/ilo
+$ ln --symbolic --relative ilo-2.3.0/bin/ilo ~/bin/ilo
 ----
 
-Windows users have to use `ilo.bat` instead of `ilo` and put that `.bat` file in their `PATH`.
+Windows users have to use `ilo.bat` instead of `ilo` and put the `.bat` file in their `PATH`.
 Take a look at link:https://codeberg.org/metio.wtf/ilo/issues/65[this ticket] in case you want to help extend the installation instructions for Windows.
 
 == CLI Autocomplete
