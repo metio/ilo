@@ -68,6 +68,12 @@ public class ShellOptions {
   )
   public List<String> volumes;
 
+  @CommandLine.Option(
+      names = {"--env"},
+      description = "Specify a environment variables for the container."
+  )
+  public List<String> environmentVariables;
+
   @CommandLine.Parameters(
       defaultValue = "/bin/bash"
   )

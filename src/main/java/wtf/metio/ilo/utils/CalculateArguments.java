@@ -41,6 +41,7 @@ public final class CalculateArguments {
         optional(options.name, "--name"),
         optional(options.hostname, "--hostname"),
         asStringWithPrefix(options.labels, "--label"),
+        asStringWithPrefix(options.environmentVariables, "--env"),
         asStringWithPrefix(expandHomeDirectory(options.volumes), "--volume"))
         .flatMap(identity());
     final var command = Stream.concat(
