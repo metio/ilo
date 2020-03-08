@@ -24,6 +24,7 @@ import java.util.Arrays;
     description = "Manage reproducible build environments",
     versionProvider = VersionProvider.class,
     mixinStandardHelpOptions = true,
+    showAtFileInUsageHelp = true,
     usageHelpAutoWidth = true,
     synopsisSubcommandLabel = "COMMAND",
     descriptionHeading = "%n",

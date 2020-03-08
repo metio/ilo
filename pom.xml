@@ -57,7 +57,7 @@
     <properties>
         <revision>0.0.0-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.picocli>4.1.4</version.picocli>
+        <version.picocli>4.2.0</version.picocli>
         <version.junit5>5.6.0</version.junit5>
         <version.graal>19.3.1</version.graal>
         <version.checksum-m-p>1.8</version.checksum-m-p>
