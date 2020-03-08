@@ -57,6 +57,14 @@ public class ShellOptions {
   public boolean interactive;
 
   @CommandLine.Option(
+      names = {"--mount-project-dir"},
+      description = "Mount the project directory into the running container",
+      defaultValue = "true",
+      negatable = true
+  )
+  public boolean mountProjectDir;
+
+  @CommandLine.Option(
       names = {"--label"},
       description = "Specify a label for the container."
   )
