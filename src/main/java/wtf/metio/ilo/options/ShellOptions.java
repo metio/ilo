@@ -70,7 +70,8 @@ public class ShellOptions {
 
   @CommandLine.Option(
       names = {"--env"},
-      description = "Specify a environment variables for the container."
+      description = "Specify a environment variables for the container.",
+      paramLabel = "variables"
   )
   public List<String> environmentVariables;
 
