@@ -29,10 +29,12 @@ public final class CalculateArguments {
     final var run = Stream.of(
         tool,
         "run",
-        "--rm",
+        "--rm"
+    );
+    final var projectDir = options.mountProjectDir ? Stream.of(
         "--volume", currentDir + ":" + currentDir + ":Z",
         "--workdir", currentDir
-    );
+    ) : Stream.<String>empty();
     final var tty = options.interactive ? Stream.of(
         "--interactive",
         "--tty"
@@ -48,7 +50,7 @@ public final class CalculateArguments {
     final var command = Stream.concat(
         Stream.of(options.image),
         options.commands.stream());
-    return Stream.of(run, tty, extras, command)
+    return Stream.of(run, projectDir, tty, extras, command)
         .flatMap(identity())
         .collect(toList());
   }
