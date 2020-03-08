@@ -65,6 +65,8 @@
 
         <skip.graal>true</skip.graal>
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
+
+        <project.build.outputTimestamp>2020</project.build.outputTimestamp>
     </properties>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -178,27 +180,6 @@
                     <skip>${skip.graal}</skip>
                     <imageName>ilo</imageName>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>io.github.zlika</groupId>
-                <artifactId>reproducible-build-maven-plugin</artifactId>
-                <version>0.11</version>
-                <executions>
-                    <execution>
-                        <id>strip-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>strip-jar</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>strip-archive</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>strip-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
