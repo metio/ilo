@@ -10,6 +10,8 @@ package wtf.metio.ilo.errors;
 import picocli.CommandLine;
 import wtf.metio.ilo.commands.Compose;
 import wtf.metio.ilo.commands.Shell;
+import wtf.metio.ilo.exec.Exec;
+import wtf.metio.ilo.tools.Tools;
 
 import java.io.IOException;
 
@@ -40,7 +42,14 @@ public class ExecutionExceptionHandler implements CommandLine.IExecutionExceptio
       commandLine.getErr().println("There are two ways to solve this problem:");
       commandLine.getErr().println("  1) Install the specified runtime");
       commandLine.getErr().println("  2) Specify a different runtime using --runtime ...");
-      // TODO: detect available runtimes and print them
+      commandLine.getErr().println("  3) Specify no value for --runtime and let ilo pick the right value for you");
+      final var executables = Exec.executables();
+      final var runtimes = "shell".equals(commandName)
+          ? Tools.detectedShellRuntime(executables, null)
+          : Tools.detectedComposeRuntime(executables, null);
+      commandLine.getErr().println();
+      commandLine.getErr().println("Available runtimes on your system:");
+      runtimes.forEach(runtime -> commandLine.getErr().println("  - " + runtime));
     } else {
       commandLine.getErr().println(exception.getMessage());
       exception.printStackTrace();

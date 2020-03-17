@@ -15,8 +15,7 @@ public class ComposeOptions {
 
   @CommandLine.Option(
       names = {"--runtime"},
-      description = "Specify the runtime to use",
-      defaultValue = "podman-compose",
+      description = "Specify the runtime to use. If none is specified, use auto-detection.",
       converter = ComposeRuntimeConverter.class
   )
   public ComposeRuntime runtime;

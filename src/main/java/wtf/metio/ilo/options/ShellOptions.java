@@ -17,8 +17,7 @@ public class ShellOptions {
 
   @CommandLine.Option(
       names = {"--runtime"},
-      description = "Specify the runtime to use",
-      defaultValue = "podman",
+      description = "Specify the runtime to use. If none is specified, use auto-detection.",
       converter = RuntimeConverter.class
   )
   public Runtime runtime;

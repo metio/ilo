@@ -11,7 +11,6 @@ import picocli.CommandLine;
 import wtf.metio.ilo.exec.Exec;
 import wtf.metio.ilo.exec.Executables;
 import wtf.metio.ilo.options.ComposeOptions;
-import wtf.metio.ilo.tools.CliTool;
 import wtf.metio.ilo.tools.Tools;
 import wtf.metio.ilo.utils.CalculateArguments;
 import wtf.metio.ilo.utils.Debug;
@@ -47,9 +46,7 @@ public class Compose implements Callable<Integer> {
   private Integer execute(
       final BiFunction<? super ComposeOptions, ? super String, ? extends List<String>> argumentCreator,
       final Executables executables) {
-    return Tools.detectedComposeRuntime(executables)
-        .map(CliTool::name)
-        .filter(options.runtime::matches)
+    return Tools.detectedComposeRuntime(executables, options.runtime)
         .map(tool -> argumentCreator.apply(options, tool))
         .peek(args -> Debug.showExecutedCommand(options.debug, args))
         .map(executables::runAndWaitForExit)
