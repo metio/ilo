@@ -7,7 +7,10 @@
 
 package wtf.metio.ilo.tools;
 
+import wtf.metio.ilo.exec.ExecutablePaths;
 import wtf.metio.ilo.exec.Executables;
+import wtf.metio.ilo.model.ComposeRuntime;
+import wtf.metio.ilo.model.Runtime;
 
 import java.util.stream.Stream;
 
@@ -17,18 +20,24 @@ public final class Tools {
     // utility class
   }
 
-  public static Stream<? extends CliTool> detectedShellRuntime(final Executables executables) {
+  public static Stream<String> detectedShellRuntime(final Executables executables, final Runtime runtime) {
     final var podman = getPodmanCli(executables);
     final var docker = getDockerCli(executables);
 
-    return Stream.of(podman, docker);
+    return Stream.of(podman, docker)
+        .map(CliTool::name)
+        .filter(ExecutablePaths::exists)
+        .filter(tool -> null == runtime || runtime.matches(tool));
   }
 
-  public static Stream<? extends CliTool> detectedComposeRuntime(final Executables executables) {
+  public static Stream<String> detectedComposeRuntime(final Executables executables, final ComposeRuntime runtime) {
     final var podmanCompose = getPodmanComposeCli(executables);
     final var dockerCompose = getDockerComposeCli(executables);
 
-    return Stream.of(podmanCompose, dockerCompose);
+    return Stream.of(podmanCompose, dockerCompose)
+        .map(CliTool::name)
+        .filter(ExecutablePaths::exists)
+        .filter(tool -> null == runtime || runtime.matches(tool));
   }
 
   private static PodmanCli getPodmanCli(final Executables executables) {

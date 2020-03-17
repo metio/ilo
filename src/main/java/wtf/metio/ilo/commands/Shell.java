@@ -10,7 +10,6 @@ package wtf.metio.ilo.commands;
 import picocli.CommandLine;
 import wtf.metio.ilo.exec.Exec;
 import wtf.metio.ilo.options.ShellOptions;
-import wtf.metio.ilo.tools.CliTool;
 import wtf.metio.ilo.tools.Tools;
 import wtf.metio.ilo.utils.CalculateArguments;
 import wtf.metio.ilo.utils.Debug;
@@ -34,9 +33,7 @@ public class Shell implements Callable<Integer> {
   @Override
   public Integer call() {
     final var executables = Exec.executables();
-    return Tools.detectedShellRuntime(executables)
-        .map(CliTool::name)
-        .filter(options.runtime::matches)
+    return Tools.detectedShellRuntime(executables, options.runtime)
         .map(tool -> CalculateArguments.shellArguments(options, tool))
         .peek(args -> Debug.showExecutedCommand(options.debug, args))
         .map(executables::runAndWaitForExit)

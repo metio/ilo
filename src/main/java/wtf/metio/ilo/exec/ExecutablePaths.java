@@ -21,6 +21,10 @@ public final class ExecutablePaths {
     // utility class
   }
 
+  public static boolean exists(final String exec) {
+    return ExecutablePaths.of(exec).isPresent();
+  }
+
   public static Optional<Path> of(final String exec) {
     return allPaths().map(path -> path.resolve(exec))
         .filter(ExecutablePaths::canExecute)
