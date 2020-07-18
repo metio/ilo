@@ -8,27 +8,35 @@
 package wtf.metio.ilo.cli;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class HelpTest extends CLI_TCK {
 
-  @Test
-  void shouldHaveUsageHelp() {
-    final var exitCode = cmd.execute("-h");
+  @DisplayName("usage help")
+  @ParameterizedTest
+  @ValueSource(strings = {"-h", "--help"})
+  void shouldHaveUsageHelp(final String flag) {
+    final var exitCode = cmd.execute(flag);
     Assertions.assertEquals(0, exitCode);
     Assertions.assertTrue(output.toString().startsWith("Usage"));
   }
 
-  @Test
-  void shouldHaveHelpForShell() {
-    final var exitCode = cmd.execute("shell", "-h");
+  @DisplayName("shell help")
+  @ParameterizedTest
+  @ValueSource(strings = {"-h", "--help"})
+  void shouldHaveHelpForShell(final String flag) {
+    final var exitCode = cmd.execute("shell", flag);
     Assertions.assertEquals(0, exitCode);
     Assertions.assertTrue(output.toString().startsWith("Usage"));
   }
 
-  @Test
-  void shouldHaveHelpForCompose() {
-    final var exitCode = cmd.execute("compose", "-h");
+  @DisplayName("compose help")
+  @ParameterizedTest
+  @ValueSource(strings = {"-h", "--help"})
+  void shouldHaveHelpForCompose(final String flag) {
+    final var exitCode = cmd.execute("compose", flag);
     Assertions.assertEquals(0, exitCode);
     Assertions.assertTrue(output.toString().startsWith("Usage"));
   }
