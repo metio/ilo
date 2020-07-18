@@ -23,7 +23,8 @@ Using Rez you can create standalone environments configured for a given set of p
 
 ## Feature Comparison
 
-| Tool    | Language Support | Build Environment | Build Once |
-|---------|------------------|-------------------|------------|
-| ilo     | any              | yes               | yes        |
-| toolbox | any installable  | yes               | no         |
+| Tool       | Language Support | Build Environment | Build Once |
+|------------|------------------|-------------------|------------|
+| ilo        | any              | yes               | yes        |
+| toolbox    | any installable  | yes               | no         |
+| virtualenv | Python           | yes               | no         |
