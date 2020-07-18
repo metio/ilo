@@ -10,13 +10,20 @@ package wtf.metio.ilo.cli;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class IloTest extends CLI_TCK {
+class VersionTest extends CLI_TCK {
 
   @Test
-  void shouldHaveHelpOutput() {
-    final var exitCode = cmd.execute("-h");
+  void shouldSupportVersionOption() {
+    final var exitCode = cmd.execute("--version");
     Assertions.assertEquals(0, exitCode);
-    Assertions.assertTrue(output.toString().startsWith("Usage"));
+    Assertions.assertTrue(output.toString().startsWith("ilo: "));
+  }
+
+  @Test
+  void shouldSupportShortVersionOption() {
+    final var exitCode = cmd.execute("-V");
+    Assertions.assertEquals(0, exitCode);
+    Assertions.assertTrue(output.toString().startsWith("ilo: "));
   }
 
 }

@@ -10,11 +10,25 @@ package wtf.metio.ilo.cli;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class IloTest extends CLI_TCK {
+class HelpTest extends CLI_TCK {
 
   @Test
-  void shouldHaveHelpOutput() {
+  void shouldHaveUsageHelp() {
     final var exitCode = cmd.execute("-h");
+    Assertions.assertEquals(0, exitCode);
+    Assertions.assertTrue(output.toString().startsWith("Usage"));
+  }
+
+  @Test
+  void shouldHaveHelpForShell() {
+    final var exitCode = cmd.execute("shell", "-h");
+    Assertions.assertEquals(0, exitCode);
+    Assertions.assertTrue(output.toString().startsWith("Usage"));
+  }
+
+  @Test
+  void shouldHaveHelpForCompose() {
+    final var exitCode = cmd.execute("compose", "-h");
     Assertions.assertEquals(0, exitCode);
     Assertions.assertTrue(output.toString().startsWith("Usage"));
   }
