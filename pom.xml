@@ -13,6 +13,16 @@
     <!-- ordering follows https://maven.apache.org/developers/conventions/code.html#POM_Code_Convention -->
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!--                                 PARENT                                  -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- https://maven.apache.org/pom.html#Inheritance -->
+    <parent>
+        <groupId>wtf.metio.maven.parents</groupId>
+        <artifactId>maven-parents-java-prototype</artifactId>
+        <version>2020.7.17-11732</version>
+    </parent>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!--                               COORDINATES                               -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- https://maven.apache.org/pom.html#Maven_Coordinates -->
@@ -27,7 +37,7 @@
     <!-- https://maven.apache.org/pom.html#More_Project_Information -->
     <name>ilo</name>
     <description>ilo: manage reproducible build environments</description>
-    <url>https://ilo.metio.wtf/</url>
+    <url>https://ilo.projects.metio.wtf/</url>
     <inceptionYear>2019</inceptionYear>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -58,7 +68,6 @@
         <revision>0.0.0-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.picocli>4.2.0</version.picocli>
-        <version.junit5>5.6.0</version.junit5>
         <version.graal>19.3.1</version.graal>
         <version.checksum-m-p>1.8</version.checksum-m-p>
         <version.m-assembly-p>3.2.0</version.m-assembly-p>
@@ -82,13 +91,6 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>${version.junit5}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${version.junit5}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
