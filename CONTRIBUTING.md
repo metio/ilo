@@ -1,87 +1,64 @@
-= Contributor Guide
+# Contributor Guide
 
-Thank you so much for improving `ilo`!
-Without a healthy community, any open source project is doomed.
+Thank you so much for improving `ilo`! Without a healthy community, no open source project can survive.
 
-== How to become a contributor
+## How to become a contributor
 
 In order to become a contributor for `ilo`, you have to complete these steps:
 
-* Fork the project on codeberg/github/gitlab/bitbucket
-* Sign the waiver
-* Create a pull-/merge-request
-* Celebrate \o/
+- Fork the project on github/codeberg/gitlab/bitbucket
+- Sign the waiver
+- Create a pull-/merge-request
+- Celebrate \o/
 
-In order to sign the waiver follow these steps.
-They assume, that you have cloned your fork locally (or added another remote) to an existing clone.
+In order to sign the waiver follow these steps. They assume, that you have cloned your fork locally (or added another remote) to an existing clone.
 
-[source]
-----
+```shell script
 $ git checkout -b contributor/$(id -u -n)
 $ gpg2 --no-version --armor --sign AUTHORS/WAIVER
 $ mv AUTHORS/WAIVER.asc AUTHORS/WAIVER-signed-by-$(id -u -n)-$(date "+%Y-%m-%d").asc
 $ git add AUTHORS/WAIVER-signed-by-$(id -u -n)-$(date "+%Y-%m-%d").asc
 $ git commit -s -S -m 'sign CLA'
 $ git push -u origin contributor/$(id -u -n)
-----
+```
 
-== Git Branching Model
+## Git Branching Model
 
-We are using the so called link:https://github.com/nvie/gitflow[git-flow] branching model.
-The `master` branch always contains the latest public stable release.
-The next release can be found inside a branch called `release/x.y.z`.
-While working on a new feature or bugfix, branch off the `develop` branch which always contains the latest development snapshot.
-Release branches should be created in order to finalize a release & help us maintain that version in the future, e.g. by backporting fixes/features.
+The `master` branch always contains the latest public stable release. New features can be developed in feature branches.
 
-== Issue Management
+## Building the Project
 
-We are using the issue tracker over at link:https://codeberg.org/metio.wtf/ilo/issues[codeberg] to track issues.
-Make generous use of labels in order to make issues easier to find.
-Each release has a corresponding milestone on codeberg.
+`ilo` requires **Java 11** to build. Earlier versions cannot be used to build `ilo`.
 
-== Release Process
-
-1. Create a new ticket on codeberg titled `release <NEW_VERSION>`.
-Use the link:./docs/templates/RELEASE.md[release template] as the body of the ticket.
-2. Follow the steps outlined in the newly created ticket.
-
-== Building the Project
-
-`ilo` currently needs **Java 11** to build.
-Earlier versions cannot be used to build `ilo`.
-
-[source,shell]
-----
+```shell script
 [you@hostname ~]$ git clone <upstream> # see mirrors at bottom
 [you@hostname ~]$ cd ilo
 [you@hostname ~/ilo]$ ./mvnw verify
-----
+```
 
 The binary distribution will be located in `target/`.
 
-=== GraalVM native-image
+### GraalVM native-image
 
-In case you want to build a native executable of `ilo`, make sure that Graal 19.3 is installed and the `native-image` command is available.
+In case you want to build a native executable of `ilo`, make sure Graal 19.3 is installed and the `native-image` command is available.
 Since 19.3 Graal no longer ships `native-image` in their base distribution, thus you have to install it manually using `gu install native-image`.
-Take a look at the link:https://www.graalvm.org/docs/reference-manual/native-image/[reference documentation] for more information.
+Take a look at the [reference documentation](https://www.graalvm.org/docs/reference-manual/native-image/) for more information.
 
-=== Use `ilo` to build `ilo`
+### Use `ilo` to build `ilo`
 
 In case you already have `ilo` installed on your system, do the following:
 
-[source,shell]
-----
+```shell script
 [you@hostname ~]$ git clone <upstream> # see mirrors at bottom
 [you@hostname ~]$ cd ilo
 [you@hostname ~/ilo]$ ilo @build-once
-----
+```
 
-== SSH Setup
+## SSH Setup
 
 Use the following example config as reference and adapt according to your needs:
 
-[source]
-----
+```
 Host github
         HostName github.com
         User git
@@ -101,24 +78,22 @@ Host codeberg
         HostName codeberg.org
         User git
         IdentityFile ~/.ssh/codeberg
-----
+```
 
-== Git Mirrors
+## Git Mirrors
 
 In order to have all mirrors in sync, do the following:
 
-[source,shell]
-----
+```shell script
 $ git remote add mirrors DISABLED
 $ git remote set-url --add --push mirrors github:metio/ilo.git
 $ git remote set-url --add --push mirrors gitlab:metio.wtf/ilo.git
 $ git remote set-url --add --push mirrors bitbucket:metio-wtf/ilo.git
-----
+```
 
 The end result should look like this:
 
-[source,shell]
-----
+```shell script
 $ git remote -v
 mirrors DISABLED (fetch)
 mirrors github:metio/ilo.git (push)
@@ -126,6 +101,6 @@ mirrors gitlab:metio.wtf/ilo.git (push)
 mirrors bitbucket:metio-wtf/ilo.git (push)
 origin  codeberg:metio.wtf/ilo.git (fetch)
 origin  codeberg:metio.wtf/ilo.git (push)
-----
+```
 
 Use `git push mirrors` in order to keep the mirrors up to date.
