@@ -29,7 +29,7 @@
   - link:https://codeberg.org/metio.wtf/ilo/milestone/<MILESTONE_ID>?q=&type=all&state=closed&labels=1734&assignee=0[fixed bugs]
   - link:https://codeberg.org/metio.wtf/ilo/milestone/<MILESTONE_ID>?q=&type=all&state=closed&labels=1736&assignee=0[other work done]
   ```
-- [ ] Update version numbers in [installation instructions](../topics/INSTALL.asciidoc)
+- [ ] Update version numbers in [installation instructions](../topics/INSTALL.md)
 
 # Build
 

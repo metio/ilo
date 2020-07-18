@@ -1,40 +1,37 @@
-= ilo
+# ilo
 
-ilo is a link:https://github.com/containers/toolbox[toolbox] inspired tool to create/manage link:https://reproducible-builds.org/[reproducible build environments] based on link:https://www.opencontainers.org/[OCI] container images.
-It defaults to run with link:https://podman.io/[podman] but can work with link:https://www.docker.com/products/container-runtime[docker] as well.
+ilo is a [toolbox](https://github.com/containers/toolbox) inspired tool to create/manage [reproducible build environments](https://reproducible-builds.org/) based on [OCI](https://www.opencontainers.org/) container images.
 
-== Usage
+# Usage
 
 Make sure that `ilo` is installed in your path or otherwise accessible from your terminal.
-Two commands are available: `shell` to run a single container and `compose` to run multiple containers defined in a link:https://docs.docker.com/compose/compose-file/[docker-compose.yml] file.
+Two commands are available: `shell` to run a single container and `compose` to run multiple containers defined in a [docker-compose.yml](https://docs.docker.com/compose/compose-file/) file.
 
-=== shell
+### shell
 
 The `ilo shell` command can be used to run a single container either in interactive mode (default) or non-interactive mode (e.g. for CI builds).
 It defaults to use the `fedora:latest` image and executes `/bin/bash` inside the running container to get a running shell.
-It automatically mounts the current working directory (e.g. your project directory) and stops/removes the container once you exit the shell. `ilo shell` can be used with either podman (default) or docker by using the `--runtime` switch.
+It automatically mounts the current working directory (e.g. your project directory) and stops/removes the container once you exit the shell. `ilo shell` can be used with either [podman](https://podman.io/) (default) or [docker](https://www.docker.com/products/container-runtime) by using the `--runtime` switch. If no runtime is specified `ilo` will auto-detect available runtimes and prefer `podman` over `docker`.
 Use `ilo shell --help` to get a list of all options, and their default values.
 
-[source,shell]
-----
+```shell script
 [you@hostname project-dir]$ ilo shell
 [root@container project-dir]#
-----
+```
 
-=== compose
+### compose
 
 The `ilo compose` command can be used for more complex build environments based on docker-compose.yml files.
 Use this command in case your project requires e.g. a database in order to be build. `ilo compose` does not mount any directories by default, nor does it automatically execute a specific command.
 It defaults to run with podman-compose but can be used with docker-compose as well by using the `--runtime` switch.
 Use `ilo compose --help` to get a list of all options, and their default values.
 
-[source,shell]
-----
+```shell script
 [you@hostname project-dir]$ ilo compose
 [root@container project-dir]#
-----
+```
 
-== Customize Build Environment
+## Customize Build Environment
 
 In most cases `fedora:latest` will not be enough to compile/test/package/run your software.
 While you can install additional packages inside the container, those changes will be lost once you remove the container.
@@ -45,32 +42,35 @@ If you are using `ilo compose`, make sure to specify `your.image.here:latest` as
 One easy way to share build environments for open source projects, is to use the link:https://docs.docker.com/docker-hub/builds/[automated build system] from Docker Hub.
 Make sure Docker Hub rebuilds your build environment on every change to master (or any other branch) and have your contributors pull the resulting images to their machines.
 
-== Installation
+## Installation
 
-See link:./docs/topics/INSTALL.md[INSTALL] for installation instructions.
+See [INSTALL](./docs/topics/INSTALL.md) for installation instructions.
 
-== Integration
+## Integration
 
-Take a look at the link:./docs/topics/INTEGRATION.md[integration guide] if you want to integrate `ilo` into your workflow.
+Take a look at the [integration guide](./docs/topics/INTEGRATION.md) if you want to integrate `ilo` into your workflow.
 
-== User Support
+## User Support
 
 In case you need help, don't panic - we've all been there!
-Try the link:./docs/topics/SUPPORT.md[following resources] in order to get help.
+Try the [following resources](./docs/topics/SUPPORT.md) in order to get help.
 
-== Alternatives
+## Alternatives
 
-In case `ilo` does not offer what you are looking for, take a look at the link:./docs/topics/ALTERNATIVES.md[following tools].
+In case `ilo` does not offer what you are looking for, take a look at the [following tools](./docs/topics/ALTERNATIVES.md).
 
-== License
+## License
 
-To the extent possible under law, the author(s) have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide.
-This software is distributed without any warranty.
+```
+To the extent possible under law, the author(s) have dedicated all copyright
+and related and neighboring rights to this software to the public domain
+worldwide. This software is distributed without any warranty.
 
-You should have received a copy of the CC0 Public Domain Dedication along with this software.
-If not, see http://creativecommons.org/publicdomain/zero/1.0/.
+You should have received a copy of the CC0 Public Domain Dedication along with
+this software. If not, see http://creativecommons.org/publicdomain/zero/1.0/.
+```
 
-== Mirrors
+## Mirrors
 
 * https://github.com/metio.wtf/ilo
 * https://gitlab.com/metio.wtf/ilo
