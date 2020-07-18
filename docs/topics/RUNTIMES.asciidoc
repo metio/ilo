@@ -1,0 +1,27 @@
+== Supported Runtimes
+
+`ilo` is able to speak with the following runtimes.
+
+|===
+|Runtime |Command |Status |Issues
+
+|link:https://podman.io/[podman]
+|shell
+|Since 1.0.0
+|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1355&milestone=0&assignee=0[Open Tickets]
+
+|link:https://github.com/containers/podman-compose[podman-compose]
+|compose
+|Since 2.0.0
+|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1356&milestone=0&assignee=0[Open Tickets]
+
+|link:https://www.docker.com/products/container-runtime[docker]
+|shell
+|Since 1.0.0
+|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1357&milestone=0&assignee=0[Open Tickets]
+
+|link:https://docs.docker.com/compose/[docker-compose]
+|compose
+|Since 2.0.0
+|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1358&milestone=0&assignee=0[Open Tickets]
+|===

@@ -1,0 +1,43 @@
+= Tooling Integration
+
+== `direnv` Integration
+
+link:https://direnv.net/[direnv] can be used to automatically execute a command once you enter a directory.
+Together with `ilo`, you can do the following:
+
+[source,shell]
+----
+[you@hostname ~]$ cd path/to/your/project
+[root@container project-dir]#
+----
+
+As soon as you enter the directory of your project, `direnv` will call `ilo` which in turn will open your build environment for you.
+In order to create a setup like this, first link:https://direnv.net/#basic-installation[install direnv] and then place a `.envrc` file in the root of your project which contains `ilo` and its arguments as its contents.
+
+[source,shell]
+----
+[you@hostname project-dir]$ cat .envrc
+ilo @build-env
+----
+
+`build-env` is an link:./ARGUMENTS.asciidoc[arguments] file.
+
+== Jenkins Integration
+
+link:https://jenkins.io/[Jenkins] knows multiple ways to define jobs.
+In order to integrate with `ilo` make sure that the `ilo` executable is installed on your slaves.
+
+=== Declarative Pipeline
+
+[source]
+----
+pipeline {
+  stages {
+    stage('Build with ilo') {
+      sh 'ilo @build-things'
+    }
+  }
+}
+----
+
+`build-things` is an link:./ARGUMENTS.asciidoc[arguments] file.

@@ -1,0 +1,3 @@
+- [ ] Applies cleanup against `<target_branch>`
+- [ ] All tests are green: `./mvnw verify`
+- [ ] Code style matches the rest of the project
