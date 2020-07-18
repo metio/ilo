@@ -33,7 +33,7 @@ The `master` branch always contains the latest public stable release. New featur
 ```shell script
 [you@hostname ~]$ git clone <upstream> # see mirrors at bottom
 [you@hostname ~]$ cd ilo
-[you@hostname ~/ilo]$ ./mvnw verify
+[you@hostname ~/ilo]$ mvn verify
 ```
 
 The binary distribution will be located in `target/`.
@@ -51,7 +51,7 @@ In case you already have `ilo` installed on your system, do the following:
 ```shell script
 [you@hostname ~]$ git clone <upstream> # see mirrors at bottom
 [you@hostname ~]$ cd ilo
-[you@hostname ~/ilo]$ ilo @build-once
+[you@hostname ~/ilo]$ ilo @build/once
 ```
 
 ## SSH Setup
