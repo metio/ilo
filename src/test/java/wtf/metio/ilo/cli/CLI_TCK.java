@@ -10,6 +10,7 @@ package wtf.metio.ilo.cli;
 import org.junit.jupiter.api.BeforeEach;
 import picocli.CommandLine;
 import wtf.metio.ilo.Ilo;
+import wtf.metio.ilo.commands.Shell;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -26,6 +27,12 @@ abstract class CLI_TCK {
     cmd = new CommandLine(app);
     output = new StringWriter();
     cmd.setOut(new PrintWriter(output));
+  }
+
+  protected final Shell shell(final String... args) {
+    final var parseResult = cmd.parseArgs(args);
+    final var subcommand = parseResult.subcommand();
+    return (Shell) subcommand.commandSpec().userObject();
   }
 
 }
