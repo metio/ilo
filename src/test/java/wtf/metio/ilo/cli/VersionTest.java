@@ -8,20 +8,17 @@
 package wtf.metio.ilo.cli;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class VersionTest extends CLI_TCK {
 
-  @Test
-  void shouldSupportVersionOption() {
-    final var exitCode = cmd.execute("--version");
-    Assertions.assertEquals(0, exitCode);
-    Assertions.assertTrue(output.toString().startsWith("ilo: "));
-  }
-
-  @Test
-  void shouldSupportShortVersionOption() {
-    final var exitCode = cmd.execute("-V");
+  @DisplayName("version info")
+  @ParameterizedTest
+  @ValueSource(strings = {"-V", "--version"})
+  void shouldSupportVersionOption(final String flag) {
+    final var exitCode = cmd.execute(flag);
     Assertions.assertEquals(0, exitCode);
     Assertions.assertTrue(output.toString().startsWith("ilo: "));
   }
