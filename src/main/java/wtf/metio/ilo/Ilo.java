@@ -11,7 +11,7 @@ import picocli.AutoComplete;
 import picocli.CommandLine;
 import wtf.metio.ilo.commands.Compose;
 import wtf.metio.ilo.commands.Shell;
-import wtf.metio.ilo.errors.ExecutionExceptionHandler;
+import wtf.metio.ilo.errors.DelegatingExceptionHandler;
 import wtf.metio.ilo.version.VersionProvider;
 
 import java.util.Arrays;
@@ -50,7 +50,7 @@ public final class Ilo implements Runnable {
 
     final var commandLine = new CommandLine(new Ilo());
     commandLine.setUnmatchedArgumentsAllowed(true); // workaround for IntelliJ
-    commandLine.setExecutionExceptionHandler(new ExecutionExceptionHandler());
+    commandLine.setExecutionExceptionHandler(new DelegatingExceptionHandler());
     System.exit(commandLine.execute(arguments));
   }
 

@@ -1,10 +1,3 @@
-# http://www.gnu.org/software/make/manual/make.html
-# https://www.gnu.org/prep/standards/html_node/Makefile-Basics.html#Makefile-Basics
-# http://clarkgrubb.com/makefile-style-guide
-
-############
-# PROLOGUE #
-############
 MAKEFLAGS += --warn-undefined-variables
 SHELL = /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c
@@ -12,9 +5,6 @@ SHELL = /bin/bash
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
-######################
-# INTERNAL VARIABLES #
-######################
 TIMESTAMPED_VERSION := $(shell /bin/date "+%Y.%m.%d-%H%M%S")
 CURRENT_DATE := $(shell /bin/date "+%Y-%m-%d")
 USERNAME := $(shell id -u -n)
@@ -24,9 +14,6 @@ WHITE  := $(shell tput -Txterm setaf 7)
 YELLOW := $(shell tput -Txterm setaf 3)
 RESET  := $(shell tput -Txterm sgr0)
 
-######################
-# INTERNAL FUNCTIONS #
-######################
 HELP_FUN = \
     %help; \
     while(<>) { push @{$$help{$$2 // 'targets'}}, [$$1, $$3] if /^([a-zA-Z0-9\-]+)\s*:.*\#\#(?:@([a-zA-Z\-]+))?\s(.*)$$/ }; \
@@ -39,9 +26,6 @@ HELP_FUN = \
     }; \
     print "\n"; }
 
-###############
-# GOALS/RULES #
-###############
 .PHONY: all
 all: help
 
@@ -50,15 +34,15 @@ help: ##@other Show this help
 
 .PHONY: build
 build: ##@hacking Build everything
-	./mvnw verify
+	mvn verify
 
 .PHONY: native-image
 native-image: ##@hacking Create a native image using GraalVM
-	./mvnw verify -Dskip.graal=false
+	mvn verify -Dskip.graal=false
 
 .PHONY: clean
 clean: ##@hacking Clean build artifacts
-	./mvnw clean
+	mvn clean
 
 .PHONY: example-redis-java11
 example-redis-java11: ##@example Example shell using compose w/ redis & java 11

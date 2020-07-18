@@ -2,4 +2,4 @@ shell
 --image openjdk:11
 --no-interactive
 --volume $HOME/.m2/repository:/root/.m2/repository:Z
-./mvnw verify
+mvn verify

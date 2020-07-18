@@ -15,7 +15,7 @@ import wtf.metio.ilo.tools.Tools;
 
 import java.io.IOException;
 
-public class ExecutionExceptionHandler implements CommandLine.IExecutionExceptionHandler {
+public class DelegatingExceptionHandler implements CommandLine.IExecutionExceptionHandler {
 
   private static Throwable findRootCause(final Throwable throwable) {
     var rootCause = throwable;
@@ -29,7 +29,7 @@ public class ExecutionExceptionHandler implements CommandLine.IExecutionExceptio
   public int handleExecutionException(
       final Exception exception,
       final CommandLine commandLine,
-      final CommandLine.ParseResult parseResult) throws Exception {
+      final CommandLine.ParseResult parseResult) {
     final var rootCause = findRootCause(exception);
     if (rootCause instanceof IOException) {
       final var subcommand = parseResult.subcommand();
@@ -54,9 +54,10 @@ public class ExecutionExceptionHandler implements CommandLine.IExecutionExceptio
       commandLine.getErr().println(exception.getMessage());
       exception.printStackTrace();
     }
+
     return null != commandLine.getExitCodeExceptionMapper()
         ? commandLine.getExitCodeExceptionMapper().getExitCode(exception)
-        : CommandLine.ExitCode.SOFTWARE;
+        : commandLine.getCommandSpec().exitCodeOnExecutionException();
   }
 
 }

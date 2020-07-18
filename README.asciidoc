@@ -6,14 +6,14 @@ It defaults to run with link:https://podman.io/[podman] but can work with link:h
 == Usage
 
 Make sure that `ilo` is installed in your path or otherwise accessible from your terminal.
-Currently two commands are provided: `shell` to run a single container and `compose` to run multiple containers defined in a link:https://docs.docker.com/compose/compose-file/[docker-compose.yml] file.
+Two commands are available: `shell` to run a single container and `compose` to run multiple containers defined in a link:https://docs.docker.com/compose/compose-file/[docker-compose.yml] file.
 
 === shell
 
 The `ilo shell` command can be used to run a single container either in interactive mode (default) or non-interactive mode (e.g. for CI builds).
 It defaults to use the `fedora:latest` image and executes `/bin/bash` inside the running container to get a running shell.
 It automatically mounts the current working directory (e.g. your project directory) and stops/removes the container once you exit the shell. `ilo shell` can be used with either podman (default) or docker by using the `--runtime` switch.
-Use `ilo shell --help` to get a list of all options and their default values.
+Use `ilo shell --help` to get a list of all options, and their default values.
 
 [source,shell]
 ----
@@ -26,7 +26,7 @@ Use `ilo shell --help` to get a list of all options and their default values.
 The `ilo compose` command can be used for more complex build environments based on docker-compose.yml files.
 Use this command in case your project requires e.g. a database in order to be build. `ilo compose` does not mount any directories by default, nor does it automatically execute a specific command.
 It defaults to run with podman-compose but can be used with docker-compose as well by using the `--runtime` switch.
-Use `ilo compose --help` to get a list of all options and their default values.
+Use `ilo compose --help` to get a list of all options, and their default values.
 
 [source,shell]
 ----
@@ -37,135 +37,30 @@ Use `ilo compose --help` to get a list of all options and their default values.
 == Customize Build Environment
 
 In most cases `fedora:latest` will not be enough to compile/test/package/run your software.
-While you can install additional packages inside the container, those changes will be lost once the container is removed.
-Instead define your build environment either in a link:https://docs.docker.com/engine/reference/builder/[Dockerfile] or any other link:https://github.com/opencontainers/image-spec/blob/master/spec.md[OCI Image] compliant way.
-Make sure that this image can be accessed by everyone in your team and use `ilo shell --image your.image.here:latest` to open a new instance of your build environment.
+While you can install additional packages inside the container, those changes will be lost once you remove the container.
+Instead `ilo` allows you to define your build environment either in a link:https://docs.docker.com/engine/reference/builder/[Dockerfile] or any other link:https://github.com/opencontainers/image-spec/blob/master/spec.md[OCI Image] compliant way.
+Make sure your image can be accessed by everyone in your team and use `ilo shell --image your.image.here:latest` to open a new instance of your build environment.
 If you are using `ilo compose`, make sure to specify `your.image.here:latest` as the image in your docker-compose.yml file.
 
 One easy way to share build environments for open source projects, is to use the link:https://docs.docker.com/docker-hub/builds/[automated build system] from Docker Hub.
-Make sure that Docker Hub rebuilds your build environment on every change to master (or any other branch) and have your contributors pull the resulting images to their machines.
-
-== Argument Files
-
-In order to share the same options/commands across your team, `ilo` supports argument files which contain the options (like which image to use) for your project.
-Create an empty text file and put all options in there with their corresponding values.
-You can specify all options in a single line, separated by whitespace or use a new line for every option.
-Use that argument file by calling `ilo @file-name`.
-You can mix argument files with regular CLI options as well, e.g. `ilo shell --image=openjdk:latest @some-file`.
-The argument file used by `ilo` developers can be seen link:build-env[here] and is used like this `ilo @build-env`
-
-== `direnv` Integration
-
-link:https://direnv.net/[direnv] can be used to automatically execute a command once you enter a directory.
-Together with `ilo`, you can do the following:
-
-[source,shell]
-----
-[you@hostname ~]$ cd path/to/your/project
-[root@container project-dir]#
-----
-
-As soon as you enter the directory of your project, `direnv` will call `ilo` which in turn will open your build environment for you.
-In order to create a setup like this, first link:https://direnv.net/#basic-installation[install direnv] and then place a `.envrc` file in the root of your project which contains `ilo` and its arguments as its contents.
-
-[source,shell]
-----
-[you@hostname project-dir]$ cat .envrc
-ilo @build-env
-----
-
-== Tooling Support
-
-`ilo` is able to speak with the following tools.
-
-|===
-|Tool |Status |Issues
-
-|link:https://podman.io/[podman]
-|Since 1.0.0
-|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1355&milestone=0&assignee=0[Open Tickets]
-
-|link:https://github.com/containers/podman-compose[podman-compose]
-|Since 2.0.0
-|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1356&milestone=0&assignee=0[Open Tickets]
-
-|link:https://www.docker.com/products/container-runtime[docker]
-|Since 1.0.0
-|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1357&milestone=0&assignee=0[Open Tickets]
-
-|link:https://docs.docker.com/compose/[docker-compose]
-|Since 2.0.0
-|link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1358&milestone=0&assignee=0[Open Tickets]
-|===
+Make sure Docker Hub rebuilds your build environment on every change to master (or any other branch) and have your contributors pull the resulting images to their machines.
 
 == Installation
 
-Use the following locations in order to download the binary distribution of `ilo`:
+See link:./docs/topics/INSTALL.asciidoc[INSTALL] for installation instructions.
 
-* https://github.com/metio/ilo/releases
-* https://codeberg.org/metio.wtf/ilo/releases
+== Integration
 
-None of the widely used package managers have `ilo` in their repository yet.
-In case you want to help package `ilo` for your preferred operating system, take a look at the link:https://codeberg.org/metio.wtf/ilo/issues?q=&type=all&sort=&state=open&labels=1361&milestone=0&assignee=0[open packaging issues].
-
-Follow these steps in case you are on a unix (linux/mac) system and want to use the link:https://www.graalvm.org/[GraalVM] compiled link:https://www.graalvm.org/docs/reference-manual/native-image/[native image]:
-
-[source,shell]
-----
-$ curl --location https://github.com/metio/ilo/releases/download/2.3.0/ilo-2.3.0-native-unix.zip --output ilo.zip
-$ unzip ilo.zip
-$ ln --symbolic --relative ilo-2.3.0/ilo ~/bin/ilo
-----
-
-Make sure that `~/bin` is in your `PATH`, or adapt the location to your own needs.
-
-In case you don't want to (or cannot) use the native version, make sure that you have Java 11 installed and follow these steps:
-
-[source,shell]
-----
-$ curl --location https://github.com/metio/ilo/releases/download/2.3.0/ilo-2.3.0-java11.zip --output ilo.zip
-$ unzip ilo.zip
-$ ln --symbolic --relative ilo-2.3.0/bin/ilo ~/bin/ilo
-----
-
-Windows users have to use `ilo.bat` instead of `ilo` and put the `.bat` file in their `PATH`.
-Take a look at link:https://codeberg.org/metio.wtf/ilo/issues/65[this ticket] in case you want to help extend the installation instructions for Windows.
-
-== CLI Autocomplete
-
-In order to get autocomplete working in your shell, run the following after installing `ilo`:
-
-[source,shell]
-----
-$ source <(ilo generate-completion)
-----
-
-Place the same line in your `.bashrc` or similar file.
-Otherwise autocomplete will only work in your current shell.
+Take a look at the link:./docs/topics/INTEGRATION.asciidoc[integration guide] if you want to integrate `ilo` into your workflow.
 
 == User Support
 
 In case you need help, don't panic - we've all been there!
-Try the following resources in order to get help:
-
-* link:https://codeberg.org/metio.wtf/ilo/issues/new[open a new ticket]
-* link:https://matrix.to/#/#ilo:matrix.org[join the chat room]
-* link:https://metio.groups.io/g/ilo[send an email to the mailing list]
-* link:https://stackoverflow.com/questions/tagged/ilo[ask on stackoverflow]
-* Take a walk outside & come back to your issue with a fresh mind
+Try the link:./docs/topics/SUPPORT.asciidoc[following resources] in order to get help.
 
 == Alternatives
 
-In case `ilo` does not offer what you are looking for, take a look at the following tools:
-
-* link:https://github.com/containers/toolbox[toolbox]
-* link:https://gitian.org/[gitian]
-* link:https://rbm.torproject.org/[rbm]
-* link:https://github.com/nerdvegas/rez[rez]
-* link:https://github.com/mottosso/bleeding-rez[bleeding-rez]
-* link:http://rbld.io/[rebuild]
-* link:https://github.com/jasonwhite/ducible[ducible]
-* link:https://buildpacks.io/[buildpacks]
+In case `ilo` does not offer what you are looking for, take a look at the link:./docs/topics/ALTERNATIVES.asciidoc[following tools].
 
 == License
 
@@ -177,10 +72,7 @@ If not, see http://creativecommons.org/publicdomain/zero/1.0/.
 
 == Mirrors
 
-`ilo` is mirrored across several git repositories.
-Use any of the following to get a copy of the source.
-
-* https://codeberg.org/metio.wtf/ilo
 * https://github.com/metio.wtf/ilo
 * https://gitlab.com/metio.wtf/ilo
+* https://codeberg.org/metio.wtf/ilo
 * https://bitbucket.org/metio-wtf/ilo

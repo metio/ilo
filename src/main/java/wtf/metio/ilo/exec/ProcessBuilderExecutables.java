@@ -7,6 +7,8 @@
 
 package wtf.metio.ilo.exec;
 
+import wtf.metio.ilo.errors.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,11 +17,27 @@ import java.util.Optional;
 
 final class ProcessBuilderExecutables implements Executables {
 
+  private static Process startProcess(final ProcessBuilder processBuilder) {
+    try {
+      return processBuilder.start();
+    } catch (final UnsupportedOperationException exception) {
+      throw new OperatingSystemNotSupportedException(exception);
+    } catch (final NullPointerException exception) {
+      throw new CommandLiistContainsNullException(exception);
+    } catch (final IndexOutOfBoundsException exception) {
+      throw new CommandListIsEmptyException(exception);
+    } catch (final SecurityException exception) {
+      throw new SecurityManagerDeniesAccessException(exception);
+    } catch (final IOException exception) {
+      throw new RuntimeIOException(exception);
+    }
+  }
+
   @Override
   public Optional<String> runAndReadOutput(final String[] args) {
     try {
       final var processBuilder = new ProcessBuilder(args);
-      final var process = processBuilder.start();
+      final var process = startProcess(processBuilder);
       try (final var isr = new InputStreamReader(process.getInputStream());
            final var br = new BufferedReader(isr)) {
         final var builder = new StringBuilder();
@@ -31,16 +49,16 @@ final class ProcessBuilderExecutables implements Executables {
         return Optional.of(builder.toString());
       }
     } catch (final IOException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeIOException(e);
     }
   }
 
   @Override
   public int runAndWaitForExit(final List<String> args) {
     try {
-      return new ProcessBuilder(args).inheritIO().start().waitFor();
-    } catch (final IOException | InterruptedException e) {
-      throw new RuntimeException(e);
+      return startProcess(new ProcessBuilder(args).inheritIO()).waitFor();
+    } catch (final InterruptedException exception) {
+      throw new UnexpectedInterruptionException(exception);
     }
   }
 
