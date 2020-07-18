@@ -35,11 +35,11 @@ Use `ilo compose --help` to get a list of all options, and their default values.
 
 In most cases `fedora:latest` will not be enough to compile/test/package/run your software.
 While you can install additional packages inside the container, those changes will be lost once you remove the container.
-Instead `ilo` allows you to define your build environment either in a link:https://docs.docker.com/engine/reference/builder/[Dockerfile] or any other link:https://github.com/opencontainers/image-spec/blob/master/spec.md[OCI Image] compliant way.
+Instead `ilo` allows you to define your build environment either in a [Dockerfile](https://docs.docker.com/engine/reference/builder/) or any other [OCI Image](https://github.com/opencontainers/image-spec/blob/master/spec.md) compliant way.
 Make sure your image can be accessed by everyone in your team and use `ilo shell --image your.image.here:latest` to open a new instance of your build environment.
 If you are using `ilo compose`, make sure to specify `your.image.here:latest` as the image in your docker-compose.yml file.
 
-One easy way to share build environments for open source projects, is to use the link:https://docs.docker.com/docker-hub/builds/[automated build system] from Docker Hub.
+One easy way to share build environments for open source projects, is to use the [automated build system](https://docs.docker.com/docker-hub/builds/) from Docker Hub.
 Make sure Docker Hub rebuilds your build environment on every change to master (or any other branch) and have your contributors pull the resulting images to their machines.
 
 ## Installation
