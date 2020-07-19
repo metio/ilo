@@ -7,3 +7,5 @@ out/
 .bash_history
 .jdk
 target
+.project
+.classpath
