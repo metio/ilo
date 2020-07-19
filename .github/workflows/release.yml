@@ -138,6 +138,7 @@ jobs:
           app-id: ${{ secrets.REDDIT_APP_ID }}
           app-secret: ${{ secrets.REDDIT_API_SECRET }}
           subreddit: ${{ secrets.REDDIT_SUBREDDIT }}
+          title: "${{ github.repository }} version ${{ steps.release.outputs.version }} published"
           url: https://github.com/metio/ilo/releases/tag/${{ steps.release.outputs.version }}
   mac:
     runs-on: macos-latest
