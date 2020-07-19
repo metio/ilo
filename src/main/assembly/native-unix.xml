@@ -27,9 +27,8 @@
             <directory>${project.basedir}</directory>
             <outputDirectory/>
             <includes>
-                <include>README.asciidoc</include>
+                <include>README.md</include>
                 <include>LICENSE</include>
-                <include>CHANGELOG.asciidoc</include>
             </includes>
         </fileSet>
     </fileSets>

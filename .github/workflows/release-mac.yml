@@ -1,0 +1,52 @@
+name: Mac OSX Binary
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: setup-graalvm-ce
+        uses: rinx/setup-graalvm-ce@v0.0.4
+        with:
+          graalvm-version: "20.1.0"
+          java-version: "java11"
+          native-image: "true"
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Create Release Version
+        id: release
+        run: echo "::set-output name=version::$(date +'%Y.%-m.%-d-%-H%M%S')"
+      - name: Verify Project
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Native Mac Artifact
+        if: steps.commits.outputs.count > 0
+        id: upload-native-mac-artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-mac.zip
+          asset_name: ilo-${{ steps.release.outputs.version }}-native-mac.zip
+          asset_content_type: application/zip
+      - name: Upload Native Mac Checksum
+        if: steps.commits.outputs.count > 0
+        id: upload-native-mac-checksum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-mac.zip.sha512
+          asset_name: ilo-${{ steps.release.outputs.version }}-native-mac.zip.sha512
+          asset_content_type: text/plain

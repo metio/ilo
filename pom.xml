@@ -287,6 +287,41 @@
             </build>
         </profile>
         <profile>
+            <id>native-mac</id>
+            <activation>
+                <property>
+                    <name>skip.graal</name>
+                    <value>false</value>
+                </property>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <version>${version.m-assembly-p}</version>
+                        <executions>
+                            <execution>
+                                <id>native-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <descriptors>
+                                        <descriptor>src/main/assembly/native-mac.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>native-windows</id>
             <activation>
                 <property>
