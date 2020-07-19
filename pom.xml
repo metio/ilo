@@ -181,6 +181,9 @@
                 <configuration>
                     <skip>${skip.graal}</skip>
                     <imageName>ilo</imageName>
+                    <buildArgs>
+                        --no-server
+                    </buildArgs>
                 </configuration>
             </plugin>
             <plugin>
