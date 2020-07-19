@@ -7,10 +7,11 @@
 
 package wtf.metio.ilo.cli;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.List;
 
 import static wtf.metio.ilo.utils.CalculateArguments.shellArguments;
 
@@ -22,17 +23,12 @@ class ShellTest extends CLI_TCK {
   void shouldCreateShellCommandLine(final String tool) {
     final var shell = shell("shell", "--runtime", tool);
     final var arguments = shellArguments(shell.options, tool);
-    Assertions.assertAll("shell command",
-        () -> Assertions.assertTrue(arguments.contains(tool)),
-        () -> Assertions.assertTrue(arguments.contains("run")),
-        () -> Assertions.assertTrue(arguments.contains("--rm")),
-        () -> Assertions.assertTrue(arguments.contains("--volume")),
-        () -> Assertions.assertTrue(arguments.contains("--workdir")),
-        () -> Assertions.assertTrue(arguments.contains("--interactive")),
-        () -> Assertions.assertTrue(arguments.contains("--tty")),
-        () -> Assertions.assertTrue(arguments.contains("fedora:latest")),
-        () -> Assertions.assertTrue(arguments.contains("/bin/bash"))
-    );
+    final var cmd = List.of(tool,
+        "run", "--rm",
+        "--volume", "--workdir",
+        "--interactive", "--tty",
+        "fedora:latest", "/bin/bash");
+    assertCommandLine(cmd, arguments);
   }
 
 }
