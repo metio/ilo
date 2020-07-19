@@ -17,16 +17,68 @@ import static wtf.metio.ilo.utils.CalculateArguments.shellArguments;
 
 class ShellTest extends CLI_TCK {
 
-  @DisplayName("create shell command line")
   @ParameterizedTest
+  @DisplayName("create shell command line")
   @ValueSource(strings = {"podman", "docker"})
-  void shouldCreateShellCommandLine(final String tool) {
+  void defaultCommandLine(final String tool) {
     final var shell = shell("shell", "--runtime", tool);
     final var arguments = shellArguments(shell.options, tool);
     final var cmd = List.of(tool,
         "run", "--rm",
         "--volume", "--workdir",
         "--interactive", "--tty",
+        "fedora:latest", "/bin/bash");
+    assertCommandLine(cmd, arguments);
+  }
+
+  @ParameterizedTest
+  @DisplayName("allow to disable mounting the project directory")
+  @ValueSource(strings = {"podman", "docker"})
+  void disableProjectDirMount(final String tool) {
+    final var shell = shell("shell", "--runtime", tool, "--mount-project-dir=false");
+    final var arguments = shellArguments(shell.options, tool);
+    final var cmd = List.of(tool,
+        "run", "--rm",
+        "--interactive", "--tty",
+        "fedora:latest", "/bin/bash");
+    assertCommandLine(cmd, arguments);
+  }
+
+  @ParameterizedTest
+  @DisplayName("allow to run non-interactive")
+  @ValueSource(strings = {"podman", "docker"})
+  void nonInteractive(final String tool) {
+    final var shell = shell("shell", "--runtime", tool, "--interactive=false");
+    final var arguments = shellArguments(shell.options, tool);
+    final var cmd = List.of(tool,
+        "run", "--rm",
+        "--volume", "--workdir",
+        "fedora:latest", "/bin/bash");
+    assertCommandLine(cmd, arguments);
+  }
+
+  @ParameterizedTest
+  @DisplayName("debug mode does not influence command line")
+  @ValueSource(strings = {"podman", "docker"})
+  void debugDoesNotChangeCmd(final String tool) {
+    final var shell = shell("shell", "--runtime", tool, "--debug");
+    final var arguments = shellArguments(shell.options, tool);
+    final var cmd = List.of(tool,
+        "run", "--rm",
+        "--volume", "--workdir",
+        "--interactive", "--tty",
+        "fedora:latest", "/bin/bash");
+    assertCommandLine(cmd, arguments);
+  }
+
+  @ParameterizedTest
+  @DisplayName("allow to run non-interactive w/o mounting")
+  @ValueSource(strings = {"podman", "docker"})
+  void nonInteractiveDisableMounting(final String tool) {
+    final var shell = shell("shell", "--runtime", tool, "--interactive=false", "--mount-project-dir=false");
+    final var arguments = shellArguments(shell.options, tool);
+    final var cmd = List.of(tool,
+        "run", "--rm",
         "fedora:latest", "/bin/bash");
     assertCommandLine(cmd, arguments);
   }
