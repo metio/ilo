@@ -72,7 +72,7 @@ this software. If not, see http://creativecommons.org/publicdomain/zero/1.0/.
 
 ## Mirrors
 
-* https://github.com/metio.wtf/ilo
+* https://github.com/metio/ilo
 * https://gitlab.com/metio.wtf/ilo
 * https://codeberg.org/metio.wtf/ilo
 * https://bitbucket.org/metio-wtf/ilo
