@@ -68,7 +68,7 @@
         <revision>0.0.0-SNAPSHOT</revision>
         <version.jdk>11</version.jdk>
         <version.picocli>4.2.0</version.picocli>
-        <version.graal>19.3.1</version.graal>
+        <version.graal>20.1.0</version.graal>
         <version.checksum-m-p>1.8</version.checksum-m-p>
         <version.m-assembly-p>3.2.0</version.m-assembly-p>
 
