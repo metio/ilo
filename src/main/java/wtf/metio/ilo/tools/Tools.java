@@ -21,20 +21,20 @@ public final class Tools {
   }
 
   public static Stream<String> detectedShellRuntime(final Executables executables, final Runtime runtime) {
-    final var podman = getPodmanCli(executables);
     final var docker = getDockerCli(executables);
+    final var podman = getPodmanCli(executables);
 
-    return Stream.of(podman, docker)
+    return Stream.of(docker, podman)
         .map(CliTool::name)
         .filter(ExecutablePaths::exists)
         .filter(tool -> null == runtime || runtime.matches(tool));
   }
 
   public static Stream<String> detectedComposeRuntime(final Executables executables, final ComposeRuntime runtime) {
-    final var podmanCompose = getPodmanComposeCli(executables);
     final var dockerCompose = getDockerComposeCli(executables);
+    final var podmanCompose = getPodmanComposeCli(executables);
 
-    return Stream.of(podmanCompose, dockerCompose)
+    return Stream.of(dockerCompose, podmanCompose)
         .map(CliTool::name)
         .filter(ExecutablePaths::exists)
         .filter(tool -> null == runtime || runtime.matches(tool));
