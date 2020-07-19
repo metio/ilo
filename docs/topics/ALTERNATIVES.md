@@ -20,6 +20,7 @@ Using Rez you can create standalone environments configured for a given set of p
 - [moot](https://github.com/Zlika/moot): A shell script to easily select, download and run the versions of Maven and JDK you want for your build.
 - [paketo](https://paketo.io/): Modular Buildpacks, written in Go. Paketo Buildpacks provide language runtime support for applications. They leverage the Cloud Native Buildpacks framework to make image builds easy, performant, and secure.
 - [earthly](https://github.com/earthly/earthly): run all your builds containerized
+- [gitpod](https://www.gitpod.io/): Describe your dev environment as code and get fully prebuilt, ready-to-code development environments for any GitLab, GitHub, and Bitbucket project.
 
 ## Feature Comparison
 
