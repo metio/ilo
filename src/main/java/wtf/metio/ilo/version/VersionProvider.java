@@ -12,7 +12,7 @@ import picocli.CommandLine;
 public class VersionProvider implements CommandLine.IVersionProvider {
 
   @Override
-  public String[] getVersion() throws Exception {
+  public String[] getVersion() {
     return new String[]{
         "ilo: " + Version.VERSION,
         "JVM: ${java.version} (${java.vendor} ${java.vm.name} ${java.vm.version})",
