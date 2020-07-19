@@ -4,11 +4,8 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 
 - [toolbox](https://github.com/containers/toolbox): Toolbox is a tool that offers a familiar package based environment for developing and debugging software that runs fully unprivileged using Podman.
 - [gitian](https://gitian.org/): Gitian is a secure source-control oriented software distribution method.
-This means you can download trusted binaries that are verified by multiple builders.
 - [rbm](https://rbm.torproject.org/): Reproducible Build Manager (rbm) is a tool that helps you create and build packages for multiple linux distributions, and automate the parts that can be automated.
-It includes options to run the build in a defined environement to allow reproducing the build.
 - [rez](https://github.com/nerdvegas/rez): Rez is a cross-platform package manager with a difference.
-Using Rez you can create standalone environments configured for a given set of packages.
 - [bleeding-rez](https://github.com/mottosso/bleeding-rez): Rez is a command-line utility for Windows, Linux and MacOS, solving the problem of creating a reproducible environment for your software projects on any machine in any pre-existing environment.
 - [rebuild](http://rbld.io/): A strategic approach to managing build and test environments for IoT and embedded development.
 - [ducible](https://github.com/jasonwhite/ducible): This is a tool to make builds of Portable Executables (PEs) and PDBs reproducible.
@@ -21,6 +18,7 @@ Using Rez you can create standalone environments configured for a given set of p
 - [paketo](https://paketo.io/): Modular Buildpacks, written in Go. Paketo Buildpacks provide language runtime support for applications. They leverage the Cloud Native Buildpacks framework to make image builds easy, performant, and secure.
 - [earthly](https://github.com/earthly/earthly): run all your builds containerized
 - [gitpod](https://www.gitpod.io/): Describe your dev environment as code and get fully prebuilt, ready-to-code development environments for any GitLab, GitHub, and Bitbucket project.
+- [vagrant](https://www.vagrantup.com/): Vagrant is a tool for building and managing virtual machine environments in a single workflow.
 
 ## Feature Comparison
 
