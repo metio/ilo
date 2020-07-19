@@ -12,9 +12,9 @@ package wtf.metio.ilo.tools;
  */
 public interface DockerComposeCLI extends CliTool {
 
-    @Override
-    default String name() {
-        return "docker-compose";
-    }
+  @Override
+  default String name() {
+    return "docker-compose";
+  }
 
 }

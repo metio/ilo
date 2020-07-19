@@ -12,9 +12,9 @@ package wtf.metio.ilo.tools;
  */
 public interface BuildahCLI extends CliTool {
 
-    @Override
-    default String name() {
-        return "buildah";
-    }
+  @Override
+  default String name() {
+    return "buildah";
+  }
 
 }

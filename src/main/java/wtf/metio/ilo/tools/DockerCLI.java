@@ -12,9 +12,9 @@ package wtf.metio.ilo.tools;
  */
 public interface DockerCLI extends CliTool {
 
-    @Override
-    default String name() {
-        return "docker";
-    }
+  @Override
+  default String name() {
+    return "docker";
+  }
 
 }

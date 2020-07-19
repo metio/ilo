@@ -12,9 +12,9 @@ package wtf.metio.ilo.tools;
  */
 public interface KubectlCLI extends CliTool {
 
-    @Override
-    default String name() {
-        return "kubectl";
-    }
+  @Override
+  default String name() {
+    return "kubectl";
+  }
 
 }
