@@ -3,7 +3,7 @@ on:
   schedule:
     - cron:  '45 3 * * SUN'
 jobs:
-  build:
+  linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -26,9 +26,23 @@ jobs:
       - name: Create Release Version
         id: release
         run: echo "::set-output name=version::$(date +'%Y.%-m.%-d-%-H%M%S')"
-      - name: Count commits in last week
+      - name: Write Relase Version
+        run: "${{ steps.release.outputs.version }} > version.txt"
+      - name: Persist Release Version
+        uses: actions/upload-artifact@v1
+        with:
+          name: release
+          path: version.txt
+      - name: Count Commits
         id: commits
         run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Sunday')"
+      - name: Write Commit Count
+        run: "${{ steps.commits.outputs.count }} > commits.txt"
+      - name: Persist Commit Count
+        uses: actions/upload-artifact@v1
+        with:
+          name: repo
+          path: commits.txt
       - name: Verify Project
         run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
         env:
@@ -46,6 +60,13 @@ jobs:
           prerelease: false
           body: |
             Automated release, see [commits](https://github.com/metio/ilo/commits/${{ steps.release.outputs.version }}) for changes.
+      - name: Write Relase URL
+        run: "${{ steps.create_release.outputs.upload_url }} > url.txt"
+      - name: Persist Commit Count
+        uses: actions/upload-artifact@v1
+        with:
+          name: publish
+          path: url.txt
       - name: Upload Java11 Artifact
         if: steps.commits.outputs.count > 0
         id: upload-java11-artifact
@@ -118,3 +139,135 @@ jobs:
           app-secret: ${{ secrets.REDDIT_API_SECRET }}
           subreddit: ${{ secrets.REDDIT_SUBREDDIT }}
           url: https://github.com/metio/ilo/releases/tag/${{ steps.release.outputs.version }}
+  mac:
+    runs-on: macos-latest
+    needs: linux
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: setup-graalvm-ce
+        uses: rinx/setup-graalvm-ce@v0.0.4
+        with:
+          graalvm-version: "20.1.0"
+          java-version: "java11"
+          native-image: "true"
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Download Release Version
+        uses: actions/download-artifact@v1
+        with:
+          name: release
+      - name: Download Commit Count
+        uses: actions/download-artifact@v1
+        with:
+          name: repo
+      - name: Download Release URL
+        uses: actions/download-artifact@v1
+        with:
+          name: publish
+      - name: Release Version
+        id: release
+        run: cat "::set-output name=version::release/version.txt"
+      - name: Commit Count
+        id: commits
+        run: cat "::set-output name=count::repo/commits.txt"
+      - name: Release URL
+        id: create_release
+        run: cat "::set-output name=upload_url::publish/url.txt"
+      - name: Verify Project
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Native Mac Artifact
+        if: steps.commits.outputs.count > 0
+        id: upload-native-mac-artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-mac.zip
+          asset_name: ilo-${{ steps.release.outputs.version }}-native-mac.zip
+          asset_content_type: application/zip
+      - name: Upload Native Mac Checksum
+        if: steps.commits.outputs.count > 0
+        id: upload-native-windows-checksum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-mac.zip.sha512
+          asset_name: ilo-${{ steps.release.outputs.version }}-native-mac.zip.sha512
+          asset_content_type: text/plain
+  windows:
+    runs-on: windows-latest
+    needs: linux
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: setup-graalvm-ce
+        uses: rinx/setup-graalvm-ce@v0.0.4
+        with:
+          graalvm-version: "20.1.0"
+          java-version: "java11"
+          native-image: "true"
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Download Release Version
+        uses: actions/download-artifact@v1
+        with:
+          name: release
+      - name: Download Commit Count
+        uses: actions/download-artifact@v1
+        with:
+          name: repo
+      - name: Download Release URL
+        uses: actions/download-artifact@v1
+        with:
+          name: publish
+      - name: Release Version
+        id: release
+        run: cat "::set-output name=version::release/version.txt"
+      - name: Commit Count
+        id: commits
+        run: cat "::set-output name=count::repo/commits.txt"
+      - name: Release URL
+        id: create_release
+        run: cat "::set-output name=upload_url::publish/url.txt"
+      - name: Verify Project
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Native Windows Artifact
+        if: steps.commits.outputs.count > 0
+        id: upload-native-windows-artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-windows.zip
+          asset_name: ilo-${{ steps.release.outputs.version }}-native-windows.zip
+          asset_content_type: application/zip
+      - name: Upload Native Windows Checksum
+        if: steps.commits.outputs.count > 0
+        id: upload-native-windows-checksum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-windows.zip.sha512
+          asset_name: ilo-${{ steps.release.outputs.version }}-native-windows.zip.sha512
+          asset_content_type: text/plain
