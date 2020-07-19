@@ -35,7 +35,7 @@ class ExecutablePathsTest {
   }
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
   @DisplayName("Should detect missing tool in PATH")
   void shouldHandleMissingTool() {
     // given
@@ -66,7 +66,7 @@ class ExecutablePathsTest {
   }
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
   void shouldNotBeAbleToExecuteMissing() {
     // given
     final var tool = Paths.get("asdfasdfasadaggfksdjfgsdfglsdfglsfg");
@@ -103,20 +103,6 @@ class ExecutablePathsTest {
 
     // then
     assertTrue(path.isPresent());
-  }
-
-  @Test
-  @EnabledOnOs(OS.WINDOWS)
-  @DisplayName("Should detect missing tool in PATH (Windows)")
-  void shouldHandleMissingToolWindows() {
-    // given
-    final var tool = "fgsdfgsdlgdjlgkjsdlfgjskdfgjsldfjgdflg";
-
-    // when
-    final var path = ExecutablePaths.of(tool);
-
-    // then
-    assertTrue(path.isEmpty());
   }
 
 }

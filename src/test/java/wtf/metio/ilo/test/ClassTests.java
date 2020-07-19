@@ -7,6 +7,8 @@
 
 package wtf.metio.ilo.test;
 
+import java.lang.reflect.Modifier;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -21,6 +23,13 @@ public final class ClassTests {
     assertNotNull(constructor);
     assertTrue(constructor.trySetAccessible());
     assertTrue(constructor.canAccess(null));
+    assertTrue(Modifier.isPublic(constructor.getModifiers()));
+  }
+
+  public static void hasPrivateConstructor(final Class<?> clazz) throws NoSuchMethodException {
+    final var constructor = clazz.getDeclaredConstructor();
+    assertNotNull(constructor);
+    assertTrue(Modifier.isPrivate(constructor.getModifiers()));
   }
 
 }
