@@ -23,14 +23,13 @@ public enum ComposeRuntime {
 
   public static ComposeRuntime fromAlias(final String alias) {
     return Arrays.stream(ComposeRuntime.values())
-        .filter(runtime -> Arrays.stream(runtime.aliases).anyMatch(entry -> entry.equalsIgnoreCase(alias)))
+        .filter(runtime -> runtime.matches(alias))
         .findFirst()
         .orElseThrow(IllegalArgumentException::new);
   }
 
   public boolean matches(final String candidate) {
-    return Arrays.stream(aliases)
-        .anyMatch(candidate::equalsIgnoreCase);
+    return Arrays.stream(aliases).anyMatch(candidate::equalsIgnoreCase);
   }
 
   @Override
