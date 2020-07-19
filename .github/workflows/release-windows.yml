@@ -21,11 +21,8 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: Create Release Version
-        id: release
-        run: echo "::set-output name=version::$(date +'%Y.%-m.%-d-%-H%M%S')"
       - name: Verify Project
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ GITHUB_REF }} -Dskip.graal=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload Native Windows Artifact
@@ -36,8 +33,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-windows.zip
-          asset_name: ilo-${{ steps.release.outputs.version }}-native-windows.zip
+          asset_path: ./target/ilo-${{ GITHUB_REF }}-native-windows.zip
+          asset_name: ilo-${{ GITHUB_REF }}-native-windows.zip
           asset_content_type: application/zip
       - name: Upload Native Windows Checksum
         if: steps.commits.outputs.count > 0
@@ -47,6 +44,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-windows.zip.sha512
-          asset_name: ilo-${{ steps.release.outputs.version }}-native-windows.zip.sha512
+          asset_path: ./target/ilo-${{ GITHUB_REF }}-native-windows.zip.sha512
+          asset_name: ilo-${{ GITHUB_REF }}-native-windows.zip.sha512
           asset_content_type: text/plain
