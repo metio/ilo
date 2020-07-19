@@ -152,6 +152,7 @@
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.converter=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.exec=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.model=ALL-UNNAMED
+                        --add-opens wtf.metio.ilo/wtf.metio.ilo.options=ALL-UNNAMED
                     </argLine>
                 </configuration>
             </plugin>

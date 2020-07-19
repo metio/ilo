@@ -15,10 +15,11 @@ import java.util.List;
 
 import static wtf.metio.ilo.utils.CalculateArguments.shellArguments;
 
+@DisplayName("ilo shell")
 class ShellTest extends CLI_TCK {
 
   @ParameterizedTest
-  @DisplayName("create shell command line")
+  @DisplayName("calls command line tool")
   @ValueSource(strings = {"podman", "docker"})
   void defaultCommandLine(final String tool) {
     final var shell = shell("shell", "--runtime", tool);

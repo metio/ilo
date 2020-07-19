@@ -13,7 +13,7 @@ import wtf.metio.ilo.model.Runtime;
 
 import java.util.List;
 
-public class ShellOptions {
+public final class ShellOptions {
 
   @CommandLine.Option(
       names = {"--runtime"},

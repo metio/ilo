@@ -7,10 +7,12 @@
 
 package wtf.metio.ilo.cli;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HelpTest extends CLI_TCK {
 
@@ -18,27 +20,27 @@ class HelpTest extends CLI_TCK {
   @ParameterizedTest
   @ValueSource(strings = {"-h", "--help"})
   void shouldHaveUsageHelp(final String flag) {
-    final var exitCode = cmd.execute(flag);
-    Assertions.assertEquals(0, exitCode);
-    Assertions.assertTrue(output.toString().startsWith("Usage"));
+    verifyHelp(flag);
   }
 
   @DisplayName("shell help")
   @ParameterizedTest
   @ValueSource(strings = {"-h", "--help"})
   void shouldHaveHelpForShell(final String flag) {
-    final var exitCode = cmd.execute("shell", flag);
-    Assertions.assertEquals(0, exitCode);
-    Assertions.assertTrue(output.toString().startsWith("Usage"));
+    verifyHelp("shell", flag);
   }
 
   @DisplayName("compose help")
   @ParameterizedTest
   @ValueSource(strings = {"-h", "--help"})
   void shouldHaveHelpForCompose(final String flag) {
-    final var exitCode = cmd.execute("compose", flag);
-    Assertions.assertEquals(0, exitCode);
-    Assertions.assertTrue(output.toString().startsWith("Usage"));
+    verifyHelp("compose", flag);
+  }
+
+  private void verifyHelp(final String... flags) {
+    final var exitCode = cmd.execute(flags);
+    assertEquals(0, exitCode);
+    assertTrue(output.toString().startsWith("Usage"));
   }
 
 }

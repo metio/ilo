@@ -11,7 +11,7 @@ import picocli.CommandLine;
 import wtf.metio.ilo.converter.ComposeRuntimeConverter;
 import wtf.metio.ilo.model.ComposeRuntime;
 
-public class ComposeOptions {
+public final class ComposeOptions {
 
   @CommandLine.Option(
       names = {"--runtime"},

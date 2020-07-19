@@ -14,8 +14,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class VersionTest extends CLI_TCK {
 
-  @DisplayName("version info")
   @ParameterizedTest
+  @DisplayName("version info")
   @ValueSource(strings = {"-V", "--version"})
   void shouldSupportVersionOption(final String flag) {
     final var exitCode = cmd.execute(flag);
