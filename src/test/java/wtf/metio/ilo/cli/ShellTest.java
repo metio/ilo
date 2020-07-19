@@ -20,7 +20,7 @@ class ShellTest extends CLI_TCK {
 
   @ParameterizedTest
   @DisplayName("calls command line tool")
-  @ValueSource(strings = {"podman", "docker"})
+  @ValueSource(strings = {"podman", "docker", "p", "d"})
   void defaultCommandLine(final String tool) {
     final var shell = shell("shell", "--runtime", tool);
     final var arguments = shellArguments(shell.options, tool);
@@ -34,7 +34,7 @@ class ShellTest extends CLI_TCK {
 
   @ParameterizedTest
   @DisplayName("allow to disable mounting the project directory")
-  @ValueSource(strings = {"podman", "docker"})
+  @ValueSource(strings = {"podman", "docker", "p", "d"})
   void disableProjectDirMount(final String tool) {
     final var shell = shell("shell", "--runtime", tool, "--mount-project-dir=false");
     final var arguments = shellArguments(shell.options, tool);
@@ -47,7 +47,7 @@ class ShellTest extends CLI_TCK {
 
   @ParameterizedTest
   @DisplayName("allow to run non-interactive")
-  @ValueSource(strings = {"podman", "docker"})
+  @ValueSource(strings = {"podman", "docker", "p", "d"})
   void nonInteractive(final String tool) {
     final var shell = shell("shell", "--runtime", tool, "--interactive=false");
     final var arguments = shellArguments(shell.options, tool);
@@ -60,7 +60,7 @@ class ShellTest extends CLI_TCK {
 
   @ParameterizedTest
   @DisplayName("debug mode does not influence command line")
-  @ValueSource(strings = {"podman", "docker"})
+  @ValueSource(strings = {"podman", "docker", "p", "d"})
   void debugDoesNotChangeCmd(final String tool) {
     final var shell = shell("shell", "--runtime", tool, "--debug");
     final var arguments = shellArguments(shell.options, tool);
@@ -74,7 +74,7 @@ class ShellTest extends CLI_TCK {
 
   @ParameterizedTest
   @DisplayName("allow to run non-interactive w/o mounting")
-  @ValueSource(strings = {"podman", "docker"})
+  @ValueSource(strings = {"podman", "docker", "p", "d"})
   void nonInteractiveDisableMounting(final String tool) {
     final var shell = shell("shell", "--runtime", tool, "--interactive=false", "--mount-project-dir=false");
     final var arguments = shellArguments(shell.options, tool);

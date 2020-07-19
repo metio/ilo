@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.function.Executable;
 import picocli.CommandLine;
 import wtf.metio.ilo.Ilo;
+import wtf.metio.ilo.commands.Compose;
 import wtf.metio.ilo.commands.Shell;
 
 import java.io.PrintWriter;
@@ -37,6 +38,12 @@ abstract class CLI_TCK {
     final var parseResult = cmd.parseArgs(args);
     final var subcommand = parseResult.subcommand();
     return (Shell) subcommand.commandSpec().userObject();
+  }
+
+  protected final Compose compose(final String... args) {
+    final var parseResult = cmd.parseArgs(args);
+    final var subcommand = parseResult.subcommand();
+    return (Compose) subcommand.commandSpec().userObject();
   }
 
   private static Executable contains(final List<String> arguments, final String cmd) {
