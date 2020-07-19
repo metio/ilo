@@ -13,24 +13,25 @@ import wtf.metio.ilo.exec.Executables;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class JdkPodman implements PodmanCli {
+public final class Buildah implements BuildahCLI {
 
   private final Executables executables;
 
-  public JdkPodman(final Executables executables) {
+  public Buildah(final Executables executables) {
     this.executables = executables;
   }
 
   @Override
   public Optional<String> version() {
-    return executables.runAndReadOutput(Constants.PODMAN_COMMAND, Constants.VERSION_FLAG)
-        .map(output -> output.replace("podman version", ""))
+    return executables.runAndReadOutput(Constants.BUILDAH_COMMAND, Constants.VERSION_FLAG)
+        .map(output -> output.replace("buildah version", ""))
+        .map(output -> output.substring(0, output.indexOf("(") - 1))
         .map(String::strip);
   }
 
   @Override
   public Optional<Path> path() {
-    return ExecutablePaths.of(Constants.PODMAN_COMMAND);
+    return ExecutablePaths.of(Constants.BUILDAH_COMMAND);
   }
 
 }

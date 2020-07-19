@@ -13,27 +13,24 @@ import wtf.metio.ilo.exec.Executables;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class JdkKubectl implements KubectlCli {
+public final class Podman implements PodmanCLI {
 
   private final Executables executables;
 
-  public JdkKubectl(final Executables executables) {
+  public Podman(final Executables executables) {
     this.executables = executables;
   }
 
   @Override
   public Optional<String> version() {
-    return executables.runAndReadOutput(Constants.KUBECTL_COMMAND,
-        "version",
-        "--short=true",
-        "--client=true")
-        .map(output -> output.replace("Client Version: v", ""))
+    return executables.runAndReadOutput(Constants.PODMAN_COMMAND, Constants.VERSION_FLAG)
+        .map(output -> output.replace("podman version", ""))
         .map(String::strip);
   }
 
   @Override
   public Optional<Path> path() {
-    return ExecutablePaths.of(Constants.KUBECTL_COMMAND);
+    return ExecutablePaths.of(Constants.PODMAN_COMMAND);
   }
 
 }

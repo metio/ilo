@@ -40,28 +40,28 @@ public final class Tools {
         .filter(tool -> null == runtime || runtime.matches(tool));
   }
 
-  private static PodmanCli getPodmanCli(final Executables executables) {
-    return new JdkPodman(executables);
+  private static PodmanCLI getPodmanCli(final Executables executables) {
+    return new Podman(executables);
   }
 
-  private static PodmanComposeCli getPodmanComposeCli(final Executables executables) {
-    return new JdkPodmanCompose(executables);
+  private static PodmanComposeCLI getPodmanComposeCli(final Executables executables) {
+    return new PodmanCompose(executables);
   }
 
-  private static DockerCli getDockerCli(final Executables executables) {
-    return new JdkDocker(executables);
+  private static DockerCLI getDockerCli(final Executables executables) {
+    return new Docker(executables);
   }
 
-  private static DockerComposeCli getDockerComposeCli(final Executables executables) {
-    return new JdkDockerComposeCli(executables);
+  private static DockerComposeCLI getDockerComposeCli(final Executables executables) {
+    return new DockerCompose(executables);
   }
 
-  private static BuildahCli getBuildahCli(final Executables executables) {
-    return new JdkBuildah(executables);
+  private static BuildahCLI getBuildahCli(final Executables executables) {
+    return new Buildah(executables);
   }
 
-  private static KubectlCli getKubectlCli(final Executables executables) {
-    return new JdkKubectl(executables);
+  private static KubectlCLI getKubectlCli(final Executables executables) {
+    return new Kubectl(executables);
   }
 
 }

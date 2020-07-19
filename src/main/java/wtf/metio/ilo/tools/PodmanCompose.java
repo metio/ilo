@@ -13,11 +13,11 @@ import wtf.metio.ilo.exec.Executables;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class JdkPodmanCompose implements PodmanComposeCli {
+public final class PodmanCompose implements PodmanComposeCLI {
 
   private final Executables executables;
 
-  public JdkPodmanCompose(final Executables executables) {
+  public PodmanCompose(final Executables executables) {
     this.executables = executables;
   }
 

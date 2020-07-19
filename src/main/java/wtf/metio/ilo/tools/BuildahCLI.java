@@ -8,13 +8,13 @@
 package wtf.metio.ilo.tools;
 
 /**
- * Represents the docker CLI and its commands.
+ * Represents the buildah CLI and its commands.
  */
-public interface KubectlCli extends CliTool {
+public interface BuildahCLI extends CliTool {
 
     @Override
     default String name() {
-        return "kubectl";
+        return "buildah";
     }
 
 }

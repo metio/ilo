@@ -8,13 +8,13 @@
 package wtf.metio.ilo.tools;
 
 /**
- * Represents the docker-compose CLI and its commands.
+ * Represents the podman-compose CLI and its commands.
  */
-public interface DockerComposeCli extends CliTool {
+public interface PodmanComposeCLI extends CliTool {
 
-    @Override
-    default String name() {
-        return "docker-compose";
-    }
+  @Override
+  default String name() {
+    return "podman-compose";
+  }
 
 }

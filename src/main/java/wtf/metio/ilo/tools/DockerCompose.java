@@ -13,11 +13,11 @@ import wtf.metio.ilo.exec.Executables;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class JdkDockerComposeCli implements DockerComposeCli {
+public final class DockerCompose implements DockerComposeCLI {
 
   private final Executables executables;
 
-  public JdkDockerComposeCli(final Executables executables) {
+  public DockerCompose(final Executables executables) {
     this.executables = executables;
   }
 

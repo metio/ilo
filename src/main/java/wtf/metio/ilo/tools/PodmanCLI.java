@@ -8,13 +8,13 @@
 package wtf.metio.ilo.tools;
 
 /**
- * Represents the docker CLI and its commands.
+ * Represents the podman CLI and its commands.
  */
-public interface DockerCli extends CliTool {
+public interface PodmanCLI extends CliTool {
 
-    @Override
-    default String name() {
-        return "docker";
-    }
+  @Override
+  default String name() {
+    return "podman";
+  }
 
 }

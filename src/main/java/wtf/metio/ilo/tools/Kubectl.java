@@ -13,25 +13,27 @@ import wtf.metio.ilo.exec.Executables;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class JdkBuildah implements BuildahCli {
+public final class Kubectl implements KubectlCLI {
 
   private final Executables executables;
 
-  public JdkBuildah(final Executables executables) {
+  public Kubectl(final Executables executables) {
     this.executables = executables;
   }
 
   @Override
   public Optional<String> version() {
-    return executables.runAndReadOutput(Constants.BUILDAH_COMMAND, Constants.VERSION_FLAG)
-        .map(output -> output.replace("buildah version", ""))
-        .map(output -> output.substring(0, output.indexOf("(") - 1))
+    return executables.runAndReadOutput(Constants.KUBECTL_COMMAND,
+        "version",
+        "--short=true",
+        "--client=true")
+        .map(output -> output.replace("Client Version: v", ""))
         .map(String::strip);
   }
 
   @Override
   public Optional<Path> path() {
-    return ExecutablePaths.of(Constants.BUILDAH_COMMAND);
+    return ExecutablePaths.of(Constants.KUBECTL_COMMAND);
   }
 
 }
