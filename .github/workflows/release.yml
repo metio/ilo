@@ -11,10 +11,12 @@ jobs:
           # SonarQube: Disabling shallow clone is recommended for improving relevancy of reporting
           # Hugo: Fetch all history for .GitInfo and .Lastmod
           fetch-depth: 0
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
+      - name: setup-graalvm-ce
+        uses: rinx/setup-graalvm-ce@v0.0.4
         with:
-          java-version: 11
+          graalvm-version: "20.1.0"
+          java-version: "java11"
+          native-image: "true"
       - uses: actions/cache@v1
         with:
           path: ~/.m2/repository
@@ -28,7 +30,7 @@ jobs:
         id: commits
         run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Sunday')"
       - name: Verify Project
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }}
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Release
@@ -65,6 +67,28 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./target/ilo-${{ steps.release.outputs.version }}-java11.zip.sha512
           asset_name: ilo-${{ steps.release.outputs.version }}-java11.zip.sha512
+          asset_content_type: text/plain
+      - name: Upload Native Unix Artifact
+        if: steps.commits.outputs.count > 0
+        id: upload-native-unix-artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-unix.zip
+          asset_name: ilo-${{ steps.release.outputs.version }}-native-unix.zip
+          asset_content_type: application/zip
+      - name: Upload Native Unix Checksum
+        if: steps.commits.outputs.count > 0
+        id: upload-native-unix-checksum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-unix.zip.sha512
+          asset_name: ilo-${{ steps.release.outputs.version }}-native-unix.zip.sha512
           asset_content_type: text/plain
       - name: Send Mail
         if: steps.commits.outputs.count > 0
