@@ -50,17 +50,17 @@ final class DockerPodman {
     );
     final var tty = options.interactive ? Stream.<String>empty() : Stream.of("-T");
     final var service = Stream.of(options.service);
-    return Stream.of(run, tty, service)
+    final var args = Stream.of(run, tty, service)
         .flatMap(identity())
         .collect(toList());
+    Debug.showExecutedCommand(options.debug, args);
+    return args;
   }
 
   public static List<String> cleanupArguments(final ComposeOptions options, final String tool) {
-    return List.of(
-        tool,
-        "--file", options.composeFile,
-        "down"
-    );
+    final var args = List.of(tool, "--file", options.composeFile, "down");
+    Debug.showExecutedCommand(options.debug, args);
+    return args;
   }
 
 }
