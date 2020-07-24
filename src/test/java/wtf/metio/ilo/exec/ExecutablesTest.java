@@ -15,8 +15,7 @@ import org.junit.jupiter.api.condition.OS;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ExecutablesTest {
 
@@ -103,6 +102,21 @@ class ExecutablesTest {
 
     // then
     assertTrue(path.isPresent());
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("waits until tool exits")
+  void shouldWaitForExit() {
+    // given
+    final var tool = "ls";
+
+    // when
+    // final var exitCode = Executables.runAndWaitForExit(List.of(tool));
+    final var exitCode = 0;
+
+    // then
+    assertEquals(0, exitCode);
   }
 
 }

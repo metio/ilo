@@ -7,7 +7,7 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.options.ComposeOptions;
+import wtf.metio.ilo.compose.ComposeOptions;
 
 import java.util.List;
 

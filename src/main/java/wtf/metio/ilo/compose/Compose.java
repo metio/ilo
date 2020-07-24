@@ -5,11 +5,10 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.commands;
+package wtf.metio.ilo.compose;
 
 import picocli.CommandLine;
 import wtf.metio.ilo.exec.Executables;
-import wtf.metio.ilo.options.ComposeOptions;
 import wtf.metio.ilo.tools.Tools;
 
 import java.util.concurrent.Callable;

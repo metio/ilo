@@ -7,20 +7,25 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.shell.ShellOptions;
+import wtf.metio.ilo.compose.ComposeOptions;
 
 import java.util.List;
 
-public final class Docker implements ShellCLI {
+public final class PodsCompose implements ComposeCLI {
 
   @Override
   public String name() {
-    return "docker";
+    return "pods-compose";
   }
 
   @Override
-  public List<String> arguments(final ShellOptions options) {
+  public List<String> arguments(final ComposeOptions options) {
     return DockerPodman.arguments(options, name());
+  }
+
+  @Override
+  public List<String> cleanupArguments(final ComposeOptions options) {
+    return DockerPodman.cleanupArguments(options, name());
   }
 
 }

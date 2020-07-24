@@ -5,16 +5,10 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.converter;
+package wtf.metio.ilo.model;
 
-import picocli.CommandLine;
-import wtf.metio.ilo.runtimes.ComposeRuntime;
+public interface Matcher {
 
-public final class ComposeRuntimeConverter implements CommandLine.ITypeConverter<ComposeRuntime> {
-
-  @Override
-  public ComposeRuntime convert(final String value) {
-    return ComposeRuntime.fromAlias(value);
-  }
+  boolean matches(String candidate);
 
 }

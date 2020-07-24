@@ -12,15 +12,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.function.Executable;
 import picocli.CommandLine;
 import wtf.metio.ilo.Ilo;
-import wtf.metio.ilo.commands.Compose;
-import wtf.metio.ilo.commands.Shell;
+import wtf.metio.ilo.compose.Compose;
+import wtf.metio.ilo.shell.Shell;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-abstract class CLI_TCK {
+public abstract class CLI_TCK {
 
   protected Ilo app;
   protected CommandLine cmd;

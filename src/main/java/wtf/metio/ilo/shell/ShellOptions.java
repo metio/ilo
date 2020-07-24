@@ -5,11 +5,9 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.options;
+package wtf.metio.ilo.shell;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.converter.RuntimeConverter;
-import wtf.metio.ilo.runtimes.Runtime;
 
 import java.util.List;
 
@@ -18,9 +16,9 @@ public final class ShellOptions {
   @CommandLine.Option(
       names = {"--runtime"},
       description = "Specify the runtime to use. If none is specified, use auto-detection.",
-      converter = RuntimeConverter.class
+      converter = ShellRuntimeConverter.class
   )
-  public Runtime runtime;
+  public ShellRuntime runtime;
 
   @CommandLine.Option(
       names = {"--debug"},

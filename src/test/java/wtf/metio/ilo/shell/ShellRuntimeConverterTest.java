@@ -5,7 +5,7 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.converter;
+package wtf.metio.ilo.shell;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,11 +13,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@DisplayName("RuntimeConverter")
-class RuntimeConverterTest {
+@DisplayName("ShellRuntimeConverter")
+class ShellRuntimeConverterTest {
 
   @ParameterizedTest
-  @DisplayName("converts String to Runtime")
+  @DisplayName("converts String to ShellRuntime")
   @ValueSource(strings = {
       "podman",
       "docker",
@@ -30,7 +30,7 @@ class RuntimeConverterTest {
   })
   void shouldConvertStringToComposeRuntime(final String input) {
     // given
-    final var converter = new RuntimeConverter();
+    final var converter = new ShellRuntimeConverter();
 
     // when
     final var runtime = converter.convert(input);

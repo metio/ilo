@@ -7,24 +7,28 @@
 
 package wtf.metio.ilo.cli;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import wtf.metio.ilo.shell.ShellRuntime;
 
 @DisplayName("ilo shell")
 class ShellTest extends CLI_TCK {
-//
-//  @ParameterizedTest
-//  @DisplayName("calls command line tool")
-//  @ValueSource(strings = {"podman", "docker", "p", "d"})
-//  void defaultCommandLine(final String tool) {
-//    final var shell = shell("shell", "--runtime", tool);
-//    final var arguments = shellArguments(shell.options, tool);
-//    final var cmd = List.of(tool,
-//        "run", "--rm",
-//        "--volume", "--workdir",
-//        "--interactive", "--tty");
-//    assertCommandLine(cmd, arguments);
-//  }
-//
+
+  @ParameterizedTest
+  @DisplayName("calls command line tool")
+  @ValueSource(strings = {"podman", "docker", "p", "d"})
+  void defaultCommandLine(final String tool) {
+    final var compose = shell("shell", "--runtime", tool);
+    Assertions.assertAll("command line",
+        () -> Assertions.assertNull(compose.options.commands),
+        () -> Assertions.assertTrue(compose.options.interactive),
+        () -> Assertions.assertFalse(compose.options.debug),
+        () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), compose.options.runtime)
+    );
+  }
+
 //  @ParameterizedTest
 //  @DisplayName("allow to disable mounting the project directory")
 //  @ValueSource(strings = {"podman", "docker", "p", "d"})

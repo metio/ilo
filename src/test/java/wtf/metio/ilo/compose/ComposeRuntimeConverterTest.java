@@ -5,7 +5,7 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.runtimes;
+package wtf.metio.ilo.compose;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,33 +13,33 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@DisplayName("Runtime")
-class RuntimeTest {
+@DisplayName("ComposeRuntimeConverter")
+class ComposeRuntimeConverterTest {
 
   @ParameterizedTest
-  @DisplayName("defines shell runtime constants")
+  @DisplayName("converts String to ComposeRuntime")
   @ValueSource(strings = {
-      "PODMAN",
-      "DOCKER"
+      "podman-compose",
+      "pods-compose",
+      "docker-compose",
+      "pc",
+      "dc",
+      "pods",
+      "DOCKER-COMPOSE",
+      "PODMAN-COMPOSE",
+      "dOCkeR-cOMpOSe",
+      "pODs-cOMpOSe",
+      "podMAN-compOSe"
   })
-  void shouldHaveRuntime(final String runtime) {
-    assertNotNull(Runtime.valueOf(runtime));
-  }
+  void shouldConvertStringToComposeRuntime(final String input) {
+    // given
+    final var converter = new ComposeRuntimeConverter();
 
-  @ParameterizedTest
-  @DisplayName("supports aliases")
-  @ValueSource(strings = {
-      "podman",
-      "docker",
-      "p",
-      "d",
-      "DOCKER",
-      "PODMAN",
-      "dOCkeR",
-      "podMAN"
-  })
-  void shouldSupportAlias(final String alias) {
-    assertNotNull(Runtime.fromAlias(alias));
+    // when
+    final var runtime = converter.convert(input);
+
+    // then
+    assertNotNull(runtime, () -> input);
   }
 
 }

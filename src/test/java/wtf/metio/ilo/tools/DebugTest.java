@@ -7,20 +7,17 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.shell.ShellOptions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import wtf.metio.ilo.test.ClassTests;
 
-import java.util.List;
+@DisplayName("Debug")
+class DebugTest {
 
-public final class Docker implements ShellCLI {
-
-  @Override
-  public String name() {
-    return "docker";
-  }
-
-  @Override
-  public List<String> arguments(final ShellOptions options) {
-    return DockerPodman.arguments(options, name());
+  @Test
+  @DisplayName("has private constructor")
+  void shouldHavePrivateConstructor() throws NoSuchMethodException {
+    ClassTests.hasPrivateConstructor(Debug.class);
   }
 
 }

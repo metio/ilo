@@ -5,16 +5,15 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.converter;
+package wtf.metio.ilo.shell;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.runtimes.Runtime;
 
-public final class RuntimeConverter implements CommandLine.ITypeConverter<Runtime> {
+public final class ShellRuntimeConverter implements CommandLine.ITypeConverter<ShellRuntime> {
 
   @Override
-  public Runtime convert(final String value) {
-    return Runtime.fromAlias(value);
+  public ShellRuntime convert(final String value) {
+    return ShellRuntime.fromAlias(value);
   }
 
 }

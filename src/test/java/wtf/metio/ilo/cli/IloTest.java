@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import wtf.metio.ilo.runtimes.Runtime;
+import wtf.metio.ilo.shell.ShellRuntime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +31,7 @@ class IloTest extends CLI_TCK {
   @ValueSource(strings = {"podman", "docker", "p", "d"})
   void shouldAllowToSpecifyRuntime(final String runtime) {
     final var shell = shell("shell", "--runtime", runtime);
-    assertEquals(Runtime.fromAlias(runtime), shell.options.runtime);
+    assertEquals(ShellRuntime.fromAlias(runtime), shell.options.runtime);
   }
 
   @Test

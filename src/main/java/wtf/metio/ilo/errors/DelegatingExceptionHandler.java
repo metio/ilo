@@ -8,8 +8,8 @@
 package wtf.metio.ilo.errors;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.commands.Compose;
-import wtf.metio.ilo.commands.Shell;
+import wtf.metio.ilo.compose.Compose;
+import wtf.metio.ilo.shell.Shell;
 import wtf.metio.ilo.tools.Tools;
 
 import java.io.IOException;

@@ -7,23 +7,36 @@
 
 package wtf.metio.ilo.cli;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import wtf.metio.ilo.compose.ComposeRuntime;
 
 @DisplayName("ilo compose")
 class ComposeTest extends CLI_TCK {
-//
-//  @ParameterizedTest
-//  @DisplayName("calls command line tool")
-//  @ValueSource(strings = {"podman-compose", "docker-compose", "pc", "dc"})
-//  void defaultCommandLine(final String tool) {
-//    final var compose = compose("compose", "--runtime", tool);
-//    final var arguments = composeRunArguments(compose.options, tool);
-//    final var cmd = List.of(tool,
-//        "run", "--rm",
-//        "--file", "docker-compose.yml");
-//    assertCommandLine(cmd, arguments);
-//  }
-//
+
+  @ParameterizedTest
+  @DisplayName("calls command line tool")
+  @ValueSource(strings = {
+      "podman-compose",
+      "docker-compose",
+      "pods-compose",
+      "pc",
+      "dc",
+      "pods"
+  })
+  void defaultCommandLine(final String tool) {
+    final var compose = compose("compose", "--runtime", tool);
+    Assertions.assertAll("command line",
+        () -> Assertions.assertEquals("docker-compose.yml", compose.options.composeFile),
+        () -> Assertions.assertNull(compose.options.service),
+        () -> Assertions.assertTrue(compose.options.interactive),
+        () -> Assertions.assertFalse(compose.options.debug),
+        () -> Assertions.assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime)
+    );
+  }
+
 //  @ParameterizedTest
 //  @DisplayName("allow to run non-interactive")
 //  @ValueSource(strings = {"podman-compose", "docker-compose", "pc", "dc"})

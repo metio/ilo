@@ -7,9 +7,9 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.runtimes.ComposeRuntime;
-import wtf.metio.ilo.runtimes.Matcher;
-import wtf.metio.ilo.runtimes.Runtime;
+import wtf.metio.ilo.compose.ComposeRuntime;
+import wtf.metio.ilo.model.Matcher;
+import wtf.metio.ilo.shell.ShellRuntime;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -20,7 +20,7 @@ public final class Tools {
     // utility class
   }
 
-  public static Optional<ShellCLI> detectedShellRuntime(final Runtime runtime) {
+  public static Optional<ShellCLI> detectedShellRuntime(final ShellRuntime runtime) {
     final var docker = new Docker();
     final var podman = new Podman();
     return autoSelect(runtime, docker, podman);

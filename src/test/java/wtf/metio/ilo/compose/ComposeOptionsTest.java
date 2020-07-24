@@ -5,7 +5,7 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.options;
+package wtf.metio.ilo.compose;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
