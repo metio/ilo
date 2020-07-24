@@ -5,16 +5,10 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.tools;
+package wtf.metio.ilo.runtimes;
 
-/**
- * Represents the docker CLI and its commands.
- */
-public interface KubectlCLI extends CliTool {
+public interface Matcher {
 
-  @Override
-  default String name() {
-    return "kubectl";
-  }
+  boolean matches(String candidate);
 
 }

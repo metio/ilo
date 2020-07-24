@@ -30,9 +30,6 @@ class ShellOptionsTest {
   @DisplayName("has public fields")
   @ValueSource(strings = {
       "runtime",
-      "image",
-      "hostname",
-      "name",
       "debug",
       "interactive",
       "mountProjectDir",

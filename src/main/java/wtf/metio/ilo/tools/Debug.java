@@ -5,16 +5,20 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.exec;
+package wtf.metio.ilo.tools;
 
-public final class Exec {
+import java.util.List;
 
-  private Exec() {
+final class Debug {
+
+  private Debug() {
     // utility class
   }
 
-  public static Executables executables() {
-    return new ProcessBuilderExecutables();
+  static void showExecutedCommand(final boolean debugEnabled, final List<String> arguments) {
+    if (debugEnabled) {
+      System.out.println("ilo executes: " + String.join(" ", arguments));
+    }
   }
 
 }

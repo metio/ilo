@@ -5,29 +5,30 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.model;
+package wtf.metio.ilo.runtimes;
 
 import java.util.Arrays;
 
-public enum ComposeRuntime {
+public enum Runtime implements Matcher {
 
-  PODMAN_COMPOSE("podman-compose", "pc"),
+  PODMAN("podman", "p"),
 
-  DOCKER_COMPOSE("docker-compose", "dc");
+  DOCKER("docker", "d");
 
   private final String[] aliases;
 
-  ComposeRuntime(final String... aliases) {
+  Runtime(final String... aliases) {
     this.aliases = aliases;
   }
 
-  public static ComposeRuntime fromAlias(final String alias) {
-    return Arrays.stream(ComposeRuntime.values())
+  public static Runtime fromAlias(final String alias) {
+    return Arrays.stream(Runtime.values())
         .filter(runtime -> runtime.matches(alias))
         .findFirst()
         .orElseThrow(IllegalArgumentException::new);
   }
 
+  @Override
   public boolean matches(final String candidate) {
     return Arrays.stream(aliases).anyMatch(candidate::equalsIgnoreCase);
   }

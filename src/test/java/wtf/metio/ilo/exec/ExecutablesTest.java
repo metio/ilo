@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ExecutablePathsTest {
+class ExecutablesTest {
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
@@ -28,7 +28,7 @@ class ExecutablePathsTest {
     final var tool = "ls";
 
     // when
-    final var path = ExecutablePaths.of(tool);
+    final var path = Executables.of(tool);
 
     // then
     assertTrue(path.isPresent());
@@ -42,7 +42,7 @@ class ExecutablePathsTest {
     final var tool = "fgsdfgsdlgdjlgkjsdlfgjskdfgjsldfjgdflg";
 
     // when
-    final var path = ExecutablePaths.of(tool);
+    final var path = Executables.of(tool);
 
     // then
     assertTrue(path.isEmpty());
@@ -52,14 +52,14 @@ class ExecutablePathsTest {
   @EnabledOnOs({OS.LINUX, OS.MAC})
   void shouldBeAbleToExecuteLs() {
     // given
-    final var tool = ExecutablePaths.allPaths()
+    final var tool = Executables.allPaths()
         .map(path -> path.resolve("ls"))
         .filter(Files::exists)
         .findFirst()
         .orElseThrow();
 
     // when
-    final var canExecute = ExecutablePaths.canExecute(tool);
+    final var canExecute = Executables.canExecute(tool);
 
     // then
     assertTrue(canExecute);
@@ -72,7 +72,7 @@ class ExecutablePathsTest {
     final var tool = Paths.get("asdfasdfasadaggfksdjfgsdfglsdfglsfg");
 
     // when
-    final var canExecute = ExecutablePaths.canExecute(tool);
+    final var canExecute = Executables.canExecute(tool);
 
     // then
     assertFalse(canExecute);
@@ -85,7 +85,7 @@ class ExecutablePathsTest {
     final var tool = Paths.get("/etc/os-release");
 
     // when
-    final var canExecute = ExecutablePaths.canExecute(tool);
+    final var canExecute = Executables.canExecute(tool);
 
     // then
     assertFalse(canExecute);
@@ -99,7 +99,7 @@ class ExecutablePathsTest {
     final var tool = "cmd";
 
     // when
-    final var path = ExecutablePaths.of(tool);
+    final var path = Executables.of(tool);
 
     // then
     assertTrue(path.isPresent());

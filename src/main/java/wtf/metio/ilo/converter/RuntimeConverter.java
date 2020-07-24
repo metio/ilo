@@ -8,7 +8,7 @@
 package wtf.metio.ilo.converter;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.model.Runtime;
+import wtf.metio.ilo.runtimes.Runtime;
 
 public final class RuntimeConverter implements CommandLine.ITypeConverter<Runtime> {
 

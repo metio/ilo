@@ -5,7 +5,7 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.model;
+package wtf.metio.ilo.runtimes;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,33 +13,33 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@DisplayName("Runtime")
-class RuntimeTest {
+@DisplayName("ComposeRuntime")
+class ComposeRuntimeTest {
 
   @ParameterizedTest
-  @DisplayName("defines shell runtime constants")
+  @DisplayName("defines compose runtime constants")
   @ValueSource(strings = {
-      "PODMAN",
-      "DOCKER"
+      "PODMAN_COMPOSE",
+      "DOCKER_COMPOSE"
   })
   void shouldHaveRuntime(final String runtime) {
-    assertNotNull(Runtime.valueOf(runtime));
+    assertNotNull(ComposeRuntime.valueOf(runtime));
   }
 
   @ParameterizedTest
   @DisplayName("supports aliases")
   @ValueSource(strings = {
-      "podman",
-      "docker",
-      "p",
-      "d",
-      "DOCKER",
-      "PODMAN",
-      "dOCkeR",
-      "podMAN"
+      "podman-compose",
+      "docker-compose",
+      "pc",
+      "dc",
+      "DOCKER-COMPOSE",
+      "PODMAN-COMPOSE",
+      "dOCkeR-cOMpOSe",
+      "podMAN-compOSe"
   })
   void shouldSupportAlias(final String alias) {
-    assertNotNull(Runtime.fromAlias(alias));
+    assertNotNull(ComposeRuntime.fromAlias(alias));
   }
 
 }

@@ -7,31 +7,20 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.exec.ExecutablePaths;
-import wtf.metio.ilo.exec.Executables;
+import wtf.metio.ilo.options.ShellOptions;
 
-import java.nio.file.Path;
-import java.util.Optional;
+import java.util.List;
 
-public final class Docker implements DockerCLI {
+public final class Docker implements ShellCLI {
 
-  private final Executables executables;
-
-  public Docker(final Executables executables) {
-    this.executables = executables;
+  @Override
+  public String name() {
+    return "docker";
   }
 
   @Override
-  public Optional<String> version() {
-    return executables.runAndReadOutput(Constants.DOCKER_COMMAND, Constants.VERSION_FLAG)
-        .map(output -> output.replace("Docker version", ""))
-        .map(output -> output.substring(0, output.indexOf(",")))
-        .map(String::strip);
-  }
-
-  @Override
-  public Optional<Path> path() {
-    return ExecutablePaths.of(Constants.DOCKER_COMMAND);
+  public List<String> arguments(final ShellOptions options) {
+    return DockerPodman.arguments(options, name());
   }
 
 }

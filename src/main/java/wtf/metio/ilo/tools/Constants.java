@@ -13,8 +13,6 @@ final class Constants {
   static final String DOCKER_COMMAND = "docker";
   static final String PODMAN_COMPOSE_COMMAND = "podman-compose";
   static final String DOCKER_COMPOSE_COMMAND = "docker-compose";
-  static final String KUBECTL_COMMAND = "kubectl";
-  static final String BUILDAH_COMMAND = "buildah";
   static final String VERSION_FLAG = "--version";
 
 }

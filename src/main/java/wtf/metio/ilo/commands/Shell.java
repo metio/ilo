@@ -8,11 +8,9 @@
 package wtf.metio.ilo.commands;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.exec.Exec;
+import wtf.metio.ilo.exec.Executables;
 import wtf.metio.ilo.options.ShellOptions;
 import wtf.metio.ilo.tools.Tools;
-import wtf.metio.ilo.utils.CalculateArguments;
-import wtf.metio.ilo.utils.Debug;
 
 import java.util.concurrent.Callable;
 
@@ -32,12 +30,9 @@ public class Shell implements Callable<Integer> {
 
   @Override
   public Integer call() {
-    final var executables = Exec.executables();
-    return Tools.detectedShellRuntime(executables, options.runtime)
-        .map(tool -> CalculateArguments.shellArguments(options, tool))
-        .peek(args -> Debug.showExecutedCommand(options.debug, args))
-        .map(executables::runAndWaitForExit)
-        .findFirst()
+    return Tools.detectedShellRuntime(options.runtime)
+        .map(tool -> tool.arguments(options))
+        .map(Executables::runAndWaitForExit)
         .orElse(CommandLine.ExitCode.USAGE);
   }
 

@@ -9,7 +9,7 @@ package wtf.metio.ilo.options;
 
 import picocli.CommandLine;
 import wtf.metio.ilo.converter.RuntimeConverter;
-import wtf.metio.ilo.model.Runtime;
+import wtf.metio.ilo.runtimes.Runtime;
 
 import java.util.List;
 
@@ -21,25 +21,6 @@ public final class ShellOptions {
       converter = RuntimeConverter.class
   )
   public Runtime runtime;
-
-  @CommandLine.Option(
-      names = {"--image"},
-      description = "Specify the container image to run",
-      defaultValue = "fedora:latest"
-  )
-  public String image;
-
-  @CommandLine.Option(
-      names = {"--hostname"},
-      description = "Specify the hostname of the container"
-  )
-  public String hostname;
-
-  @CommandLine.Option(
-      names = {"--name"},
-      description = "Specify the name of the container"
-  )
-  public String name;
 
   @CommandLine.Option(
       names = {"--debug"},
@@ -63,34 +44,7 @@ public final class ShellOptions {
   )
   public boolean mountProjectDir;
 
-  @CommandLine.Option(
-      names = {"--label"},
-      description = "Specify a label for the container."
-  )
-  public List<String> labels;
-
-  @CommandLine.Option(
-      names = {"--volume"},
-      description = "Specify a volume for the container."
-  )
-  public List<String> volumes;
-
-  @CommandLine.Option(
-      names = {"--env"},
-      description = "Specify a environment variables for the container.",
-      paramLabel = "variables"
-  )
-  public List<String> environmentVariables;
-
-  @CommandLine.Option(
-      names = {"--publish"},
-      description = "Specify container ports to publish."
-  )
-  public List<String> ports;
-
-  @CommandLine.Parameters(
-      defaultValue = "/bin/bash"
-  )
+  @CommandLine.Parameters
   public List<String> commands;
 
 }

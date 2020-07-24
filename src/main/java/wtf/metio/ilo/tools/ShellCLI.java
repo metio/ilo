@@ -7,14 +7,7 @@
 
 package wtf.metio.ilo.tools;
 
-/**
- * Represents the docker-compose CLI and its commands.
- */
-public interface DockerComposeCLI extends CliTool {
+import wtf.metio.ilo.options.ShellOptions;
 
-  @Override
-  default String name() {
-    return "docker-compose";
-  }
-
+public interface ShellCLI extends CliTool<ShellOptions> {
 }

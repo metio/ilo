@@ -9,7 +9,7 @@ package wtf.metio.ilo.options;
 
 import picocli.CommandLine;
 import wtf.metio.ilo.converter.ComposeRuntimeConverter;
-import wtf.metio.ilo.model.ComposeRuntime;
+import wtf.metio.ilo.runtimes.ComposeRuntime;
 
 public final class ComposeOptions {
 

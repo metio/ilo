@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import wtf.metio.ilo.model.Runtime;
+import wtf.metio.ilo.runtimes.Runtime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,20 +32,6 @@ class IloTest extends CLI_TCK {
   void shouldAllowToSpecifyRuntime(final String runtime) {
     final var shell = shell("shell", "--runtime", runtime);
     assertEquals(Runtime.fromAlias(runtime), shell.options.runtime);
-  }
-
-  @Test
-  @DisplayName("default image is 'fedora:latest'")
-  void shouldDefaultToLatestFedoraImage() {
-    final var shell = shell("shell");
-    assertEquals("fedora:latest", shell.options.image);
-  }
-
-  @Test
-  @DisplayName("custom images are supported")
-  void shouldAllowToSpecifyCustomImage() {
-    final var shell = shell("shell", "--image", "my.own.image:awesome");
-    assertEquals("my.own.image:awesome", shell.options.image);
   }
 
   @Test

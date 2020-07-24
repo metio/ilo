@@ -7,31 +7,25 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.exec.ExecutablePaths;
-import wtf.metio.ilo.exec.Executables;
+import wtf.metio.ilo.options.ComposeOptions;
 
-import java.nio.file.Path;
-import java.util.Optional;
+import java.util.List;
 
-public final class DockerCompose implements DockerComposeCLI {
+public final class DockerCompose implements ComposeCLI {
 
-  private final Executables executables;
-
-  public DockerCompose(final Executables executables) {
-    this.executables = executables;
+  @Override
+  public String name() {
+    return "docker-compose";
   }
 
   @Override
-  public Optional<String> version() {
-    return executables.runAndReadOutput(Constants.DOCKER_COMPOSE_COMMAND, Constants.VERSION_FLAG)
-        .map(output -> output.replace("docker-compose version", ""))
-        .map(output -> output.substring(0, output.indexOf(",")))
-        .map(String::strip);
+  public List<String> arguments(final ComposeOptions options) {
+    return DockerPodman.arguments(options, name());
   }
 
   @Override
-  public Optional<Path> path() {
-    return ExecutablePaths.of(Constants.DOCKER_COMPOSE_COMMAND);
+  public List<String> cleanupArguments(final ComposeOptions options) {
+    return DockerPodman.cleanupArguments(options, name());
   }
 
 }

@@ -8,16 +8,11 @@
 package wtf.metio.ilo.commands;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.exec.Exec;
 import wtf.metio.ilo.exec.Executables;
 import wtf.metio.ilo.options.ComposeOptions;
 import wtf.metio.ilo.tools.Tools;
-import wtf.metio.ilo.utils.CalculateArguments;
-import wtf.metio.ilo.utils.Debug;
 
-import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.function.BiFunction;
 
 @CommandLine.Command(
     name = "compose",
@@ -35,23 +30,17 @@ public class Compose implements Callable<Integer> {
 
   @Override
   public Integer call() {
-    final var executables = Exec.executables();
-    final var runExitCode = execute(CalculateArguments::composeRunArguments, executables);
+    final var runExitCode = Tools.detectedComposeRuntime(options.runtime)
+        .map(tool -> tool.arguments(options))
+        .map(Executables::runAndWaitForExit)
+        .orElse(CommandLine.ExitCode.USAGE);
     // docker-compose needs an additional cleanup even when using 'run --rm'
     // see https://github.com/docker/compose/issues/2791
-    final var cleanupExitCode = execute(CalculateArguments::composeCleanupArguments, executables);
-    return Math.max(runExitCode, cleanupExitCode);
-  }
-
-  private Integer execute(
-      final BiFunction<? super ComposeOptions, ? super String, ? extends List<String>> argumentCreator,
-      final Executables executables) {
-    return Tools.detectedComposeRuntime(executables, options.runtime)
-        .map(tool -> argumentCreator.apply(options, tool))
-        .peek(args -> Debug.showExecutedCommand(options.debug, args))
-        .map(executables::runAndWaitForExit)
-        .findFirst()
+    final var cleanupExitCode = Tools.detectedComposeRuntime(options.runtime)
+        .map(tool -> tool.cleanupArguments(options))
+        .map(Executables::runAndWaitForExit)
         .orElse(CommandLine.ExitCode.USAGE);
+    return Math.max(runExitCode, cleanupExitCode);
   }
 
 }

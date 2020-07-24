@@ -7,13 +7,62 @@
 
 package wtf.metio.ilo.exec;
 
+import wtf.metio.ilo.errors.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
-public interface Executables {
+public final class Executables {
 
-  Optional<String> runAndReadOutput(String... args);
+  private Executables() {
+    // utility class
+  }
 
-  int runAndWaitForExit(List<String> args);
+  public static Optional<Path> of(final String tool) {
+    return allPaths().map(path -> path.resolve(tool))
+        .filter(Executables::canExecute)
+        .findFirst();
+  }
+
+  static Stream<Path> allPaths() {
+    return Stream.of(System.getenv("PATH")
+        .split(Pattern.quote(File.pathSeparator)))
+        .map(Paths::get);
+  }
+
+  static boolean canExecute(final Path binary) {
+    return Files.exists(binary) && Files.isExecutable(binary);
+  }
+
+  public static int runAndWaitForExit(final List<String> args) {
+    try {
+      return startProcess(new ProcessBuilder(args).inheritIO()).waitFor();
+    } catch (final InterruptedException exception) {
+      throw new UnexpectedInterruptionException(exception);
+    }
+  }
+
+  private static Process startProcess(final ProcessBuilder processBuilder) {
+    try {
+      return processBuilder.start();
+    } catch (final UnsupportedOperationException exception) {
+      throw new OperatingSystemNotSupportedException(exception);
+    } catch (final NullPointerException exception) {
+      throw new CommandLiistContainsNullException(exception);
+    } catch (final IndexOutOfBoundsException exception) {
+      throw new CommandListIsEmptyException(exception);
+    } catch (final SecurityException exception) {
+      throw new SecurityManagerDeniesAccessException(exception);
+    } catch (final IOException exception) {
+      throw new RuntimeIOException(exception);
+    }
+  }
 
 }

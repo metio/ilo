@@ -7,14 +7,12 @@
 
 package wtf.metio.ilo.tools;
 
-/**
- * Represents the podman-compose CLI and its commands.
- */
-public interface PodmanComposeCLI extends CliTool {
+import wtf.metio.ilo.options.ComposeOptions;
 
-  @Override
-  default String name() {
-    return "podman-compose";
-  }
+import java.util.List;
+
+public interface ComposeCLI extends CliTool<ComposeOptions> {
+
+  List<String> cleanupArguments(ComposeOptions options);
 
 }

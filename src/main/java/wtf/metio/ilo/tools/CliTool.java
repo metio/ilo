@@ -7,13 +7,14 @@
 
 package wtf.metio.ilo.tools;
 
-import java.nio.file.Path;
-import java.util.Optional;
+import wtf.metio.ilo.exec.Executables;
+
+import java.util.List;
 
 /**
  * Most generic CLI tool.
  */
-public interface CliTool {
+public interface CliTool<OPTIONS> {
 
   /**
    * @return The name of the CLI tool.
@@ -21,13 +22,16 @@ public interface CliTool {
   String name();
 
   /**
-   * @return The version of the CLI tool.
+   * @return Whether this CLI tool is installed and executable.
    */
-  Optional<String> version();
+  default boolean exists() {
+    return Executables.of(name()).isPresent();
+  }
 
   /**
-   * @return The absolute path to the CLI tool.
+   * @param options The options to use.
+   * @return The command line to execute.
    */
-  Optional<Path> path();
+  List<String> arguments(OPTIONS options);
 
 }

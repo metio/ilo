@@ -7,30 +7,20 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.exec.ExecutablePaths;
-import wtf.metio.ilo.exec.Executables;
+import wtf.metio.ilo.options.ShellOptions;
 
-import java.nio.file.Path;
-import java.util.Optional;
+import java.util.List;
 
-public final class Podman implements PodmanCLI {
+public final class Podman implements ShellCLI {
 
-  private final Executables executables;
-
-  public Podman(final Executables executables) {
-    this.executables = executables;
+  @Override
+  public String name() {
+    return "podman";
   }
 
   @Override
-  public Optional<String> version() {
-    return executables.runAndReadOutput(Constants.PODMAN_COMMAND, Constants.VERSION_FLAG)
-        .map(output -> output.replace("podman version", ""))
-        .map(String::strip);
-  }
-
-  @Override
-  public Optional<Path> path() {
-    return ExecutablePaths.of(Constants.PODMAN_COMMAND);
+  public List<String> arguments(final ShellOptions options) {
+    return DockerPodman.arguments(options, name());
   }
 
 }

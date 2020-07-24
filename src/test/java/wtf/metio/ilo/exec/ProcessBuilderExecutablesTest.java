@@ -7,47 +7,37 @@
 
 package wtf.metio.ilo.exec;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
-import org.junit.jupiter.api.condition.OS;
-
-import java.util.List;
-import java.util.function.Predicate;
-
-@DisplayName("ProcessBuilderExecutables")
 class ProcessBuilderExecutablesTest {
-
-  @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC})
-  @DisplayName("runs tool and captures its output")
-  void shouldCaptureOutput() {
-    // given
-    final var exec = new ProcessBuilderExecutables();
-
-    // when
-    final var output = exec.runAndReadOutput(new String[]{"ls", "--version"});
-
-    // then
-    Assertions.assertTrue(output
-        .map(String::trim)
-        .filter(Predicate.not(String::isBlank))
-        .isPresent());
-  }
-
-  @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC})
-  @DisplayName("waits until tool exits")
-  void shouldWaitForExit() {
-    // given
-    final var exec = new ProcessBuilderExecutables();
-
-    // when
-    final var exitCode = exec.runAndWaitForExit(List.of("ls"));
-
-    // then
-    Assertions.assertEquals(0, exitCode);
-  }
+//
+//  @Test
+//  @EnabledOnOs({OS.LINUX, OS.MAC})
+//  @DisplayName("runs tool and captures its output")
+//  void shouldCaptureOutput() {
+//    // given
+//    final var exec = new ProcessBuilderExecutables();
+//
+//    // when
+//    final var output = exec.runAndReadOutput(new String[]{"ls", "--version"});
+//
+//    // then
+//    Assertions.assertTrue(output
+//        .map(String::trim)
+//        .filter(Predicate.not(String::isBlank))
+//        .isPresent());
+//  }
+//
+//  @Test
+//  @EnabledOnOs({OS.LINUX, OS.MAC})
+//  @DisplayName("waits until tool exits")
+//  void shouldWaitForExit() {
+//    // given
+//    final var exec = new ProcessBuilderExecutables();
+//
+//    // when
+//    final var exitCode = exec.runAndWaitForExit(List.of("ls"));
+//
+//    // then
+//    Assertions.assertEquals(0, exitCode);
+//  }
 
 }

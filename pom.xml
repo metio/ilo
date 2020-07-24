@@ -151,8 +151,8 @@
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.cli=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.converter=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.exec=ALL-UNNAMED
-                        --add-opens wtf.metio.ilo/wtf.metio.ilo.model=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.options=ALL-UNNAMED
+                        --add-opens wtf.metio.ilo/wtf.metio.ilo.runtimes=1ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.version=ALL-UNNAMED
                     </argLine>
                 </configuration>
