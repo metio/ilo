@@ -26,7 +26,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
       - name: REUSE Compliance Check
-        uses: fsfe/reuse-action@v1
+        uses: fsfe/reuse-action@v1.1
       - name: GPG Key
         id: gpg
         run: |
