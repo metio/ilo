@@ -1,24 +1,17 @@
 {{ define "title" }}
-{{ .Site.Title }} &ndash; {{ .Title }}
+    {{ .Site.Title }} &ndash; {{ .Title }}
 {{ end }}
 {{ define "main" }}
-<!--
-  ~ This file is part of ilo. It is subject to the license terms in the LICENSE file found in the top-level
-  ~ directory of this distribution and at http://creativecommons.org/publicdomain/zero/1.0/. No part of ilo,
-  ~ including this file, may be copied, modified, propagated, or distributed except according to the terms contained
-  ~ in the LICENSE file.
-  -->
-
-<h1>{{ .Title }}</h1>
-{{.Content}}
-{{ if gt (len .Pages) 0 }}
-<h2>Pages</h2>
-<ul>
-    {{ range .Pages }}
-    <a href="{{.Permalink}}">
-        <li>{{ .Title }}</li>
-    </a>
+    <h1>{{ .Title }}</h1>
+    {{.Content}}
+    {{ if gt (len .Pages) 0 }}
+        <h2>Pages</h2>
+        <ul>
+            {{ range .Pages }}
+            <a href="{{.Permalink}}">
+                <li>{{ .Title }}</li>
+            </a>
+            {{ end }}
+        </ul>
     {{ end }}
-</ul>
-{{ end }}
 {{ end }}

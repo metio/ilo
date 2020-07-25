@@ -1,27 +1,19 @@
 {{ block "footer" . }}
-<!--
-  ~ This file is part of ilo. It is subject to the license terms in the LICENSE file found in the top-level
-  ~ directory of this distribution and at http://creativecommons.org/publicdomain/zero/1.0/. No part of ilo,
-  ~ including this file, may be copied, modified, propagated, or distributed except according to the terms contained
-  ~ in the LICENSE file.
-  -->
-
 <footer id="footer">
-    <p>
-        <a href="https://creativecommons.org/publicdomain/zero/1.0/" rel="license">
-            <img src="{{ "/images/cc0.png" | absURL }}" style="border-style: none;" alt="CC0" width="88px" height="31px"
-            />
-        </a><br/>
+    <p xmlns:dct="http://purl.org/dc/terms/" xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#">
+        <a rel="license" href="https://creativecommons.org/publicdomain/zero/1.0/">
+            <img src="{{ "/images/cc0.png" | absURL }}" style="border-style: none;" alt="CC0" width="88px" height="31px" />
+        </a><br />
         To the extent possible under law,
-        <a href="{{ " rel="dct:publisher"/" | absLangURL }}">
-        <span property="dct:title">metio.wtf</span>
+        <a rel="dct:publisher" href="{{ "/" | absLangURL }}">
+            <span property="dct:title">metio.wtf</span>
         </a>
         has waived all copyright and related or neighboring rights to
         <span property="dct:title">{{ .Site.Title }}</span>.
         This work is published from:
-        <span about="{{ " content="EN" datatype="dct:ISO3166" property="vcard:Country"/" | absLangURL }}">
-        Germany
-        </span>
+        <span property="vcard:Country" datatype="dct:ISO3166" content="EN" about="{{ "/" | absLangURL }}">
+      Germany
+    </span>
     </p>
 </footer>
 {{ end }}

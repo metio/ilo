@@ -1,21 +1,14 @@
 {{ block "header" . }}
-<!--
-  ~ This file is part of ilo. It is subject to the license terms in the LICENSE file found in the top-level
-  ~ directory of this distribution and at http://creativecommons.org/publicdomain/zero/1.0/. No part of ilo,
-  ~ including this file, may be copied, modified, propagated, or distributed except according to the terms contained
-  ~ in the LICENSE file.
-  -->
-
 <header id="header">
     <h1 id="projectname">
-        <a href="{{ " id="rootlink"/" | absLangURL }}">{{.Site.Title}}</a>
-        <a href="{{ " sitemap/" | absLangURL }}" title="show me all pages" id="sitemaplink">
-        <img class="svgimg" src="{{ "/images/sitemap.svg" | absURL }}" alt="sitemap" width="30" height="30">
+        <a id="rootlink" href="{{ "/" | absLangURL }}">{{.Site.Title}}</a>
+        <a href="{{ "sitemap/" | absLangURL }}" title="show me all pages" id="sitemaplink">
+            <img class="svgimg" src="{{ "/images/sitemap.svg" | absURL }}" alt="sitemap" width="30" height="30">
         </a>
     </h1>
     {{ partial "i18n/translations.html" . }}
     <span id="actions">
-        <a href="https://github.com/metio/ilo" id="github" title="want some code?">
+        <a href="https://github.com/metio/krei" id="github" title="want some code?">
             <img class="svgimg" src="{{ "/images/github.svg" | absURL }}" alt="github" width="32" height="32">
         </a>
         <a href="{{ "/atom.xml" | absURL }}" id="newsfeed" title="get notified about updates">
