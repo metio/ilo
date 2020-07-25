@@ -25,8 +25,10 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - id: gpg-key
-        name: GPG Key
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v1
+      - name: GPG Key
+        id: gpg
         run: |
           echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
       - name: Build with Maven
