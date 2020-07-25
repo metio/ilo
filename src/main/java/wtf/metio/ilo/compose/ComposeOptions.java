@@ -20,7 +20,7 @@ public final class ComposeOptions {
 
   @CommandLine.Option(
       names = {"--interactive"},
-      description = "Allocate a pseudo TTY or not",
+      description = "Allocate a pseudo TTY or not. Not used by pods-compose",
       defaultValue = "true",
       negatable = true
   )
@@ -34,13 +34,13 @@ public final class ComposeOptions {
 
   @CommandLine.Option(
       names = {"--service"},
-      description = "Specify the service to use"
+      description = "Specify the service to use. Not used by pods-compose"
   )
   public String service;
 
   @CommandLine.Option(
       names = {"--file"},
-      description = "Specify the compose file to use",
+      description = "Specify the docker-compose file to use. Not used by pods-compose",
       defaultValue = "docker-compose.yml"
   )
   public String composeFile;

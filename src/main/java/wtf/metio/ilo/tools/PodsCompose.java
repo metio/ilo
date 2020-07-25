@@ -21,12 +21,16 @@ public final class PodsCompose implements ComposeCLI {
 
   @Override
   public List<String> arguments(final ComposeOptions options) {
-    return DockerPodman.arguments(options, name());
+    final var args = List.of(name(), "--up");
+    Debug.showExecutedCommand(options.debug, args);
+    return args;
   }
 
   @Override
   public List<String> cleanupArguments(final ComposeOptions options) {
-    return DockerPodman.cleanupArguments(options, name());
+    final var args = List.of(name(), "--down");
+    Debug.showExecutedCommand(options.debug, args);
+    return args;
   }
 
 }
