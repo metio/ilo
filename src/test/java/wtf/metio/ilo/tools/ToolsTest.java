@@ -24,7 +24,7 @@ class ToolsTest {
   @Test
   @DisplayName("selects shell runtimes")
   void shellRuntime() {
-    Assertions.assertTrue(Tools.selectShellRuntime(null).isPresent());
+    Assertions.assertNotNull(Tools.selectShellRuntime(null));
   }
 
 }

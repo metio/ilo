@@ -20,7 +20,7 @@ public final class Docker implements ShellCLI {
   }
 
   @Override
-  public List<String> arguments(final ShellOptions options) {
+  public List<String> runArguments(final ShellOptions options) {
     return DockerPodman.arguments(options, name());
   }
 

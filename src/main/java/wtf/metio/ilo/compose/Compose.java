@@ -29,16 +29,13 @@ public class Compose implements Callable<Integer> {
 
   @Override
   public Integer call() {
-    final var runExitCode = Tools.selectComposeRuntime(options.runtime)
-        .map(tool -> tool.arguments(options))
-        .map(Executables::runAndWaitForExit)
-        .orElse(CommandLine.ExitCode.USAGE);
+    final var tool = Tools.selectComposeRuntime(options.runtime);
+    final var runArguments = tool.runArguments(options);
+    final var runExitCode = Executables.runAndWaitForExit(runArguments);
     // docker-compose needs an additional cleanup even when using 'run --rm'
     // see https://github.com/docker/compose/issues/2791
-    final var cleanupExitCode = Tools.selectComposeRuntime(options.runtime)
-        .map(tool -> tool.cleanupArguments(options))
-        .map(Executables::runAndWaitForExit)
-        .orElse(CommandLine.ExitCode.USAGE);
+    final var cleanupArguments = tool.cleanupArguments(options);
+    final var cleanupExitCode = Executables.runAndWaitForExit(cleanupArguments);
     return Math.max(runExitCode, cleanupExitCode);
   }
 

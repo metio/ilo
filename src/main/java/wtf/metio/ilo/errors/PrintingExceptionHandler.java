@@ -11,7 +11,7 @@ import picocli.CommandLine;
 
 import java.util.Optional;
 
-public class PrintingExceptionHandler implements CommandLine.IExecutionExceptionHandler {
+public final class PrintingExceptionHandler implements CommandLine.IExecutionExceptionHandler {
 
   @Override
   public int handleExecutionException(

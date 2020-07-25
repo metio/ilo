@@ -7,7 +7,7 @@
 
 package wtf.metio.ilo.errors;
 
-public class UnexpectedInterruptionException extends BusinessException {
+public final class UnexpectedInterruptionException extends BusinessException {
 
   public UnexpectedInterruptionException(final InterruptedException exception) {
     super(106, exception, "The process was unexpected interrupted. In case you can reproduce this, open a ticket at https://github.com/metio/ilo");

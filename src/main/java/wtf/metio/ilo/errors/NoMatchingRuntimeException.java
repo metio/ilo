@@ -7,10 +7,10 @@
 
 package wtf.metio.ilo.errors;
 
-public final class OperatingSystemNotSupportedException extends BusinessException {
+public final class NoMatchingRuntimeException extends BusinessException {
 
-  public OperatingSystemNotSupportedException(final UnsupportedOperationException exception) {
-    super(103, exception, "Your operating system does not support the creation of processes. Sadly ilo won't work here :-(");
+  public NoMatchingRuntimeException() {
+    super(107, null, "No matching runtime was found on your system. Select another runtime using '--runtime' or install your preferred runtime on your system.");
   }
 
 }

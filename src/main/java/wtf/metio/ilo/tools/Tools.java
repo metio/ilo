@@ -9,6 +9,7 @@ package wtf.metio.ilo.tools;
 
 import wtf.metio.ilo.compose.ComposeCLI;
 import wtf.metio.ilo.compose.ComposeRuntime;
+import wtf.metio.ilo.errors.NoMatchingRuntimeException;
 import wtf.metio.ilo.model.Matcher;
 import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellRuntime;
@@ -22,13 +23,13 @@ public final class Tools {
     // utility class
   }
 
-  public static Optional<ShellCLI> selectShellRuntime(final ShellRuntime runtime) {
+  public static ShellCLI selectShellRuntime(final ShellRuntime runtime) {
     final var docker = new Docker();
     final var podman = new Podman();
     return autoSelect(runtime, docker, podman);
   }
 
-  public static Optional<ComposeCLI> selectComposeRuntime(final ComposeRuntime runtime) {
+  public static ComposeCLI selectComposeRuntime(final ComposeRuntime runtime) {
     final var dockerCompose = new DockerCompose();
     final var podmanCompose = new PodmanCompose();
     final var podsCompose = new PodsCompose();
@@ -36,7 +37,7 @@ public final class Tools {
   }
 
   @SafeVarargs
-  private static <SHELL extends CliTool<?>> Optional<SHELL> autoSelect(
+  private static <SHELL extends CliTool<?>> SHELL autoSelect(
       final Matcher matcher,
       final SHELL... tools) {
     return Stream.of(tools)
@@ -44,7 +45,8 @@ public final class Tools {
         .filter(tool -> Optional.ofNullable(matcher)
             .map(runtime -> runtime.matches(tool.name()))
             .orElse(true))
-        .findFirst();
+        .findFirst()
+        .orElseThrow(NoMatchingRuntimeException::new);
   }
 
 }

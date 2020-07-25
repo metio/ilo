@@ -9,24 +9,12 @@ package wtf.metio.ilo.errors;
 
 import picocli.CommandLine;
 
-public class ExitCodes implements CommandLine.IExitCodeExceptionMapper {
+public final class ExitCodes implements CommandLine.IExitCodeExceptionMapper {
 
   @Override
   public int getExitCode(final Throwable exception) {
-    if (exception instanceof CommandListContainsNullException) {
-      return ((CommandListContainsNullException) exception).getExitCode();
-    }
-    if (exception instanceof CommandListIsEmptyException) {
-      return ((CommandListIsEmptyException) exception).getExitCode();
-    }
-    if (exception instanceof OperatingSystemNotSupportedException) {
-      return ((OperatingSystemNotSupportedException) exception).getExitCode();
-    }
-    if (exception instanceof RuntimeIOException) {
-      return ((RuntimeIOException) exception).getExitCode();
-    }
-    if (exception instanceof SecurityManagerDeniesAccessException) {
-      return ((SecurityManagerDeniesAccessException) exception).getExitCode();
+    if (exception instanceof BusinessException) {
+      return ((BusinessException) exception).getExitCode();
     }
     return CommandLine.ExitCode.SOFTWARE;
   }

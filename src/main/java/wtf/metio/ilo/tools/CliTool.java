@@ -32,6 +32,6 @@ public interface CliTool<OPTIONS> {
    * @param options The options to use.
    * @return The command line to execute.
    */
-  List<String> arguments(OPTIONS options);
+  List<String> runArguments(OPTIONS options);
 
 }
