@@ -29,7 +29,7 @@ class ComposeTest extends CLI_TCK {
   void defaultCommandLine(final String tool) {
     final var compose = compose("compose", "--runtime", tool);
     Assertions.assertAll("compose options",
-        () -> Assertions.assertEquals("docker-compose.yml", compose.options.composeFile),
+        () -> Assertions.assertEquals("docker-compose.yml", compose.options.file),
         () -> Assertions.assertNull(compose.options.service),
         () -> Assertions.assertTrue(compose.options.interactive),
         () -> Assertions.assertFalse(compose.options.debug),
@@ -50,7 +50,7 @@ class ComposeTest extends CLI_TCK {
   void nonInteractive(final String tool) {
     final var compose = compose("compose", "--runtime", tool, "--interactive=false");
     Assertions.assertAll("compose options",
-        () -> Assertions.assertEquals("docker-compose.yml", compose.options.composeFile),
+        () -> Assertions.assertEquals("docker-compose.yml", compose.options.file),
         () -> Assertions.assertNull(compose.options.service),
         () -> Assertions.assertFalse(compose.options.interactive),
         () -> Assertions.assertFalse(compose.options.debug),
@@ -71,7 +71,7 @@ class ComposeTest extends CLI_TCK {
   void debug(final String tool) {
     final var compose = compose("compose", "--runtime", tool, "--debug");
     Assertions.assertAll("compose options",
-        () -> Assertions.assertEquals("docker-compose.yml", compose.options.composeFile),
+        () -> Assertions.assertEquals("docker-compose.yml", compose.options.file),
         () -> Assertions.assertNull(compose.options.service),
         () -> Assertions.assertTrue(compose.options.interactive),
         () -> Assertions.assertTrue(compose.options.debug),

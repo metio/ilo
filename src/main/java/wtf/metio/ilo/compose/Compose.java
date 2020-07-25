@@ -33,6 +33,8 @@ public class Compose implements Callable<Integer> {
     final var tool = Tools.selectComposeRuntime(options.runtime);
     final var pullArguments = tool.pullArguments(options);
     final var pullExitCode = Executables.runAndWaitForExit(pullArguments);
+    final var buildArguments = tool.buildArguments(options);
+    final var buildExitCode = Executables.runAndWaitForExit(buildArguments);
     final var runArguments = tool.runArguments(options);
     final var runExitCode = Executables.runAndWaitForExit(runArguments);
     // docker-compose needs an additional cleanup even when using 'run --rm'

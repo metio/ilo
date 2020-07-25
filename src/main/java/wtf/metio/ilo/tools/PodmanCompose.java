@@ -25,6 +25,11 @@ public final class PodmanCompose implements ComposeCLI {
   }
 
   @Override
+  public List<String> buildArguments(final ComposeOptions options) {
+    return List.of();
+  }
+
+  @Override
   public List<String> runArguments(final ComposeOptions options) {
     return DockerPodman.runArguments(options, name());
   }

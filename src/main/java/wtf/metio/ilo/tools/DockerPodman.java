@@ -80,7 +80,7 @@ final class DockerPodman {
   static List<String> runArguments(final ComposeOptions options, final String tool) {
     final var run = Stream.of(
         tool,
-        "--file", options.composeFile,
+        "--file", options.file,
         "run",
         "--rm"
     );
@@ -94,7 +94,7 @@ final class DockerPodman {
   }
 
   static List<String> cleanupArguments(final ComposeOptions options, final String tool) {
-    final var args = List.of(tool, "--file", options.composeFile, "down");
+    final var args = List.of(tool, "--file", options.file, "down");
     Debug.showExecutedCommand(options.debug, args);
     return args;
   }

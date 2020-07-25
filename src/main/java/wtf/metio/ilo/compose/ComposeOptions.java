@@ -40,15 +40,15 @@ public final class ComposeOptions {
 
   @CommandLine.Option(
       names = {"--service"},
-      description = "Specify the service to use. Not used by pods-compose."
+      description = "Specify the service to use. Used by docker-/podman-compose."
   )
   public String service;
 
   @CommandLine.Option(
       names = {"--file"},
-      description = "Specify the docker-compose file to use. Not used by pods-compose.",
+      description = "Specify the docker-compose.yml/footloose.yaml file to use.",
       defaultValue = "docker-compose.yml"
   )
-  public String composeFile;
+  public String file;
 
 }

@@ -12,31 +12,37 @@ import wtf.metio.ilo.compose.ComposeOptions;
 
 import java.util.List;
 
-public final class DockerCompose implements ComposeCLI {
+public final class Footloose implements ComposeCLI {
 
   @Override
   public String name() {
-    return "docker-compose";
+    return "footloose";
   }
 
   @Override
   public List<String> pullArguments(final ComposeOptions options) {
-    return DockerPodman.pullArguments(options, name());
-  }
-
-  @Override
-  public List<String> buildArguments(final ComposeOptions options) {
     return List.of();
   }
 
   @Override
+  public List<String> buildArguments(final ComposeOptions options) {
+    final var args = List.of(name(), "create", "--config", options.file);
+    Debug.showExecutedCommand(options.debug, args);
+    return args;
+  }
+
+  @Override
   public List<String> runArguments(final ComposeOptions options) {
-    return DockerPodman.runArguments(options, name());
+    final var args = List.of(name(), "ssh", "--config", options.file);
+    Debug.showExecutedCommand(options.debug, args);
+    return args;
   }
 
   @Override
   public List<String> cleanupArguments(final ComposeOptions options) {
-    return DockerPodman.cleanupArguments(options, name());
+    final var args = List.of(name(), "delete", "--config", options.file);
+    Debug.showExecutedCommand(options.debug, args);
+    return args;
   }
 
 }

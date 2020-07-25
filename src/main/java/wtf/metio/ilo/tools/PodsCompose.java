@@ -25,6 +25,11 @@ public final class PodsCompose implements ComposeCLI {
   }
 
   @Override
+  public List<String> buildArguments(final ComposeOptions options) {
+    return List.of();
+  }
+
+  @Override
   public List<String> runArguments(final ComposeOptions options) {
     final var args = List.of(name(), "--up");
     Debug.showExecutedCommand(options.debug, args);
