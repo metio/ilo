@@ -8,17 +8,26 @@
 package wtf.metio.ilo.devcontainer;
 
 import picocli.CommandLine;
+import wtf.metio.ilo.compose.ComposeRuntime;
+import wtf.metio.ilo.compose.ComposeRuntimeConverter;
 import wtf.metio.ilo.shell.ShellRuntime;
 import wtf.metio.ilo.shell.ShellRuntimeConverter;
 
 public final class DevcontainerOptions {
 
   @CommandLine.Option(
-      names = {"--runtime"},
-      description = "Specify the runtime to use. If none is specified, use auto-selection.",
+      names = {"--shell-runtime", "-S"},
+      description = "Specify the shell runtime to use. If none is specified, use auto-selection.",
       converter = ShellRuntimeConverter.class
   )
-  public ShellRuntime runtime;
+  public ShellRuntime shellRuntime;
+
+  @CommandLine.Option(
+      names = {"--compose-runtime", "-C"},
+      description = "Specify the compose runtime to use. If none is specified, use auto-selection.",
+      converter = ComposeRuntimeConverter.class
+  )
+  public ComposeRuntime composeRuntime;
 
   @CommandLine.Option(
       names = {"--debug"},

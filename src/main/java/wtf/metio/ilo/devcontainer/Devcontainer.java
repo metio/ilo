@@ -59,6 +59,7 @@ public class Devcontainer implements Callable<Integer> {
         opts.service = config.service;
         opts.debug = options.debug;
         opts.pull = options.pull;
+        opts.runtime = options.composeRuntime;
         final var command = new Compose();
         command.options = opts;
         return command.call();
@@ -69,7 +70,7 @@ public class Devcontainer implements Callable<Integer> {
         opts.debug = options.debug;
         opts.pull = options.pull;
         opts.removeImage = options.removeImage;
-        opts.runtime = options.runtime;
+        opts.runtime = options.shellRuntime;
         opts.dockerfile = config.dockerFile;
         opts.mountProjectDir = options.mountProjectDir;
         final var command = new Shell();
