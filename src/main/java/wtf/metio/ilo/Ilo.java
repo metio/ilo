@@ -53,6 +53,7 @@ public final class Ilo implements Runnable {
 
     final var commandLine = new CommandLine(new Ilo());
     commandLine.setUnmatchedArgumentsAllowed(true); // workaround for IntelliJ
+    commandLine.setUnmatchedOptionsArePositionalParams(true);
     commandLine.setExecutionExceptionHandler(new PrintingExceptionHandler());
     commandLine.setExitCodeExceptionMapper(new ExitCodes());
     System.exit(commandLine.execute(arguments));
