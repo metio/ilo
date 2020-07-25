@@ -19,11 +19,13 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [earthly](https://github.com/earthly/earthly): run all your builds containerized
 - [gitpod](https://www.gitpod.io/): Describe your dev environment as code and get fully prebuilt, ready-to-code development environments for any GitLab, GitHub, and Bitbucket project.
 - [vagrant](https://www.vagrantup.com/): Vagrant is a tool for building and managing virtual machine environments in a single workflow.
+- [subuser](https://subuser.org/): Subuser turns Docker containers into normal linux programs
 
 ## Feature Comparison
 
-| Tool       | Language Support | Build Environment | Build Once |
-|------------|------------------|-------------------|------------|
-| ilo        | any              | yes               | yes        |
-| toolbox    | any installable  | yes               | no         |
-| virtualenv | Python           | yes               | no         |
+| Tool       | Language Support | Build Environment | Build Once | Linux | Mac | Windows |
+|------------|------------------|-------------------|------------|-------|-----|---------|
+| ilo        | any              | yes               | yes        | yes   | yes | yes     |
+| toolbox    | any installable  | yes               | no         | yes   | no  | no      |
+| virtualenv | Python           | yes               | no         | yes   | yes | yes     |
+| subuser    | any              | yes               | no         | yes   | no  | no      |
