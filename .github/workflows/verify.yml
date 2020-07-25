@@ -38,9 +38,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: java11
-          path: ./target/ilo-*-java11*
+          path: ./target/ilo-*-java11.[zip|zip.asc|zip.sha512]
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v2
         with:
           name: linux
-          path: ./target/ilo-*-linux*
+          path: ./target/ilo-*-linux.[zip|zip.asc|zip.sha512]
