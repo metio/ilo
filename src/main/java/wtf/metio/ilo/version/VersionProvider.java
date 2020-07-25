@@ -9,7 +9,7 @@ package wtf.metio.ilo.version;
 
 import picocli.CommandLine;
 
-public class VersionProvider implements CommandLine.IVersionProvider {
+public final class VersionProvider implements CommandLine.IVersionProvider {
 
   @Override
   public String[] getVersion() {
