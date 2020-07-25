@@ -27,6 +27,15 @@ final class DockerPodman {
     return List.of();
   }
 
+  public static List<String> buildArguments(final ShellOptions options, final String tool) {
+    if (null != options.dockerfile && !options.dockerfile.isBlank()) {
+      final var args = List.of(tool, "build", options.dockerfile, ".");
+      Debug.showExecutedCommand(options.debug, args);
+      return args;
+    }
+    return List.of();
+  }
+
   static List<String> runArguments(final ShellOptions options, final String tool) {
     final var currentDir = System.getProperty("user.dir");
     final var run = Stream.of(

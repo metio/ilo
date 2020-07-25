@@ -33,11 +33,13 @@ public class Shell implements Callable<Integer> {
     final var tool = Tools.selectShellRuntime(options.runtime);
     final var pullArguments = tool.pullArguments(options);
     final var pullExitCode = Executables.runAndWaitForExit(pullArguments);
+    final var buildArguments = tool.buildArguments(options);
+    final var buildExitCode = Executables.runAndWaitForExit(buildArguments);
     final var runArguments = tool.runArguments(options);
     final var runExitCode = Executables.runAndWaitForExit(runArguments);
     final var cleanupArguments = tool.cleanupArguments(options);
     final var cleanupExitCode = Executables.runAndWaitForExit(cleanupArguments);
-    return IntStream.of(pullExitCode, runExitCode, cleanupExitCode)
+    return IntStream.of(pullExitCode, buildExitCode, runExitCode, cleanupExitCode)
         .max().orElse(CommandLine.ExitCode.SOFTWARE);
   }
 

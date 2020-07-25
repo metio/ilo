@@ -13,6 +13,8 @@ import java.util.List;
 
 public interface ShellCLI extends CliTool<ShellOptions> {
 
+  List<String> buildArguments(ShellOptions options);
+
   List<String> pullArguments(ShellOptions options);
 
   List<String> cleanupArguments(ShellOptions options);
