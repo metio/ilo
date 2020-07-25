@@ -2,6 +2,7 @@ module wtf.metio.ilo {
 
   requires info.picocli;
   requires info.picocli.codegen;
+  requires com.fasterxml.jackson.databind;
 
   opens wtf.metio.ilo to info.picocli;
   opens wtf.metio.ilo.compose to info.picocli;
