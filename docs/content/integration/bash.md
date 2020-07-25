@@ -1,14 +1,14 @@
 ---
-title: oh-my-zsh
+title: bash
 date: 2020-04-13
 menu:
   main:
     parent: integration
-    identifier: integration_omz
+    identifier: integration_bash
 categories:
 - integration
 tags:
-- oh my zsh
+- bash
 ---
 
 [bash](https://www.gnu.org/software/bash/) has several options to customize its shell. In order to integrate the autocomplete support, follow these steps:
