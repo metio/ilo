@@ -9,6 +9,7 @@ package wtf.metio.ilo;
 
 import picocli.AutoComplete;
 import picocli.CommandLine;
+import picocli.codegen.docgen.manpage.ManPageGenerator;
 import wtf.metio.ilo.compose.Compose;
 import wtf.metio.ilo.devcontainer.Devcontainer;
 import wtf.metio.ilo.errors.ExitCodes;
@@ -37,7 +38,8 @@ import java.util.Arrays;
         Shell.class,
         Compose.class,
         Devcontainer.class,
-        AutoComplete.GenerateCompletion.class
+        AutoComplete.GenerateCompletion.class,
+        ManPageGenerator.class
     },
     showDefaultValues = true
 )
