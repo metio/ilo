@@ -25,4 +25,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/public
           force_orphan: true
-          cname: ilo.people.metio.wtf
+          cname: ilo.projects.metio.wtf
