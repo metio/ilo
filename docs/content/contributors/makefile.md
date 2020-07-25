@@ -17,18 +17,21 @@ $ make
 usage: make [target]
 
 contributing:
-  sign-waiver         Sign the WAIVER
+  sign-waiver                     Sign the WAIVER
+
+example:
+  ec-redis-java11                 Example using 'ilo compose' w/ redis & java 11
+  es-default                      Example using 'ilo shell' w/ default settings
+  es-openjdk11                    Example using 'ilo shell' w/ openjdk11
+  es-maven                        Example using 'ilo shell' w/ maven
 
 hacking:
-  install             Install all artifacts into local repository
-  verify              Verify all modules
-  site                Build website
-  site-watch          Build and watch website
-  build-env           Open a new shell in a predefined build environment
-  build-once          Build the entire project once in a predefined build environment
+  build                           Build everything
+  native-image                    Create a native image using GraalVM
+  clean                           Clean build artifacts
 
 other:
-  help                Show this help
+  help                            Show this help
 ```
 
 Run any of the available targets like this:
