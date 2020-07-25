@@ -26,14 +26,17 @@ public final class Tools {
   public static ShellCLI selectShellRuntime(final ShellRuntime runtime) {
     final var docker = new Docker();
     final var podman = new Podman();
-    return autoSelect(runtime, docker, podman);
+    final var lxd = new LXD();
+    return autoSelect(runtime, docker, podman, lxd);
   }
 
   public static ComposeCLI selectComposeRuntime(final ComposeRuntime runtime) {
     final var dockerCompose = new DockerCompose();
     final var podmanCompose = new PodmanCompose();
     final var podsCompose = new PodsCompose();
-    return autoSelect(runtime, dockerCompose, podmanCompose, podsCompose);
+    final var footloose = new Footloose();
+    final var vagrant = new Vagrant();
+    return autoSelect(runtime, dockerCompose, podmanCompose, podsCompose, footloose, vagrant);
   }
 
   @SafeVarargs
