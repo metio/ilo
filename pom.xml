@@ -348,7 +348,7 @@
             </build>
         </profile>
         <profile>
-            <id>native-unix</id>
+            <id>native-linux</id>
             <activation>
                 <property>
                     <name>skip.graal</name>
@@ -373,7 +373,7 @@
                                 </goals>
                                 <configuration>
                                     <descriptors>
-                                        <descriptor>src/main/assembly/native-unix.xml</descriptor>
+                                        <descriptor>src/main/assembly/linux.xml</descriptor>
                                     </descriptors>
                                 </configuration>
                             </execution>
@@ -408,7 +408,7 @@
                                 </goals>
                                 <configuration>
                                     <descriptors>
-                                        <descriptor>src/main/assembly/native-mac.xml</descriptor>
+                                        <descriptor>src/main/assembly/mac.xml</descriptor>
                                     </descriptors>
                                 </configuration>
                             </execution>
@@ -443,7 +443,7 @@
                                 </goals>
                                 <configuration>
                                     <descriptors>
-                                        <descriptor>src/main/assembly/native-windows.xml</descriptor>
+                                        <descriptor>src/main/assembly/windows.xml</descriptor>
                                     </descriptors>
                                 </configuration>
                             </execution>
