@@ -9,6 +9,7 @@ package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import wtf.metio.ilo.shell.ShellCLI;
 
 @DisplayName("Docker")
 class DockerTest extends CLI_TOOL_TCK<ShellCLI> {

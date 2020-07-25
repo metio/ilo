@@ -5,9 +5,14 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.tools;
+package wtf.metio.ilo.compose;
 
-import wtf.metio.ilo.shell.ShellOptions;
+import wtf.metio.ilo.tools.CliTool;
 
-public interface ShellCLI extends CliTool<ShellOptions> {
+import java.util.List;
+
+public interface ComposeCLI extends CliTool<ComposeOptions> {
+
+  List<String> cleanupArguments(ComposeOptions options);
+
 }

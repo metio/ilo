@@ -9,6 +9,7 @@ package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import wtf.metio.ilo.shell.ShellCLI;
 
 @DisplayName("Podman")
 class PodmanTest extends CLI_TOOL_TCK<ShellCLI> {

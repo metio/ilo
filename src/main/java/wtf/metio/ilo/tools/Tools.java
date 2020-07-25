@@ -7,8 +7,10 @@
 
 package wtf.metio.ilo.tools;
 
+import wtf.metio.ilo.compose.ComposeCLI;
 import wtf.metio.ilo.compose.ComposeRuntime;
 import wtf.metio.ilo.model.Matcher;
+import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellRuntime;
 
 import java.util.Optional;
@@ -34,11 +36,13 @@ public final class Tools {
 
   @SafeVarargs
   static <SHELL extends CliTool<?>> Optional<SHELL> autoSelect(
-      final Matcher runtime,
+      final Matcher matcher,
       final SHELL... tools) {
     return Stream.of(tools)
         .filter(CliTool::exists)
-        .filter(tool -> null == runtime || runtime.matches(tool.name()))
+        .filter(tool -> Optional.ofNullable(matcher)
+            .map(runtime -> runtime.matches(tool.name()))
+            .orElse(true))
         .findFirst();
   }
 
