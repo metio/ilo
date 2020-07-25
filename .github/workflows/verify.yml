@@ -30,7 +30,17 @@ jobs:
         run: |
           echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
       - name: Build with Maven
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Dskip.graal=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+      - name: Upload Java 11 Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: java11
+          path: ./target/ilo-*-java11*
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux
+          path: ./target/ilo-*-linux*
