@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 
 final class DockerPodman {
 
-  public static List<String> arguments(final ShellOptions options, final String tool) {
+  static List<String> arguments(final ShellOptions options, final String tool) {
     final var currentDir = System.getProperty("user.dir");
     final var run = Stream.of(
         tool,
@@ -41,7 +41,7 @@ final class DockerPodman {
     return args;
   }
 
-  public static List<String> arguments(final ComposeOptions options, final String tool) {
+  static List<String> arguments(final ComposeOptions options, final String tool) {
     final var run = Stream.of(
         tool,
         "--file", options.composeFile,
@@ -57,7 +57,7 @@ final class DockerPodman {
     return args;
   }
 
-  public static List<String> cleanupArguments(final ComposeOptions options, final String tool) {
+  static List<String> cleanupArguments(final ComposeOptions options, final String tool) {
     final var args = List.of(tool, "--file", options.composeFile, "down");
     Debug.showExecutedCommand(options.debug, args);
     return args;

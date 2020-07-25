@@ -31,7 +31,8 @@ public final class Tools {
   public static Optional<ComposeCLI> detectedComposeRuntime(final ComposeRuntime runtime) {
     final var dockerCompose = new DockerCompose();
     final var podmanCompose = new PodmanCompose();
-    return autoSelect(runtime, dockerCompose, podmanCompose);
+    final var podsCompose = new PodsCompose();
+    return autoSelect(runtime, dockerCompose, podmanCompose, podsCompose);
   }
 
   @SafeVarargs
