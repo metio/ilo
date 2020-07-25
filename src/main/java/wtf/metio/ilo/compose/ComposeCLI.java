@@ -13,6 +13,8 @@ import java.util.List;
 
 public interface ComposeCLI extends CliTool<ComposeOptions> {
 
+  List<String> pullArguments(ComposeOptions options);
+
   List<String> cleanupArguments(ComposeOptions options);
 
 }

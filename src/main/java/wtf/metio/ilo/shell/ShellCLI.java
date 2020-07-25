@@ -9,5 +9,12 @@ package wtf.metio.ilo.shell;
 
 import wtf.metio.ilo.tools.CliTool;
 
+import java.util.List;
+
 public interface ShellCLI extends CliTool<ShellOptions> {
+
+  List<String> pullArguments(ShellOptions options);
+
+  List<String> cleanupArguments(ShellOptions options);
+
 }

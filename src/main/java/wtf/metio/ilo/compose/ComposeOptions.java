@@ -13,14 +13,14 @@ public final class ComposeOptions {
 
   @CommandLine.Option(
       names = {"--runtime"},
-      description = "Specify the runtime to use. If none is specified, use auto-detection.",
+      description = "Specify the runtime to use. If none is specified, use auto-selection.",
       converter = ComposeRuntimeConverter.class
   )
   public ComposeRuntime runtime;
 
   @CommandLine.Option(
       names = {"--interactive"},
-      description = "Allocate a pseudo TTY or not. Not used by pods-compose",
+      description = "Allocate a pseudo TTY or not. Not used by pods-compose.",
       defaultValue = "true",
       negatable = true
   )
@@ -28,19 +28,25 @@ public final class ComposeOptions {
 
   @CommandLine.Option(
       names = {"--debug"},
-      description = "Show additional debug information"
+      description = "Show additional debug information."
   )
   public boolean debug;
 
   @CommandLine.Option(
+      names = {"--pull"},
+      description = "Pull images before opening shell."
+  )
+  public boolean pull;
+
+  @CommandLine.Option(
       names = {"--service"},
-      description = "Specify the service to use. Not used by pods-compose"
+      description = "Specify the service to use. Not used by pods-compose."
   )
   public String service;
 
   @CommandLine.Option(
       names = {"--file"},
-      description = "Specify the docker-compose file to use. Not used by pods-compose",
+      description = "Specify the docker-compose file to use. Not used by pods-compose.",
       defaultValue = "docker-compose.yml"
   )
   public String composeFile;

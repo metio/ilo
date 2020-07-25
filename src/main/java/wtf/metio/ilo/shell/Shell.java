@@ -12,6 +12,7 @@ import wtf.metio.ilo.exec.Executables;
 import wtf.metio.ilo.tools.Tools;
 
 import java.util.concurrent.Callable;
+import java.util.stream.IntStream;
 
 @CommandLine.Command(
     name = "shell",
@@ -30,8 +31,14 @@ public class Shell implements Callable<Integer> {
   @Override
   public Integer call() {
     final var tool = Tools.selectShellRuntime(options.runtime);
+    final var pullArguments = tool.pullArguments(options);
+    final var pullExitCode = Executables.runAndWaitForExit(pullArguments);
     final var runArguments = tool.runArguments(options);
-    return Executables.runAndWaitForExit(runArguments);
+    final var runExitCode = Executables.runAndWaitForExit(runArguments);
+    final var cleanupArguments = tool.cleanupArguments(options);
+    final var cleanupExitCode = Executables.runAndWaitForExit(cleanupArguments);
+    return IntStream.of(pullExitCode, runExitCode, cleanupExitCode)
+        .max().orElse(CommandLine.ExitCode.SOFTWARE);
   }
 
 }

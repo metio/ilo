@@ -15,20 +15,26 @@ public final class ShellOptions {
 
   @CommandLine.Option(
       names = {"--runtime"},
-      description = "Specify the runtime to use. If none is specified, use auto-detection.",
+      description = "Specify the runtime to use. If none is specified, use auto-selection.",
       converter = ShellRuntimeConverter.class
   )
   public ShellRuntime runtime;
 
   @CommandLine.Option(
       names = {"--debug"},
-      description = "Show additional debug information"
+      description = "Show additional debug information."
   )
   public boolean debug;
 
   @CommandLine.Option(
+      names = {"--pull"},
+      description = "Pull image before opening shell."
+  )
+  public boolean pull;
+
+  @CommandLine.Option(
       names = {"--interactive"},
-      description = "Open interactive shell or just run a single command",
+      description = "Open interactive shell or just run a single command.",
       defaultValue = "true",
       negatable = true
   )
@@ -36,11 +42,24 @@ public final class ShellOptions {
 
   @CommandLine.Option(
       names = {"--mount-project-dir"},
-      description = "Mount the project directory into the running container",
+      description = "Mount the project directory into the running container.",
       defaultValue = "true",
       negatable = true
   )
   public boolean mountProjectDir;
+
+  @CommandLine.Option(
+      names = {"--image"},
+      description = "The OCI image to use.",
+      defaultValue = "fedora:latest"
+  )
+  public String image;
+
+  @CommandLine.Option(
+      names = {"--remove-image"},
+      description = "Remove image after closing the shell."
+  )
+  public boolean removeImage;
 
   @CommandLine.Parameters
   public List<String> commands;

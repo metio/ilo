@@ -41,15 +41,18 @@ public final class Executables {
     return Files.exists(binary) && Files.isExecutable(binary);
   }
 
-  public static int runAndWaitForExit(final List<String> args) {
+  public static int runAndWaitForExit(final List<String> arguments) {
+    if (null == arguments || arguments.isEmpty()) {
+      return 0;
+    }
     try {
-      return new ProcessBuilder(args).inheritIO().start().waitFor();
+      return new ProcessBuilder(arguments).inheritIO().start().waitFor();
     } catch (final InterruptedException exception) {
       throw new UnexpectedInterruptionException(exception);
     } catch (final UnsupportedOperationException exception) {
       throw new OperatingSystemNotSupportedException(exception);
     } catch (final NullPointerException exception) {
-      throw new CommandListContainsNullException(exception, args);
+      throw new CommandListContainsNullException(exception, arguments);
     } catch (final IndexOutOfBoundsException exception) {
       throw new CommandListIsEmptyException(exception);
     } catch (final SecurityException exception) {

@@ -20,8 +20,18 @@ public final class Podman implements ShellCLI {
   }
 
   @Override
+  public List<String> pullArguments(final ShellOptions options) {
+    return DockerPodman.runArguments(options, name());
+  }
+
+  @Override
   public List<String> runArguments(final ShellOptions options) {
-    return DockerPodman.arguments(options, name());
+    return DockerPodman.runArguments(options, name());
+  }
+
+  @Override
+  public List<String> cleanupArguments(final ShellOptions options) {
+    return DockerPodman.runArguments(options, name());
   }
 
 }

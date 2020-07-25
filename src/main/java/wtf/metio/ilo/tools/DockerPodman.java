@@ -18,7 +18,16 @@ import static java.util.stream.Collectors.toList;
 
 final class DockerPodman {
 
-  static List<String> arguments(final ShellOptions options, final String tool) {
+  public static List<String> pullArguments(final ShellOptions options, final String tool) {
+    if (options.pull) {
+      final var args = List.of(tool, "pull", options.image);
+      Debug.showExecutedCommand(options.debug, args);
+      return args;
+    }
+    return List.of();
+  }
+
+  static List<String> runArguments(final ShellOptions options, final String tool) {
     final var currentDir = System.getProperty("user.dir");
     final var run = Stream.of(
         tool,
@@ -34,14 +43,32 @@ final class DockerPodman {
         "--tty"
     ) : Stream.<String>empty();
     final var command = Stream.ofNullable(options.commands).flatMap(List::stream);
-    final var args = Stream.of(run, projectDir, tty, command)
+    final var args = Stream.of(run, projectDir, tty, Stream.of(options.image), command)
         .flatMap(identity())
         .collect(toList());
     Debug.showExecutedCommand(options.debug, args);
     return args;
   }
 
-  static List<String> arguments(final ComposeOptions options, final String tool) {
+  public static List<String> cleanupArguments(final ShellOptions options, final String tool) {
+    if (options.removeImage) {
+      final var args = List.of(tool, "rmi", options.image);
+      Debug.showExecutedCommand(options.debug, args);
+      return args;
+    }
+    return List.of();
+  }
+
+  static List<String> pullArguments(final ComposeOptions options, final String tool) {
+    if (options.pull) {
+      final var args = List.of(tool, "pull");
+      Debug.showExecutedCommand(options.debug, args);
+      return args;
+    }
+    return List.of();
+  }
+
+  static List<String> runArguments(final ComposeOptions options, final String tool) {
     final var run = Stream.of(
         tool,
         "--file", options.composeFile,

@@ -12,6 +12,7 @@ import wtf.metio.ilo.exec.Executables;
 import wtf.metio.ilo.tools.Tools;
 
 import java.util.concurrent.Callable;
+import java.util.stream.IntStream;
 
 @CommandLine.Command(
     name = "compose",
@@ -30,13 +31,16 @@ public class Compose implements Callable<Integer> {
   @Override
   public Integer call() {
     final var tool = Tools.selectComposeRuntime(options.runtime);
+    final var pullArguments = tool.pullArguments(options);
+    final var pullExitCode = Executables.runAndWaitForExit(pullArguments);
     final var runArguments = tool.runArguments(options);
     final var runExitCode = Executables.runAndWaitForExit(runArguments);
     // docker-compose needs an additional cleanup even when using 'run --rm'
     // see https://github.com/docker/compose/issues/2791
     final var cleanupArguments = tool.cleanupArguments(options);
     final var cleanupExitCode = Executables.runAndWaitForExit(cleanupArguments);
-    return Math.max(runExitCode, cleanupExitCode);
+    return IntStream.of(pullExitCode, runExitCode, cleanupExitCode)
+        .max().orElse(CommandLine.ExitCode.SOFTWARE);
   }
 
 }
