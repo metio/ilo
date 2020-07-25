@@ -15,4 +15,4 @@ Want to use `ilo` for your project? Take a look at the [usage guide](./usage).
 
 ## Contributors
 
-Interested in contributing to `ilo`? Take a look at the [contributor guide]()
+Interested in contributing to `ilo`? Take a look at the [contributor guide](./contributors)
