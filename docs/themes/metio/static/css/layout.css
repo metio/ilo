@@ -1,0 +1,39 @@
+/*
+ * This file is part of ilo. It is subject to the license terms in the LICENSE file found in the top-level
+ * directory of this distribution and at http://creativecommons.org/publicdomain/zero/1.0/. No part of ilo,
+ * including this file, may be copied, modified, propagated, or distributed except according to the terms contained
+ * in the LICENSE file.
+ */
+
+#site {
+    display: grid;
+}
+
+#header {
+    grid-area: header;
+}
+
+#navigation {
+    grid-area: navigation;
+}
+
+#content {
+    grid-area: content;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#footer {
+    grid-area: footer;
+}
+
+.highlight {
+    max-width: 90vw;
+}
+
+.highlight > pre {
+    overflow: scroll;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}

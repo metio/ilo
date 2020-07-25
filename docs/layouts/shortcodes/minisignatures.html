@@ -1,0 +1,13 @@
+{{ range $.Site.Data.contributors }}
+<!--
+  ~ This file is part of ilo. It is subject to the license terms in the LICENSE file found in the top-level
+  ~ directory of this distribution and at http://creativecommons.org/publicdomain/zero/1.0/. No part of ilo,
+  ~ including this file, may be copied, modified, propagated, or distributed except according to the terms contained
+  ~ in the LICENSE file.
+  -->
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># verify signature: {{ .id }}</span>
+$ minisign -V -x AUTHORS/WAIVER.{{ .id }}.minisig -P {{ .minisign }} -m AUTHORS/WAIVER
+</code></pre>
+</div>
+{{ end }}

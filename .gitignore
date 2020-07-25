@@ -9,3 +9,5 @@ out/
 target
 .project
 .classpath
+docs/public
+docs/resources

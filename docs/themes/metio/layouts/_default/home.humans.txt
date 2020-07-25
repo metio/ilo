@@ -1,0 +1,5 @@
+/* TEAM */
+{{ range $.Site.Data.contributors }}
+{{ .title }}: {{ .first_name }} {{ .last_name }}
+Site: {{ .website }}
+{{ end }}

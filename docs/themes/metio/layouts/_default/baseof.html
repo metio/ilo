@@ -1,0 +1,31 @@
+<!--
+  ~ This file is part of ilo. It is subject to the license terms in the LICENSE file found in the top-level
+  ~ directory of this distribution and at http://creativecommons.org/publicdomain/zero/1.0/. No part of ilo,
+  ~ including this file, may be copied, modified, propagated, or distributed except according to the terms contained
+  ~ in the LICENSE file.
+  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{ partial "head/metadata.html" . }}
+    {{ partial "head/opengraph.html" . }}
+    {{ partial "head/links.html" . }}
+    {{ partial "head/styles.html" . }}
+    <title>
+        {{ block "title" . }}
+        {{ .Site.Title }}
+        {{ end }}
+    </title>
+</head>
+<body id="site">
+{{ partial "body/site-header.html" . }}
+{{ partial "body/site-navigation.html" . }}
+<main id="content">
+    {{ block "main" . }}
+    <!-- The part of the page that begins to differ between templates -->
+    {{ end }}
+</main>
+{{ partial "body/site-footer.html" . }}
+</body>
+</html>

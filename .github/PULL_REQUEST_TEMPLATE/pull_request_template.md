@@ -1,0 +1,3 @@
+- [ ] `WAIVER` is [signed](https://ilo.projects.metio.wtf/contributors/first-timer/)
+- [ ] all checks are passing
+- [ ] review ok

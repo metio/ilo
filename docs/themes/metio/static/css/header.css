@@ -1,0 +1,53 @@
+/*
+ * This file is part of ilo. It is subject to the license terms in the LICENSE file found in the top-level
+ * directory of this distribution and at http://creativecommons.org/publicdomain/zero/1.0/. No part of ilo,
+ * including this file, may be copied, modified, propagated, or distributed except according to the terms contained
+ * in the LICENSE file.
+ */
+
+#header {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    border: dotted gray;
+    border-width: 0 0 2px 0;
+    margin-left: 15px;
+    margin-right: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    max-width: 100vw
+}
+
+#header a {
+    text-decoration: none;
+    color: black
+}
+
+#projectname {
+    flex-grow: 1;
+    display: flex
+}
+
+#projectname #sitemaplink {
+    margin-top: 4px;
+    margin-left: 10px;
+    mask: url(/images/sitemap.svg) no-repeat center;
+}
+
+#languages {
+    font-size: 25px;
+    border: dotted gray;
+    border-width: 0 2px 0 0;
+}
+
+#languages a {
+    margin-right: 15px
+}
+
+#actions a:first-child {
+    margin-left: 15px
+}
+
+#actions a:not(:last-child) {
+    margin-right: 15px
+}

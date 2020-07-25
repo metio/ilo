@@ -1,0 +1,27 @@
+/*
+ * This file is part of ilo. It is subject to the license terms in the LICENSE file found in the top-level
+ * directory of this distribution and at http://creativecommons.org/publicdomain/zero/1.0/. No part of ilo,
+ * including this file, may be copied, modified, propagated, or distributed except according to the terms contained
+ * in the LICENSE file.
+ */
+
+body {
+    font-family: 'DejaVu Sans', Georgia, sans-serifs, serif
+}
+
+.tag {
+    font-size: small;
+    color: gray
+}
+
+blockquote {
+    font-style: italic;
+}
+
+blockquote > p::before, blockquote > p::after {
+    content: '”';
+}
+
+code {
+    font-weight: bold;
+}

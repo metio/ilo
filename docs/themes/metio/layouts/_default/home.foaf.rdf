@@ -1,0 +1,22 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:foaf="http://xmlns.com/foaf/0.1/">
+  <foaf:PersonalProfileDocument rdf:about="">
+    <foaf:maker rdf:resource="#sebhoss" />
+    <foaf:primaryTopic rdf:resource="{{ .Site.Title }}" />
+  </foaf:PersonalProfileDocument>
+
+  <foaf:Project rdf:ID="{{ .Site.Title }}">
+    <foaf:name>{{ .Site.Title }}</foaf:name>
+    <foaf:homepage rdf:resource="{{ .Site.BaseURL }}" />
+  </foaf:Project>
+
+  {{ range $.Site.Data.contributors }}
+  <foaf:Person rdf:ID="{{ .id }}">
+    <foaf:name>{{ .first_name }} {{ .last_name }}</foaf:name>
+    <foaf:title>{{ .title }}</foaf:title>
+    <foaf:givenname>{{ .first_name }}</foaf:givenname>
+    <foaf:family_name>{{ .last_name }}</foaf:family_name>
+    <foaf:mbox rdf:resource="mailto:{{ .email }}" />
+    <foaf:homepage rdf:resource="{{ .website }}" />
+  </foaf:Person>
+  {{ end }}
+</rdf:RDF>

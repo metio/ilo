@@ -1,0 +1,14 @@
+baseURL = "https://ilo.projects.metio.wtf/"
+languageCode = "en"
+theme = "metio"
+title = "ilo"
+
+pygmentsUseClasses=true
+sectionPagesMenu = "main"
+enableRobotsTXT = true
+DefaultContentLanguage = "en"
+
+[outputs]
+  home = [ "HTML", "RSS", "ATOM", "HUMANS", "FOAF"]
+  section = ["HTML", "RSS", "ATOM"]
+  term = ["HTML", "RSS", "ATOM"]
