@@ -2,6 +2,33 @@
     {{ .Site.Title }} &ndash; {{ .Title }}
 {{ end }}
 {{ define "main" }}
-    <h1>{{ .Title }}</h1>
-    {{ .Content }}
+    <h1 class="post-titel">
+        <a href="{{ .Permalink }}">
+            {{ .Title }}
+        </a>
+        <a href="https://github.com/metio/ilo/commits/master/docs/content/{{ .File }}">
+            <img src="{{ "/images/history.svg" | absURL }}" height="16" width="14" class="icon svgimg">
+        </a>
+        <a href="https://github.com/metio/ilo/edit/master/docs/content/{{ .File }}">
+            <img src="{{ "/images/pencil.svg" | absURL }}" height="16" width="14" class="icon svgimg">
+        </a>
+    </h1>
+    <div class="subtitle">
+        Published: <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+        {{ if ne .Date .Lastmod }}
+            , Updated: <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Lastmod.Format "January 2, 2006" }}</time>
+        {{ end }}
+    </div>
+    {{ with .Params.tags }}
+        <div class="subtitle">
+            Talks about:
+            {{ $sort := sort . }}
+            {{ $links := apply $sort "partial" "body/post-tag-link" "." }}
+            {{ $clean := apply $links "chomp" "." }}
+            {{ delimit $clean ", " ", and " }}
+        </div>
+    {{ end }}
+    <div id="post-content">
+        {{ .Content }}
+    </div>
 {{ end }}

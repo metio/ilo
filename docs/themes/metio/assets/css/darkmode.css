@@ -3,15 +3,6 @@ body {
     color: white;
 }
 
-img {
-    opacity: .75;
-    transition: opacity .5s ease-in-out;
-}
-
-img:hover {
-    opacity: 1;
-}
-
 #header a {
     color: white;
 }
@@ -20,11 +11,16 @@ img:hover {
     filter: invert(1);
 }
 
-a,a:visited,a>span {
+a,a>span {
     color: #268bd2;
-    // #4AF626 terminal green
 }
 
 li::marker {
     color: white;
+}
+.post-titel,.post-titel > a,.post-titel > a:visited {
+    color: white;
+}
+.post-tag {
+    color: gray;
 }

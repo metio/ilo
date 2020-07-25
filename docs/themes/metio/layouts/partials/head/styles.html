@@ -1,18 +1,24 @@
-<link href="{{ "/css/normalize.css" | absURL }}" media="screen" rel="stylesheet">
+{{ $normalize := resources.Get "/css/normalize.css" }}
+{{ $font := resources.Get "/css/font.css" }}
+{{ $header := resources.Get "/css/header.css" }}
+{{ $footer := resources.Get "/css/footer.css" }}
+{{ $navigation := resources.Get "/css/navigation.css" }}
+{{ $navigation_mobile := resources.Get "/css/navigation-mobile.css" }}
+{{ $navigation_tablet := resources.Get "/css/navigation-tablet.css" }}
+{{ $navigation_desktop := resources.Get "/css/navigation-desktop.css" }}
+{{ $layout := resources.Get "/css/layout.css" }}
+{{ $layout_mobile := resources.Get "/css/layout-mobile.css" }}
+{{ $layout_tablet := resources.Get "/css/layout-tablet.css" }}
+{{ $layout_desktop := resources.Get "/css/layout-desktop.css" }}
+{{ $syntax := resources.Get "/css/syntax.css" }}
+{{ $darkmode := resources.Get "/css/darkmode.css" | minify | fingerprint "sha512" }}
 
-<link href="{{ "/css/font.css" | absURL }}" media="screen" rel="stylesheet">
-<link href="{{ "/css/header.css" | absURL }}" media="screen" rel="stylesheet">
-<link href="{{ "/css/footer.css" | absURL }}" media="screen" rel="stylesheet">
+{{ $mobile := slice $normalize $font $header $footer $navigation $layout $syntax $navigation_mobile $layout_mobile | resources.Concat "css/mobile.css" | minify | fingerprint "sha512" }}
+{{ $tablet := slice $normalize $font $header $footer $navigation $layout $syntax $navigation_tablet $layout_tablet | resources.Concat "css/tablet.css" | minify | fingerprint "sha512" }}
+{{ $desktop := slice $normalize $font $header $footer $navigation $layout $syntax $navigation_desktop $layout_desktop | resources.Concat "css/desktop.css" | minify | fingerprint "sha512" }}
 
-<link href="{{ "/css/navigation.css" | absURL }}" media="screen" rel="stylesheet">
-<link href="{{ "/css/navigation-mobile.css" | absURL }}" media="screen and (max-width: 1199px)" rel="stylesheet">
-<link href="{{ "/css/navigation-tablet.css" | absURL }}" media="screen and (min-width: 801px)" rel="stylesheet">
-<link href="{{ "/css/navigation-desktop.css" | absURL }}" media="screen and (min-width: 1200px)" rel="stylesheet">
+<link href="{{ $mobile.Permalink }}" integrity="{{ $mobile.Data.Integrity }}" media="screen and (max-width: 800px)" rel="stylesheet">
+<link href="{{ $tablet.Permalink }}" integrity="{{ $tablet.Data.Integrity }}" media="screen and (min-width: 801px) and (max-width: 1199px)" rel="stylesheet">
+<link href="{{ $desktop.Permalink }}" integrity="{{ $desktop.Data.Integrity }}" media="screen and (min-width: 1200px)" rel="stylesheet">
 
-<link href="{{ "/css/layout.css" | absURL }}" rel="stylesheet">
-<link href="{{ "/css/layout-mobile.css" | absURL }}" media="screen and (max-width: 800px)" rel="stylesheet">
-<link href="{{ "/css/layout-tablet.css" | absURL }}" media="screen and (min-width: 801px) and (max-width: 1199px)" rel="stylesheet">
-<link href="{{ "/css/layout-desktop.css" | absURL }}" media="screen and (min-width: 1200px)" rel="stylesheet">
-
-<link href="{{ "/css/syntax.css" | absURL }}" media="screen" rel="stylesheet">
-<link href="{{ "/css/darkmode.css" | absURL }}" media="screen and (prefers-color-scheme: dark)" rel="stylesheet">
+<link href="{{ $darkmode.Permalink }}" integrity="{{ $darkmode.Data.Integrity }}" media="screen and (prefers-color-scheme: dark)" rel="stylesheet">

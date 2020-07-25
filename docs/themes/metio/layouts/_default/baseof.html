@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     {{ partial "head/metadata.html" . }}
-    {{ partial "head/opengraph.html" . }}
+    {{ template "_internal/opengraph.html" . }}
+    {{ template "_internal/twitter_cards.html" . }}
+    {{ template "_internal/schema.html" . }}
     {{ partial "head/links.html" . }}
     {{ partial "head/styles.html" . }}
     <title>

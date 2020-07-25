@@ -1,0 +1,8 @@
+{{ define "title" }}
+    {{ .Site.Title }} &ndash; {{ .Title }}
+{{ end }}
+{{ define "main"}}
+    <h1>404 - Not Found</h1>
+    <p>The page you are looking for does not exist or was moved to another location.</p>
+    <p>Either go back to the <a href="{{ "/" | absLangURL }}">start page</a> or search for something like <code>site:ilo.projects.metio.wtf YOUR_SEARCH_TERM</code> on <a href="https://www.google.com/search?q=site%3Ailo.projects.metio.wtf+YOUR_SEARCH_TERM">google</a>.</p>
+{{ end }}

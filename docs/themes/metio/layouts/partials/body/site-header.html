@@ -1,16 +1,33 @@
 {{ block "header" . }}
 <header id="header">
     <h1 id="projectname">
-        <a id="rootlink" href="{{ "/" | absLangURL }}">{{.Site.Title}}</a>
+        <a id="rootlink" href="{{ "/" | absLangURL }}">{{ .Site.Title }}</a>
         <a href="{{ "sitemap/" | absLangURL }}" title="show me all pages" id="sitemaplink">
             <img class="svgimg" src="{{ "/images/sitemap.svg" | absURL }}" alt="sitemap" width="30" height="30">
         </a>
     </h1>
     {{ partial "i18n/translations.html" . }}
     <span id="actions">
-        <a href="https://github.com/metio/krei" id="github" title="want some code?">
-            <img class="svgimg" src="{{ "/images/github.svg" | absURL }}" alt="github" width="32" height="32">
-        </a>
+        {{ with .Site.Params.matrix }}
+            <a href="https://matrix.to/#/{{ . }}" id="matrix" title="lets talk">
+                <img class="svgimg" src="{{ "/images/matrix.svg" | absURL }}" alt="matrix" width="32" height="32">
+            </a>
+        {{ end }}
+        {{ with .Site.Params.email }}
+            <a href="mailto:{{ . }}" id="email" title="i want to write you an email">
+                <img class="svgimg" src="{{ "/images/email.svg" | absURL }}" alt="email" width="32" height="32">
+            </a>
+        {{ end }}
+        {{ with .Site.Params.mastodon }}
+            <a rel="me" href="{{ . }}" id="mastodon" title="toot toot toot">
+                <img class="svgimg" src="{{ "/images/mastodon.svg" | absURL }}" alt="mastodon" width="32" height="32">
+            </a>
+        {{ end }}
+        {{ with .Site.Params.github }}
+            <a href="https://github.com/{{ . }}" id="github" title="want some code?">
+                <img class="svgimg" src="{{ "/images/github.svg" | absURL }}" alt="github" width="32" height="32">
+            </a>
+        {{ end }}
         <a href="{{ "/atom.xml" | absURL }}" id="newsfeed" title="get notified about updates">
             <img class="svgimg" src="{{ "/images/rss.svg" | absURL }}" alt="newsfeed" width="32" height="32">
         </a>

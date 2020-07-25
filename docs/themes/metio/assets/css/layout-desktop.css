@@ -8,3 +8,10 @@
     visibility: visible;
 }
 
+#content img {
+    max-width: calc(90vw - 250px);
+}
+
+#content pre {
+    max-width: calc(90vw - 250px);
+}

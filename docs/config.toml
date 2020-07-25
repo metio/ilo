@@ -12,3 +12,13 @@ DefaultContentLanguage = "en"
   home = [ "HTML", "RSS", "ATOM", "HUMANS", "FOAF"]
   section = ["HTML", "RSS", "ATOM"]
   term = ["HTML", "RSS", "ATOM"]
+
+[params]
+  mainSections = ["community", "compose", "contributors", "devcontainer", "integration", "metrics", "shell", "usage"]
+  author = "metio.wtf"
+  email = "ilo@metio.groups.io"
+  matrix = "#ilo:matrix.org"
+  github = "metio/ilo"
+  mastodon = "https://fosstodon.org/@metiobuild"
+  work = "ilo.projects.metio.wtf"
+  description = "manage reproducible build environments"
