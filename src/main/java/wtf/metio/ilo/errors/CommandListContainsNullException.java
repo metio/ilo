@@ -7,10 +7,10 @@
 
 package wtf.metio.ilo.errors;
 
-public class CommandLiistContainsNullException extends RuntimeException {
+public class CommandListContainsNullException extends BusinessException {
 
-  public CommandLiistContainsNullException(final NullPointerException exception) {
-    super(exception);
+  public CommandListContainsNullException(final NullPointerException exception) {
+    super(101, exception);
   }
 
 }

@@ -7,10 +7,10 @@
 
 package wtf.metio.ilo.errors;
 
-public class OperatingSystemNotSupportedException extends RuntimeException {
+public class OperatingSystemNotSupportedException extends BusinessException {
 
   public OperatingSystemNotSupportedException(final UnsupportedOperationException exception) {
-    super(exception);
+    super(103, exception);
   }
 
 }

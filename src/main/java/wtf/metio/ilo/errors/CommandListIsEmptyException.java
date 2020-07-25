@@ -7,10 +7,10 @@
 
 package wtf.metio.ilo.errors;
 
-public class CommandListIsEmptyException extends RuntimeException {
+public class CommandListIsEmptyException extends BusinessException {
 
   public CommandListIsEmptyException(final IndexOutOfBoundsException exception) {
-    super(exception);
+    super(102, exception);
   }
 
 }

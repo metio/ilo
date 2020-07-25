@@ -7,10 +7,10 @@
 
 package wtf.metio.ilo.errors;
 
-public class UnexpectedInterruptionException extends RuntimeException {
+public class UnexpectedInterruptionException extends BusinessException {
 
   public UnexpectedInterruptionException(final InterruptedException exception) {
-    super(exception);
+    super(106, exception);
   }
 
 }

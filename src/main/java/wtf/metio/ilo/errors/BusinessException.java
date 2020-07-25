@@ -7,10 +7,17 @@
 
 package wtf.metio.ilo.errors;
 
-public class SecurityManagerDeniesAccessException extends BusinessException {
+abstract class BusinessException extends RuntimeException {
 
-  public SecurityManagerDeniesAccessException(final SecurityException exception) {
-    super(105, exception);
+  private final int exitCode;
+
+  public BusinessException(final int exitCode, final Throwable cause) {
+    super(cause);
+    this.exitCode = exitCode;
+  }
+
+  public int getExitCode() {
+    return exitCode;
   }
 
 }

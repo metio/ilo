@@ -10,7 +10,8 @@ package wtf.metio.ilo;
 import picocli.AutoComplete;
 import picocli.CommandLine;
 import wtf.metio.ilo.compose.Compose;
-import wtf.metio.ilo.errors.DelegatingExceptionHandler;
+import wtf.metio.ilo.errors.ExitCodes;
+import wtf.metio.ilo.errors.PrintingExceptionHandler;
 import wtf.metio.ilo.shell.Shell;
 import wtf.metio.ilo.version.VersionProvider;
 
@@ -50,7 +51,8 @@ public final class Ilo implements Runnable {
 
     final var commandLine = new CommandLine(new Ilo());
     commandLine.setUnmatchedArgumentsAllowed(true); // workaround for IntelliJ
-    commandLine.setExecutionExceptionHandler(new DelegatingExceptionHandler());
+    commandLine.setExecutionExceptionHandler(new PrintingExceptionHandler());
+    commandLine.setExitCodeExceptionMapper(new ExitCodes());
     System.exit(commandLine.execute(arguments));
   }
 

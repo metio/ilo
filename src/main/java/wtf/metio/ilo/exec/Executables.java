@@ -43,19 +43,13 @@ public final class Executables {
 
   public static int runAndWaitForExit(final List<String> args) {
     try {
-      return startProcess(new ProcessBuilder(args).inheritIO()).waitFor();
+      return new ProcessBuilder(args).inheritIO().start().waitFor();
     } catch (final InterruptedException exception) {
       throw new UnexpectedInterruptionException(exception);
-    }
-  }
-
-  private static Process startProcess(final ProcessBuilder processBuilder) {
-    try {
-      return processBuilder.start();
     } catch (final UnsupportedOperationException exception) {
       throw new OperatingSystemNotSupportedException(exception);
     } catch (final NullPointerException exception) {
-      throw new CommandLiistContainsNullException(exception);
+      throw new CommandListContainsNullException(exception);
     } catch (final IndexOutOfBoundsException exception) {
       throw new CommandListIsEmptyException(exception);
     } catch (final SecurityException exception) {
