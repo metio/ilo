@@ -18,7 +18,7 @@ public final class PrintingExceptionHandler implements CommandLine.IExecutionExc
       final Exception exception,
       final CommandLine commandLine,
       final CommandLine.ParseResult parseResult) {
-    commandLine.getErr().println(commandLine.getColorScheme().text(exception.getMessage()));
+    commandLine.getErr().println(commandLine.getColorScheme().errorText(exception.getMessage()));
     return Optional.of(commandLine)
         .map(CommandLine::getExitCodeExceptionMapper)
         .map(mapper -> mapper.getExitCode(exception))
