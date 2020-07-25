@@ -1,0 +1,28 @@
+name: Publish Website
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'docs/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # Hugo: Fetch all history for .GitInfo and .Lastmod
+          fetch-depth: 0
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: latest
+      - name: Build Website
+        run: hugo --minify --i18n-warnings --path-warnings --source docs
+      - name: Deploy Website
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/public
+          force_orphan: true
+          cname: ilo.people.metio.wtf
