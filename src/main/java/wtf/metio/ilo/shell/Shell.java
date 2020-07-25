@@ -29,7 +29,7 @@ public class Shell implements Callable<Integer> {
 
   @Override
   public Integer call() {
-    return Tools.detectedShellRuntime(options.runtime)
+    return Tools.selectShellRuntime(options.runtime)
         .map(tool -> tool.arguments(options))
         .map(Executables::runAndWaitForExit)
         .orElse(CommandLine.ExitCode.USAGE);

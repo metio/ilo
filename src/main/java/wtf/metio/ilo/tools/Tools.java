@@ -22,13 +22,13 @@ public final class Tools {
     // utility class
   }
 
-  public static Optional<ShellCLI> detectedShellRuntime(final ShellRuntime runtime) {
+  public static Optional<ShellCLI> selectShellRuntime(final ShellRuntime runtime) {
     final var docker = new Docker();
     final var podman = new Podman();
     return autoSelect(runtime, docker, podman);
   }
 
-  public static Optional<ComposeCLI> detectedComposeRuntime(final ComposeRuntime runtime) {
+  public static Optional<ComposeCLI> selectComposeRuntime(final ComposeRuntime runtime) {
     final var dockerCompose = new DockerCompose();
     final var podmanCompose = new PodmanCompose();
     final var podsCompose = new PodsCompose();
@@ -36,7 +36,7 @@ public final class Tools {
   }
 
   @SafeVarargs
-  static <SHELL extends CliTool<?>> Optional<SHELL> autoSelect(
+  private static <SHELL extends CliTool<?>> Optional<SHELL> autoSelect(
       final Matcher matcher,
       final SHELL... tools) {
     return Stream.of(tools)
