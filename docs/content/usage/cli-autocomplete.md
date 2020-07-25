@@ -11,7 +11,7 @@ tags:
 - autocomplete
 ---
 
-The `ilo generate-completion` command generates autocompletion configuration for shells such as [bash](https://www.gnu.org/software/bash/) and [zsh](https://en.wikipedia.org/wiki/Z_shell). 
+The `ilo generate-completion` command generates autocompletion configuration for shells such as [bash](https://www.gnu.org/software/bash/) and [zsh](https://www.zsh.org/). 
 
 In order to get autocomplete working in your shell, execute the following snippet:
 
@@ -19,4 +19,4 @@ In order to get autocomplete working in your shell, execute the following snippe
 $ source <(ilo generate-completion)
 ```
 
-Place the same line in your `.bashrc` (or similar) file in order to make the change permanent.
+See the integration pages for [bash](../integration/bash) and [zsh](../integration/zsh) for help.
