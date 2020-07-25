@@ -10,6 +10,7 @@ package wtf.metio.ilo;
 import picocli.AutoComplete;
 import picocli.CommandLine;
 import wtf.metio.ilo.compose.Compose;
+import wtf.metio.ilo.devcontainer.Devcontainer;
 import wtf.metio.ilo.errors.ExitCodes;
 import wtf.metio.ilo.errors.PrintingExceptionHandler;
 import wtf.metio.ilo.shell.Shell;
@@ -35,6 +36,7 @@ import java.util.Arrays;
     subcommands = {
         Shell.class,
         Compose.class,
+        Devcontainer.class,
         AutoComplete.GenerateCompletion.class
     },
     showDefaultValues = true
