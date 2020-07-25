@@ -3,14 +3,24 @@ on:
   schedule:
     - cron:  '45 3 * * SUN'
 jobs:
-  linux:
+  prepare:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Create Release Version
+        id: release
+        run: echo "::set-output name=version::$(date +'%Y.%-m.%-d-%-H%M%S')"
+      - name: Write Relase Version
+        run: echo ${{ steps.release.outputs.version }} > version.txt
+      - name: Persist Release Version
+        uses: actions/upload-artifact@v2
         with:
-          # SonarQube: Disabling shallow clone is recommended for improving relevancy of reporting
-          # Hugo: Fetch all history for .GitInfo and .Lastmod
-          fetch-depth: 0
+          name: release
+          path: version.txt
+  linux:
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v2
       - name: setup-graalvm-ce
         uses: rinx/setup-graalvm-ce@v0.0.4
         with:
@@ -23,35 +33,146 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - id: gpg-key
-        name: GPG Key
-        run: |
-          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
-      - name: Create Release Version
-        id: release
-        run: echo "::set-output name=version::$(date +'%Y.%-m.%-d-%-H%M%S')"
-      - name: Write Relase Version
-        run: "${{ steps.release.outputs.version }} > version.txt"
-      - name: Persist Release Version
-        uses: actions/upload-artifact@v1
+      - name: Download Release Version
+        uses: actions/download-artifact@v2
         with:
           name: release
-          path: version.txt
-      - name: Count Commits
-        id: commits
-        run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Sunday')"
-      - name: Write Commit Count
-        run: "${{ steps.commits.outputs.count }} > commits.txt"
-      - name: Persist Commit Count
-        uses: actions/upload-artifact@v1
-        with:
-          name: repo
-          path: commits.txt
+      - name: Release Version
+        id: release
+        run: cat "::set-output name=version::release/version.txt"
+      - name: GPG Key
+        id: gpg
+        run: |
+          echo ${{ secrets.GPG_KEY }} | base64 --decode > signing.key.asc
       - name: Verify Project
         run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+      - name: Upload Java 11 Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: java11
+          path: ./target/ilo-${{ steps.release.outputs.version }}-java11*
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: linux
+          path: ./target/ilo-${{ steps.release.outputs.version }}-linux*
+  mac:
+    runs-on: macos-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup-graalvm-ce
+        uses: rinx/setup-graalvm-ce@v0.0.4
+        with:
+          graalvm-version: "20.1.0"
+          java-version: "java11"
+          native-image: "true"
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Download Release Version
+        uses: actions/download-artifact@v2
+        with:
+          name: release
+      - name: Release Version
+        id: release
+        run: cat "::set-output name=version::release/version.txt"
+      - name: GPG Key
+        id: gpg
+        run: |
+          echo ${{ secrets.GPG_KEY }} | base64 --decode > signing.key.asc
+      - name: Verify Project
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+      - name: Upload Mac Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: mac
+          path: ./target/ilo-${{ steps.release.outputs.version }}-mac*
+  windows:
+    runs-on: windows-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup-graalvm-ce
+        uses: rinx/setup-graalvm-ce@v0.0.4
+        with:
+          graalvm-version: "20.1.0"
+          java-version: "java11"
+          native-image: "true"
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: GPG Key
+        id: gpg
+        run: |
+          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
+      - name: Download Release Version
+        uses: actions/download-artifact@v2
+        with:
+          name: release
+      - name: Release Version
+        id: release
+        run: cat "::set-output name=version::release/version.txt"
+      - name: Verify Project
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows
+          path: ./target/ilo-${{ steps.release.outputs.version }}-windows*
+  release:
+    runs-on: ubuntu-latest
+    needs:
+      - linux
+      - mac
+      - windows
+    steps:
+      - name: Count Commits
+        id: commits
+        run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Sunday')"
+      - name: Download Release Version
+        uses: actions/download-artifact@v2
+        id: release-dl
+        with:
+          name: release
+      - name: Download Java11
+        id: java11-dl
+        uses: actions/download-artifact@v2
+        with:
+          name: java11
+      - name: Download Linux
+        id: linux-dl
+        uses: actions/download-artifact@v2
+        with:
+          name: linux
+      - name: Download Mac
+        id: mac-dl
+        uses: actions/download-artifact@v2
+        with:
+          name: mac
+      - name: Download Windows
+        id: windows-dl
+        uses: actions/download-artifact@v2
+        with:
+          name: windows
+      - name: Release Version
+        id: release
+        run: cat "::set-output name=version::release/version.txt"
       - name: Create Release
         if: steps.commits.outputs.count > 0
         id: create_release
@@ -64,14 +185,7 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Automated release, see [commits](https://github.com/metio/ilo/commits/${{ steps.release.outputs.version }}) for changes.
-      - name: Write Relase URL
-        run: "${{ steps.create_release.outputs.upload_url }} > url.txt"
-      - name: Persist Commit Count
-        uses: actions/upload-artifact@v1
-        with:
-          name: publish
-          path: url.txt
+            Automated release, see [commits](https://github.com/metio/ilo/commits/${{ steps.release.outputs.version }}) for changes. Take a look at the [website](https://ilo.projects.metio.wtf/) for installation instructions.
       - name: Upload Java11 Artifact
         if: steps.commits.outputs.count > 0
         id: upload-java11-artifact
@@ -80,7 +194,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-java11.zip
+          asset_path: ${{ steps.java11-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-java11.zip
           asset_name: ilo-${{ steps.release.outputs.version }}-java11.zip
           asset_content_type: application/zip
       - name: Upload Java11 Checksum
@@ -91,30 +205,118 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-java11.zip.sha512
+          asset_path: ${{ steps.java11-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-java11.zip.sha512
           asset_name: ilo-${{ steps.release.outputs.version }}-java11.zip.sha512
           asset_content_type: text/plain
-      - name: Upload Native Unix Artifact
+      - name: Upload Java11 Signature
         if: steps.commits.outputs.count > 0
-        id: upload-native-unix-artifact
+        id: upload-java11-signature
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-unix.zip
-          asset_name: ilo-${{ steps.release.outputs.version }}-native-unix.zip
+          asset_path: ${{ steps.java11-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-java11.zip.asc
+          asset_name: ilo-${{ steps.release.outputs.version }}-java11.zip.asc
+          asset_content_type: text/plain
+      - name: Upload Linux Artifact
+        if: steps.commits.outputs.count > 0
+        id: upload-linux-artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.linux-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-linux.zip
+          asset_name: ilo-${{ steps.release.outputs.version }}-linux.zip
           asset_content_type: application/zip
-      - name: Upload Native Unix Checksum
+      - name: Upload Linux Checksum
         if: steps.commits.outputs.count > 0
-        id: upload-native-unix-checksum
+        id: upload-linux-checksum
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-unix.zip.sha512
-          asset_name: ilo-${{ steps.release.outputs.version }}-native-unix.zip.sha512
+          asset_path: ${{ steps.linux-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-linux.zip.sha512
+          asset_name: ilo-${{ steps.release.outputs.version }}-linux.zip.sha512
+          asset_content_type: text/plain
+      - name: Upload Linux Signature
+        if: steps.commits.outputs.count > 0
+        id: upload-linux-signature
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.linux-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-linux.zip.asc
+          asset_name: ilo-${{ steps.release.outputs.version }}-linux.zip.asc
+          asset_content_type: text/plain
+      - name: Upload Mac Artifact
+        if: steps.commits.outputs.count > 0
+        id: upload-mac-artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.mac-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-mac.zip
+          asset_name: ilo-${{ steps.release.outputs.version }}-mac.zip
+          asset_content_type: application/zip
+      - name: Upload Mac Checksum
+        if: steps.commits.outputs.count > 0
+        id: upload-mac-checksum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.mac-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-mac.zip.sha512
+          asset_name: ilo-${{ steps.release.outputs.version }}-mac.zip.sha512
+          asset_content_type: text/plain
+      - name: Upload Mac Signature
+        if: steps.commits.outputs.count > 0
+        id: upload-mac-signature
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.mac-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-mac.zip.asc
+          asset_name: ilo-${{ steps.release.outputs.version }}-mac.zip.asc
+          asset_content_type: text/plain
+      - name: Upload Windows Artifact
+        if: steps.commits.outputs.count > 0
+        id: upload-windows-artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.windows-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-windows.zip
+          asset_name: ilo-${{ steps.release.outputs.version }}-windows.zip
+          asset_content_type: application/zip
+      - name: Upload Windows Checksum
+        if: steps.commits.outputs.count > 0
+        id: upload-windows-checksum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.windows-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-windows.zip.sha512
+          asset_name: ilo-${{ steps.release.outputs.version }}-windows.zip.sha512
+          asset_content_type: text/plain
+      - name: Upload Windows Signature
+        if: steps.commits.outputs.count > 0
+        id: upload-windows-signature
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.windows-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-windows.zip.asc
+          asset_name: ilo-${{ steps.release.outputs.version }}-windows.zip.asc
           asset_content_type: text/plain
       - name: Send Mail
         if: steps.commits.outputs.count > 0
@@ -145,145 +347,3 @@ jobs:
           subreddit: ${{ secrets.REDDIT_SUBREDDIT }}
           title: "${{ github.repository }} version ${{ steps.release.outputs.version }} published"
           url: https://github.com/metio/ilo/releases/tag/${{ steps.release.outputs.version }}
-  mac:
-    runs-on: macos-latest
-    needs: linux
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: setup-graalvm-ce
-        uses: rinx/setup-graalvm-ce@v0.0.4
-        with:
-          graalvm-version: "20.1.0"
-          java-version: "java11"
-          native-image: "true"
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - id: gpg-key
-        name: GPG Key
-        run: |
-          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
-      - name: Download Release Version
-        uses: actions/download-artifact@v1
-        with:
-          name: release
-      - name: Download Commit Count
-        uses: actions/download-artifact@v1
-        with:
-          name: repo
-      - name: Download Release URL
-        uses: actions/download-artifact@v1
-        with:
-          name: publish
-      - name: Release Version
-        id: release
-        run: cat "::set-output name=version::release/version.txt"
-      - name: Commit Count
-        id: commits
-        run: cat "::set-output name=count::repo/commits.txt"
-      - name: Release URL
-        id: create_release
-        run: cat "::set-output name=upload_url::publish/url.txt"
-      - name: Verify Project
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
-      - name: Upload Native Mac Artifact
-        if: steps.commits.outputs.count > 0
-        id: upload-native-mac-artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-mac.zip
-          asset_name: ilo-${{ steps.release.outputs.version }}-native-mac.zip
-          asset_content_type: application/zip
-      - name: Upload Native Mac Checksum
-        if: steps.commits.outputs.count > 0
-        id: upload-native-windows-checksum
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-mac.zip.sha512
-          asset_name: ilo-${{ steps.release.outputs.version }}-native-mac.zip.sha512
-          asset_content_type: text/plain
-  windows:
-    runs-on: windows-latest
-    needs: linux
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: setup-graalvm-ce
-        uses: rinx/setup-graalvm-ce@v0.0.4
-        with:
-          graalvm-version: "20.1.0"
-          java-version: "java11"
-          native-image: "true"
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - id: gpg-key
-        name: GPG Key
-        run: |
-          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
-      - name: Download Release Version
-        uses: actions/download-artifact@v1
-        with:
-          name: release
-      - name: Download Commit Count
-        uses: actions/download-artifact@v1
-        with:
-          name: repo
-      - name: Download Release URL
-        uses: actions/download-artifact@v1
-        with:
-          name: publish
-      - name: Release Version
-        id: release
-        run: cat "::set-output name=version::release/version.txt"
-      - name: Commit Count
-        id: commits
-        run: cat "::set-output name=count::repo/commits.txt"
-      - name: Release URL
-        id: create_release
-        run: cat "::set-output name=upload_url::publish/url.txt"
-      - name: Verify Project
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
-      - name: Upload Native Windows Artifact
-        if: steps.commits.outputs.count > 0
-        id: upload-native-windows-artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-windows.zip
-          asset_name: ilo-${{ steps.release.outputs.version }}-native-windows.zip
-          asset_content_type: application/zip
-      - name: Upload Native Windows Checksum
-        if: steps.commits.outputs.count > 0
-        id: upload-native-windows-checksum
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-native-windows.zip.sha512
-          asset_name: ilo-${{ steps.release.outputs.version }}-native-windows.zip.sha512
-          asset_content_type: text/plain
