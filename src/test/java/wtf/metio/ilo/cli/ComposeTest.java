@@ -17,7 +17,7 @@ import wtf.metio.ilo.compose.ComposeRuntime;
 class ComposeTest extends CLI_TCK {
 
   @ParameterizedTest
-  @DisplayName("calls command line tool")
+  @DisplayName("supports multiple runtimes")
   @ValueSource(strings = {
       "podman-compose",
       "docker-compose",
@@ -28,7 +28,7 @@ class ComposeTest extends CLI_TCK {
   })
   void defaultCommandLine(final String tool) {
     final var compose = compose("compose", "--runtime", tool);
-    Assertions.assertAll("command line",
+    Assertions.assertAll("compose options",
         () -> Assertions.assertEquals("docker-compose.yml", compose.options.composeFile),
         () -> Assertions.assertNull(compose.options.service),
         () -> Assertions.assertTrue(compose.options.interactive),
@@ -37,28 +37,46 @@ class ComposeTest extends CLI_TCK {
     );
   }
 
-//  @ParameterizedTest
-//  @DisplayName("allow to run non-interactive")
-//  @ValueSource(strings = {"podman-compose", "docker-compose", "pc", "dc"})
-//  void nonInteractive(final String tool) {
-//    final var compose = compose("compose", "--runtime", tool, "--interactive=false");
-//    final var arguments = composeRunArguments(compose.options, tool);
-//    final var cmd = List.of(tool,
-//        "run", "--rm",
-//        "--file", "docker-compose.yml");
-//    assertCommandLine(cmd, arguments);
-//  }
-//
-//  @ParameterizedTest
-//  @DisplayName("debug mode does not influence command line")
-//  @ValueSource(strings = {"podman-compose", "docker-compose", "pc", "dc"})
-//  void debugDoesNotChangeCmd(final String tool) {
-//    final var compose = compose("compose", "--runtime", tool, "--debug");
-//    final var arguments = composeRunArguments(compose.options, tool);
-//    final var cmd = List.of(tool,
-//        "run", "--rm",
-//        "--file", "docker-compose.yml");
-//    assertCommandLine(cmd, arguments);
-//  }
+  @ParameterizedTest
+  @DisplayName("allow to run non-interactive")
+  @ValueSource(strings = {
+      "podman-compose",
+      "docker-compose",
+      "pods-compose",
+      "pc",
+      "dc",
+      "pods"
+  })
+  void nonInteractive(final String tool) {
+    final var compose = compose("compose", "--runtime", tool, "--interactive=false");
+    Assertions.assertAll("compose options",
+        () -> Assertions.assertEquals("docker-compose.yml", compose.options.composeFile),
+        () -> Assertions.assertNull(compose.options.service),
+        () -> Assertions.assertFalse(compose.options.interactive),
+        () -> Assertions.assertFalse(compose.options.debug),
+        () -> Assertions.assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime)
+    );
+  }
+
+  @ParameterizedTest
+  @DisplayName("has debug mode")
+  @ValueSource(strings = {
+      "podman-compose",
+      "docker-compose",
+      "pods-compose",
+      "pc",
+      "dc",
+      "pods"
+  })
+  void debug(final String tool) {
+    final var compose = compose("compose", "--runtime", tool, "--debug");
+    Assertions.assertAll("compose options",
+        () -> Assertions.assertEquals("docker-compose.yml", compose.options.composeFile),
+        () -> Assertions.assertNull(compose.options.service),
+        () -> Assertions.assertTrue(compose.options.interactive),
+        () -> Assertions.assertTrue(compose.options.debug),
+        () -> Assertions.assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime)
+    );
+  }
 
 }

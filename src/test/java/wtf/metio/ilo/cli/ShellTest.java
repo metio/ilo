@@ -17,64 +17,74 @@ import wtf.metio.ilo.shell.ShellRuntime;
 class ShellTest extends CLI_TCK {
 
   @ParameterizedTest
-  @DisplayName("calls command line tool")
+  @DisplayName("supports multiple runtimes")
   @ValueSource(strings = {"podman", "docker", "p", "d"})
   void defaultCommandLine(final String tool) {
-    final var compose = shell("shell", "--runtime", tool);
-    Assertions.assertAll("command line",
-        () -> Assertions.assertNull(compose.options.commands),
-        () -> Assertions.assertTrue(compose.options.interactive),
-        () -> Assertions.assertFalse(compose.options.debug),
-        () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), compose.options.runtime)
+    final var shell = shell("shell", "--runtime", tool);
+    Assertions.assertAll("shell options",
+        () -> Assertions.assertNull(shell.options.commands),
+        () -> Assertions.assertTrue(shell.options.interactive),
+        () -> Assertions.assertTrue(shell.options.mountProjectDir),
+        () -> Assertions.assertFalse(shell.options.debug),
+        () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
     );
   }
 
-//  @ParameterizedTest
-//  @DisplayName("allow to disable mounting the project directory")
-//  @ValueSource(strings = {"podman", "docker", "p", "d"})
-//  void disableProjectDirMount(final String tool) {
-//    final var shell = shell("shell", "--runtime", tool, "--mount-project-dir=false");
-//    final var arguments = shellArguments(shell.options, tool);
-//    final var cmd = List.of(tool,
-//        "run", "--rm",
-//        "--interactive", "--tty");
-//    assertCommandLine(cmd, arguments);
-//  }
-//
-//  @ParameterizedTest
-//  @DisplayName("allow to run non-interactive")
-//  @ValueSource(strings = {"podman", "docker", "p", "d"})
-//  void nonInteractive(final String tool) {
-//    final var shell = shell("shell", "--runtime", tool, "--interactive=false");
-//    final var arguments = shellArguments(shell.options, tool);
-//    final var cmd = List.of(tool,
-//        "run", "--rm",
-//        "--volume", "--workdir");
-//    assertCommandLine(cmd, arguments);
-//  }
-//
-//  @ParameterizedTest
-//  @DisplayName("debug mode does not influence command line")
-//  @ValueSource(strings = {"podman", "docker", "p", "d"})
-//  void debugDoesNotChangeCmd(final String tool) {
-//    final var shell = shell("shell", "--runtime", tool, "--debug");
-//    final var arguments = shellArguments(shell.options, tool);
-//    final var cmd = List.of(tool,
-//        "run", "--rm",
-//        "--volume", "--workdir",
-//        "--interactive", "--tty");
-//    assertCommandLine(cmd, arguments);
-//  }
-//
-//  @ParameterizedTest
-//  @DisplayName("allow to run non-interactive w/o mounting")
-//  @ValueSource(strings = {"podman", "docker", "p", "d"})
-//  void nonInteractiveDisableMounting(final String tool) {
-//    final var shell = shell("shell", "--runtime", tool, "--interactive=false", "--mount-project-dir=false");
-//    final var arguments = shellArguments(shell.options, tool);
-//    final var cmd = List.of(tool, "run", "--rm");
-//    assertCommandLine(cmd, arguments);
-//  }
+  @ParameterizedTest
+  @DisplayName("allows to disable mounting the project directory")
+  @ValueSource(strings = {"podman", "docker", "p", "d"})
+  void disableProjectDirMount(final String tool) {
+    final var shell = shell("shell", "--runtime", tool, "--mount-project-dir=false");
+    Assertions.assertAll("shell options",
+        () -> Assertions.assertNull(shell.options.commands),
+        () -> Assertions.assertTrue(shell.options.interactive),
+        () -> Assertions.assertFalse(shell.options.mountProjectDir),
+        () -> Assertions.assertFalse(shell.options.debug),
+        () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
+    );
+  }
+
+  @ParameterizedTest
+  @DisplayName("allows to run non-interactive")
+  @ValueSource(strings = {"podman", "docker", "p", "d"})
+  void nonInteractive(final String tool) {
+    final var shell = shell("shell", "--runtime", tool, "--interactive=false");
+    Assertions.assertAll("shell options",
+        () -> Assertions.assertNull(shell.options.commands),
+        () -> Assertions.assertFalse(shell.options.interactive),
+        () -> Assertions.assertTrue(shell.options.mountProjectDir),
+        () -> Assertions.assertFalse(shell.options.debug),
+        () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
+    );
+  }
+
+  @ParameterizedTest
+  @DisplayName("has debug mode")
+  @ValueSource(strings = {"podman", "docker", "p", "d"})
+  void debug(final String tool) {
+    final var shell = shell("shell", "--runtime", tool, "--debug");
+    Assertions.assertAll("shell options",
+        () -> Assertions.assertNull(shell.options.commands),
+        () -> Assertions.assertTrue(shell.options.interactive),
+        () -> Assertions.assertTrue(shell.options.mountProjectDir),
+        () -> Assertions.assertTrue(shell.options.debug),
+        () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
+    );
+  }
+
+  @ParameterizedTest
+  @DisplayName("allows to disable mounting and interactive")
+  @ValueSource(strings = {"podman", "docker", "p", "d"})
+  void nonInteractiveNonMounting(final String tool) {
+    final var shell = shell("shell", "--runtime", tool, "--mount-project-dir=false", "--interactive=false");
+    Assertions.assertAll("shell options",
+        () -> Assertions.assertNull(shell.options.commands),
+        () -> Assertions.assertFalse(shell.options.interactive),
+        () -> Assertions.assertFalse(shell.options.mountProjectDir),
+        () -> Assertions.assertFalse(shell.options.debug),
+        () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
+    );
+  }
 
   // TODO: ensure that we can still run fedora:latest as default image w/o any additional parameters
 
