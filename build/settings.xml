@@ -24,7 +24,7 @@
                 <sonar.organization>metio</sonar.organization>
                 <sonar.projectKey>metio_ilo</sonar.projectKey>
                 <sonar.login>${env.SONAR_TOKEN}</sonar.login>
-                <pgp.secretkey>keyfile:${project.basedir}/${env.GPG_KEY_ID}</pgp.secretkey>
+                <pgp.secretkey>keyfile:${project.basedir}/signing.key.asc</pgp.secretkey>
                 <pgp.passphrase>literal:${env.GPG_KEY_PASSPHRASE}</pgp.passphrase>
             </properties>
             <repositories>

@@ -33,5 +33,4 @@ jobs:
         run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_ID: signing.key.asc
           GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
