@@ -2,17 +2,6 @@
 
 Manage reproducible build environments. Take a look at the [website](https://ilo.projects.metio.wtf/) for detailed information.
 
-# Usage
-
-## Customize Build Environment
-
-In most cases `fedora:latest` will not be enough to compile/test/package/run your software.
-While you can install additional packages inside the container, those changes will be lost once you remove the container.
-Instead `ilo` allows you to define your build environment either in a [Dockerfile](https://docs.docker.com/engine/reference/builder/) or any other [OCI Image](https://github.com/opencontainers/image-spec/blob/master/spec.md) compliant way.
-Make sure your image can be accessed by everyone in your team and use `ilo shell --image your.image.here:latest` to open a new instance of your build environment.
-If you are using `ilo compose`, make sure to specify `your.image.here:latest` as the image in your docker-compose.yml file.
-
-
 ## License
 
 ```
