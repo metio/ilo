@@ -13,12 +13,6 @@
             <img src="{{ "/images/pencil.svg" | absURL }}" height="16" width="14" class="icon svgimg">
         </a>
     </h1>
-    <div class="subtitle">
-        Published: <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
-        {{ if ne .Date .Lastmod }}
-            , Updated: <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Lastmod.Format "January 2, 2006" }}</time>
-        {{ end }}
-    </div>
     {{ with .Params.tags }}
         <div class="subtitle">
             Talks about:
