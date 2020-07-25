@@ -23,6 +23,10 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - id: gpg-key
+        name: GPG Key
+        run: |
+          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
       - name: Create Release Version
         id: release
         run: echo "::set-output name=version::$(date +'%Y.%-m.%-d-%-H%M%S')"
@@ -47,6 +51,7 @@ jobs:
         run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
       - name: Create Release
         if: steps.commits.outputs.count > 0
         id: create_release
@@ -159,6 +164,10 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - id: gpg-key
+        name: GPG Key
+        run: |
+          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
       - name: Download Release Version
         uses: actions/download-artifact@v1
         with:
@@ -184,6 +193,7 @@ jobs:
         run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
       - name: Upload Native Mac Artifact
         if: steps.commits.outputs.count > 0
         id: upload-native-mac-artifact
@@ -225,6 +235,10 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - id: gpg-key
+        name: GPG Key
+        run: |
+          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
       - name: Download Release Version
         uses: actions/download-artifact@v1
         with:
@@ -250,6 +264,7 @@ jobs:
         run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
       - name: Upload Native Windows Artifact
         if: steps.commits.outputs.count > 0
         id: upload-native-windows-artifact
