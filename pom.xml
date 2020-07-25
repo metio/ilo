@@ -306,7 +306,6 @@
                             <goal>process-asciidoc</goal>
                         </goals>
                         <configuration>
-                            <sourceHighlighter>coderay</sourceHighlighter>
                             <backend>html5</backend>
                         </configuration>
                     </execution>
@@ -317,7 +316,6 @@
                             <goal>process-asciidoc</goal>
                         </goals>
                         <configuration>
-                            <sourceHighlighter>coderay</sourceHighlighter>
                             <backend>manpage</backend>
                         </configuration>
                     </execution>
@@ -330,6 +328,25 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>github</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.kohsuke</groupId>
+                        <artifactId>pgp-maven-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>native-unix</id>
             <activation>
