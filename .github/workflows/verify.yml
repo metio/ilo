@@ -28,7 +28,7 @@ jobs:
       - id: gpg-key
         name: GPG Key
         run: |
-          echo "${secrets.GPG_KEY}" | base64 --decode > signing.key.asc
+          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
       - name: Build with Maven
         run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify
         env:
