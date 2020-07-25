@@ -49,7 +49,7 @@ public final class Executables {
     } catch (final UnsupportedOperationException exception) {
       throw new OperatingSystemNotSupportedException(exception);
     } catch (final NullPointerException exception) {
-      throw new CommandListContainsNullException(exception);
+      throw new CommandListContainsNullException(exception, args);
     } catch (final IndexOutOfBoundsException exception) {
       throw new CommandListIsEmptyException(exception);
     } catch (final SecurityException exception) {

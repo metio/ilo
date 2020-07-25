@@ -12,7 +12,7 @@ import java.io.IOException;
 public class RuntimeIOException extends BusinessException {
 
   public RuntimeIOException(final IOException exception) {
-    super(104, exception);
+    super(104, exception, "Random I/O error");
   }
 
 }

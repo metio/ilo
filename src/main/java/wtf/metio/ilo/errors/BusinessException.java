@@ -11,8 +11,8 @@ abstract class BusinessException extends RuntimeException {
 
   private final int exitCode;
 
-  public BusinessException(final int exitCode, final Throwable cause) {
-    super(cause);
+  public BusinessException(final int exitCode, final Throwable cause, final String message) {
+    super(message, cause);
     this.exitCode = exitCode;
   }
 

@@ -10,7 +10,7 @@ package wtf.metio.ilo.errors;
 public class CommandListIsEmptyException extends BusinessException {
 
   public CommandListIsEmptyException(final IndexOutOfBoundsException exception) {
-    super(102, exception);
+    super(102, exception, "The generated command list is empty - this is a bug in ilo!");
   }
 
 }
