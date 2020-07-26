@@ -29,7 +29,7 @@ final class DockerPodman {
 
   public static List<String> buildArguments(final ShellOptions options, final String tool) {
     if (null != options.dockerfile && !options.dockerfile.isBlank()) {
-      final var args = List.of(tool, "build", options.dockerfile, ".");
+      final var args = List.of(tool, "build", "--tag", options.image, "--file", options.dockerfile, ".");
       Debug.showExecutedCommand(options.debug, args);
       return args;
     }

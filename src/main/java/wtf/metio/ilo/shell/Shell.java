@@ -8,9 +8,8 @@
 package wtf.metio.ilo.shell;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.exec.Executables;
-import wtf.metio.ilo.tools.Tools;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.stream.IntStream;
 
@@ -28,19 +27,37 @@ public class Shell implements Callable<Integer> {
   @CommandLine.Mixin
   public ShellOptions options;
 
+  private final ShellAPI api;
+
+  // default constructor for picocli
+  public Shell() {
+    this(new ShellExecutor());
+  }
+
+  // constructor for testing
+  Shell(final ShellAPI api) {
+    this.api = api;
+  }
+
   @Override
   public Integer call() {
-    final var tool = Tools.selectShellRuntime(options.runtime);
+    final var tool = api.selectRuntime(options.runtime);
     final var pullArguments = tool.pullArguments(options);
-    final var pullExitCode = Executables.runAndWaitForExit(pullArguments);
+    final var pullExitCode = api.execute(pullArguments);
     final var buildArguments = tool.buildArguments(options);
-    final var buildExitCode = Executables.runAndWaitForExit(buildArguments);
+    final var buildExitCode = api.execute(buildArguments);
     final var runArguments = tool.runArguments(options);
-    final var runExitCode = Executables.runAndWaitForExit(runArguments);
+    final var runExitCode = api.execute(runArguments);
     final var cleanupArguments = tool.cleanupArguments(options);
-    final var cleanupExitCode = Executables.runAndWaitForExit(cleanupArguments);
+    final var cleanupExitCode = api.execute(cleanupArguments);
     return IntStream.of(pullExitCode, buildExitCode, runExitCode, cleanupExitCode)
         .max().orElse(CommandLine.ExitCode.SOFTWARE);
+  }
+
+  interface ShellAPI {
+    ShellCLI selectRuntime(ShellRuntime runtime);
+
+    int execute(List<String> args);
   }
 
 }

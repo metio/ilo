@@ -10,24 +10,20 @@ package wtf.metio.ilo.cli;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import wtf.metio.ilo.compose.ComposeRuntime;
+
+import java.util.stream.Stream;
 
 @DisplayName("ilo compose")
 class ComposeTest extends CLI_TCK {
 
   @ParameterizedTest
+  @MethodSource("composeRuntimes")
   @DisplayName("supports multiple runtimes")
-  @ValueSource(strings = {
-      "podman-compose",
-      "docker-compose",
-      "pods-compose",
-      "pc",
-      "dc",
-      "pods"
-  })
   void defaultCommandLine(final String tool) {
-    final var compose = compose("compose", "--runtime", tool);
+    final var compose = parseComposeCommand("compose", "--runtime", tool);
     Assertions.assertAll("compose options",
         () -> Assertions.assertEquals("docker-compose.yml", compose.options.file),
         () -> Assertions.assertNull(compose.options.service),
@@ -38,17 +34,10 @@ class ComposeTest extends CLI_TCK {
   }
 
   @ParameterizedTest
+  @MethodSource("composeRuntimes")
   @DisplayName("allow to run non-interactive")
-  @ValueSource(strings = {
-      "podman-compose",
-      "docker-compose",
-      "pods-compose",
-      "pc",
-      "dc",
-      "pods"
-  })
   void nonInteractive(final String tool) {
-    final var compose = compose("compose", "--runtime", tool, "--interactive=false");
+    final var compose = parseComposeCommand("compose", "--runtime", tool, "--interactive=false");
     Assertions.assertAll("compose options",
         () -> Assertions.assertEquals("docker-compose.yml", compose.options.file),
         () -> Assertions.assertNull(compose.options.service),
@@ -59,17 +48,10 @@ class ComposeTest extends CLI_TCK {
   }
 
   @ParameterizedTest
+  @MethodSource("composeRuntimes")
   @DisplayName("has debug mode")
-  @ValueSource(strings = {
-      "podman-compose",
-      "docker-compose",
-      "pods-compose",
-      "pc",
-      "dc",
-      "pods"
-  })
   void debug(final String tool) {
-    final var compose = compose("compose", "--runtime", tool, "--debug");
+    final var compose = parseComposeCommand("compose", "--runtime", tool, "--debug");
     Assertions.assertAll("compose options",
         () -> Assertions.assertEquals("docker-compose.yml", compose.options.file),
         () -> Assertions.assertNull(compose.options.service),

@@ -12,11 +12,13 @@ import picocli.CommandLine;
 import wtf.metio.ilo.Ilo;
 import wtf.metio.ilo.compose.Compose;
 import wtf.metio.ilo.shell.Shell;
+import wtf.metio.ilo.test.TestSources;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.stream.Stream;
 
-public abstract class CLI_TCK {
+public abstract class CLI_TCK extends TestSources {
 
   protected Ilo app;
   protected CommandLine cmd;
@@ -30,13 +32,13 @@ public abstract class CLI_TCK {
     cmd.setOut(new PrintWriter(output));
   }
 
-  protected final Shell shell(final String... args) {
+  protected final Shell parseShellCommand(final String... args) {
     final var parseResult = cmd.parseArgs(args);
     final var subcommand = parseResult.subcommand();
     return (Shell) subcommand.commandSpec().userObject();
   }
 
-  protected final Compose compose(final String... args) {
+  protected final Compose parseComposeCommand(final String... args) {
     final var parseResult = cmd.parseArgs(args);
     final var subcommand = parseResult.subcommand();
     return (Compose) subcommand.commandSpec().userObject();

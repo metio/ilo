@@ -22,7 +22,7 @@ class IloTest extends CLI_TCK {
   @Test
   @DisplayName("select runtime automatically by default")
   void shouldDefaultToAutoRuntimeSelection() {
-    final var shell = shell("shell");
+    final var shell = parseShellCommand("shell");
     assertNull(shell.options.runtime);
   }
 
@@ -30,35 +30,35 @@ class IloTest extends CLI_TCK {
   @ParameterizedTest
   @ValueSource(strings = {"podman", "docker", "p", "d"})
   void shouldAllowToSpecifyRuntime(final String runtime) {
-    final var shell = shell("shell", "--runtime", runtime);
+    final var shell = parseShellCommand("shell", "--runtime", runtime);
     assertEquals(ShellRuntime.fromAlias(runtime), shell.options.runtime);
   }
 
   @Test
   @DisplayName("debug is disabled by default")
   void shouldDisableDebugByDefault() {
-    final var shell = shell("shell");
+    final var shell = parseShellCommand("shell");
     assertFalse(shell.options.debug);
   }
 
   @Test
   @DisplayName("allow to enable debug")
   void shouldAllowToEnableDebug() {
-    final var shell = shell("shell", "--debug");
+    final var shell = parseShellCommand("shell", "--debug");
     assertTrue(shell.options.debug);
   }
 
   @Test
   @DisplayName("allow to disable debug")
   void shouldAllowToDisableDebug() {
-    final var shell = shell("shell", "--debug=false");
+    final var shell = parseShellCommand("shell", "--debug=false");
     assertFalse(shell.options.debug);
   }
 
   @Test
   @DisplayName("interactive mode is enabled by default")
   void shouldEnableInteractiveModeByDefault() {
-    final var shell = shell("shell");
+    final var shell = parseShellCommand("shell");
     assertTrue(shell.options.interactive);
   }
 
@@ -66,28 +66,28 @@ class IloTest extends CLI_TCK {
   @Disabled("negate does not work from tests?")
   @DisplayName("interactive mode can be negated")
   void shouldAllowToNegateInteractiveMode() {
-    final var shell = shell("shell", "--no-interactive");
+    final var shell = parseShellCommand("shell", "--no-interactive");
     assertFalse(shell.options.interactive);
   }
 
   @Test
   @DisplayName("interactive mode can be disabled")
   void shouldAllowToDisableInteractiveMode() {
-    final var shell = shell("shell", "--interactive=false");
+    final var shell = parseShellCommand("shell", "--interactive=false");
     assertFalse(shell.options.interactive);
   }
 
   @Test
   @DisplayName("project directory should be mounted by default")
   void shouldMountProjectDirectoryByDefault() {
-    final var shell = shell("shell");
+    final var shell = parseShellCommand("shell");
     assertTrue(shell.options.mountProjectDir);
   }
 
   @Test
   @DisplayName("mounting the project directory can be disabled")
   void shouldAllowToDisableProjectDirectoryMounting() {
-    final var shell = shell("shell", "--mount-project-dir=false");
+    final var shell = parseShellCommand("shell", "--mount-project-dir=false");
     assertFalse(shell.options.mountProjectDir);
   }
 

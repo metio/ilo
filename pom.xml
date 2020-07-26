@@ -163,6 +163,7 @@
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.exec=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.model=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.shell=ALL-UNNAMED
+                        --add-opens wtf.metio.ilo/wtf.metio.ilo.test=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.tools=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.version=ALL-UNNAMED
                     </argLine>
