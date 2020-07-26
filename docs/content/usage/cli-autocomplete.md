@@ -19,4 +19,16 @@ In order to get autocomplete working in your shell, execute the following snippe
 $ source <(ilo generate-completion)
 ```
 
-See the integration pages for [bash](../../integration/bash) and [zsh](../../integration/zsh) for help.
+See the integration pages for [bash](../../integration/bash) and [zsh](../../integration/zsh) for details.
+
+Once enabled you can use the `<TAB>` key to autocomplete ilo commands and their options:
+
+```shell script
+# autocomplete commands
+$ ilo s<TAB>
+$ ilo shell
+
+# autocomplete options
+$ ilo shell --i<TAB>
+$ ilo shell --image
+```
