@@ -24,15 +24,21 @@ shell
 $ ilo @some/folder/your-arguments.txt
 ```
 
-The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line as well:
+The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:
 
 ```shell script
 # write argument file
 $ cat some/other/your-arguments.txt
 shell --image node:latest /bin/bash
 
+# write argument file
+$ cat some/more/your-arguments.txt
+shell --image
+node:latest /bin/bash
+
 # use argument file
 $ ilo @some/other/your-arguments.txt
+$ ilo @some/more/your-arguments.txt
 ```
 
 In order to use an argument file, you have to add **@** in front of the file name: `ilo @file-name`.
