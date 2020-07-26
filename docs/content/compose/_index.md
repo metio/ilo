@@ -28,5 +28,5 @@ Take a look at all available [options](./options) or use `ilo compose --help` to
 
 ```shell script
 # using argument file
-$ ilo @shell
+$ ilo @compose
 ```
