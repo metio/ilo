@@ -20,17 +20,15 @@ tags:
 |----------------|--------|--------|------|
 | run container  | yes    | yes    | yes  |
 | custom image   | yes    | yes    | yes  |
-| shell          | yes    | yes    | no   |
-| build          | yes    | yes    | no   |
-| commands       | yes    | yes    | no   |
+| shell          | yes    | yes    | [#33](https://github.com/metio/ilo/issues/33) |
+| build          | yes    | yes    | [#34](https://github.com/metio/ilo/issues/34) |
+| commands       | yes    | yes    | [#35](https://github.com/metio/ilo/issues/35) |
 | debug          | yes    | yes    | yes  |
-| pull           | yes    | yes    | no   |
-| dockerfile     | yes    | yes    | no   |
+| pull           | yes    | yes    | [#36](https://github.com/metio/ilo/issues/36) |
+| dockerfile     | yes    | yes    | [#37](https://github.com/metio/ilo/issues/37) |
 | interactive    | yes    | yes    | yes  |
-| no-interactive | yes    | yes    | no   |
-| mount          | yes    | yes    | no   |
-| no-mount       | yes    | yes    | no   |
-| remove image   | yes    | yes    | no   |
+| mount          | yes    | yes    | [#38](https://github.com/metio/ilo/issues/38) |
+| remove image   | yes    | yes    | [#39](https://github.com/metio/ilo/issues/39) |
 
 - **run container**: Allows to run a container.
 - **custom image**: Allows to specify a custom image.
@@ -41,9 +39,7 @@ tags:
 - **pull**: Allows to pull an image before opening a new shell.
 - **dockerfile**: Allows to build an image locally before opening a new shell.
 - **interactive**: Allows running interactively.
-- **no-interactive**: Allows running non-interactive.
 - **mount**: Allows to mount the project directory automatically.
-- **no-mount**: Allows disabling mounting the project directory.
 - **remove image**: Allows to remove the image from your local system after the shell closes.
 
 ## Docker
