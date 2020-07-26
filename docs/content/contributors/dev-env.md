@@ -26,8 +26,8 @@ tags:
 
 ## ilo Setup
 
-- [ilo](https://github.com/metio/ilo) to open the predefined build environment
-- [podman](https://podman.io/) or [docker](https://www.docker.com/) as an `ilo` runtime
+- [ilo](../usage/install) to open the reproducible build environment for `ilo` itself
+- Anyone of the [runtimes](../shell) that `ilo shell` supports.
 
 ## GitHub Packages
 
