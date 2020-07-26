@@ -27,10 +27,18 @@ RUN apt-get update && apt-get install hugo -y; \
     mvn --version; \
     hugo version;
 CMD ["jshell"]
+```
 
+Build the image like this:
+
+```shell script
 # build image
 $ docker build --tag your.image:latest .
+```
 
+Once completed, you can open a new shell like this:
+
+```shell script
 # use image, jump into 'jshell'
 $ ilo shell --iamge your.image:latest
 ```
