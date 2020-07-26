@@ -38,5 +38,5 @@ Once completed, you can open a new shell like this:
 
 ```shell script
 # use image, jump into 'jshell'
-$ ilo shell --iamge your.image:latest
+$ ilo shell --image your.image:latest
 ```
