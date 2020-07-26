@@ -24,6 +24,10 @@ In case you want to help package `ilo` for your preferred operating system, take
 
 This package requires a Java 11 runtime installed on the host machine. It uses the identifier `java11`.
 
+### Native Binary
+
+The native binaries have no external dependencies and can be used without installing any additional software.
+
 ## Installation Methods
 
 ### Manual Command Line (Mac/Linux)
