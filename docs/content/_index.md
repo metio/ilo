@@ -21,11 +21,11 @@ Thanks to containers, `ilo` can fully encapsulate the necessary tools required t
 
 ### Teamwork
 
-Onboarding new team members into a big projects with complex build requirements can be a hassle. `ilo`'s container approach reduces the amount of work required to get new members up to speed - install `ilo`, clone your project, and you're good to go. `ilo` supports multiple ways to share a build environment across your team which can reproduce your project.
+Onboarding new team members into a big projects with complex build requirements can be a hassle. `ilo`'s container approach reduces the amount of work required to get new members up to speed - install `ilo`, clone your project, and you're good to go. `ilo` supports multiple ways to share build environments with your team in order reproduce a project.
 
 ### Cross-Platform
 
-`ilo` is available for Linux, Mac, and Windows. It supports a wide range of runtimes which makes it easy to both add and remove `ilo` from your project. It plays nicely with tools already available on your local system - use your favorite IDE to write code!
+`ilo` is available for [Linux](https://www.kernel.org/), [Mac](https://www.apple.com/macos/), and [Windows](https://www.microsoft.com/en-us/windows). It supports a wide range of runtimes which makes it easy to both add and remove `ilo` from your project. It plays nicely with tools already available on your local system - use your favorite IDE to write code!
 
 ## Users
 

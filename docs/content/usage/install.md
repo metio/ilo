@@ -22,7 +22,7 @@ In case you want to help package `ilo` for your preferred operating system, take
 
 ### Java 11 Runtime
 
-This package requires a Java 11 runtime installed on the host machine. It uses the identifier `java11`.
+This package requires at least [Java 11](https://www.oracle.com/javadownload) installed on the host machine. It uses the identifier `java11`.
 
 ### Native Binary
 
