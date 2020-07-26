@@ -31,6 +31,9 @@ The `--pull` flag will cause the image to be pulled first before opening a new s
 # using ilo
 $ ilo shell --image openjdk:11 --pull
 
+# using argument file
+$ ilo @shell
+
 # using docker
 $ docker pull openjdk:11
 $ docker run --rm \
@@ -45,6 +48,9 @@ The `--remove-image` flag causes the image to be removed after the shell was clo
 ```shell script
 # using ilo
 $ ilo shell --image openjdk:11 --pull --remove-image
+
+# using argument file
+$ ilo @shell
 
 # using docker
 $ docker pull openjdk:11
