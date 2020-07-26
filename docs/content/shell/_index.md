@@ -7,12 +7,53 @@ The `ilo shell` command can be used to run a single container either interactive
 
 ```shell script
 # open shell for local builds
-[you@hostname project-dir]$ ilo shell @build
+[you@hostname project-dir]$ ilo shell --image openjdk:11
 [root@container project-dir]#
 
 # run command
-[you@hostname project-dir]$ ilo shell --no--interactive @build mvn verify
+[you@hostname project-dir]$ ilo shell --no--interactive --image openjdk:11 mvn verify
 [you@hostname project-dir]$ 
 ```
 
-CLI arguments starting with **@** are so called [argument files](../usage/argument-files). Take a look at all available [options](./options) or use `ilo shell --help` to get a list of all options, and their default values. `ilo shell` supports multiple [runtimes](./runtimes) using the `--runtime` flag.
+`ilo shell` will delegate most of its work to one of the supported [runtimes](./runtimes). The first example above will produce something like this:
+
+```shell script
+$ docker run --rm \
+    --volume $(pwd):$(pwd):Z\
+    --workdir $(pwd) \
+    --tty --interactive \
+    openjdk:11
+```
+
+The `--pull` flag will cause the image to be pulled first before opening a new shell:
+
+```shell script
+# using ilo
+$ ilo shell --image openjdk:11 --pull
+
+# using docker
+$ docker pull openjdk:11
+$ docker run --rm \
+    --volume $(pwd):$(pwd):Z\
+    --workdir $(pwd) \
+    --tty --interactive \
+    openjdk:11
+```
+
+The `--remove-image` flag causes the image to be removed after the shell was closed:
+
+```shell script
+# using ilo
+$ ilo shell --image openjdk:11 --pull --remove-image
+
+# using docker
+$ docker pull openjdk:11
+$ docker run --rm \
+    --volume $(pwd):$(pwd):Z\
+    --workdir $(pwd) \
+    --tty --interactive \
+    openjdk:11
+$ docker rmi openjdk:11
+```
+
+Take a look at all available [options](./options) or use `ilo shell --help` to get a list of all options, and their default values. In order to simplify handling of long command line options, consider using [argument files](../usage/argument-files).
