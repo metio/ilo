@@ -17,9 +17,6 @@ In case you have Java and Maven locally installed call:
 ```shell script
 # run all tests
 $ mvn verify
-
-# install locally
-$ mvn install
 ```
 
 In case you have `ilo` installed, call this:
