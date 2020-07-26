@@ -19,4 +19,4 @@ In order to get autocomplete working in your shell, execute the following snippe
 $ source <(ilo generate-completion)
 ```
 
-See the integration pages for [bash](../integration/bash) and [zsh](../integration/zsh) for help.
+See the integration pages for [bash](../../integration/bash) and [zsh](../../integration/zsh) for help.
