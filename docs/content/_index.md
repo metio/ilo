@@ -21,7 +21,7 @@ Thanks to containers, `ilo` can fully encapsulate the necessary tools required t
 
 ### Teamwork
 
-Onboarding new team members into a big projects with complex build requirements can be a hassle. `ilo`'s container approach reduces the amount of work required to get new members up to speed - install `ilo`, clone your project, and you're good to go. `ilo` supports multiple ways to share build environments with your team in order reproduce a project.
+Onboarding new team members into a big projects with complex build requirements can be a hassle. `ilo`'s container approach reduces the amount of work required to get new members up to speed - install `ilo`, clone your project, and you're good to go. `ilo` supports multiple ways to share immutable build environments with your team in order reproduce a project.
 
 ### Cross-Platform
 
