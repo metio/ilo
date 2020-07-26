@@ -142,6 +142,7 @@ jobs:
       - mac
       - windows
     steps:
+      - uses: actions/checkout@v2
       - name: Count Commits
         id: commits
         run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Sunday')"
