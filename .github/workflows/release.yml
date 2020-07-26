@@ -203,6 +203,6 @@ jobs:
           title: "${{ github.repository }} version ${{ steps.release.outputs.version }} published"
           url: https://github.com/metio/ilo/releases/tag/${{ steps.release.outputs.version }}
           comment: |
-            Take a look at the [website](https://ilo.projects.metio.wtf/) for detailed information.
+            Manage reproducible build environments with [ilo](https://ilo.projects.metio.wtf/)!
             # Changes
             ${{ steps.changelog.outputs.changelog }}
