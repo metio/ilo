@@ -86,6 +86,11 @@ jobs:
       - name: Release Version
         id: release
         run: cat "::set-output name=version::version.txt"
+      - name: Generate Changelog
+        id: changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Release
         if: steps.commits.outputs.count > 0
         id: create_release
@@ -98,7 +103,10 @@ jobs:
           draft: false
           prerelease: false
           body: |
-            Automated release, see [commits](https://github.com/metio/ilo/commits/${{ steps.release.outputs.version }}) for changes. Take a look at the [website](https://ilo.projects.metio.wtf/) for installation instructions.
+            # ilo
+            Manage reproducible build environments. Take a look at the [website](https://ilo.projects.metio.wtf/) for detailed information.
+            ## Changes
+            ${{ steps.changelog.outputs.changelog }}
       - name: Upload Java11 Artifact
         if: steps.commits.outputs.count > 0
         id: upload-java11-artifact
