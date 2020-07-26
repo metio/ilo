@@ -28,6 +28,11 @@
                 <img class="svgimg" src="{{ "/images/github.svg" | absURL }}" alt="github" width="32" height="32">
             </a>
         {{ end }}
+        {{ with .Site.Params.calendar }}
+            <a href="{{ . }}" id="calendar" title="release calendar">
+                <img class="svgimg" src="{{ "/images/calendar.svg" | absURL }}" alt="github" width="32" height="32">
+            </a>
+        {{ end }}
         <a href="{{ "/atom.xml" | absURL }}" id="newsfeed" title="get notified about updates">
             <img class="svgimg" src="{{ "/images/rss.svg" | absURL }}" alt="newsfeed" width="32" height="32">
         </a>
