@@ -9,9 +9,6 @@ Make sure that `ilo` is [installed](./install) in your path or otherwise accessi
 ## ilo shell
 
 The `ilo shell` command can be used to run a single container either in interactive mode (default) or non-interactive mode (e.g. for CI builds).
-It defaults to use the `fedora:latest` image and executes `/bin/bash` inside the running container to get a running shell.
-It automatically mounts the current working directory (e.g. your project directory) and stops/removes the container once you exit the shell. `ilo shell` can be used with either [podman](https://podman.io/) (default) or [docker](https://www.docker.com/products/container-runtime) by using the `--runtime` switch. If no runtime is specified `ilo` will auto-detect available runtimes and prefer `podman` over `docker`.
-Use `ilo shell --help` to get a list of all options, and their default values.
 
 ```shell script
 [you@hostname project-dir]$ ilo shell
