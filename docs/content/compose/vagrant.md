@@ -12,7 +12,7 @@ tags:
 - vagrant
 ---
 
-[vagrant](https://github.com/weaveworks/footloose) is one of the available `ilo compose` runtimes. Force `ilo` to use `vagrant` like this:
+[vagrant](https://www.vagrantup.com/) is one of the available `ilo compose` runtimes. Force `ilo` to use `vagrant` like this:
 
 ```shell script
 $ ilo compose --runtime vagrant
