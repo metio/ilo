@@ -21,11 +21,9 @@ Make sure your image can be accessed by everyone in your team and use `ilo shell
 # write some Dockerfile
 $ cat Dockerfile
 FROM maven:slim
-RUN apt-get update && apt-get install hugo -y; \
-    java --version; \
-    javac --version; \
-    mvn --version; \
-    hugo version;
+
+RUN apt-get update && apt-get install hugo -y
+
 CMD ["jshell"]
 ```
 
