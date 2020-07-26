@@ -1,7 +1,7 @@
 name: Perform Release
 on:
   schedule:
-    - cron:  '45 3 * * SUN'
+    - cron:  '45 3 * * MON'
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -39,7 +39,7 @@ jobs:
           name: release
       - name: Release Version
         id: release
-        run: cat "::set-output name=version::release/version.txt"
+        run: cat "::set-output name=version::version.txt"
       - name: GPG Key
         id: gpg
         run: |
@@ -59,93 +59,15 @@ jobs:
         with:
           name: linux
           path: ./target/ilo-${{ steps.release.outputs.version }}-linux*
-  mac:
-    runs-on: macos-latest
-    needs: prepare
-    steps:
-      - uses: actions/checkout@v2
-      - name: setup-graalvm-ce
-        uses: rinx/setup-graalvm-ce@v0.0.4
-        with:
-          graalvm-version: "20.1.0"
-          java-version: "java11"
-          native-image: "true"
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - name: Download Release Version
-        uses: actions/download-artifact@v2
-        with:
-          name: release
-      - name: Release Version
-        id: release
-        run: cat "::set-output name=version::release/version.txt"
-      - name: GPG Key
-        id: gpg
-        run: |
-          echo ${{ secrets.GPG_KEY }} | base64 --decode > signing.key.asc
-      - name: Verify Project
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
-      - name: Upload Mac Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: mac
-          path: ./target/ilo-${{ steps.release.outputs.version }}-mac*
-  windows:
-    runs-on: windows-latest
-    needs: prepare
-    steps:
-      - uses: actions/checkout@v2
-      - name: setup-graalvm-ce
-        uses: rinx/setup-graalvm-ce@v0.0.4
-        with:
-          graalvm-version: "20.1.0"
-          java-version: "java11"
-          native-image: "true"
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - name: GPG Key
-        id: gpg
-        run: |
-          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
-      - name: Download Release Version
-        uses: actions/download-artifact@v2
-        with:
-          name: release
-      - name: Release Version
-        id: release
-        run: cat "::set-output name=version::release/version.txt"
-      - name: Verify Project
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
-      - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: windows
-          path: ./target/ilo-${{ steps.release.outputs.version }}-windows*
   release:
     runs-on: ubuntu-latest
     needs:
       - linux
-      - mac
-      - windows
     steps:
       - uses: actions/checkout@v2
       - name: Count Commits
         id: commits
-        run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Sunday')"
+        run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Monday')"
       - name: Download Release Version
         uses: actions/download-artifact@v2
         id: release-dl
@@ -173,7 +95,7 @@ jobs:
           name: windows
       - name: Release Version
         id: release
-        run: cat "::set-output name=version::release/version.txt"
+        run: cat "::set-output name=version::version.txt"
       - name: Create Release
         if: steps.commits.outputs.count > 0
         id: create_release
