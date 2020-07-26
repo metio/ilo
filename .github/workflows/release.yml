@@ -202,3 +202,7 @@ jobs:
           subreddit: ${{ secrets.REDDIT_SUBREDDIT }}
           title: "${{ github.repository }} version ${{ steps.release.outputs.version }} published"
           url: https://github.com/metio/ilo/releases/tag/${{ steps.release.outputs.version }}
+          comment: |
+            Take a look at the [website](https://ilo.projects.metio.wtf/) for detailed information.
+            # Changes
+            ${{ steps.changelog.outputs.changelog }}
