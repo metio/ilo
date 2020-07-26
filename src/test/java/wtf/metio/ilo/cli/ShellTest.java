@@ -91,6 +91,20 @@ class ShellTest extends CLI_TCK {
     );
   }
 
-  // TODO: ensure that we can still run fedora:latest as default image w/o any additional parameters
+  @ParameterizedTest
+  @MethodSource("shellRuntimes")
+  @DisplayName("allows to disable mounting and interactive")
+  void customImage(final String tool) {
+    final var shell = parseShellCommand("shell", "--runtime", tool, "--image=example:test");
+    Assertions.assertAll("shell options",
+        () -> Assertions.assertNull(shell.options.commands),
+        () -> Assertions.assertTrue(shell.options.interactive),
+        () -> Assertions.assertTrue(shell.options.mountProjectDir),
+        () -> Assertions.assertFalse(shell.options.debug),
+        () -> Assertions.assertEquals("example:test", shell.options.image),
+        () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
+    );
+  }
+
 
 }
