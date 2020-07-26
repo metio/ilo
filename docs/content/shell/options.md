@@ -11,11 +11,11 @@ tags:
 - options
 ---
 
-The `ilo shell` command can be configured with the following command line options.
+The `ilo shell` command can be configured with the following command line options. From your terminal, use `ilo shell --help` to get a list of all options, and their default values.
 
 ## `--runtime`
 
-The `--runtime` option can be used to force the usage of a specific runtime. See [docker](./docker), [podman](./podman), or [lxd](./lxd) for details.
+The `--runtime` option can be used to force the usage of a specific runtime. See [runtimes](./runtimes) for details.
 
 ```shell script
 # force to use docker

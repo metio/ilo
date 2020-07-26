@@ -3,10 +3,16 @@ title: compose
 date: 2020-04-13
 ---
 
-The `compose` command allows interacting with complex build environments.
+The `ilo compose` command allows interacting with complex build environments, e.g. your project requires a database in order to be build. It integrates with widely used tools such as [docker-compose](https://docs.docker.com/compose/) in order to re-use as much existing infrastructure as possible. `ilo compose` will delegate most of its work to one of the supported [runtimes](./runtimes).
 
-`ilo compose` does not mount any directories by default, nor does it automatically execute a specific command.
+```shell script
+[you@hostname project-dir]$ ilo compose
+[root@container project-dir]#
+```
 
-`ilo compose` can be used with either [podman-compose](./podman-compose), [docker-compose](./docker), [pods-compose](./pods-compose), [footloose](./footloose), or [vagrant](./vagrant) by using the `--runtime` switch.
+Take a look at all available [options](./options) or use `ilo compose --help` to get a list of all options, and their default values. In order to simplify handling of long command line options, consider using [argument files](../usage/argument-files).
 
-Use `ilo compose --help` to get a list of all options, and their default values.
+```shell script
+# using argument file
+$ ilo @shell
+```
