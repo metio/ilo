@@ -25,4 +25,4 @@ pipeline {
 }
 ```
 
-`build-things` is an [arguments](../usage/argument-files) file.
+`build-things` is an [arguments](../../usage/argument-files) file.
