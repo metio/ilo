@@ -83,16 +83,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: linux
-      - name: Download Mac
-        id: mac-dl
-        uses: actions/download-artifact@v2
-        with:
-          name: mac
-      - name: Download Windows
-        id: windows-dl
-        uses: actions/download-artifact@v2
-        with:
-          name: windows
       - name: Release Version
         id: release
         run: cat "::set-output name=version::version.txt"
@@ -174,72 +164,6 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ steps.linux-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-linux.zip.asc
           asset_name: ilo-${{ steps.release.outputs.version }}-linux.zip.asc
-          asset_content_type: text/plain
-      - name: Upload Mac Artifact
-        if: steps.commits.outputs.count > 0
-        id: upload-mac-artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.mac-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-mac.zip
-          asset_name: ilo-${{ steps.release.outputs.version }}-mac.zip
-          asset_content_type: application/zip
-      - name: Upload Mac Checksum
-        if: steps.commits.outputs.count > 0
-        id: upload-mac-checksum
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.mac-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-mac.zip.sha512
-          asset_name: ilo-${{ steps.release.outputs.version }}-mac.zip.sha512
-          asset_content_type: text/plain
-      - name: Upload Mac Signature
-        if: steps.commits.outputs.count > 0
-        id: upload-mac-signature
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.mac-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-mac.zip.asc
-          asset_name: ilo-${{ steps.release.outputs.version }}-mac.zip.asc
-          asset_content_type: text/plain
-      - name: Upload Windows Artifact
-        if: steps.commits.outputs.count > 0
-        id: upload-windows-artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.windows-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-windows.zip
-          asset_name: ilo-${{ steps.release.outputs.version }}-windows.zip
-          asset_content_type: application/zip
-      - name: Upload Windows Checksum
-        if: steps.commits.outputs.count > 0
-        id: upload-windows-checksum
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.windows-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-windows.zip.sha512
-          asset_name: ilo-${{ steps.release.outputs.version }}-windows.zip.sha512
-          asset_content_type: text/plain
-      - name: Upload Windows Signature
-        if: steps.commits.outputs.count > 0
-        id: upload-windows-signature
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.windows-dl.outputs.download-path }}/ilo-${{ steps.release.outputs.version }}-windows.zip.asc
-          asset_name: ilo-${{ steps.release.outputs.version }}-windows.zip.asc
           asset_content_type: text/plain
       - name: Send Mail
         if: steps.commits.outputs.count > 0
