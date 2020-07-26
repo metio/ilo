@@ -27,4 +27,4 @@ In order to create a setup like this, first [install direnv](https://direnv.net/
 ilo @build-env
 ```
 
-`build-env` is an [arguments](ARGUMENTS.md) file.
+`build-env` is an [arguments](../usage/argument-files) file.
