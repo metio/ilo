@@ -44,7 +44,11 @@
     margin-bottom: 0;
 }
 
-th,td {
+th {
     border: 2px solid;
     padding: 0.5rem;
+}
+td {
+    border: 2px solid;
+    padding: 0.4rem;
 }
