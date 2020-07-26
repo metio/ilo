@@ -19,7 +19,9 @@ tags:
 | Feature        | Docker | Podman | LXD  |
 |----------------|-----------------|------|
 | run container  | yes    | yes    | yes  |
-| custom-image   | yes    | yes    | yes  |
+| custom image   | yes    | yes    | yes  |
+| shell          | yes    | yes    | no   |
+| build          | yes    | yes    | no   |
 | commands       | yes    | yes    | no   |
 | debug          | yes    | yes    | yes  |
 | pull           | yes    | yes    | no   |
@@ -28,7 +30,21 @@ tags:
 | no-interactive | yes    | yes    | no   |
 | mount          | yes    | yes    | no   |
 | no-mount       | yes    | yes    | no   |
-| remove-image   | yes    | yes    | no   |
+| remove image   | yes    | yes    | no   |
+
+- **run container**: Allows to run a container.
+- **custom image**: Allows to specify a custom image.
+- **shell**: Allows opening up a new shell automatically.
+- **build**: Allows to execute a build command within a container.
+- **commands**: Allows specifying custom commands.
+- **debug**: Allows to enable debug mode.
+- **pull**: Allows to pull an image before opening a new shell.
+- **dockerfile**: Allows to build an image locally before opening a new shell.
+- **interactive**: Allows running interactively.
+- **no-interactive**: Allows running non-interactive.
+- **mount**: Allows to mount the project directory automatically.
+- **no-mount**: Allows disabling mounting the project directory.
+- **remove image**: Allows to remove the image from your local system after the shell closes.
 
 ## Docker
 
