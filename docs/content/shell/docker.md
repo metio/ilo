@@ -12,7 +12,7 @@ tags:
 - docker
 ---
 
-[Docker](https://www.docker.com/) is one of the available `ilo shell` runtimes. Force `ilo` to use docker like this:
+[Docker](https://www.docker.com/) is one of the available `ilo shell` runtimes. Force `ilo` to use `docker` like this:
 
 ```shell script
 $ ilo shell --runtime docker

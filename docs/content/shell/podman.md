@@ -12,7 +12,7 @@ tags:
 - podman
 ---
 
-[Podman](https://podman.io/) is one of the available `ilo shell` runtimes. Force `ilo` to use docker like this:
+[Podman](https://podman.io/) is one of the available `ilo shell` runtimes. Force `ilo` to use `podman` like this:
 
 ```shell script
 $ ilo shell --runtime podman

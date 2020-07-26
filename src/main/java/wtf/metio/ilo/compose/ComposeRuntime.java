@@ -15,6 +15,8 @@ public enum ComposeRuntime implements Matcher {
 
   PODMAN_COMPOSE("podman-compose", "pc"),
   PODS_COMPOSE("pods-compose", "pods"),
+  FOOTLOOSE("footloose", "fl"),
+  VAGRANT("vagrant", "v"),
   DOCKER_COMPOSE("docker-compose", "dc");
 
   private final String[] aliases;

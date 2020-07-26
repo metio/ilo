@@ -4,7 +4,7 @@ date: 2020-04-13
 menu:
   main:
     parent: compose
-    identifier: shell_pods_compose
+    identifier: compose_pods_compose
 categories:
 - compose
 tags:
@@ -12,7 +12,7 @@ tags:
 - pods-compose
 ---
 
-[pods-compose](https://github.com/abalage/pods-compose) is one of the available `ilo compose` runtimes. Force `ilo` to use docker like this:
+[pods-compose](https://github.com/abalage/pods-compose) is one of the available `ilo compose` runtimes. Force `ilo` to use `pods-compose` like this:
 
 ```shell script
 $ ilo compose --runtime pods-compose

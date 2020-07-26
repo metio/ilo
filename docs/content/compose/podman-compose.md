@@ -4,7 +4,7 @@ date: 2020-04-13
 menu:
   main:
     parent: compose
-    identifier: shell_podman_compose
+    identifier: compose_podman_compose
 categories:
 - compose
 tags:
@@ -12,7 +12,7 @@ tags:
 - podman-compose
 ---
 
-[podman-compose](https://github.com/containers/podman-compose) is one of the available `ilo compose` runtimes. Force `ilo` to use docker like this:
+[podman-compose](https://github.com/containers/podman-compose) is one of the available `ilo compose` runtimes. Force `ilo` to use `podman-compose` like this:
 
 ```shell script
 $ ilo compose --runtime podman-compose

@@ -4,7 +4,7 @@ date: 2020-04-13
 menu:
   main:
     parent: compose
-    identifier: shell_docker_compose
+    identifier: compose_docker_compose
 categories:
 - compose
 tags:
@@ -12,7 +12,7 @@ tags:
 - docker-compose
 ---
 
-[docker-compose](https://docs.docker.com/compose/) is one of the available `ilo compose` runtimes. Force `ilo` to use docker like this:
+[docker-compose](https://docs.docker.com/compose/) is one of the available `ilo compose` runtimes. Force `ilo` to use `docker-compose` like this:
 
 ```shell script
 $ ilo compose --runtime docker-compose

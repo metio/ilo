@@ -13,7 +13,7 @@ tags:
 - lxc
 ---
 
-[LXD](https://linuxcontainers.org/lxd/introduction/) is one of the available `ilo shell` runtimes. Force `ilo` to use docker like this:
+[LXD](https://linuxcontainers.org/lxd/introduction/) is one of the available `ilo shell` runtimes. Force `ilo` to use `lxd` like this:
 
 ```shell script
 $ ilo shell --runtime lxd
