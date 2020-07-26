@@ -173,7 +173,7 @@ jobs:
           server_port: ${{ secrets.MAIL_PORT }}
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: ilo release ${{ steps.release.outputs.version }}
+          subject: ilo #release ${{ steps.release.outputs.version }}
           body: See https://github.com/metio/ilo/releases/tag/${{ steps.release.outputs.version }} for details.
           to: ilo@metio.groups.io
           from: ${{ secrets.MAIL_SENDER }}
