@@ -14,7 +14,7 @@
             </a>
         {{ end }}
         {{ with .Site.Params.email }}
-            <a href="mailto:{{ . }}" id="email" title="i want to write you an email">
+            <a href="{{ . }}" id="email" title="i want to write you an email">
                 <img class="svgimg" src="{{ "/images/email.svg" | absURL }}" alt="email" width="32" height="32">
             </a>
         {{ end }}
