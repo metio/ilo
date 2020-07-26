@@ -15,7 +15,7 @@ The `ilo shell` command can be configured with the following command line option
 
 ## `--runtime`
 
-The `--runtime` option can be used to force the usage of a specific runtime. See [runtimes](./runtimes) for details.
+The `--runtime` option can be used to force the usage of a specific runtime. See [runtimes](../runtimes) for details.
 
 ```shell script
 # force to use docker
