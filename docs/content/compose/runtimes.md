@@ -38,10 +38,10 @@ $ ilo shell --runtime dd
 Force `ilo` to use [podman-compose](https://github.com/containers/podman-compose) like this:
 
 ```shell script
-$ ilo shell --runtime podman
+$ ilo shell --runtime podman-copose
 
 # alias
-$ ilo shell --runtime p
+$ ilo shell --runtime pc
 ```
 
 ## pods-compose
