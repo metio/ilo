@@ -17,10 +17,7 @@ The `ilo shell` command can be used to run a single container either in interact
 
 ## ilo compose
 
-The `ilo compose` command can be used for more complex build environments based on docker-compose.yml files.
-Use this command in case your project requires e.g. a database in order to be build. `ilo compose` does not mount any directories by default, nor does it automatically execute a specific command.
-It defaults to run with podman-compose but can be used with docker-compose as well by using the `--runtime` switch.
-Use `ilo compose --help` to get a list of all options, and their default values.
+The `ilo compose` command can be used for more complex build environments based on `docker-compose.yml` files. Use this command in case your project requires e.g. a database in order to be build.
 
 ```shell script
 [you@hostname project-dir]$ ilo compose
@@ -28,3 +25,5 @@ Use `ilo compose --help` to get a list of all options, and their default values.
 ```
 
 ## ilo devcontainer
+
+The `ilo devcontainer` command uses a [devcontainer]() environment.
