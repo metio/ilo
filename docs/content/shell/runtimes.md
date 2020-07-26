@@ -17,7 +17,7 @@ tags:
 `ilo shell` by default searches your local system for supported runtimes. It prefers `docker` over `podman` over `lxd` at the moment. In order to force the usage of a specific runtime, use the `--runtime` flag.
 
 | Feature        | Docker | Podman | LXD  |
-|----------------|-----------------|------|
+|----------------|--------|--------|------|
 | run container  | yes    | yes    | yes  |
 | custom image   | yes    | yes    | yes  |
 | shell          | yes    | yes    | no   |
