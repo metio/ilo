@@ -41,12 +41,23 @@ class DockerPodmanTest extends TestSources {
   void buildArguments(final String tool) {
     final var runtime = ShellRuntime.fromAlias(tool);
     final var options = new ShellOptions();
-    options.runtime = runtime;
+    options.image = "example:test";
+    options.dockerfile = "Dockerfile";
+    final var arguments = DockerPodman.buildArguments(options, runtime.toString());
+    assertEquals(String.format("%s build --file Dockerfile --tag example:test .", runtime), String.join(" ", arguments));
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("generate build arguments with pull")
+  void buildArgumentsWithPull(final String tool) {
+    final var runtime = ShellRuntime.fromAlias(tool);
+    final var options = new ShellOptions();
     options.pull = true;
     options.image = "example:test";
     options.dockerfile = "Dockerfile";
     final var arguments = DockerPodman.buildArguments(options, runtime.toString());
-    assertEquals(String.format("%s build --tag example:test --file Dockerfile .", runtime), String.join(" ", arguments));
+    assertEquals(String.format("%s build --file Dockerfile --pull --tag example:test .", runtime), String.join(" ", arguments));
   }
 
   @ParameterizedTest
@@ -55,10 +66,7 @@ class DockerPodmanTest extends TestSources {
   void runArguments(final String tool) {
     final var runtime = ShellRuntime.fromAlias(tool);
     final var options = new ShellOptions();
-    options.runtime = runtime;
-    options.pull = true;
     options.image = "example:test";
-    options.dockerfile = "Dockerfile";
     final var arguments = DockerPodman.runArguments(options, runtime.toString());
     assertEquals(String.format("%s run --rm example:test", runtime), String.join(" ", arguments));
   }
@@ -69,10 +77,7 @@ class DockerPodmanTest extends TestSources {
   void cleanArguments(final String tool) {
     final var runtime = ShellRuntime.fromAlias(tool);
     final var options = new ShellOptions();
-    options.runtime = runtime;
-    options.pull = true;
     options.image = "example:test";
-    options.dockerfile = "Dockerfile";
     options.removeImage = true;
     final var arguments = DockerPodman.cleanupArguments(options, runtime.toString());
     assertEquals(String.format("%s rmi example:test", runtime), String.join(" ", arguments));
@@ -84,10 +89,7 @@ class DockerPodmanTest extends TestSources {
   void interactive(final String tool) {
     final var runtime = ShellRuntime.fromAlias(tool);
     final var options = new ShellOptions();
-    options.runtime = runtime;
-    options.pull = true;
     options.image = "example:test";
-    options.dockerfile = "Dockerfile";
     options.interactive = true;
     final var arguments = DockerPodman.runArguments(options, runtime.toString());
     assertEquals(String.format("%s run --rm --interactive --tty example:test", runtime), String.join(" ", arguments));
@@ -99,9 +101,6 @@ class DockerPodmanTest extends TestSources {
   void mount(final String tool) {
     final var runtime = ShellRuntime.fromAlias(tool);
     final var options = new ShellOptions();
-    options.runtime = runtime;
-    options.pull = true;
-    options.dockerfile = "Dockerfile";
     options.commands = List.of("example:test", "/bin/bash", "-c", "whoami");
     final var arguments = DockerPodman.runArguments(options, runtime.toString());
     assertEquals(String.format("%s run --rm example:test /bin/bash -c whoami", runtime), String.join(" ", arguments));
@@ -113,9 +112,6 @@ class DockerPodmanTest extends TestSources {
   void runtimeOptions(final String tool) {
     final var runtime = ShellRuntime.fromAlias(tool);
     final var options = new ShellOptions();
-    options.runtime = runtime;
-    options.pull = true;
-    options.dockerfile = "Dockerfile";
     options.commands = List.of("--volume=/abc/123:/abc:Z", "example:test", "/bin/bash", "-c", "whoami");
     final var arguments = DockerPodman.runArguments(options, runtime.toString());
     assertEquals(String.format("%s run --rm --volume=/abc/123:/abc:Z example:test /bin/bash -c whoami", runtime), String.join(" ", arguments));

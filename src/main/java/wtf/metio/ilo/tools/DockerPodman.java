@@ -9,10 +9,12 @@ package wtf.metio.ilo.tools;
 
 import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.shell.ShellOptions;
+import wtf.metio.ilo.utils.Strings;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.function.Function.identity;
@@ -22,7 +24,7 @@ import static java.util.stream.Collectors.toList;
 final class DockerPodman {
 
   public static List<String> pullArguments(final ShellOptions options, final String tool) {
-    if (options.pull) {
+    if (options.pull && Strings.isNotBlank(options.dockerfile)) {
       final var args = List.of(tool, "pull", options.image);
       Debug.showExecutedCommand(options.debug, args);
       return args;
@@ -31,8 +33,15 @@ final class DockerPodman {
   }
 
   public static List<String> buildArguments(final ShellOptions options, final String tool) {
-    if (null != options.dockerfile && !options.dockerfile.isBlank()) {
-      final var args = List.of(tool, "build", "--tag", options.image, "--file", options.dockerfile, ".");
+    if (Strings.isBlank(options.dockerfile)) {
+      final var args = Stream.of(tool, "build",
+          "--file", options.dockerfile,
+          options.pull ? "--pull" : "",
+          "--tag", options.image,
+          ".")
+          .filter(Objects::nonNull)
+          .filter(not(String::isBlank))
+          .collect(toList());
       Debug.showExecutedCommand(options.debug, args);
       return args;
     }
