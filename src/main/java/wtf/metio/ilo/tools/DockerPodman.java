@@ -11,9 +11,12 @@ import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.shell.ShellOptions;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.function.Function.identity;
+import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
 final class DockerPodman {
@@ -54,6 +57,8 @@ final class DockerPodman {
     final var command = Stream.ofNullable(options.commands).flatMap(List::stream);
     final var args = Stream.of(run, projectDir, tty, Stream.of(options.image), command)
         .flatMap(identity())
+        .filter(Objects::nonNull)
+        .filter(not(String::isBlank))
         .collect(toList());
     Debug.showExecutedCommand(options.debug, args);
     return args;
