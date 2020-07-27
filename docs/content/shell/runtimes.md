@@ -53,6 +53,8 @@ $ ilo shell --runtime docker
 $ ilo shell --runtime d
 ```
 
+Configure the docker runtime with its [environment variables](https://docs.docker.com/engine/reference/commandline/cli/#environment-variables).
+
 ## Podman
 
 Force `ilo` to use [podman](https://podman.io/) like this:
