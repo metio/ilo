@@ -9,23 +9,16 @@ package wtf.metio.ilo.architecture;
 
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
+import com.tngtech.archunit.junit.ArchRules;
 import com.tngtech.archunit.junit.ArchTest;
-import com.tngtech.archunit.lang.ArchRule;
-
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 @AnalyzeClasses(packages = "wtf.metio.ilo", importOptions = ImportOption.DoNotIncludeTests.class)
-public final class StructureTest {
+public final class ArchitectureTest {
 
   @ArchTest
-  public static final ArchRule modelsDependsOnThemselves = noClasses()
-      .that().resideInAPackage("..model..")
-      .should().dependOnClassesThat().resideOutsideOfPackage("..model..");
+  public static final ArchRules codingRules = ArchRules.in(CodingRules.class);
 
   @ArchTest
-  public static final ArchRule executablesCanThrowErrors = classes()
-      .that().resideInAPackage("..exec..")
-      .should().dependOnClassesThat().resideInAPackage("..errors..");
+  public static final ArchRules structureRules = ArchRules.in(StructureRules.class);
 
 }
