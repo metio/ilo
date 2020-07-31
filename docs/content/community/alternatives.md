@@ -30,6 +30,7 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [gitpod](https://www.gitpod.io/): Describe your dev environment as code and get fully prebuilt, ready-to-code development environments for any GitLab, GitHub, and Bitbucket project.
 - [vagrant](https://www.vagrantup.com/): Vagrant is a tool for building and managing virtual machine environments in a single workflow.
 - [subuser](https://subuser.org/): Subuser turns Docker containers into normal linux programs
+- [bob](https://bobbuildtool.dev/): Bob is a functional build automation tool with an emphasisis on cross compilation. It is intended for complex embedded projects and thus focuses on reproducible builds while still being nice to developers in agile environments.
 
 ## Feature Comparison
 
