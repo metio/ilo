@@ -9,6 +9,7 @@ package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import wtf.metio.ilo.cli.Debug;
 import wtf.metio.ilo.test.ClassTests;
 
 @DisplayName("Debug")

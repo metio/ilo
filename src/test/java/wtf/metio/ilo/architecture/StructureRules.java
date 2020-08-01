@@ -9,10 +9,13 @@ package wtf.metio.ilo.architecture;
 
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import org.junit.jupiter.api.DisplayName;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
+@DisplayName("Structural Rules")
 public final class StructureRules {
 
   @ArchTest
@@ -21,13 +24,18 @@ public final class StructureRules {
       .should().dependOnClassesThat().resideOutsideOfPackage("..model..");
 
   @ArchTest
-  public static final ArchRule executablesCanThrowErrors = classes()
-      .that().resideInAPackage("..exec..")
-      .should().dependOnClassesThat().resideInAPackage("..errors..");
+  public static final ArchRule toolsDoNoDependOnCommands = noClasses()
+      .that().resideInAPackage("..tools..")
+      .should().dependOnClassesThat().resideInAnyPackage("..compose..", "..devcontainer..", "..shell..");
 
   @ArchTest
   public static final ArchRule iloDependsOnCommands = classes()
       .that().haveFullyQualifiedName("wtf.metio.ilo.Ilo")
       .should().dependOnClassesThat().resideInAnyPackage("..compose..", "..devcontainer..", "..shell..");
+
+  @ArchTest
+  public static final ArchRule noCycles = slices()
+      .matching("wtf.metio.ilo.(*)..")
+      .should().beFreeOfCycles();
 
 }

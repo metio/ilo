@@ -7,8 +7,9 @@
 
 package wtf.metio.ilo.shell;
 
-import wtf.metio.ilo.exec.Executables;
-import wtf.metio.ilo.tools.Tools;
+import wtf.metio.ilo.cli.AutoSelectRuntime;
+import wtf.metio.ilo.cli.Executables;
+import wtf.metio.ilo.model.ShellCLI;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ final class ShellExecutor implements Shell.ShellAPI {
 
   @Override
   public ShellCLI selectRuntime(final ShellRuntime runtime) {
-    return Tools.selectShellRuntime(runtime);
+    return AutoSelectRuntime.selectShellRuntime(runtime);
   }
 
   @Override

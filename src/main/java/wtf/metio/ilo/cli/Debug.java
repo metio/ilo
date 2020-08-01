@@ -5,18 +5,22 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.compose;
-
-import wtf.metio.ilo.tools.CliTool;
+package wtf.metio.ilo.cli;
 
 import java.util.List;
 
-public interface ComposeCLI extends CliTool<ComposeOptions> {
+// TODO: move class to 'cli' package
+public final class Debug {
 
-  List<String> pullArguments(ComposeOptions options);
+  // use commandLine logger from picocli
+  public static void showExecutedCommand(final boolean debugEnabled, final List<String> arguments) {
+    if (debugEnabled) {
+      System.out.println("ilo executes: " + String.join(" ", arguments));
+    }
+  }
 
-  List<String> buildArguments(ComposeOptions options);
-
-  List<String> cleanupArguments(ComposeOptions options);
+  private Debug() {
+    // utility class
+  }
 
 }

@@ -169,14 +169,17 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <argLine>
+                        --add-opens wtf.metio.ilo/wtf.metio.ilo.acceptance=ALL-UNNAMED
+                        --add-opens wtf.metio.ilo/wtf.metio.ilo.architecture=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.cli=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.compose=ALL-UNNAMED
+                        --add-opens wtf.metio.ilo/wtf.metio.ilo.factories=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.devcontainer=ALL-UNNAMED
-                        --add-opens wtf.metio.ilo/wtf.metio.ilo.exec=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.model=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.shell=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.test=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.tools=ALL-UNNAMED
+                        --add-opens wtf.metio.ilo/wtf.metio.ilo.utils=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.version=ALL-UNNAMED
                     </argLine>
                 </configuration>

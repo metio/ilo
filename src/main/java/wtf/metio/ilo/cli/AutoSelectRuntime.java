@@ -5,22 +5,37 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.exec;
+package wtf.metio.ilo.cli;
 
+import wtf.metio.ilo.model.ComposeCLI;
+import wtf.metio.ilo.compose.ComposeRuntime;
 import wtf.metio.ilo.errors.NoMatchingRuntimeException;
+import wtf.metio.ilo.factories.ComposeRuntimes;
 import wtf.metio.ilo.factories.ShellRuntimes;
 import wtf.metio.ilo.model.Matcher;
-import wtf.metio.ilo.shell.ShellCLI;
+import wtf.metio.ilo.model.ShellCLI;
 import wtf.metio.ilo.shell.ShellRuntime;
-import wtf.metio.ilo.tools.CliTool;
+import wtf.metio.ilo.model.CliTool;
 
 import java.util.List;
 import java.util.Optional;
 
-public class AutoSelectRuntime {
+public final class AutoSelectRuntime {
 
   public static ShellCLI selectShellRuntime(final ShellRuntime runtime) {
-    return autoSelect(runtime, ShellRuntimes.allRuntimes());
+    return selectShellRuntime(runtime, ShellRuntimes.allRuntimes());
+  }
+
+  static ShellCLI selectShellRuntime(final ShellRuntime runtime, final List<? extends ShellCLI> tools) {
+    return autoSelect(runtime, tools);
+  }
+
+  public static ComposeCLI selectComposeRuntime(final ComposeRuntime runtime) {
+    return selectComposeRuntime(runtime, ComposeRuntimes.allRuntimes());
+  }
+
+  static ComposeCLI selectComposeRuntime(final ComposeRuntime runtime, final List<? extends ComposeCLI> tools) {
+    return autoSelect(runtime, tools);
   }
 
   private static <SHELL extends CliTool<?>> SHELL autoSelect(

@@ -7,6 +7,8 @@
 
 package wtf.metio.ilo.tools;
 
+import wtf.metio.ilo.model.CliTool;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 abstract class CLI_TOOL_TCK<SHELL extends CliTool<?>> {

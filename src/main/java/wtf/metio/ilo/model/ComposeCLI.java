@@ -5,20 +5,13 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.tools;
+package wtf.metio.ilo.model;
 
-import java.util.List;
+import wtf.metio.ilo.compose.ComposeOptions;
+import wtf.metio.ilo.model.CliTool;
 
-final class Debug {
+public interface ComposeCLI extends CliTool<ComposeOptions> {
 
-  private Debug() {
-    // utility class
-  }
-
-  static void showExecutedCommand(final boolean debugEnabled, final List<String> arguments) {
-    if (debugEnabled) {
-      System.out.println("ilo executes: " + String.join(" ", arguments));
-    }
-  }
+  // Marker interface
 
 }

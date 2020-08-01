@@ -7,18 +7,42 @@
 
 package wtf.metio.ilo.architecture;
 
+import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
-import com.tngtech.archunit.junit.AnalyzeClasses;
-import com.tngtech.archunit.junit.ArchRules;
-import com.tngtech.archunit.junit.ArchTest;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicNode;
+import org.junit.jupiter.api.TestFactory;
+import wtf.metio.ilo.Ilo;
+import wtf.metio.ilo.test.ArchUnitTests;
 
-@AnalyzeClasses(packages = "wtf.metio.ilo", importOptions = ImportOption.DoNotIncludeTests.class)
+import java.util.stream.Stream;
+
+@DisplayName("Architecture")
 public final class ArchitectureTest {
 
-  @ArchTest
-  public static final ArchRules codingRules = ArchRules.in(CodingRules.class);
+  private static JavaClasses classes;
 
-  @ArchTest
-  public static final ArchRules structureRules = ArchRules.in(StructureRules.class);
+  @BeforeAll
+  static void importPackages() {
+    classes = new ClassFileImporter()
+        .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
+        .importPackages(Ilo.class.getPackageName());
+  }
+
+  @TestFactory
+  @DisplayName("Global Rules")
+  Stream<DynamicNode> globalRules() {
+    return Stream.of(CodingRules.class, StructureRules.class, LayerRules.class)
+        .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
+  }
+
+  @TestFactory
+  @DisplayName("Implementation Rules")
+  Stream<DynamicNode> implementationRules() {
+    return Stream.of(CliRules.class, ErrorsRules.class, ToolsRules.class)
+        .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
+  }
 
 }
