@@ -5,14 +5,15 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.tools;
+package wtf.metio.ilo.model;
 
-import wtf.metio.ilo.exec.Executables;
+import wtf.metio.ilo.cli.Executables;
+import wtf.metio.ilo.compose.ComposeOptions;
 
 import java.util.List;
 
 /**
- * Most generic CLI tool.
+ * CLI tools are used by 'ilo' in order to do most of its work. This interface represents such a tool.
  */
 public interface CliTool<OPTIONS> {
 
@@ -30,8 +31,26 @@ public interface CliTool<OPTIONS> {
 
   /**
    * @param options The options to use.
-   * @return The command line to execute.
+   * @return The command line for the 'pull' step.
+   */
+  List<String> pullArguments(OPTIONS options);
+
+  /**
+   * @param options The options to use.
+   * @return The command line for the 'build' step.
+   */
+  List<String> buildArguments(OPTIONS options);
+
+  /**
+   * @param options The options to use.
+   * @return The command line for the 'run' step.
    */
   List<String> runArguments(OPTIONS options);
+
+  /**
+   * @param options The options to use.
+   * @return The command line for the 'cleanup' step.
+   */
+  List<String> cleanupArguments(OPTIONS options);
 
 }

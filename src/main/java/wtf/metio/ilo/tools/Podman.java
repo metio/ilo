@@ -7,7 +7,7 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.shell.ShellCLI;
+import wtf.metio.ilo.model.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
 
 import java.util.List;

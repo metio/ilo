@@ -5,7 +5,7 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.exec;
+package wtf.metio.ilo.cli;
 
 import wtf.metio.ilo.errors.*;
 

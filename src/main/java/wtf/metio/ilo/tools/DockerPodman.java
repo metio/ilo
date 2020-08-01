@@ -8,13 +8,12 @@
 package wtf.metio.ilo.tools;
 
 import wtf.metio.ilo.compose.ComposeOptions;
+import wtf.metio.ilo.cli.Debug;
 import wtf.metio.ilo.shell.ShellOptions;
 import wtf.metio.ilo.utils.Strings;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.function.Function.identity;

@@ -8,8 +8,8 @@
 package wtf.metio.ilo.compose;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.exec.Executables;
-import wtf.metio.ilo.tools.Tools;
+import wtf.metio.ilo.cli.AutoSelectRuntime;
+import wtf.metio.ilo.cli.Executables;
 
 import java.util.concurrent.Callable;
 import java.util.stream.IntStream;
@@ -30,7 +30,7 @@ public class Compose implements Callable<Integer> {
 
   @Override
   public Integer call() {
-    final var tool = Tools.selectComposeRuntime(options.runtime);
+    final var tool = AutoSelectRuntime.selectComposeRuntime(options.runtime);
     final var pullArguments = tool.pullArguments(options);
     final var pullExitCode = Executables.runAndWaitForExit(pullArguments);
     final var buildArguments = tool.buildArguments(options);

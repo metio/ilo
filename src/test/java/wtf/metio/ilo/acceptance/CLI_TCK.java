@@ -5,7 +5,7 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.cli;
+package wtf.metio.ilo.acceptance;
 
 import org.junit.jupiter.api.BeforeEach;
 import picocli.CommandLine;
@@ -16,7 +16,6 @@ import wtf.metio.ilo.test.TestSources;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.stream.Stream;
 
 public abstract class CLI_TCK extends TestSources {
 

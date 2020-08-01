@@ -5,26 +5,19 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.tools;
+package wtf.metio.ilo.factories;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.test.ClassTests;
 
-@DisplayName("Tools")
-class ToolsTest {
+@DisplayName("ComposeRuntimes")
+class ComposeRuntimesTest {
 
   @Test
   @DisplayName("has private constructor")
   void shouldHavePrivateConstructor() throws NoSuchMethodException {
-    ClassTests.hasPrivateConstructor(Debug.class);
-  }
-
-  @Test
-  @DisplayName("selects shell runtimes")
-  void shellRuntime() {
-    Assertions.assertNotNull(Tools.selectShellRuntime(null));
+    ClassTests.hasPrivateConstructor(ComposeRuntimes.class);
   }
 
 }

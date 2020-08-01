@@ -8,6 +8,7 @@
 package wtf.metio.ilo.shell;
 
 import picocli.CommandLine;
+import wtf.metio.ilo.model.ShellCLI;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -42,8 +43,11 @@ public class Shell implements Callable<Integer> {
   @Override
   public Integer call() {
     final var tool = api.selectRuntime(options.runtime);
+
+    // var pullExitCode = tool.pull(options);
     final var pullArguments = tool.pullArguments(options);
     final var pullExitCode = api.execute(pullArguments);
+
     final var buildArguments = tool.buildArguments(options);
     final var buildExitCode = api.execute(buildArguments);
     final var runArguments = tool.runArguments(options);

@@ -5,18 +5,13 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.shell;
+package wtf.metio.ilo.model;
 
-import wtf.metio.ilo.tools.CliTool;
-
-import java.util.List;
+import wtf.metio.ilo.model.CliTool;
+import wtf.metio.ilo.shell.ShellOptions;
 
 public interface ShellCLI extends CliTool<ShellOptions> {
 
-  List<String> buildArguments(ShellOptions options);
-
-  List<String> pullArguments(ShellOptions options);
-
-  List<String> cleanupArguments(ShellOptions options);
+  // Marker interface
 
 }

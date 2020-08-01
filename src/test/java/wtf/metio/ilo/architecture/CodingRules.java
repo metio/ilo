@@ -10,7 +10,9 @@ package wtf.metio.ilo.architecture;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.library.GeneralCodingRules;
+import org.junit.jupiter.api.DisplayName;
 
+@DisplayName("Coding Rules")
 public final class CodingRules {
 
   @ArchTest

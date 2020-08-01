@@ -5,24 +5,22 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.tools;
+package wtf.metio.ilo.factories;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.model.ShellCLI;
+import wtf.metio.ilo.tools.Docker;
+import wtf.metio.ilo.tools.LXD;
+import wtf.metio.ilo.tools.Podman;
 
-@DisplayName("Podman")
-class PodmanTest extends CLI_TOOL_TCK<ShellCLI> {
+import java.util.List;
 
-  @Override
-  public ShellCLI tool() {
-    return new Podman();
-  }
+public final class ShellRuntimes {
 
-  @Test
-  @DisplayName("has runtime name")
-  void shouldHaveName() {
-    assertName("podman");
+  public static List<ShellCLI> allRuntimes() {
+    final var podman = new Podman();
+    final var docker = new Docker();
+    final var lxd = new LXD();
+    return List.of(podman, docker, lxd);
   }
 
 }
