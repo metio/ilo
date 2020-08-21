@@ -67,8 +67,7 @@
     <properties>
         <revision>0.0.0-SNAPSHOT</revision>
         <version.jdk>11</version.jdk>
-        <version.picocli>4.4.0</version.picocli>
-        <version.graal>20.1.0</version.graal>
+        <version.graal>20.2.0</version.graal>
         <version.checksum-m-p>1.8</version.checksum-m-p>
         <version.m-assembly-p>3.2.0</version.m-assembly-p>
 
@@ -86,12 +85,10 @@
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>${version.picocli}</version>
         </dependency>
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli-codegen</artifactId>
-            <version>${version.picocli}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -109,25 +106,21 @@
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit</artifactId>
-            <version>0.14.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5</artifactId>
-            <version>0.14.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-api</artifactId>
-            <version>0.14.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.graalvm.sdk</groupId>
             <artifactId>graal-sdk</artifactId>
-            <version>${version.graal}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -144,13 +137,6 @@
                 <version>3.8.1</version>
                 <configuration>
                     <release>${version.jdk}</release>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>info.picocli</groupId>
-                            <artifactId>picocli-codegen</artifactId>
-                            <version>${version.picocli}</version>
-                        </path>
-                    </annotationProcessorPaths>
                     <compilerArgs>
                         <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
                     </compilerArgs>
@@ -311,14 +297,6 @@
                         <argument>wtf.metio.ilo.devcontainer.Devcontainer</argument>
                     </arguments>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>info.picocli</groupId>
-                        <artifactId>picocli-codegen</artifactId>
-                        <version>${version.picocli}</version>
-                        <type>jar</type>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.asciidoctor</groupId>
