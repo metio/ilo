@@ -7,8 +7,14 @@
 
 package wtf.metio.ilo.model;
 
-public interface Matcher {
+import java.util.Arrays;
 
-  boolean matches(String candidate);
+public interface Runtime {
+
+  default boolean matches(final String candidate) {
+    return Arrays.stream(aliases()).anyMatch(candidate::equalsIgnoreCase);
+  }
+
+  String[] aliases();
 
 }

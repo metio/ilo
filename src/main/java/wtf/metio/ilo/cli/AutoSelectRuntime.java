@@ -12,7 +12,7 @@ import wtf.metio.ilo.compose.ComposeRuntime;
 import wtf.metio.ilo.errors.NoMatchingRuntimeException;
 import wtf.metio.ilo.factories.ComposeRuntimes;
 import wtf.metio.ilo.factories.ShellRuntimes;
-import wtf.metio.ilo.model.Matcher;
+import wtf.metio.ilo.model.Runtime;
 import wtf.metio.ilo.model.ShellCLI;
 import wtf.metio.ilo.shell.ShellRuntime;
 import wtf.metio.ilo.model.CliTool;
@@ -39,7 +39,7 @@ public final class AutoSelectRuntime {
   }
 
   private static <SHELL extends CliTool<?>> SHELL autoSelect(
-      final Matcher matcher,
+      final Runtime matcher,
       final List<SHELL> tools) {
     return tools.stream()
         .filter(CliTool::exists)

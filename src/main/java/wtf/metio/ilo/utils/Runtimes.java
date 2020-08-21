@@ -7,13 +7,13 @@
 
 package wtf.metio.ilo.utils;
 
-import wtf.metio.ilo.model.Matcher;
+import wtf.metio.ilo.model.Runtime;
 
 import java.util.Arrays;
 
 public final class Runtimes {
 
-  public static <RUNTIME extends Matcher> RUNTIME firstMatching(final String alias, final RUNTIME[] matchers) {
+  public static <RUNTIME extends Runtime> RUNTIME firstMatching(final String alias, final RUNTIME[] matchers) {
     return Arrays.stream(matchers)
         .filter(runtime -> runtime.matches(alias))
         .findFirst()

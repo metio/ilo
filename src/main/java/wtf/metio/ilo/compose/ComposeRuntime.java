@@ -7,12 +7,10 @@
 
 package wtf.metio.ilo.compose;
 
-import wtf.metio.ilo.model.Matcher;
+import wtf.metio.ilo.model.Runtime;
 import wtf.metio.ilo.utils.Runtimes;
 
-import java.util.Arrays;
-
-public enum ComposeRuntime implements Matcher {
+public enum ComposeRuntime implements Runtime {
 
   DOCKER_COMPOSE("docker-compose", "dc"),
   FOOTLOOSE("footloose", "fl"),
@@ -27,12 +25,12 @@ public enum ComposeRuntime implements Matcher {
   }
 
   public static ComposeRuntime fromAlias(final String alias) {
-    return Runtimes.firstMatching(alias, ComposeRuntime.values());
+    return Runtimes.firstMatching(alias, values());
   }
 
   @Override
-  public boolean matches(final String candidate) {
-    return Arrays.stream(aliases).anyMatch(candidate::equalsIgnoreCase);
+  public String[] aliases() {
+    return aliases;
   }
 
   @Override

@@ -7,12 +7,10 @@
 
 package wtf.metio.ilo.shell;
 
-import wtf.metio.ilo.model.Matcher;
+import wtf.metio.ilo.model.Runtime;
 import wtf.metio.ilo.utils.Runtimes;
 
-import java.util.Arrays;
-
-public enum ShellRuntime implements Matcher {
+public enum ShellRuntime implements Runtime {
 
   DOCKER("docker", "d"),
   LXD("lxd", "l"),
@@ -25,12 +23,12 @@ public enum ShellRuntime implements Matcher {
   }
 
   public static ShellRuntime fromAlias(final String alias) {
-    return Runtimes.firstMatching(alias, ShellRuntime.values());
+    return Runtimes.firstMatching(alias, values());
   }
 
   @Override
-  public boolean matches(final String candidate) {
-    return Arrays.stream(aliases).anyMatch(candidate::equalsIgnoreCase);
+  public String[] aliases() {
+    return aliases;
   }
 
   @Override
