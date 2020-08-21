@@ -35,7 +35,9 @@ abstract class DockerPodman implements ShellCLI {
   @Override
   public final List<String> buildArguments(final ShellOptions options) {
     if (Strings.isBlank(options.dockerfile)) {
-      final var args = Stream.of(name(), "build",
+      final var args = Stream.of(
+          name(),
+          "build",
           "--file", options.dockerfile,
           options.pull ? "--pull" : "",
           "--tag", options.image,
