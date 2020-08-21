@@ -33,6 +33,7 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [bob](https://bobbuildtool.dev/): Bob is a functional build automation tool with an emphasisis on cross compilation. It is intended for complex embedded projects and thus focuses on reproducible builds while still being nice to developers in agile environments.
 - [dojo](https://github.com/kudulab/dojo): Containerize your development and operations environment
 - [go2nix](https://github.com/kamilchm/go2nix): Reproducible builds and development environment for Go
+- [vermin](https://mhewedy.github.io/vermin/): Vermin is a smart, simple and powerful command line tool for Linux, Windows and macOS. It's designed for developers who want a fresh VM environment with a single command.
 
 ## Feature Comparison
 
