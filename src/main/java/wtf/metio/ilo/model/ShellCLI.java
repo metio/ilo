@@ -7,7 +7,6 @@
 
 package wtf.metio.ilo.model;
 
-import wtf.metio.ilo.model.CliTool;
 import wtf.metio.ilo.shell.ShellOptions;
 
 public interface ShellCLI extends CliTool<ShellOptions> {

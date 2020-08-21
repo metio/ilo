@@ -8,21 +8,19 @@
 package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.model.ShellCLI;
 
 @DisplayName("Docker")
-class DockerTest extends CLI_TOOL_TCK<ShellCLI> {
+class DockerTest extends DockerPodmanTCK {
 
   @Override
   public ShellCLI tool() {
     return new Docker();
   }
 
-  @Test
-  @DisplayName("has runtime name")
-  void shouldHaveName() {
-    assertName("docker");
+  @Override
+  protected String name() {
+    return "docker";
   }
 
 }

@@ -8,7 +8,6 @@
 package wtf.metio.ilo.model;
 
 import wtf.metio.ilo.compose.ComposeOptions;
-import wtf.metio.ilo.model.CliTool;
 
 public interface ComposeCLI extends CliTool<ComposeOptions> {
 

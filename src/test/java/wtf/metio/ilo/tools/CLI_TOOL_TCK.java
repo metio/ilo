@@ -7,6 +7,8 @@
 
 package wtf.metio.ilo.tools;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.model.CliTool;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,8 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 abstract class CLI_TOOL_TCK<SHELL extends CliTool<?>> {
 
   protected abstract SHELL tool();
+  
+  protected abstract String name();
 
-  protected final void assertName(final String expected) {
+  @Test
+  @DisplayName("has runtime name")
+  void shouldHaveName() {
     // given
     final var tool = tool();
 
@@ -23,7 +29,7 @@ abstract class CLI_TOOL_TCK<SHELL extends CliTool<?>> {
     final var name = tool.name();
 
     // then
-    assertEquals(expected, name);
+    assertEquals(name(), name);
   }
 
 }

@@ -8,6 +8,7 @@
 package wtf.metio.ilo.compose;
 
 import wtf.metio.ilo.model.Matcher;
+import wtf.metio.ilo.utils.Runtimes;
 
 import java.util.Arrays;
 
@@ -26,10 +27,7 @@ public enum ComposeRuntime implements Matcher {
   }
 
   public static ComposeRuntime fromAlias(final String alias) {
-    return Arrays.stream(ComposeRuntime.values())
-        .filter(runtime -> runtime.matches(alias))
-        .findFirst()
-        .orElseThrow(IllegalArgumentException::new);
+    return Runtimes.firstMatching(alias, ComposeRuntime.values());
   }
 
   @Override

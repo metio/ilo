@@ -7,8 +7,8 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.cli.Debug;
+import wtf.metio.ilo.model.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
 import wtf.metio.ilo.utils.Strings;
 
@@ -20,20 +20,22 @@ import static java.util.function.Function.identity;
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
-final class DockerPodman {
+abstract class DockerPodman implements ShellCLI {
 
-  public static List<String> pullArguments(final ShellOptions options, final String tool) {
+  @Override
+  public final List<String> pullArguments(final ShellOptions options) {
     if (options.pull && Strings.isNotBlank(options.dockerfile)) {
-      final var args = List.of(tool, "pull", options.image);
+      final var args = List.of(name(), "pull", options.image);
       Debug.showExecutedCommand(options.debug, args);
       return args;
     }
     return List.of();
   }
 
-  public static List<String> buildArguments(final ShellOptions options, final String tool) {
+  @Override
+  public final List<String> buildArguments(final ShellOptions options) {
     if (Strings.isBlank(options.dockerfile)) {
-      final var args = Stream.of(tool, "build",
+      final var args = Stream.of(name(), "build",
           "--file", options.dockerfile,
           options.pull ? "--pull" : "",
           "--tag", options.image,
@@ -47,10 +49,11 @@ final class DockerPodman {
     return List.of();
   }
 
-  static List<String> runArguments(final ShellOptions options, final String tool) {
+  @Override
+  public final List<String> runArguments(final ShellOptions options) {
     final var currentDir = System.getProperty("user.dir");
     final var run = Stream.of(
-        tool,
+        name(),
         "run",
         "--rm"
     );
@@ -72,44 +75,14 @@ final class DockerPodman {
     return args;
   }
 
-  public static List<String> cleanupArguments(final ShellOptions options, final String tool) {
+  @Override
+  public final List<String> cleanupArguments(final ShellOptions options) {
     if (options.removeImage) {
-      final var args = List.of(tool, "rmi", options.image);
+      final var args = List.of(name(), "rmi", options.image);
       Debug.showExecutedCommand(options.debug, args);
       return args;
     }
     return List.of();
-  }
-
-  static List<String> pullArguments(final ComposeOptions options, final String tool) {
-    if (options.pull) {
-      final var args = List.of(tool, "pull");
-      Debug.showExecutedCommand(options.debug, args);
-      return args;
-    }
-    return List.of();
-  }
-
-  static List<String> runArguments(final ComposeOptions options, final String tool) {
-    final var run = Stream.of(
-        tool,
-        "--file", options.file,
-        "run",
-        "--rm"
-    );
-    final var tty = options.interactive ? Stream.<String>empty() : Stream.of("-T");
-    final var service = Stream.of(options.service);
-    final var args = Stream.of(run, tty, service)
-        .flatMap(identity())
-        .collect(toList());
-    Debug.showExecutedCommand(options.debug, args);
-    return args;
-  }
-
-  static List<String> cleanupArguments(final ComposeOptions options, final String tool) {
-    final var args = List.of(tool, "--file", options.file, "down");
-    Debug.showExecutedCommand(options.debug, args);
-    return args;
   }
 
 }

@@ -8,7 +8,6 @@
 package wtf.metio.ilo.model;
 
 import wtf.metio.ilo.cli.Executables;
-import wtf.metio.ilo.compose.ComposeOptions;
 
 import java.util.List;
 

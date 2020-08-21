@@ -7,36 +7,11 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.model.ShellCLI;
-import wtf.metio.ilo.shell.ShellOptions;
-
-import java.util.List;
-
-public final class Docker implements ShellCLI {
+public final class Docker extends DockerPodman {
 
   @Override
   public String name() {
     return "docker";
-  }
-
-  @Override
-  public List<String> buildArguments(final ShellOptions options) {
-    return DockerPodman.buildArguments(options, name());
-  }
-
-  @Override
-  public List<String> pullArguments(final ShellOptions options) {
-    return DockerPodman.pullArguments(options, name());
-  }
-
-  @Override
-  public List<String> runArguments(final ShellOptions options) {
-    return DockerPodman.runArguments(options, name());
-  }
-
-  @Override
-  public List<String> cleanupArguments(final ShellOptions options) {
-    return DockerPodman.cleanupArguments(options, name());
   }
 
 }

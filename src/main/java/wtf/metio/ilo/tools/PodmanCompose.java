@@ -7,36 +7,11 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.model.ComposeCLI;
-import wtf.metio.ilo.compose.ComposeOptions;
-
-import java.util.List;
-
-public final class PodmanCompose implements ComposeCLI {
+public final class PodmanCompose extends DockerComposePodmanCompose {
 
   @Override
   public String name() {
     return "podman-compose";
-  }
-
-  @Override
-  public List<String> pullArguments(final ComposeOptions options) {
-    return DockerPodman.pullArguments(options, name());
-  }
-
-  @Override
-  public List<String> buildArguments(final ComposeOptions options) {
-    return List.of();
-  }
-
-  @Override
-  public List<String> runArguments(final ComposeOptions options) {
-    return DockerPodman.runArguments(options, name());
-  }
-
-  @Override
-  public List<String> cleanupArguments(final ComposeOptions options) {
-    return DockerPodman.cleanupArguments(options, name());
   }
 
 }

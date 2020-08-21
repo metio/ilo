@@ -8,7 +8,6 @@
 package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.model.ComposeCLI;
 
 @DisplayName("PodsCompose")
@@ -19,10 +18,9 @@ class PodsComposeTest extends CLI_TOOL_TCK<ComposeCLI> {
     return new PodsCompose();
   }
 
-  @Test
-  @DisplayName("has runtime name")
-  void shouldHaveName() {
-    assertName("pods-compose");
+  @Override
+  protected String name() {
+    return "pods-compose";
   }
 
 }

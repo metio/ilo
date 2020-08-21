@@ -41,7 +41,7 @@ public class Compose implements Callable<Integer> {
     // see https://github.com/docker/compose/issues/2791
     final var cleanupArguments = tool.cleanupArguments(options);
     final var cleanupExitCode = Executables.runAndWaitForExit(cleanupArguments);
-    return IntStream.of(pullExitCode, runExitCode, cleanupExitCode)
+    return IntStream.of(pullExitCode, buildExitCode, runExitCode, cleanupExitCode)
         .max().orElse(CommandLine.ExitCode.SOFTWARE);
   }
 

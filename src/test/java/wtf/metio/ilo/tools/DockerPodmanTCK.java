@@ -9,111 +9,100 @@ package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import wtf.metio.ilo.model.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
 import wtf.metio.ilo.shell.ShellRuntime;
-import wtf.metio.ilo.test.TestSources;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("DockerPodman")
-class DockerPodmanTest extends TestSources {
+abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
 
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
+  @Test
   @DisplayName("generate pull arguments")
-  void pullArguments(final String tool) {
-    final var runtime = ShellRuntime.fromAlias(tool);
+  void pullArguments() {
+    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.runtime = runtime;
     options.pull = true;
     options.image = "example:test";
-    final var arguments = DockerPodman.pullArguments(options, runtime.toString());
+    final var arguments = tool().pullArguments(options);
     assertEquals(String.format("%s pull example:test", runtime), String.join(" ", arguments));
   }
 
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
+  @Test
   @DisplayName("generate build arguments")
-  void buildArguments(final String tool) {
-    final var runtime = ShellRuntime.fromAlias(tool);
+  void buildArguments() {
+    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.image = "example:test";
     options.dockerfile = "Dockerfile";
-    final var arguments = DockerPodman.buildArguments(options, runtime.toString());
+    final var arguments = tool().buildArguments(options);
     assertEquals(String.format("%s build --file Dockerfile --tag example:test .", runtime), String.join(" ", arguments));
   }
 
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
+  @Test
   @DisplayName("generate build arguments with pull")
-  void buildArgumentsWithPull(final String tool) {
-    final var runtime = ShellRuntime.fromAlias(tool);
+  void buildArgumentsWithPull() {
+    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.pull = true;
     options.image = "example:test";
     options.dockerfile = "Dockerfile";
-    final var arguments = DockerPodman.buildArguments(options, runtime.toString());
+    final var arguments = tool().buildArguments(options);
     assertEquals(String.format("%s build --file Dockerfile --pull --tag example:test .", runtime), String.join(" ", arguments));
   }
 
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
+  @Test
   @DisplayName("generate run arguments")
-  void runArguments(final String tool) {
-    final var runtime = ShellRuntime.fromAlias(tool);
+  void runArguments() {
+    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.image = "example:test";
-    final var arguments = DockerPodman.runArguments(options, runtime.toString());
+    final var arguments = tool().runArguments(options);
     assertEquals(String.format("%s run --rm example:test", runtime), String.join(" ", arguments));
   }
 
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
+  @Test
   @DisplayName("generate clean arguments")
-  void cleanArguments(final String tool) {
-    final var runtime = ShellRuntime.fromAlias(tool);
+  void cleanArguments() {
+    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.image = "example:test";
     options.removeImage = true;
-    final var arguments = DockerPodman.cleanupArguments(options, runtime.toString());
+    final var arguments = tool().cleanupArguments(options);
     assertEquals(String.format("%s rmi example:test", runtime), String.join(" ", arguments));
   }
 
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
+  @Test
   @DisplayName("interactive run")
-  void interactive(final String tool) {
-    final var runtime = ShellRuntime.fromAlias(tool);
+  void interactive() {
+    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.image = "example:test";
     options.interactive = true;
-    final var arguments = DockerPodman.runArguments(options, runtime.toString());
+    final var arguments = tool().runArguments(options);
     assertEquals(String.format("%s run --rm --interactive --tty example:test", runtime), String.join(" ", arguments));
   }
 
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
+  @Test
   @DisplayName("custom command run")
-  void mount(final String tool) {
-    final var runtime = ShellRuntime.fromAlias(tool);
+  void mount() {
+    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.commands = List.of("example:test", "/bin/bash", "-c", "whoami");
-    final var arguments = DockerPodman.runArguments(options, runtime.toString());
+    final var arguments = tool().runArguments(options);
     assertEquals(String.format("%s run --rm example:test /bin/bash -c whoami", runtime), String.join(" ", arguments));
   }
 
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
+  @Test
   @DisplayName("pass-through runtime options")
-  void runtimeOptions(final String tool) {
-    final var runtime = ShellRuntime.fromAlias(tool);
+  void runtimeOptions() {
+    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.commands = List.of("--volume=/abc/123:/abc:Z", "example:test", "/bin/bash", "-c", "whoami");
-    final var arguments = DockerPodman.runArguments(options, runtime.toString());
+    final var arguments = tool().runArguments(options);
     assertEquals(String.format("%s run --rm --volume=/abc/123:/abc:Z example:test /bin/bash -c whoami", runtime), String.join(" ", arguments));
   }
 

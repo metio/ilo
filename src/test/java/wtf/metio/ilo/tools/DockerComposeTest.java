@@ -8,7 +8,6 @@
 package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.model.ComposeCLI;
 
 @DisplayName("DockerCompose")
@@ -19,10 +18,9 @@ class DockerComposeTest extends CLI_TOOL_TCK<ComposeCLI> {
     return new DockerCompose();
   }
 
-  @Test
-  @DisplayName("has runtime name")
-  void shouldHaveName() {
-    assertName("docker-compose");
+  @Override
+  protected String name() {
+    return "docker-compose";
   }
 
 }
