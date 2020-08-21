@@ -14,11 +14,11 @@ import java.util.Arrays;
 
 public enum ComposeRuntime implements Matcher {
 
+  DOCKER_COMPOSE("docker-compose", "dc"),
+  FOOTLOOSE("footloose", "fl"),
   PODMAN_COMPOSE("podman-compose", "pc"),
   PODS_COMPOSE("pods-compose", "pods"),
-  FOOTLOOSE("footloose", "fl"),
-  VAGRANT("vagrant", "v"),
-  DOCKER_COMPOSE("docker-compose", "dc");
+  VAGRANT("vagrant", "v");
 
   private final String[] aliases;
 

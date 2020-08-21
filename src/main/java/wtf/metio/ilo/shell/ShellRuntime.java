@@ -14,9 +14,9 @@ import java.util.Arrays;
 
 public enum ShellRuntime implements Matcher {
 
-  PODMAN("podman", "p"),
+  DOCKER("docker", "d"),
   LXD("lxd", "l"),
-  DOCKER("docker", "d");
+  PODMAN("podman", "p");
 
   private final String[] aliases;
 
