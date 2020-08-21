@@ -70,11 +70,9 @@
         <version.graal>20.2.0</version.graal>
         <version.checksum-m-p>1.8</version.checksum-m-p>
         <version.m-assembly-p>3.2.0</version.m-assembly-p>
-
         <skip.graal>true</skip.graal>
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
-
-        <project.build.outputTimestamp>2020</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2019</project.build.outputTimestamp>
     </properties>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -162,6 +160,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
                 <configuration>
+                    <!-- open module for junit engine -->
                     <argLine>
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.acceptance=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.architecture=ALL-UNNAMED
