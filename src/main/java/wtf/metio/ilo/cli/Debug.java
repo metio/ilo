@@ -9,7 +9,6 @@ package wtf.metio.ilo.cli;
 
 import java.util.List;
 
-// TODO: move class to 'cli' package
 public final class Debug {
 
   // use commandLine logger from picocli
