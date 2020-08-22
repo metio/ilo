@@ -18,6 +18,7 @@ import wtf.metio.ilo.errors.JsonParsingException;
 import wtf.metio.ilo.errors.RuntimeIOException;
 import wtf.metio.ilo.shell.Shell;
 import wtf.metio.ilo.shell.ShellOptions;
+import wtf.metio.ilo.utils.Strings;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -53,7 +54,7 @@ public class Devcontainer implements Callable<Integer> {
       final var json = Files.readString(devcontainerJson);
       final var config = mapper.readValue(json, DevcontainerJson.class);
 
-      if (null != config.dockerComposeFile && !config.dockerComposeFile.isBlank()) {
+      if (Strings.isNotBlank(config.dockerComposeFile)) {
         final var opts = new ComposeOptions();
         opts.file = config.dockerComposeFile;
         opts.service = config.service;
@@ -64,7 +65,7 @@ public class Devcontainer implements Callable<Integer> {
         command.options = opts;
         return command.call();
       }
-      if (null != config.image && !config.image.isBlank()) {
+      if (Strings.isNotBlank(config.image)) {
         final var opts = new ShellOptions();
         opts.image = config.image;
         opts.debug = options.debug;

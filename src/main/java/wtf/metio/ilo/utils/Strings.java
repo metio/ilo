@@ -10,11 +10,11 @@ package wtf.metio.ilo.utils;
 public final class Strings {
 
   public static boolean isBlank(final String value) {
-    return null != value && !value.isBlank();
+    return null == value || value.isBlank();
   }
 
   public static boolean isNotBlank(final String value) {
-    return null == value || value.isBlank();
+    return null != value && !value.isBlank();
   }
 
   private Strings() {
