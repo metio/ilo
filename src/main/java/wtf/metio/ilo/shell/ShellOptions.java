@@ -8,10 +8,11 @@
 package wtf.metio.ilo.shell;
 
 import picocli.CommandLine;
+import wtf.metio.ilo.model.Options;
 
 import java.util.List;
 
-public final class ShellOptions {
+public final class ShellOptions implements Options {
 
   @CommandLine.Option(
       names = {"--runtime"},
@@ -69,5 +70,10 @@ public final class ShellOptions {
 
   @CommandLine.Parameters
   public List<String> commands;
+
+  @Override
+  public boolean debug() {
+    return debug;
+  }
 
 }

@@ -5,14 +5,13 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.factories;
+package wtf.metio.ilo.compose;
 
 import wtf.metio.ilo.model.ComposeCLI;
 import wtf.metio.ilo.tools.*;
 
 import java.util.List;
 
-// TODO: move to compose package?
 public final class ComposeRuntimes {
 
   public static List<ComposeCLI> allRuntimes() {

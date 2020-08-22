@@ -8,8 +8,9 @@
 package wtf.metio.ilo.compose;
 
 import picocli.CommandLine;
+import wtf.metio.ilo.model.Options;
 
-public final class ComposeOptions {
+public final class ComposeOptions implements Options {
 
   @CommandLine.Option(
       names = {"--runtime"},
@@ -50,5 +51,10 @@ public final class ComposeOptions {
       defaultValue = "docker-compose.yml"
   )
   public String file;
+
+  @Override
+  public boolean debug() {
+    return debug;
+  }
 
 }

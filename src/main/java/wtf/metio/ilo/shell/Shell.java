@@ -8,11 +8,11 @@
 package wtf.metio.ilo.shell;
 
 import picocli.CommandLine;
+import wtf.metio.ilo.cli.CommandLifecycle;
 import wtf.metio.ilo.model.ShellCLI;
 
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.stream.IntStream;
 
 @CommandLine.Command(
     name = "shell",
@@ -43,16 +43,7 @@ public final class Shell implements Callable<Integer> {
   @Override
   public Integer call() {
     final var tool = api.selectRuntime(options.runtime);
-    final var pullArguments = tool.pullArguments(options);
-    final var pullExitCode = api.execute(pullArguments, options.debug);
-    final var buildArguments = tool.buildArguments(options);
-    final var buildExitCode = api.execute(buildArguments, options.debug);
-    final var runArguments = tool.runArguments(options);
-    final var runExitCode = api.execute(runArguments, options.debug);
-    final var cleanupArguments = tool.cleanupArguments(options);
-    final var cleanupExitCode = api.execute(cleanupArguments, options.debug);
-    return IntStream.of(pullExitCode, buildExitCode, runExitCode, cleanupExitCode)
-        .max().orElse(CommandLine.ExitCode.SOFTWARE);
+    return CommandLifecycle.run(tool, options, api::execute);
   }
 
   interface ShellAPI {

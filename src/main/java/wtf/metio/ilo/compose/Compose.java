@@ -8,11 +8,11 @@
 package wtf.metio.ilo.compose;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.cli.AutoSelectRuntime;
-import wtf.metio.ilo.cli.Executables;
+import wtf.metio.ilo.cli.CommandLifecycle;
+import wtf.metio.ilo.model.ComposeCLI;
 
+import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.stream.IntStream;
 
 @CommandLine.Command(
     name = "compose",
@@ -28,19 +28,28 @@ public final class Compose implements Callable<Integer> {
   @CommandLine.Mixin
   public ComposeOptions options;
 
+  private final ComposeAPI api;
+
+  // default constructor for picocli
+  public Compose() {
+    this(new ComposeExecutor());
+  }
+
+  // constructor for testing
+  Compose(final ComposeAPI api) {
+    this.api = api;
+  }
+
   @Override
   public Integer call() {
-    final var tool = AutoSelectRuntime.selectComposeRuntime(options.runtime);
-    final var pullArguments = tool.pullArguments(options);
-    final var pullExitCode = Executables.runAndWaitForExit(pullArguments, options.debug);
-    final var buildArguments = tool.buildArguments(options);
-    final var buildExitCode = Executables.runAndWaitForExit(buildArguments, options.debug);
-    final var runArguments = tool.runArguments(options);
-    final var runExitCode = Executables.runAndWaitForExit(runArguments, options.debug);
-    final var cleanupArguments = tool.cleanupArguments(options);
-    final var cleanupExitCode = Executables.runAndWaitForExit(cleanupArguments, options.debug);
-    return IntStream.of(pullExitCode, buildExitCode, runExitCode, cleanupExitCode)
-        .max().orElse(CommandLine.ExitCode.SOFTWARE);
+    final var tool = api.selectRuntime(options.runtime);
+    return CommandLifecycle.run(tool, options, api::execute);
+  }
+
+  interface ComposeAPI {
+    ComposeCLI selectRuntime(ComposeRuntime runtime);
+
+    int execute(List<String> args, boolean debug);
   }
 
 }

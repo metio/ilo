@@ -5,10 +5,11 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.factories;
+package wtf.metio.ilo.compose;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import wtf.metio.ilo.compose.ComposeRuntimes;
 import wtf.metio.ilo.test.ClassTests;
 
 @DisplayName("ComposeRuntimes")

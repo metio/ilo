@@ -5,7 +5,7 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.factories;
+package wtf.metio.ilo.shell;
 
 import wtf.metio.ilo.model.ShellCLI;
 import wtf.metio.ilo.tools.Docker;
@@ -14,7 +14,6 @@ import wtf.metio.ilo.tools.Podman;
 
 import java.util.List;
 
-// TODO: move to shell package?
 public final class ShellRuntimes {
 
   public static List<ShellCLI> allRuntimes() {
