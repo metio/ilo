@@ -4,7 +4,7 @@ date: 2020-04-13
 menu: main
 ---
 
-Make sure that `ilo` is [installed](./install) in your path or otherwise accessible from your terminal. The following subcommands are currently available:
+Make sure that `ilo` is [installed](./install) in your PATH or otherwise accessible from your terminal. The following subcommands are currently available:
 
 ## ilo shell
 
