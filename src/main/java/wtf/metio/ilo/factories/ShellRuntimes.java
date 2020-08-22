@@ -23,4 +23,8 @@ public final class ShellRuntimes {
     return List.of(podman, docker, lxd);
   }
 
+  private ShellRuntimes() {
+    // factory class
+  }
+
 }

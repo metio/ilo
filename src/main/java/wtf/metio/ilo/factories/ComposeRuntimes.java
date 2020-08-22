@@ -22,7 +22,7 @@ public final class ComposeRuntimes {
     final var footloose = new Footloose();
     return List.of(podmanCompose, dockerCompose, podsCompose, vagrant, footloose);
   }
-  
+
   private ComposeRuntimes() {
     // factory class
   }

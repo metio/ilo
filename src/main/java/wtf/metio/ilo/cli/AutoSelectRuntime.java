@@ -39,12 +39,12 @@ public final class AutoSelectRuntime {
   }
 
   private static <SHELL extends CliTool<?>> SHELL autoSelect(
-      final Runtime matcher,
+      final Runtime runtime,
       final List<SHELL> tools) {
     return tools.stream()
         .filter(CliTool::exists)
-        .filter(tool -> Optional.ofNullable(matcher)
-            .map(runtime -> runtime.matches(tool.name()))
+        .filter(tool -> Optional.ofNullable(runtime)
+            .map(selectedRuntime -> selectedRuntime.matches(tool.name()))
             .orElse(true))
         .findFirst()
         .orElseThrow(NoMatchingRuntimeException::new);
