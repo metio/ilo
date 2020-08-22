@@ -67,6 +67,7 @@
     <properties>
         <revision>0.0.0-SNAPSHOT</revision>
         <version.jdk>11</version.jdk>
+        <version.picocli>4.5.0</version.picocli>
         <version.graal>20.2.0</version.graal>
         <version.checksum-m-p>1.8</version.checksum-m-p>
         <version.m-assembly-p>3.2.0</version.m-assembly-p>
@@ -134,6 +135,13 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <release>${version.jdk}</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>info.picocli</groupId>
+                            <artifactId>picocli-codegen</artifactId>
+                            <version>${version.picocli}</version>
+                        </path>
+                    </annotationProcessorPaths>
                     <compilerArgs>
                         <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
                     </compilerArgs>
@@ -294,6 +302,13 @@
                         <argument>wtf.metio.ilo.devcontainer.Devcontainer</argument>
                     </arguments>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>info.picocli</groupId>
+                        <artifactId>picocli-codegen</artifactId>
+                        <version>${version.picocli}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.asciidoctor</groupId>
