@@ -31,9 +31,4 @@ public enum ShellRuntime implements Runtime {
     return aliases;
   }
 
-  @Override
-  public String toString() {
-    return aliases[0];
-  }
-
 }

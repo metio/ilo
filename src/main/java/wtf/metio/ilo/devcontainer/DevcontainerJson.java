@@ -7,7 +7,7 @@
 
 package wtf.metio.ilo.devcontainer;
 
-public class DevcontainerJson {
+public final class DevcontainerJson {
 
   public String image;
   public String dockerFile;

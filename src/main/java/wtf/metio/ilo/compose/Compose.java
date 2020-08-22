@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
     descriptionHeading = "%n",
     optionListHeading = "%n"
 )
-public class Compose implements Callable<Integer> {
+public final class Compose implements Callable<Integer> {
 
   @CommandLine.Mixin
   public ComposeOptions options;
@@ -32,15 +32,13 @@ public class Compose implements Callable<Integer> {
   public Integer call() {
     final var tool = AutoSelectRuntime.selectComposeRuntime(options.runtime);
     final var pullArguments = tool.pullArguments(options);
-    final var pullExitCode = Executables.runAndWaitForExit(pullArguments);
+    final var pullExitCode = Executables.runAndWaitForExit(pullArguments, options.debug);
     final var buildArguments = tool.buildArguments(options);
-    final var buildExitCode = Executables.runAndWaitForExit(buildArguments);
+    final var buildExitCode = Executables.runAndWaitForExit(buildArguments, options.debug);
     final var runArguments = tool.runArguments(options);
-    final var runExitCode = Executables.runAndWaitForExit(runArguments);
-    // docker-compose needs an additional cleanup even when using 'run --rm'
-    // see https://github.com/docker/compose/issues/2791
+    final var runExitCode = Executables.runAndWaitForExit(runArguments, options.debug);
     final var cleanupArguments = tool.cleanupArguments(options);
-    final var cleanupExitCode = Executables.runAndWaitForExit(cleanupArguments);
+    final var cleanupExitCode = Executables.runAndWaitForExit(cleanupArguments, options.debug);
     return IntStream.of(pullExitCode, buildExitCode, runExitCode, cleanupExitCode)
         .max().orElse(CommandLine.ExitCode.SOFTWARE);
   }

@@ -7,7 +7,6 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.cli.Debug;
 import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.model.ComposeCLI;
 
@@ -22,9 +21,7 @@ abstract class DockerComposePodmanCompose implements ComposeCLI {
   @Override
   public final List<String> pullArguments(final ComposeOptions options) {
     if (options.pull) {
-      final var args = List.of(name(), "pull");
-      Debug.showExecutedCommand(options.debug, args);
-      return args;
+      return List.of(name(), "pull");
     }
     return List.of();
   }
@@ -44,18 +41,16 @@ abstract class DockerComposePodmanCompose implements ComposeCLI {
     );
     final var tty = options.interactive ? Stream.<String>empty() : Stream.of("-T");
     final var service = Stream.of(options.service);
-    final var args = Stream.of(run, tty, service)
+    return Stream.of(run, tty, service)
         .flatMap(identity())
         .collect(toList());
-    Debug.showExecutedCommand(options.debug, args);
-    return args;
   }
 
   @Override
   public final List<String> cleanupArguments(final ComposeOptions options) {
-    final var args = List.of(name(), "--file", options.file, "down");
-    Debug.showExecutedCommand(options.debug, args);
-    return args;
+    // docker-compose needs an additional cleanup even when using 'run --rm'
+    // see https://github.com/docker/compose/issues/2791
+    return List.of(name(), "--file", options.file, "down");
   }
 
 }

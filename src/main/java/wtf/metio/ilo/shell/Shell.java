@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
     descriptionHeading = "%n",
     parameterListHeading = "%n"
 )
-public class Shell implements Callable<Integer> {
+public final class Shell implements Callable<Integer> {
 
   @CommandLine.Mixin
   public ShellOptions options;
@@ -43,17 +43,14 @@ public class Shell implements Callable<Integer> {
   @Override
   public Integer call() {
     final var tool = api.selectRuntime(options.runtime);
-
-    // var pullExitCode = tool.pull(options);
     final var pullArguments = tool.pullArguments(options);
-    final var pullExitCode = api.execute(pullArguments);
-
+    final var pullExitCode = api.execute(pullArguments, options.debug);
     final var buildArguments = tool.buildArguments(options);
-    final var buildExitCode = api.execute(buildArguments);
+    final var buildExitCode = api.execute(buildArguments, options.debug);
     final var runArguments = tool.runArguments(options);
-    final var runExitCode = api.execute(runArguments);
+    final var runExitCode = api.execute(runArguments, options.debug);
     final var cleanupArguments = tool.cleanupArguments(options);
-    final var cleanupExitCode = api.execute(cleanupArguments);
+    final var cleanupExitCode = api.execute(cleanupArguments, options.debug);
     return IntStream.of(pullExitCode, buildExitCode, runExitCode, cleanupExitCode)
         .max().orElse(CommandLine.ExitCode.SOFTWARE);
   }
@@ -61,7 +58,7 @@ public class Shell implements Callable<Integer> {
   interface ShellAPI {
     ShellCLI selectRuntime(ShellRuntime runtime);
 
-    int execute(List<String> args);
+    int execute(List<String> args, boolean debug);
   }
 
 }

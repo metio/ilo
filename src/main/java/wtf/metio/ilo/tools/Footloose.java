@@ -7,9 +7,8 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.model.ComposeCLI;
 import wtf.metio.ilo.compose.ComposeOptions;
-import wtf.metio.ilo.cli.Debug;
+import wtf.metio.ilo.model.ComposeCLI;
 
 import java.util.List;
 
@@ -27,23 +26,17 @@ public final class Footloose implements ComposeCLI {
 
   @Override
   public List<String> buildArguments(final ComposeOptions options) {
-    final var args = List.of(name(), "create", "--config", options.file);
-    Debug.showExecutedCommand(options.debug, args);
-    return args;
+    return List.of(name(), "create", "--config", options.file);
   }
 
   @Override
   public List<String> runArguments(final ComposeOptions options) {
-    final var args = List.of(name(), "ssh", "--config", options.file);
-    Debug.showExecutedCommand(options.debug, args);
-    return args;
+    return List.of(name(), "ssh", "--config", options.file);
   }
 
   @Override
   public List<String> cleanupArguments(final ComposeOptions options) {
-    final var args = List.of(name(), "delete", "--config", options.file);
-    Debug.showExecutedCommand(options.debug, args);
-    return args;
+    return List.of(name(), "delete", "--config", options.file);
   }
 
 }

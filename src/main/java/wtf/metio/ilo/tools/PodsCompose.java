@@ -7,9 +7,8 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.model.ComposeCLI;
 import wtf.metio.ilo.compose.ComposeOptions;
-import wtf.metio.ilo.cli.Debug;
+import wtf.metio.ilo.model.ComposeCLI;
 
 import java.util.List;
 
@@ -32,16 +31,12 @@ public final class PodsCompose implements ComposeCLI {
 
   @Override
   public List<String> runArguments(final ComposeOptions options) {
-    final var args = List.of(name(), "--up");
-    Debug.showExecutedCommand(options.debug, args);
-    return args;
+    return List.of(name(), "--up");
   }
 
   @Override
   public List<String> cleanupArguments(final ComposeOptions options) {
-    final var args = List.of(name(), "--down");
-    Debug.showExecutedCommand(options.debug, args);
-    return args;
+    return List.of(name(), "--down");
   }
 
 }

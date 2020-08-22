@@ -33,9 +33,4 @@ public enum ComposeRuntime implements Runtime {
     return aliases;
   }
 
-  @Override
-  public String toString() {
-    return aliases[0];
-  }
-
 }

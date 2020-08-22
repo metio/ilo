@@ -28,7 +28,7 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
     options.pull = true;
     options.image = "example:test";
     final var arguments = tool().pullArguments(options);
-    assertEquals(String.format("%s pull example:test", runtime), String.join(" ", arguments));
+    assertEquals(String.format("%s pull example:test", name()), String.join(" ", arguments));
   }
 
   @Test
@@ -39,7 +39,7 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
     options.image = "example:test";
     options.dockerfile = "Dockerfile";
     final var arguments = tool().buildArguments(options);
-    assertEquals(String.format("%s build --file Dockerfile --tag example:test .", runtime), String.join(" ", arguments));
+    assertEquals(String.format("%s build --file Dockerfile --tag example:test .", name()), String.join(" ", arguments));
   }
 
   @Test
@@ -51,7 +51,7 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
     options.image = "example:test";
     options.dockerfile = "Dockerfile";
     final var arguments = tool().buildArguments(options);
-    assertEquals(String.format("%s build --file Dockerfile --pull --tag example:test .", runtime), String.join(" ", arguments));
+    assertEquals(String.format("%s build --file Dockerfile --pull --tag example:test .", name()), String.join(" ", arguments));
   }
 
   @Test
@@ -61,7 +61,7 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
     final var options = new ShellOptions();
     options.image = "example:test";
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm example:test", runtime), String.join(" ", arguments));
+    assertEquals(String.format("%s run --rm example:test", name()), String.join(" ", arguments));
   }
 
   @Test
@@ -72,7 +72,7 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
     options.image = "example:test";
     options.removeImage = true;
     final var arguments = tool().cleanupArguments(options);
-    assertEquals(String.format("%s rmi example:test", runtime), String.join(" ", arguments));
+    assertEquals(String.format("%s rmi example:test", name()), String.join(" ", arguments));
   }
 
   @Test
@@ -83,7 +83,7 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
     options.image = "example:test";
     options.interactive = true;
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --interactive --tty example:test", runtime), String.join(" ", arguments));
+    assertEquals(String.format("%s run --rm --interactive --tty example:test", name()), String.join(" ", arguments));
   }
 
   @Test
@@ -93,7 +93,7 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
     final var options = new ShellOptions();
     options.commands = List.of("example:test", "/bin/bash", "-c", "whoami");
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm example:test /bin/bash -c whoami", runtime), String.join(" ", arguments));
+    assertEquals(String.format("%s run --rm example:test /bin/bash -c whoami", name()), String.join(" ", arguments));
   }
 
   @Test
@@ -103,7 +103,7 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
     final var options = new ShellOptions();
     options.commands = List.of("--volume=/abc/123:/abc:Z", "example:test", "/bin/bash", "-c", "whoami");
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --volume=/abc/123:/abc:Z example:test /bin/bash -c whoami", runtime), String.join(" ", arguments));
+    assertEquals(String.format("%s run --rm --volume=/abc/123:/abc:Z example:test /bin/bash -c whoami", name()), String.join(" ", arguments));
   }
 
 }

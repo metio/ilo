@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 public final class Runtimes {
 
+  // TODO: move to Runtime interface?
   public static <RUNTIME extends Runtime> RUNTIME firstMatching(final String alias, final RUNTIME[] matchers) {
     return Arrays.stream(matchers)
         .filter(runtime -> runtime.matches(alias))

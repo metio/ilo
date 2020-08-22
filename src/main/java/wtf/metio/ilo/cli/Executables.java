@@ -41,9 +41,12 @@ public final class Executables {
     return Files.exists(binary) && Files.isExecutable(binary);
   }
 
-  public static int runAndWaitForExit(final List<String> arguments) {
+  public static int runAndWaitForExit(final List<String> arguments, final boolean debug) {
     if (null == arguments || arguments.isEmpty()) {
       return 0;
+    }
+    if (debug) {
+      System.out.println("ilo executes: " + String.join(" ", arguments));
     }
     try {
       return new ProcessBuilder(arguments).inheritIO().start().waitFor();

@@ -35,7 +35,7 @@ import java.util.stream.Stream;
     descriptionHeading = "%n",
     optionListHeading = "%n"
 )
-public class Devcontainer implements Callable<Integer> {
+public final class Devcontainer implements Callable<Integer> {
 
   @CommandLine.Mixin
   public DevcontainerOptions options;

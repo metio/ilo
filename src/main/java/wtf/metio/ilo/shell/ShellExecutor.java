@@ -21,8 +21,8 @@ final class ShellExecutor implements Shell.ShellAPI {
   }
 
   @Override
-  public int execute(final List<String> arguments) {
-    return Executables.runAndWaitForExit(arguments);
+  public int execute(final List<String> arguments, final boolean debug) {
+    return Executables.runAndWaitForExit(arguments, debug);
   }
 
 }

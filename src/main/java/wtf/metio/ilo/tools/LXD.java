@@ -7,7 +7,6 @@
 
 package wtf.metio.ilo.tools;
 
-import wtf.metio.ilo.cli.Debug;
 import wtf.metio.ilo.model.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
 
@@ -33,9 +32,7 @@ public final class LXD implements ShellCLI {
   @Override
   public List<String> runArguments(final ShellOptions options) {
     final var currentDir = System.getProperty("user.dir");
-    final var args = List.of(name(), "launch", options.image, currentDir);
-    Debug.showExecutedCommand(options.debug, args);
-    return args;
+    return List.of(name(), "launch", options.image, currentDir);
   }
 
   @Override
