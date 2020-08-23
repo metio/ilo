@@ -27,6 +27,8 @@ public abstract class CLI_TCK extends TestSources {
   final void initializeCLI() {
     app = new Ilo();
     cmd = new CommandLine(app);
+    cmd.setUnmatchedArgumentsAllowed(true);
+    cmd.setStopAtPositional(true);
     output = new StringWriter();
     cmd.setOut(new PrintWriter(output));
   }

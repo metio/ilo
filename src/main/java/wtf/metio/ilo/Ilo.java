@@ -19,7 +19,7 @@ import wtf.metio.ilo.version.VersionProvider;
 import java.util.Arrays;
 
 /**
- * Main entry point for Ilo - a little tool to manage reproducible build environments
+ * Main entry point for ilo - a little tool to manage reproducible build environments
  */
 @CommandLine.Command(
     name = "ilo",
@@ -48,12 +48,13 @@ public final class Ilo implements Runnable {
 
   public static void main(final String[] args) {
     final var arguments = Arrays.stream(args)
-        .filter(arg -> !Ilo.class.getCanonicalName().equalsIgnoreCase(arg)) // workaround for IntelliJ
+        // workaround for IntelliJ
+        .filter(arg -> !Ilo.class.getCanonicalName().equalsIgnoreCase(arg))
         .toArray(String[]::new);
 
     final var commandLine = new CommandLine(new Ilo());
-    commandLine.setUnmatchedArgumentsAllowed(true); // workaround for IntelliJ
-    commandLine.setUnmatchedOptionsArePositionalParams(true);
+    commandLine.setUnmatchedArgumentsAllowed(true);
+    commandLine.setStopAtPositional(true);
     commandLine.setExecutionExceptionHandler(new PrintingExceptionHandler());
     commandLine.setExitCodeExceptionMapper(new ExitCodes());
     System.exit(commandLine.execute(arguments));

@@ -11,6 +11,7 @@ import picocli.CommandLine;
 import wtf.metio.ilo.model.Options;
 
 import java.util.List;
+import java.util.Stack;
 
 public final class ShellOptions implements Options {
 
@@ -56,19 +57,67 @@ public final class ShellOptions implements Options {
   public String dockerfile;
 
   @CommandLine.Option(
-      names = {"--image"},
-      description = "The OCI image to use. In case --dockerfile is given as well, this defines the name of the resulting image.",
-      defaultValue = "fedora:latest"
-  )
-  public String image;
-
-  @CommandLine.Option(
       names = {"--remove-image"},
       description = "Remove image after closing the shell."
   )
   public boolean removeImage;
 
-  @CommandLine.Parameters
+  @CommandLine.Option(
+      names = {"--runtime-option"},
+      description = "Options for the selected runtime itself."
+  )
+  public List<String> runtimeOptions;
+
+  @CommandLine.Option(
+      names = {"--runtime-pull-option"},
+      description = "Options for the selected runtime."
+  )
+  public List<String> runtimePullOptions;
+
+  @CommandLine.Option(
+      names = {"--runtime-build-option"},
+      description = "Options for the selected runtime."
+  )
+  public List<String> runtimeBuildOptions;
+
+  @CommandLine.Option(
+      names = {"--runtime-run-option"},
+      description = "Options for the selected runtime."
+  )
+  public List<String> runtimeRunOptions;
+
+  @CommandLine.Option(
+      names = {"--runtime-cleanup-option"},
+      description = "Options for the selected runtime."
+  )
+  public List<String> runtimeCleanupOptions;
+
+  @CommandLine.Option(
+      names = {"--volume"},
+      description = "Mount a volume into the container."
+  )
+  public List<String> volumes;
+
+  @CommandLine.Option(
+      names = {"--env"},
+      description = "Specify a environment variable for the container."
+  )
+  public List<String> variables;
+
+  @CommandLine.Option(
+      names = {"--publish"},
+      description = "Publish a container ports to the host system."
+  )
+  public List<String> ports;
+
+  @CommandLine.Parameters(
+      index = "0",
+      description = "The OCI image to use. In case --dockerfile is given as well, this defines the name of the resulting image.",
+      defaultValue = "fedora:latest"
+  )
+  public String image;
+
+  @CommandLine.Parameters(index = "1..*")
   public List<String> commands;
 
   @Override

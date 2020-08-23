@@ -12,19 +12,23 @@ import wtf.metio.ilo.shell.ShellOptions;
 import wtf.metio.ilo.utils.Strings;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
-import static java.util.function.Function.identity;
-import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
+import static wtf.metio.ilo.utils.Streams.*;
 
 abstract class DockerPodman implements ShellCLI {
 
   @Override
   public final List<String> pullArguments(final ShellOptions options) {
     if (options.pull && Strings.isBlank(options.dockerfile)) {
-      return List.of(name(), "pull", options.image);
+      return flatten(
+          of(name()),
+          fromList(options.runtimeOptions),
+          of("pull"),
+          fromList(options.runtimePullOptions),
+          of(options.image));
     }
     return List.of();
   }
@@ -32,16 +36,13 @@ abstract class DockerPodman implements ShellCLI {
   @Override
   public final List<String> buildArguments(final ShellOptions options) {
     if (Strings.isNotBlank(options.dockerfile)) {
-      return Stream.of(
-          name(),
-          "build",
-          "--file", options.dockerfile,
-          options.pull ? "--pull" : "",
-          "--tag", options.image,
-          ".")
-          .filter(Objects::nonNull)
-          .filter(not(String::isBlank))
-          .collect(toList());
+      return flatten(
+          of(name()),
+          fromList(options.runtimeOptions),
+          of("build", "--file", options.dockerfile),
+          fromList(options.runtimeBuildOptions),
+          maybe(options.pull, "--pull"),
+          of("--tag", options.image, "."));
     }
     return List.of();
   }
@@ -49,33 +50,46 @@ abstract class DockerPodman implements ShellCLI {
   @Override
   public final List<String> runArguments(final ShellOptions options) {
     final var currentDir = System.getProperty("user.dir");
-    final var run = Stream.of(
-        name(),
-        "run",
-        "--rm"
-    );
-    final var projectDir = options.mountProjectDir ? Stream.of(
+    final var projectDir = maybe(options.mountProjectDir,
         "--volume", currentDir + ":" + currentDir + ":Z",
-        "--workdir", currentDir
-    ) : Stream.<String>empty();
-    final var tty = options.interactive ? Stream.of(
-        "--interactive",
-        "--tty"
-    ) : Stream.<String>empty();
-    final var command = Stream.ofNullable(options.commands).flatMap(List::stream);
-    return Stream.of(run, projectDir, tty, Stream.of(options.image), command)
-        .flatMap(identity())
-        .filter(Objects::nonNull)
-        .filter(not(String::isBlank))
-        .collect(toList());
+        "--workdir", currentDir);
+    return flatten(
+        of(name()),
+        fromList(options.runtimeOptions),
+        of("run", "--rm"),
+        fromList(options.runtimeRunOptions),
+        projectDir,
+        maybe(options.interactive, "--interactive", "--tty"),
+        withPrefix("--env", options.variables),
+        withPrefix("--publish", options.ports),
+        withPrefix("--volume", expandHomeDirectory(options.volumes)),
+        of(options.image),
+        fromList(options.commands));
   }
 
   @Override
   public final List<String> cleanupArguments(final ShellOptions options) {
     if (options.removeImage) {
-      return List.of(name(), "rmi", options.image);
+      return flatten(
+          of(name()),
+          fromList(options.runtimeOptions),
+          of("rmi"),
+          fromList(options.runtimeCleanupOptions),
+          of(options.image));
     }
     return List.of();
+  }
+
+  private static Stream<String> withPrefix(final String prefix, final List<String> values) {
+    return filter(fromList(values)).flatMap(value -> of(prefix, value));
+  }
+
+  private static List<String> expandHomeDirectory(final List<String> values) {
+    final var userHome = System.getProperty("user.home");
+    return filter(fromList(values))
+        .map(value -> value.replace("$HOME", userHome))
+        .map(value -> value.replace("~", userHome))
+        .collect(toList());
   }
 
 }
