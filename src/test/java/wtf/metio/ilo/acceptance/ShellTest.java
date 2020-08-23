@@ -93,7 +93,7 @@ class ShellTest extends CLI_TCK {
 
   @ParameterizedTest
   @MethodSource("shellRuntimes")
-  @DisplayName("allows to disable mounting and interactive")
+  @DisplayName("allows to specify custom image")
   void customImage(final String tool) {
     final var shell = parseShellCommand("shell", "--runtime", tool, "--image=example:test");
     Assertions.assertAll("shell options",
