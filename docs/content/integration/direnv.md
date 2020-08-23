@@ -11,8 +11,7 @@ tags:
 - direnv
 ---
 
-[direnv](https://direnv.net/) can be used to automatically execute a command once you enter a directory.
-Together with `ilo`, you can do the following:
+[direnv](https://direnv.net/) can be used to automatically execute a command once you enter a directory. Together with `ilo`, you can do the following:
 
 ```shell script
 [you@hostname ~]$ cd path/to/your/project
