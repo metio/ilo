@@ -13,7 +13,7 @@ import wtf.metio.ilo.utils.Runtimes;
 public enum ShellRuntime implements Runtime {
 
   DOCKER("docker", "d"),
-  LXD("lxd", "l"),
+  LXD("lxd", "lxc", "l"),
   PODMAN("podman", "p");
 
   private final String[] aliases;
