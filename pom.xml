@@ -18,7 +18,7 @@
     <!-- https://maven.apache.org/pom.html#Inheritance -->
     <parent>
         <groupId>wtf.metio.maven.parents</groupId>
-        <artifactId>maven-parents-java-stable</artifactId>
+        <artifactId>maven-parents-java-prototype</artifactId>
         <version>2020.8.21-12113</version>
     </parent>
 
@@ -306,6 +306,7 @@
                         <groupId>info.picocli</groupId>
                         <artifactId>picocli-codegen</artifactId>
                         <version>${version.picocli}</version>
+                        <type>jar</type>
                     </dependency>
                 </dependencies>
             </plugin>
