@@ -23,19 +23,11 @@ import java.util.Optional;
 public final class AutoSelectRuntime {
 
   public static ShellCLI selectShellRuntime(final ShellRuntime runtime) {
-    return selectShellRuntime(runtime, ShellRuntimes.allRuntimes());
-  }
-
-  static ShellCLI selectShellRuntime(final ShellRuntime runtime, final List<? extends ShellCLI> tools) {
-    return autoSelect(runtime, tools);
+    return autoSelect(runtime, ShellRuntimes.allRuntimes());
   }
 
   public static ComposeCLI selectComposeRuntime(final ComposeRuntime runtime) {
-    return selectComposeRuntime(runtime, ComposeRuntimes.allRuntimes());
-  }
-
-  static ComposeCLI selectComposeRuntime(final ComposeRuntime runtime, final List<? extends ComposeCLI> tools) {
-    return autoSelect(runtime, tools);
+    return autoSelect(runtime, ComposeRuntimes.allRuntimes());
   }
 
   private static <SHELL extends CliTool<?>> SHELL autoSelect(
