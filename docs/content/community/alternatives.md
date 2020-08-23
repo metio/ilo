@@ -34,6 +34,8 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [dojo](https://github.com/kudulab/dojo): Containerize your development and operations environment
 - [go2nix](https://github.com/kamilchm/go2nix): Reproducible builds and development environment for Go
 - [vermin](https://mhewedy.github.io/vermin/): Vermin is a smart, simple and powerful command line tool for Linux, Windows and macOS. It's designed for developers who want a fresh VM environment with a single command.
+- [jabba](https://github.com/shyiko/jabba): Java Version Manager inspired by nvm (Node.js). Written in Go.
+- [nvm](https://github.com/nvm-sh/nvm): nvm is a version manager for node.js, designed to be installed per-user, and invoked per-shell. nvm works on any POSIX-compliant shell (sh, dash, ksh, zsh, bash), in particular on these platforms: unix, macOS, and windows WSL.
 
 ## Feature Comparison
 
