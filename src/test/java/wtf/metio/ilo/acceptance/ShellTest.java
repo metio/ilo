@@ -106,5 +106,4 @@ class ShellTest extends CLI_TCK {
     );
   }
 
-
 }
