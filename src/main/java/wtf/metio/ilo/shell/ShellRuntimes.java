@@ -17,10 +17,7 @@ import java.util.List;
 public final class ShellRuntimes {
 
   public static List<ShellCLI> allRuntimes() {
-    final var podman = new Podman();
-    final var docker = new Docker();
-    final var lxd = new LXD();
-    return List.of(podman, docker, lxd);
+    return List.of(new Podman(), new Docker(), new LXD());
   }
 
   private ShellRuntimes() {

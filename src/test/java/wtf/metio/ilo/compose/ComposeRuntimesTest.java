@@ -9,8 +9,9 @@ package wtf.metio.ilo.compose;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import wtf.metio.ilo.compose.ComposeRuntimes;
 import wtf.metio.ilo.test.ClassTests;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("ComposeRuntimes")
 class ComposeRuntimesTest {
@@ -19,6 +20,42 @@ class ComposeRuntimesTest {
   @DisplayName("has private constructor")
   void shouldHavePrivateConstructor() throws NoSuchMethodException {
     ClassTests.hasPrivateConstructor(ComposeRuntimes.class);
+  }
+
+  @Test
+  @DisplayName("supports multiple runtimes")
+  void shouldSupportMultipleRuntimes() {
+    assertEquals(5, ComposeRuntimes.allRuntimes().size());
+  }
+
+  @Test
+  @DisplayName("docker-compose is the first choice")
+  void dockerCompose() {
+    assertEquals("docker-compose", ComposeRuntimes.allRuntimes().get(0).name());
+  }
+
+  @Test
+  @DisplayName("podman-compose is the second choice")
+  void podmanCompose() {
+    assertEquals("podman-compose", ComposeRuntimes.allRuntimes().get(1).name());
+  }
+
+  @Test
+  @DisplayName("pods-compose is the third choice")
+  void podsCompose() {
+    assertEquals("pods-compose", ComposeRuntimes.allRuntimes().get(2).name());
+  }
+
+  @Test
+  @DisplayName("vagrant is the fourth choice")
+  void vagrant() {
+    assertEquals("vagrant", ComposeRuntimes.allRuntimes().get(3).name());
+  }
+
+  @Test
+  @DisplayName("footloose is the fifth choice")
+  void footloose() {
+    assertEquals("footloose", ComposeRuntimes.allRuntimes().get(4).name());
   }
 
 }

@@ -15,12 +15,12 @@ import java.util.List;
 public final class ComposeRuntimes {
 
   public static List<ComposeCLI> allRuntimes() {
-    final var dockerCompose = new DockerCompose();
-    final var podmanCompose = new PodmanCompose();
-    final var podsCompose = new PodsCompose();
-    final var vagrant = new Vagrant();
-    final var footloose = new Footloose();
-    return List.of(podmanCompose, dockerCompose, podsCompose, vagrant, footloose);
+    return List.of(
+        new DockerCompose(),
+        new PodmanCompose(),
+        new PodsCompose(),
+        new Vagrant(),
+        new Footloose());
   }
 
   private ComposeRuntimes() {
