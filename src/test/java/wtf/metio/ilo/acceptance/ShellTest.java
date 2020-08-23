@@ -26,6 +26,7 @@ class ShellTest extends CLI_TCK {
         () -> Assertions.assertTrue(shell.options.interactive),
         () -> Assertions.assertTrue(shell.options.mountProjectDir),
         () -> Assertions.assertFalse(shell.options.debug),
+        () -> Assertions.assertFalse(shell.options.removeImage),
         () -> Assertions.assertEquals("fedora:latest", shell.options.image),
         () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
     );
@@ -41,6 +42,7 @@ class ShellTest extends CLI_TCK {
         () -> Assertions.assertTrue(shell.options.interactive),
         () -> Assertions.assertFalse(shell.options.mountProjectDir),
         () -> Assertions.assertFalse(shell.options.debug),
+        () -> Assertions.assertFalse(shell.options.removeImage),
         () -> Assertions.assertEquals("fedora:latest", shell.options.image),
         () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
     );
@@ -56,6 +58,7 @@ class ShellTest extends CLI_TCK {
         () -> Assertions.assertFalse(shell.options.interactive),
         () -> Assertions.assertTrue(shell.options.mountProjectDir),
         () -> Assertions.assertFalse(shell.options.debug),
+        () -> Assertions.assertFalse(shell.options.removeImage),
         () -> Assertions.assertEquals("fedora:latest", shell.options.image),
         () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
     );
@@ -71,6 +74,7 @@ class ShellTest extends CLI_TCK {
         () -> Assertions.assertTrue(shell.options.interactive),
         () -> Assertions.assertTrue(shell.options.mountProjectDir),
         () -> Assertions.assertTrue(shell.options.debug),
+        () -> Assertions.assertFalse(shell.options.removeImage),
         () -> Assertions.assertEquals("fedora:latest", shell.options.image),
         () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
     );
@@ -86,6 +90,7 @@ class ShellTest extends CLI_TCK {
         () -> Assertions.assertFalse(shell.options.interactive),
         () -> Assertions.assertFalse(shell.options.mountProjectDir),
         () -> Assertions.assertFalse(shell.options.debug),
+        () -> Assertions.assertFalse(shell.options.removeImage),
         () -> Assertions.assertEquals("fedora:latest", shell.options.image),
         () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
     );
@@ -101,7 +106,25 @@ class ShellTest extends CLI_TCK {
         () -> Assertions.assertTrue(shell.options.interactive),
         () -> Assertions.assertTrue(shell.options.mountProjectDir),
         () -> Assertions.assertFalse(shell.options.debug),
+        () -> Assertions.assertFalse(shell.options.removeImage),
         () -> Assertions.assertEquals("example:test", shell.options.image),
+        () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("shellRuntimes")
+  @DisplayName("allows to specify dockerfile")
+  void dockerfile(final String tool) {
+    final var shell = parseShellCommand("shell", "--runtime", tool, "--dockerfile=build/env.dockerfile");
+    Assertions.assertAll("shell options",
+        () -> Assertions.assertNull(shell.options.commands),
+        () -> Assertions.assertTrue(shell.options.interactive),
+        () -> Assertions.assertTrue(shell.options.mountProjectDir),
+        () -> Assertions.assertFalse(shell.options.debug),
+        () -> Assertions.assertFalse(shell.options.removeImage),
+        () -> Assertions.assertEquals("fedora:latest", shell.options.image),
+        () -> Assertions.assertEquals("build/env.dockerfile", shell.options.dockerfile),
         () -> Assertions.assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime)
     );
   }
