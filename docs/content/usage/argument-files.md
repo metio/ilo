@@ -17,7 +17,7 @@ In order to share the same options/commands across your team, `ilo` supports arg
 # write argument file
 $ cat some/folder/your-arguments.txt
 shell
---image node:latest
+node:latest
 /bin/bash
 
 # use argument file
@@ -29,11 +29,11 @@ The argument file in the above example specified all commands and options on a n
 ```shell script
 # write argument file
 $ cat some/other/your-arguments.txt
-shell --image node:latest /bin/bash
+shell node:latest /bin/bash
 
 # write argument file
 $ cat some/more/your-arguments.txt
-shell --image
+shell
 node:latest /bin/bash
 
 # use argument file
@@ -52,7 +52,7 @@ $ ilo @first @second
 You can mix argument files with regular CLI options as well:
 
 ```shell script
-$ ilo shell --image openjdk:11 @default-shell
+$ ilo shell @default-shell openjdk:11
 ```
 
 The argument file used by `ilo` developers can be seen [here](https://github.com/metio/ilo/blob/master/build/shell) and is used like this:

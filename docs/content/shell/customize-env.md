@@ -15,7 +15,7 @@ The `ilo shell` command uses the `fedora:latest` image by default. In most cases
 
 `ilo` allows you to define your build environment either in a [Dockerfile](https://docs.docker.com/engine/reference/builder/) or any other [OCI Image](https://github.com/opencontainers/image-spec/blob/master/spec.md) compliant way.
 
-Make sure your image can be accessed by everyone in your team and use `ilo shell --image your.image.here:latest` to open a new instance of your build environment.
+Make sure your image can be accessed by everyone in your team and use `ilo shell your.image.here:latest` to open a new instance of your build environment.
 
 ```shell script
 # write some Dockerfile
@@ -38,5 +38,5 @@ Once completed, you can open a new shell like this:
 
 ```shell script
 # use image, jump into 'jshell'
-$ ilo shell --image your.image:latest
+$ ilo shell your.image:latest
 ```

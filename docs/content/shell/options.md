@@ -33,21 +33,6 @@ $ ilo shell
 
 In case no `--runtime` is specified, `ilo shell` will automatically select one of the runtimes installed on your local system and prefers `docker` over `podman` over `lxd`.
 
-## `--image`
-
-The OCI image to use, defaults to `fedora:latest`. In case `--dockerfile` is given as well, this defines the name of the created image.
-
-```shell script
-# use node:12.18.2
-$ ilo shell --image node:12.18.2
-
-# use fedora:latest
-$ ilo shell
-
-# build image my.awesome.image:latest & open shell in it
-$ ilo shell --image my.awesome.image:latest --dockerfile build/Dockerfile
-```
-
 ## `--pull`
 
 The `--pull` option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a `latest` tag for their image.

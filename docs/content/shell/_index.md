@@ -7,11 +7,11 @@ The `ilo shell` command can be used to run a single container either interactive
 
 ```shell script
 # open shell for local builds
-[you@hostname project-dir]$ ilo shell --image openjdk:11
+[you@hostname project-dir]$ ilo shell openjdk:11
 [root@container project-dir]#
 
 # run command
-[you@hostname project-dir]$ ilo shell --no--interactive --image openjdk:11 mvn verify
+[you@hostname project-dir]$ ilo shell --no--interactive openjdk:11 mvn verify
 [you@hostname project-dir]$ 
 ```
 
@@ -29,7 +29,7 @@ The `--pull` flag will cause the image to be pulled first before opening a new s
 
 ```shell script
 # using ilo
-$ ilo shell --image openjdk:11 --pull
+$ ilo shell --pull openjdk:11
 
 # using docker
 $ docker pull openjdk:11
@@ -40,11 +40,11 @@ $ docker run --rm \
     openjdk:11
 ```
 
-The `--remove-image` flag causes the image to be removed after the shell was closed:
+The `--remove-image` flag causes the image to be removed after the shell is closed:
 
 ```shell script
 # using ilo
-$ ilo shell --image openjdk:11 --pull --remove-image
+$ ilo shell --pull --remove-image openjdk:11
 
 # using docker
 $ docker pull openjdk:11

@@ -29,6 +29,6 @@ $ ilo s<TAB>
 $ ilo shell
 
 # autocomplete options
-$ ilo shell --i<TAB>
-$ ilo shell --image
+$ ilo shell --p<TAB>
+$ ilo shell --pull
 ```
