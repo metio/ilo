@@ -17,7 +17,7 @@ The following examples show how `ilo shell` can be used.
 
 [Maven](https://maven.apache.org/) caches all downloaded dependencies in your local `~/.m2/repository` directory.
 
-In order to re-use already downloaded dependencies inside the container, specify another `--volumne` like this:
+In order to re-use already downloaded dependencies inside the container, specify a `--volumne` like this:
 
 ```shell script
 # Maven project that mounts local m2 repo
@@ -30,7 +30,7 @@ $ ilo shell \
 
 [Gradle](https://gradle.org/) caches all downloaded dependencies in your local `~/.gradle` directory.
 
-In order to re-use already downloaded dependencies inside the container, specify another `--volumne` like this:
+In order to re-use already downloaded dependencies inside the container, specify a `--volumne` like this:
 
 ```shell script
 # Gradle project that mounts local .gradle folder
