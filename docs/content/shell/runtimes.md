@@ -73,6 +73,7 @@ Force `ilo` to use [lxd](https://linuxcontainers.org/lxd/introduction/) like thi
 ```shell script
 $ ilo shell --runtime lxd
 
-# alias
+# aliases
+$ ilo shell --runtime lxc
 $ ilo shell --runtime l
 ```

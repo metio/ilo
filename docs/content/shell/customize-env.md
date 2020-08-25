@@ -40,3 +40,11 @@ Once completed, you can open a new shell like this:
 # use image, jump into 'jshell'
 $ ilo shell your.image:latest
 ```
+
+## Local environments
+
+In case you cannot push an image to a registry (e.g. you don't have one), you can use the `--dockerfile` option to let `ilo` build your image first before entering a new shell. The above example can thus be simplified to:
+
+```shell script
+$ ilo shell --dockerfile your.dockerfile your.image:latest
+```
