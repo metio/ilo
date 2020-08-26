@@ -7,31 +7,22 @@
 
 package wtf.metio.ilo.test;
 
+import wtf.metio.ilo.compose.ComposeRuntime;
+import wtf.metio.ilo.shell.ShellRuntime;
+
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public abstract class TestSources {
 
   private static Stream<String> shellRuntimes() {
-    return Stream.of("podman", "docker", "p", "d", "lxd", "l");
-  }
-
-  private static Stream<String> dockerLikeRuntimes() {
-    return Stream.of("podman", "docker", "p", "d");
+    return Arrays.stream(ShellRuntime.values())
+        .flatMap(runtime -> Arrays.stream(runtime.aliases()));
   }
 
   private static Stream<String> composeRuntimes() {
-    return Stream.of(
-        "podman-compose",
-        "docker-compose",
-        "pods-compose",
-        "footloose",
-        "vagrant",
-        "pc",
-        "dc",
-        "fl",
-        "v",
-        "pods"
-    );
+    return Arrays.stream(ComposeRuntime.values())
+        .flatMap(runtime -> Arrays.stream(runtime.aliases()));
   }
 
 }
