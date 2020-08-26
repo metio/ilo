@@ -7,12 +7,44 @@
 
 package wtf.metio.ilo.devcontainer;
 
+import java.util.List;
+import java.util.Map;
+
+/**
+ * @see <a href="https://code.visualstudio.com/docs/remote/devcontainerjson-reference">devcontainer reference</a>
+ */
 final class DevcontainerJson {
 
+  //region general
+  public String name;
+  public String remoteUser;
+  public Map<String, String> remoteEnv;
+  public String workspaceFolder;
+  //endregion
+
+  //region shell
   public String image;
   public String dockerFile;
+  public String context;
+  public List<Integer> forwardPorts;
+  public String containerUser;
+  public List<String> runArgs;
+  public Map<String, String> containerEnv;
+  public boolean overrideCommand;
+  public Build build;
+  //endregion
+
+  //region compose
   public String dockerComposeFile;
   public String service;
-  public String name;
+  public List<String> runServices;
+  //endregion
 
+  static final class Build {
+    public String dockerFile;
+    public String context;
+    public Map<String, String> args;
+    public String target;
+  }
+  
 }
