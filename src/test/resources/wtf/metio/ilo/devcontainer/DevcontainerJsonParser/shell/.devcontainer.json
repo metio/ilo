@@ -1,0 +1,4 @@
+{
+  "image": "example:123",
+  "dockerFile": "my.dockerfile"
+}
