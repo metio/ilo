@@ -14,9 +14,7 @@ import org.junit.jupiter.api.DynamicNode;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.lang.reflect.Modifier.*;
@@ -27,10 +25,6 @@ public final class ArchUnitTests {
 
   private ArchUnitTests() {
     // helper class
-  }
-
-  public static Function<Class<?>, DynamicNode> with(final Consumer<? super ArchRule> check) {
-    return clazz -> in(clazz, check);
   }
 
   public static DynamicNode in(final Class<?> clazz, final Consumer<? super ArchRule> check) {

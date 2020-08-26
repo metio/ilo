@@ -10,10 +10,7 @@ package wtf.metio.ilo.architecture;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DynamicNode;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
 import wtf.metio.ilo.Ilo;
 import wtf.metio.ilo.test.ArchUnitTests;
 
@@ -43,6 +40,13 @@ public final class ArchitectureTest {
   Stream<DynamicNode> implementationRules() {
     return Stream.of(CliRules.class, ErrorsRules.class, ToolsRules.class)
         .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
+  }
+
+  @Test
+  @DisplayName("Setup Works")
+  @Disabled("figure out why ArchUnit cannot find classes")
+  void printClasses() {
+    Assertions.assertTrue(classes.contain("wtf.metio.ilo.Ilo"));
   }
 
 }
