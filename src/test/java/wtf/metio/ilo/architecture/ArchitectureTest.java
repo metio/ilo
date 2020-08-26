@@ -25,7 +25,7 @@ public final class ArchitectureTest {
   static void importPackages() {
     classes = new ClassFileImporter()
         .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
-        .importPackages(Ilo.class.getPackageName());
+        .importPackagesOf(Ilo.class);
   }
 
   @TestFactory
@@ -45,8 +45,8 @@ public final class ArchitectureTest {
   @Test
   @DisplayName("Setup Works")
   @Disabled("figure out why ArchUnit cannot find classes")
-  void printClasses() {
-    Assertions.assertTrue(classes.contain("wtf.metio.ilo.Ilo"));
+  void mainClass() {
+    Assertions.assertTrue(classes.contain(Ilo.class));
   }
 
 }
