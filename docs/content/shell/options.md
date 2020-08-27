@@ -31,7 +31,7 @@ $ ilo shell --runtime lxd
 $ ilo shell
 ```
 
-In case no `--runtime` is specified, `ilo shell` will automatically select one of the runtimes installed on your local system and prefers `docker` over `podman` over `lxd`.
+In case no `--runtime` is specified, `ilo shell` will automatically select one of the runtimes installed on your local system and prefers `podman` over `docker` over `lxd`.
 
 ## `--pull`
 
