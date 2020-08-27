@@ -20,20 +20,17 @@ The `ilo shell` command can be used to run a single container either interactive
 The `--pull` flag will cause the image to be pulled first before opening a new shell:
 
 ```shell script
-# using ilo
 $ ilo shell --pull openjdk:11
 ```
 
 The `--remove-image` flag causes the image to be removed after the shell is closed:
 
 ```shell script
-# using ilo
 $ ilo shell --pull --remove-image openjdk:11
 ```
 
 Take a look at all available [options](./options) or use `ilo shell --help` to get a list of all options, and their default values. In order to simplify handling of long command line options, consider using [argument files](../usage/argument-files).
 
 ```shell script
-# using argument file
 $ ilo @shell
 ```
