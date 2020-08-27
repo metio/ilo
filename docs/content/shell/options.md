@@ -120,7 +120,7 @@ By default, `--env` does not set any environment variables.
 The `--publish` option can be used to publish ports of your container to your local system.
 
 ```shell script
-# expose container port 80 to local 8080
+# binds your local 8080 port to port 80 of the container
 $ ilo shell --publish 8080:80
 
 # do not expose any ports
