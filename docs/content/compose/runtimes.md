@@ -26,7 +26,7 @@ Force `ilo` to use [docker-compose](https://docs.docker.com/compose/) like this:
 $ ilo shell --runtime docker-compose
 
 # alias
-$ ilo shell --runtime dd
+$ ilo shell --runtime dc
 ```
 
 ## podman-compose
