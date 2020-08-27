@@ -43,6 +43,7 @@ $ ilo shell --pull
 
 # do not pull image before opening shell
 $ ilo shell --no-pull
+$ ilo shell --pull=false
 
 # do not pull image before opening shell
 $ ilo shell 
@@ -60,6 +61,7 @@ $ ilo shell --interactive
 
 # run non-interactive
 $ ilo shell --no-interactive
+$ ilo shell --interactive=false
 
 # run interactively
 $ ilo shell
@@ -77,6 +79,7 @@ $ ilo shell --mount-project-dir
 
 # do not mount directory
 $ ilo shell --no-mount-project-dir
+$ ilo shell --mount-project-dir=false
 
 # mount directory
 $ ilo shell
@@ -150,6 +153,7 @@ $ ilo shell --remove-image
 
 # do not remove image
 $ ilo shell --no-remove-image
+$ ilo shell --remove-image=false
 $ ilo shell
 ```
 
@@ -239,6 +243,8 @@ The `--debug` option toggles whether `ilo` should print the runtime commands int
 $ ilo shell --debug
 
 # do not print runtime commands
+$ ilo shell --no-debug
+$ ilo shell --debug=false
 $ ilo shell
 ```
 
