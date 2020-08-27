@@ -15,7 +15,7 @@ The `ilo shell` command can be used to run a single container either interactive
 [you@hostname project-dir]$ 
 ```
 
-`ilo shell` will delegate most of its work to one of the supported [runtimes](./runtimes). The first example above will produce something like this:
+`ilo shell` will delegate most of its work to one of the supported [runtimes](./runtimes).
 
 The `--pull` flag will cause the image to be pulled first before opening a new shell:
 
