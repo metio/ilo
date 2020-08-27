@@ -68,7 +68,8 @@ class DevcontainerJsonParserTest {
     assertAll("compose",
         () -> assertEquals("some-file.yml", devcontainer.dockerComposeFile, "dockerComposeFile"),
         () -> assertEquals("dev", devcontainer.service, "service"),
-        () -> assertEquals("my-name", devcontainer.name, "name"));
+        () -> assertEquals("my-name", devcontainer.name, "name"),
+        () -> assertIterableEquals(List.of("first", "second"), devcontainer.runServices, "runServices"));
   }
 
   private Path findJsonIn(final String testDirectory) {
