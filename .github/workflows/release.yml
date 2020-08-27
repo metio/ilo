@@ -7,19 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Create Release Version
-        id: release
-        run: echo "::set-output name=version::$(date +'%Y.%-m.%-d-%-H%M%S')"
-      - name: Count Commits
-        id: commits
-        run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Monday')"
-      - name: setup-graalvm-ce
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+      - name: GraalVM Setup
         uses: rinx/setup-graalvm-ce@v0.0.4
         with:
           graalvm-version: "20.2.0"
           java-version: "java11"
           native-image: "true"
       - uses: actions/cache@v1
+        name: Cache Maven Repository
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -28,7 +26,13 @@ jobs:
       - name: GPG Key
         id: gpg
         run: |
-          echo ${{ secrets.GPG_KEY }} | base64 --decode > signing.key.asc
+          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
+      - name: Create Release Version
+        id: release
+        run: echo "::set-output name=version::$(date +'%Y.%-m.%-d-%-H%M%S')"
+      - name: Count Commits
+        id: commits
+        run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Monday')"
       - name: Verify Project
         run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
         env:
