@@ -14,6 +14,7 @@ import wtf.metio.ilo.errors.DevcontainerJsonMissingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.devcontainer.DevcontainerJsonParser.findJson;
@@ -45,7 +46,19 @@ class DevcontainerJsonParserTest {
     final var devcontainer = DevcontainerJsonParser.parseJson(findJsonIn("shell"));
     assertAll("shell",
         () -> assertEquals("example:123", devcontainer.image, "image"),
-        () -> assertEquals("my.dockerfile", devcontainer.dockerFile, "dockerFile"));
+        () -> assertEquals("my.dockerfile", devcontainer.dockerFile, "dockerFile"),
+        () -> assertEquals("testUser", devcontainer.remoteUser, "remoteUser"),
+        () -> assertEquals("root", devcontainer.containerUser, "containerUser"),
+        () -> assertEquals("/home/testUser/project", devcontainer.workspaceFolder, "workspaceFolder"),
+        () -> assertTrue(devcontainer.overrideCommand, "overrideCommand"),
+        () -> assertIterableEquals(List.of(12345, 9876), devcontainer.forwardPorts, "forwardPorts"),
+        () -> assertIterableEquals(List.of("--pull"), devcontainer.runArgs, "runArgs"),
+        () -> assertEquals("value", devcontainer.remoteEnv.get("key"), "remoteEnv"),
+        () -> assertEquals("yes", devcontainer.containerEnv.get("CI"), "containerEnv"),
+        () -> assertEquals("other.dockerfile", devcontainer.build.dockerFile, "build.dockerFile"),
+        () -> assertEquals(".", devcontainer.build.context, "build.context"),
+        () -> assertEquals("dev", devcontainer.build.target, "build.target"),
+        () -> assertEquals("value", devcontainer.build.args.get("some"), "build.args"));
   }
 
   @Test
