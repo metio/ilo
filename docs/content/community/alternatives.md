@@ -39,4 +39,5 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [devspace](https://devspace.sh/): DevSpace is an open-source developer tool for Kubernetes that lets you develop and deploy cloud-native software faster.
 - [rbenv](https://github.com/rbenv/rbenv): Use rbenv to pick a Ruby version for your application and guarantee that your development environment matches production.
 - [rvm](https://rvm.io/): RVM is a command-line tool which allows you to easily install, manage, and work with multiple ruby environments from interpreters to sets of gems.
- 
+- [buckaroo](https://github.com/LoopPerfect/buckaroo): The decentralized package manager for C++ and friends.
+- [repeatr](https://github.com/polydawn/repeatr): Repeatr is a tool for running processes repeatedly. Repeatr is designed to make task definition precise, environment setup portable, and results reproducible.
