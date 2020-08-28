@@ -48,7 +48,6 @@ The `--pull` option can be used to pull images before opening a new shell. This 
 $ ilo compose --pull
 
 # do not pull image before opening shell
-$ ilo compose --no-pull
 $ ilo compose --pull=false
 
 # do not pull image before opening shell
@@ -84,7 +83,6 @@ The `--build` option can be used to build images before opening a new shell. Use
 $ ilo compose --build
 
 # do not build images before opening shell
-$ ilo compose --no-build
 $ ilo compose --build=false
 
 # do not build images before opening shell
