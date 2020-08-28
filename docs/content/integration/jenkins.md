@@ -11,7 +11,7 @@ tags:
 - jenkins
 ---
 
-[Jenkins](https://jenkins.io/) knows multiple ways to define jobs. In order to integrate with `ilo` make sure the `ilo` is installed on your slaves.
+[Jenkins](https://jenkins.io/) knows multiple ways to define jobs. In order to integrate with `ilo` make sure the `ilo` is [installed](../../usage/install) on your slaves.
 
 ## Declarative Pipeline
 
