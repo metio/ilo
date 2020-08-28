@@ -19,7 +19,7 @@
     <parent>
         <groupId>wtf.metio.maven.parents</groupId>
         <artifactId>maven-parents-java-prototype</artifactId>
-        <version>2020.8.21-12113</version>
+        <version>2020.8.28-12528</version>
     </parent>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -67,7 +67,7 @@
     <properties>
         <revision>0.0.0-SNAPSHOT</revision>
         <version.jdk>11</version.jdk>
-        <version.picocli>4.5.0</version.picocli>
+        <version.picocli>4.5.1</version.picocli>
         <version.graal>20.2.0</version.graal>
         <version.checksum-m-p>1.8</version.checksum-m-p>
         <version.m-assembly-p>3.2.0</version.m-assembly-p>
@@ -167,7 +167,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
                 <configuration>
                     <!-- open module for junit engine -->
                     <argLine>
@@ -188,7 +187,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>templating-maven-plugin</artifactId>
-                <version>1.0.0</version>
                 <executions>
                     <execution>
                         <id>filter-src</id>
@@ -221,7 +219,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.10</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -245,7 +242,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>${version.m-assembly-p}</version>
                 <executions>
                     <execution>
                         <id>jre-assembly</id>
@@ -264,7 +260,6 @@
             <plugin>
                 <groupId>net.nicoulaj.maven.plugins</groupId>
                 <artifactId>checksum-maven-plugin</artifactId>
-                <version>${version.checksum-m-p}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -281,7 +276,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>generateManPages</id>
@@ -314,7 +308,6 @@
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>2.0.0</version>
                 <executions>
                     <execution>
                         <id>output-html</id>
