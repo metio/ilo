@@ -6,11 +6,19 @@ date: 2020-04-13
 The `ilo shell` command can be used to run a single container either interactively (default) or in non-interactive mode (e.g. for CI builds). It can build an image, mount directories automatically, stop containers, remove images, and [customize](./customize-env) the build environment according to the needs of your project.
 
 ```shell script
-# open shell for local builds
+# open shell for local builds in default image
 [you@hostname project-dir]$ ilo shell
 [root@container project-dir]#
 
-# run command
+# use custom image
+[you@hostname project-dir]$ ilo shell maven:latest
+[root@container project-dir]#
+
+# use custom command
+[you@hostname project-dir]$ ilo shell openjdk:11 jshell
+[root@container project-dir]#
+
+# run command non-interactive
 [you@hostname project-dir]$ ilo shell --no--interactive openjdk:11 mvn verify
 [you@hostname project-dir]$ 
 ```
