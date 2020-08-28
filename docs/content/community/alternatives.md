@@ -37,3 +37,6 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [jabba](https://github.com/shyiko/jabba): Java Version Manager inspired by nvm (Node.js). Written in Go.
 - [nvm](https://github.com/nvm-sh/nvm): nvm is a version manager for node.js, designed to be installed per-user, and invoked per-shell. nvm works on any POSIX-compliant shell (sh, dash, ksh, zsh, bash), in particular on these platforms: unix, macOS, and windows WSL.
 - [devspace](https://devspace.sh/): DevSpace is an open-source developer tool for Kubernetes that lets you develop and deploy cloud-native software faster.
+- [rbenv](https://github.com/rbenv/rbenv): Use rbenv to pick a Ruby version for your application and guarantee that your development environment matches production.
+- [rvm](https://rvm.io/): RVM is a command-line tool which allows you to easily install, manage, and work with multiple ruby environments from interpreters to sets of gems.
+ 
