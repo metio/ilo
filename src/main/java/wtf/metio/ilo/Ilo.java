@@ -9,6 +9,7 @@ package wtf.metio.ilo;
 
 import picocli.AutoComplete;
 import picocli.CommandLine;
+import wtf.metio.ilo.cli.RunCommands;
 import wtf.metio.ilo.compose.Compose;
 import wtf.metio.ilo.devcontainer.Devcontainer;
 import wtf.metio.ilo.errors.ExitCodes;
@@ -16,7 +17,9 @@ import wtf.metio.ilo.errors.PrintingExceptionHandler;
 import wtf.metio.ilo.shell.Shell;
 import wtf.metio.ilo.version.VersionProvider;
 
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Main entry point for ilo - a little tool to manage reproducible build environments
@@ -47,7 +50,8 @@ public final class Ilo implements Runnable {
   CommandLine.Model.CommandSpec spec;
 
   public static void main(final String[] args) {
-    final var arguments = Arrays.stream(args)
+    final var currentDir = Paths.get(System.getProperty("user.dir"));
+    final var arguments = Stream.concat(RunCommands.locate(currentDir), Arrays.stream(args))
         // workaround for IntelliJ
         .filter(arg -> !Ilo.class.getCanonicalName().equalsIgnoreCase(arg))
         .toArray(String[]::new);

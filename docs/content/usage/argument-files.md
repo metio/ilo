@@ -24,6 +24,8 @@ node:latest
 $ ilo @some/folder/your-arguments.txt
 ```
 
+By default, `ilo` will look for a `.ilo.rc` and `.ilo/ilo.rc` files in the current directory and adds them automatically as argument files.
+
 The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:
 
 ```shell script
