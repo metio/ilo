@@ -243,7 +243,6 @@ The `--debug` option toggles whether `ilo` should print the runtime commands int
 $ ilo shell --debug
 
 # do not print runtime commands
-$ ilo shell --no-debug
 $ ilo shell --debug=false
 $ ilo shell
 ```
