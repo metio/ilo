@@ -53,7 +53,6 @@ public final class Ilo implements Runnable {
         .toArray(String[]::new);
 
     final var commandLine = new CommandLine(new Ilo());
-    commandLine.setUnmatchedArgumentsAllowed(true);
     commandLine.setStopAtPositional(true);
     commandLine.setExecutionExceptionHandler(new PrintingExceptionHandler());
     commandLine.setExitCodeExceptionMapper(new ExitCodes());
