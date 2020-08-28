@@ -19,15 +19,12 @@ import java.io.StringWriter;
 
 public abstract class CLI_TCK extends TestSources {
 
-  protected Ilo app;
   protected CommandLine cmd;
   protected StringWriter output;
 
   @BeforeEach
   final void initializeCLI() {
-    app = new Ilo();
-    cmd = new CommandLine(app);
-    cmd.setStopAtPositional(true);
+    cmd = Ilo.commandLine();
     output = new StringWriter();
     cmd.setOut(new PrintWriter(output));
   }

@@ -51,12 +51,16 @@ public final class Ilo implements Runnable {
         // workaround for IntelliJ
         .filter(arg -> !Ilo.class.getCanonicalName().equalsIgnoreCase(arg))
         .toArray(String[]::new);
+    System.exit(commandLine().execute(arguments));
+  }
 
+  // visible for testing
+  public static CommandLine commandLine() {
     final var commandLine = new CommandLine(new Ilo());
     commandLine.setStopAtPositional(true);
     commandLine.setExecutionExceptionHandler(new PrintingExceptionHandler());
     commandLine.setExitCodeExceptionMapper(new ExitCodes());
-    System.exit(commandLine.execute(arguments));
+    return commandLine;
   }
 
   @Override
