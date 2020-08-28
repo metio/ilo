@@ -71,9 +71,56 @@ class ShellTest extends CLI_TCK {
 
   @ParameterizedTest
   @MethodSource("shellRuntimes")
+  @DisplayName("allows to disable mounting the project directory")
+  void negateProjectDirMount(final String tool) {
+    final var shell = parseShellCommand("shell", "--runtime", tool, "--no-mount-project-dir");
+    assertAll("shell options",
+        () -> assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime, "runtime"),
+        () -> assertTrue(shell.options.interactive, "interactive"),
+        () -> assertFalse(shell.options.mountProjectDir, "mountProjectDir"),
+        () -> assertFalse(shell.options.debug, "debug"),
+        () -> assertFalse(shell.options.removeImage, "removeImage"),
+        () -> assertNull(shell.options.dockerfile, "dockerfile"),
+        () -> assertNull(shell.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(shell.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(shell.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(shell.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(shell.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertNull(shell.options.volumes, "volumes"),
+        () -> assertNull(shell.options.variables, "variables"),
+        () -> assertNull(shell.options.ports, "ports"),
+        () -> assertEquals("fedora:latest", shell.options.image, "image"),
+        () -> assertNull(shell.options.commands, "commands")
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("shellRuntimes")
   @DisplayName("allows to run non-interactive")
   void nonInteractive(final String tool) {
     final var shell = parseShellCommand("shell", "--runtime", tool, "--interactive=false");
+    assertAll("shell options",
+        () -> assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime, "runtime"),
+        () -> assertFalse(shell.options.interactive, "interactive"),
+        () -> assertTrue(shell.options.mountProjectDir, "mountProjectDir"),
+        () -> assertFalse(shell.options.debug, "debug"),
+        () -> assertFalse(shell.options.removeImage, "removeImage"),
+        () -> assertNull(shell.options.dockerfile, "dockerfile"),
+        () -> assertNull(shell.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(shell.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(shell.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(shell.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(shell.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("fedora:latest", shell.options.image, "image"),
+        () -> assertNull(shell.options.commands, "commands")
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("shellRuntimes")
+  @DisplayName("allows to run non-interactive")
+  void interactiveNegated(final String tool) {
+    final var shell = parseShellCommand("shell", "--runtime", tool, "--no-interactive");
     assertAll("shell options",
         () -> assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime, "runtime"),
         () -> assertFalse(shell.options.interactive, "interactive"),
@@ -120,7 +167,7 @@ class ShellTest extends CLI_TCK {
   @MethodSource("shellRuntimes")
   @DisplayName("allows to disable mounting and interactive")
   void nonInteractiveNonMounting(final String tool) {
-    final var shell = parseShellCommand("shell", "--runtime", tool, "--mount-project-dir=false", "--interactive=false");
+    final var shell = parseShellCommand("shell", "--runtime", tool, "--no-mount-project-dir", "--no-interactive");
     assertAll("shell options",
         () -> assertEquals(ShellRuntime.fromAlias(tool), shell.options.runtime, "runtime"),
         () -> assertFalse(shell.options.interactive, "interactive"),

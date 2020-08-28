@@ -35,7 +35,7 @@ public final class ShellOptions implements Options {
   public boolean pull;
 
   @CommandLine.Option(
-      names = {"--interactive"},
+      names = {"--no-interactive"},
       description = "Open interactive shell or just run a single command.",
       defaultValue = "true",
       negatable = true
@@ -43,7 +43,7 @@ public final class ShellOptions implements Options {
   public boolean interactive;
 
   @CommandLine.Option(
-      names = {"--mount-project-dir"},
+      names = {"--no-mount-project-dir"},
       description = "Mount the project directory into the running container.",
       defaultValue = "true",
       negatable = true

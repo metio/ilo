@@ -20,7 +20,7 @@ public final class ComposeOptions implements Options {
   public ComposeRuntime runtime;
 
   @CommandLine.Option(
-      names = {"--interactive"},
+      names = {"--no-interactive"},
       description = "Allocate a pseudo TTY or not. Not used by pods-compose.",
       defaultValue = "true",
       negatable = true

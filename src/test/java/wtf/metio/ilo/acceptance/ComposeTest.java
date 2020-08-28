@@ -7,11 +7,12 @@
 
 package wtf.metio.ilo.acceptance;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import wtf.metio.ilo.compose.ComposeRuntime;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("ilo compose")
 class ComposeTest extends CLI_TCK {
@@ -21,12 +22,26 @@ class ComposeTest extends CLI_TCK {
   @DisplayName("supports multiple runtimes")
   void defaultCommandLine(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool);
-    Assertions.assertAll("compose options",
-        () -> Assertions.assertEquals("docker-compose.yml", compose.options.file),
-        () -> Assertions.assertNull(compose.options.service),
-        () -> Assertions.assertTrue(compose.options.interactive),
-        () -> Assertions.assertFalse(compose.options.debug),
-        () -> Assertions.assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime)
+    assertAll("compose options",
+        () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+        () -> assertNull(compose.options.service, "service"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime")
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("composeRuntimes")
+  @DisplayName("allow to run interactive")
+  void interactive(final String tool) {
+    final var compose = parseComposeCommand("compose", "--runtime", tool, "--interactive");
+    assertAll("compose options",
+        () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+        () -> assertNull(compose.options.service, "service"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime")
     );
   }
 
@@ -35,12 +50,26 @@ class ComposeTest extends CLI_TCK {
   @DisplayName("allow to run non-interactive")
   void nonInteractive(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--interactive=false");
-    Assertions.assertAll("compose options",
-        () -> Assertions.assertEquals("docker-compose.yml", compose.options.file),
-        () -> Assertions.assertNull(compose.options.service),
-        () -> Assertions.assertFalse(compose.options.interactive),
-        () -> Assertions.assertFalse(compose.options.debug),
-        () -> Assertions.assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime)
+    assertAll("compose options",
+        () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+        () -> assertNull(compose.options.service, "service"),
+        () -> assertFalse(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime")
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("composeRuntimes")
+  @DisplayName("allow to run non-interactive with negated option")
+  void interactiveNegated(final String tool) {
+    final var compose = parseComposeCommand("compose", "--runtime", tool, "--no-interactive");
+    assertAll("compose options",
+        () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+        () -> assertNull(compose.options.service, "service"),
+        () -> assertFalse(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime")
     );
   }
 
@@ -49,12 +78,12 @@ class ComposeTest extends CLI_TCK {
   @DisplayName("has debug mode")
   void debug(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--debug");
-    Assertions.assertAll("compose options",
-        () -> Assertions.assertEquals("docker-compose.yml", compose.options.file),
-        () -> Assertions.assertNull(compose.options.service),
-        () -> Assertions.assertTrue(compose.options.interactive),
-        () -> Assertions.assertTrue(compose.options.debug),
-        () -> Assertions.assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime)
+    assertAll("compose options",
+        () -> assertEquals("docker-compose.yml", compose.options.file),
+        () -> assertNull(compose.options.service),
+        () -> assertTrue(compose.options.interactive),
+        () -> assertTrue(compose.options.debug),
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime)
     );
   }
 
