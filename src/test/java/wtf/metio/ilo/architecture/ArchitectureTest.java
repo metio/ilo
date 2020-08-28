@@ -12,9 +12,15 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import org.junit.jupiter.api.*;
 import wtf.metio.ilo.Ilo;
+import wtf.metio.ilo.compose.Compose;
+import wtf.metio.ilo.devcontainer.Devcontainer;
+import wtf.metio.ilo.shell.Shell;
 import wtf.metio.ilo.test.ArchUnitTests;
 
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Architecture")
 public final class ArchitectureTest {
@@ -45,8 +51,12 @@ public final class ArchitectureTest {
   @Test
   @DisplayName("Setup Works")
   @Disabled("figure out why ArchUnit cannot find classes")
-  void mainClass() {
-    Assertions.assertTrue(classes.contain(Ilo.class));
+  void shouldFindClasses() {
+    assertAll("classes",
+        () -> assertTrue(classes.contain(Ilo.class), Ilo.class.getName()),
+        () -> assertTrue(classes.contain(Shell.class), Shell.class.getName()),
+        () -> assertTrue(classes.contain(Compose.class), Compose.class.getName()),
+        () -> assertTrue(classes.contain(Devcontainer.class), Devcontainer.class.getName()));
   }
 
 }
