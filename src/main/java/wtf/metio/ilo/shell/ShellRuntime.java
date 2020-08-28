@@ -8,7 +8,6 @@
 package wtf.metio.ilo.shell;
 
 import wtf.metio.ilo.model.Runtime;
-import wtf.metio.ilo.utils.Runtimes;
 
 public enum ShellRuntime implements Runtime {
 
@@ -23,7 +22,7 @@ public enum ShellRuntime implements Runtime {
   }
 
   public static ShellRuntime fromAlias(final String alias) {
-    return Runtimes.firstMatching(alias, values());
+    return Runtime.firstMatching(alias, values());
   }
 
   @Override

@@ -8,7 +8,6 @@
 package wtf.metio.ilo.compose;
 
 import wtf.metio.ilo.model.Runtime;
-import wtf.metio.ilo.utils.Runtimes;
 
 public enum ComposeRuntime implements Runtime {
 
@@ -25,7 +24,7 @@ public enum ComposeRuntime implements Runtime {
   }
 
   public static ComposeRuntime fromAlias(final String alias) {
-    return Runtimes.firstMatching(alias, values());
+    return Runtime.firstMatching(alias, values());
   }
 
   @Override

@@ -10,6 +10,8 @@ package wtf.metio.ilo.compose;
 import picocli.CommandLine;
 import wtf.metio.ilo.model.Options;
 
+import java.util.List;
+
 public final class ComposeOptions implements Options {
 
   @CommandLine.Option(
@@ -21,7 +23,7 @@ public final class ComposeOptions implements Options {
 
   @CommandLine.Option(
       names = {"--no-interactive"},
-      description = "Allocate a pseudo TTY or not. Not used by pods-compose.",
+      description = "Allocate a pseudo TTY or not.",
       defaultValue = "true",
       negatable = true
   )
@@ -40,10 +42,10 @@ public final class ComposeOptions implements Options {
   public boolean pull;
 
   @CommandLine.Option(
-      names = {"--service"},
-      description = "Specify the service to use. Used by docker-/podman-compose."
+      names = {"--build"},
+      description = "Build images before opening shell."
   )
-  public String service;
+  public boolean build;
 
   @CommandLine.Option(
       names = {"--file"},
@@ -51,6 +53,46 @@ public final class ComposeOptions implements Options {
       defaultValue = "docker-compose.yml"
   )
   public String file;
+
+  @CommandLine.Option(
+      names = {"--runtime-option"},
+      description = "Options for the selected runtime itself."
+  )
+  public List<String> runtimeOptions;
+
+  @CommandLine.Option(
+      names = {"--runtime-pull-option"},
+      description = "Options for the pull command of the selected runtime."
+  )
+  public List<String> runtimePullOptions;
+
+  @CommandLine.Option(
+      names = {"--runtime-build-option"},
+      description = "Options for the build command of the selected runtime."
+  )
+  public List<String> runtimeBuildOptions;
+
+  @CommandLine.Option(
+      names = {"--runtime-run-option"},
+      description = "Options for the run command of the selected runtime."
+  )
+  public List<String> runtimeRunOptions;
+
+  @CommandLine.Option(
+      names = {"--runtime-cleanup-option"},
+      description = "Options for the cleanup command of the selected runtime."
+  )
+  public List<String> runtimeCleanupOptions;
+
+  @CommandLine.Parameters(
+      index = "0",
+      description = "Specify the service to run.",
+      defaultValue = "dev"
+  )
+  public String service;
+
+  @CommandLine.Parameters(index = "1..*")
+  public List<String> arguments;
 
   @Override
   public boolean debug() {

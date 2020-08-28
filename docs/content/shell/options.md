@@ -46,7 +46,7 @@ $ ilo shell --no-pull
 $ ilo shell --pull=false
 
 # do not pull image before opening shell
-$ ilo shell 
+$ ilo shell
 ```
 
 By default, `--pull` is not enabled.

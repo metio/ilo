@@ -11,6 +11,13 @@ import java.util.Arrays;
 
 public interface Runtime {
 
+  static <RUNTIME extends Runtime> RUNTIME firstMatching(final String alias, final RUNTIME[] matchers) {
+    return Arrays.stream(matchers)
+        .filter(runtime -> runtime.matches(alias))
+        .findFirst()
+        .orElseThrow(IllegalArgumentException::new);
+  }
+
   default boolean matches(final String candidate) {
     return Arrays.stream(aliases()).anyMatch(candidate::equalsIgnoreCase);
   }

@@ -70,25 +70,25 @@ public final class ShellOptions implements Options {
 
   @CommandLine.Option(
       names = {"--runtime-pull-option"},
-      description = "Options for the selected runtime."
+      description = "Options for the pull command of the selected runtime."
   )
   public List<String> runtimePullOptions;
 
   @CommandLine.Option(
       names = {"--runtime-build-option"},
-      description = "Options for the selected runtime."
+      description = "Options for the build command of the selected runtime."
   )
   public List<String> runtimeBuildOptions;
 
   @CommandLine.Option(
       names = {"--runtime-run-option"},
-      description = "Options for the selected runtime."
+      description = "Options for the run command of the selected runtime."
   )
   public List<String> runtimeRunOptions;
 
   @CommandLine.Option(
       names = {"--runtime-cleanup-option"},
-      description = "Options for the selected runtime."
+      description = "Options for the cleanup command of the selected runtime."
   )
   public List<String> runtimeCleanupOptions;
 
