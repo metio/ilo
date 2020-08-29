@@ -46,7 +46,6 @@ public final class Executables {
       return 0;
     }
     if (debug) {
-      // TODO: use System.Logger?
       System.out.println("ilo executes: " + String.join(" ", arguments));
     }
     try {
