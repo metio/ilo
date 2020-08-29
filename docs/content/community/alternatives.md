@@ -46,3 +46,5 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [lando](https://github.com/lando/lando): The local development and DevOps tool trusted by professional developers across the galaxy.
 - [ddev](https://github.com/drud/ddev): ddev is an open source tool that makes it simple to get local PHP development environments up and running in minutes.
 - [tlbx](https://gitlab.com/uppercat/tlbx): tlbx is a tool that facilitates creating and using mutable, persistent Linux container environments.
+- [mach-nix](https://github.com/DavHau/mach-nix): Mach-nix makes it easy to create and share reproducible python environments.
+- [renv](https://rstudio.github.io/renv/): The renv package helps you create reproducible environments for your R projects.
