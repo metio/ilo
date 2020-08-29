@@ -43,3 +43,5 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [rvm](https://rvm.io/): RVM is a command-line tool which allows you to easily install, manage, and work with multiple ruby environments from interpreters to sets of gems.
 - [buckaroo](https://github.com/LoopPerfect/buckaroo): The decentralized package manager for C++ and friends.
 - [repeatr](https://github.com/polydawn/repeatr): Repeatr is a tool for running processes repeatedly. Repeatr is designed to make task definition precise, environment setup portable, and results reproducible.
+- [lando](https://github.com/lando/lando): The local development and DevOps tool trusted by professional developers across the galaxy.
+- [ddev](https://github.com/drud/ddev): ddev is an open source tool that makes it simple to get local PHP development environments up and running in minutes.
