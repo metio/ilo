@@ -30,9 +30,9 @@ public final class AutoSelectRuntime {
     return autoSelect(runtime, ComposeRuntimes.allRuntimes());
   }
 
-  private static <SHELL extends CliTool<?>> SHELL autoSelect(
+  private static <TOOL extends CliTool<?>> TOOL autoSelect(
       final Runtime runtime,
-      final List<SHELL> tools) {
+      final List<TOOL> tools) {
     return tools.stream()
         .filter(CliTool::exists)
         .filter(tool -> Optional.ofNullable(runtime)
