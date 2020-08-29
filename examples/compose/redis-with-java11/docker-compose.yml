@@ -2,7 +2,7 @@ version: "3.7"
 services:
   redis:
     image: redis:latest
-  dev:
+  build:
     image: openjdk:11
     command: "/bin/bash"
     depends_on:
