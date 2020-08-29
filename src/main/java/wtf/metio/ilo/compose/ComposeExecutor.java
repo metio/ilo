@@ -9,7 +9,6 @@ package wtf.metio.ilo.compose;
 
 import wtf.metio.ilo.cli.AutoSelectRuntime;
 import wtf.metio.ilo.model.CliExecutor;
-import wtf.metio.ilo.model.ComposeCLI;
 
 final class ComposeExecutor implements CliExecutor<ComposeRuntime, ComposeCLI> {
 

@@ -9,7 +9,7 @@ package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
 import wtf.metio.ilo.compose.ComposeOptions;
-import wtf.metio.ilo.model.ComposeCLI;
+import wtf.metio.ilo.compose.ComposeCLI;
 
 @DisplayName("PodsCompose")
 class PodsComposeTest extends CLI_TOOL_TCK<ComposeOptions, ComposeCLI> {

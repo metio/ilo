@@ -7,13 +7,13 @@
 
 package wtf.metio.ilo.cli;
 
-import wtf.metio.ilo.model.ComposeCLI;
+import wtf.metio.ilo.compose.ComposeCLI;
 import wtf.metio.ilo.compose.ComposeRuntime;
 import wtf.metio.ilo.errors.NoMatchingRuntimeException;
 import wtf.metio.ilo.compose.ComposeRuntimes;
 import wtf.metio.ilo.shell.ShellRuntimes;
 import wtf.metio.ilo.model.Runtime;
-import wtf.metio.ilo.model.ShellCLI;
+import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellRuntime;
 import wtf.metio.ilo.model.CliTool;
 

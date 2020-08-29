@@ -7,7 +7,6 @@
 
 package wtf.metio.ilo.compose;
 
-import wtf.metio.ilo.model.ComposeCLI;
 import wtf.metio.ilo.tools.*;
 
 import java.util.List;

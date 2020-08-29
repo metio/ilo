@@ -8,7 +8,7 @@
 package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
-import wtf.metio.ilo.model.ShellCLI;
+import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
 
 @DisplayName("Docker")

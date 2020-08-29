@@ -7,7 +7,6 @@
 
 package wtf.metio.ilo.shell;
 
-import wtf.metio.ilo.model.ShellCLI;
 import wtf.metio.ilo.tools.Docker;
 import wtf.metio.ilo.tools.LXD;
 import wtf.metio.ilo.tools.Podman;

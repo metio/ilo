@@ -9,7 +9,6 @@ package wtf.metio.ilo.shell;
 
 import wtf.metio.ilo.cli.AutoSelectRuntime;
 import wtf.metio.ilo.model.CliExecutor;
-import wtf.metio.ilo.model.ShellCLI;
 
 final class ShellExecutor implements CliExecutor<ShellRuntime, ShellCLI> {
 

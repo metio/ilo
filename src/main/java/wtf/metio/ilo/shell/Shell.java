@@ -10,7 +10,6 @@ package wtf.metio.ilo.shell;
 import picocli.CommandLine;
 import wtf.metio.ilo.cli.CommandLifecycle;
 import wtf.metio.ilo.model.CliExecutor;
-import wtf.metio.ilo.model.ShellCLI;
 
 import java.util.concurrent.Callable;
 

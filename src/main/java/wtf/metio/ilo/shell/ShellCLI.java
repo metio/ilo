@@ -5,11 +5,11 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.model;
+package wtf.metio.ilo.shell;
 
-import wtf.metio.ilo.compose.ComposeOptions;
+import wtf.metio.ilo.model.CliTool;
 
-public interface ComposeCLI extends CliTool<ComposeOptions> {
+public interface ShellCLI extends CliTool<ShellOptions> {
 
   // Marker interface
 

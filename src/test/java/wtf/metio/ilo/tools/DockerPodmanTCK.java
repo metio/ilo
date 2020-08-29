@@ -9,9 +9,8 @@ package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import wtf.metio.ilo.model.ShellCLI;
+import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
-import wtf.metio.ilo.shell.ShellRuntime;
 
 import java.util.List;
 
