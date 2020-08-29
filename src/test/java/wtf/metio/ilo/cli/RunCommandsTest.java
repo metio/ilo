@@ -9,11 +9,13 @@ package wtf.metio.ilo.cli;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import wtf.metio.ilo.test.TestResources;
 
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static wtf.metio.ilo.test.TestResources.testResources;
 
 @DisplayName("RunCommands")
 class RunCommandsTest {
@@ -37,9 +39,7 @@ class RunCommandsTest {
   }
 
   private Stream<String> findRunCommandFiles(final String testDirectory) {
-    final var testResources = Paths.get("src/test/resources/");
-    final var testRootDirectory = RunCommands.class.getName().replace(".", "/");
-    return RunCommands.locate(testResources.resolve(testRootDirectory).resolve(testDirectory));
+    return RunCommands.locate(testResources(RunCommands.class).resolve(testDirectory));
   }
 
 }

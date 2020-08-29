@@ -10,14 +10,15 @@ package wtf.metio.ilo.devcontainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.errors.DevcontainerJsonMissingException;
+import wtf.metio.ilo.test.TestResources;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.devcontainer.DevcontainerJsonParser.findJson;
+import static wtf.metio.ilo.test.TestResources.testResources;
 
 @DisplayName("DevcontainerJsonParser")
 class DevcontainerJsonParserTest {
@@ -73,9 +74,7 @@ class DevcontainerJsonParserTest {
   }
 
   private Path findJsonIn(final String testDirectory) {
-    final var testResources = Paths.get("src/test/resources/");
-    final var testRootDirectory = DevcontainerJsonParser.class.getName().replace(".", "/");
-    return findJson(testResources.resolve(testRootDirectory).resolve(testDirectory));
+    return findJson(testResources(DevcontainerJsonParser.class).resolve(testDirectory));
   }
 
 }
