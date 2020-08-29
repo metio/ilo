@@ -8,14 +8,20 @@
 package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
+import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.model.ComposeCLI;
 
 @DisplayName("PodmanCompose")
-class PodmanComposeTest extends CLI_TOOL_TCK<ComposeCLI> {
+class PodmanComposeTest extends CLI_TOOL_TCK<ComposeOptions, ComposeCLI> {
 
   @Override
   public ComposeCLI tool() {
     return new PodmanCompose();
+  }
+
+  @Override
+  protected ComposeOptions options() {
+    return new ComposeOptions();
   }
 
   @Override

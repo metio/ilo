@@ -9,6 +9,7 @@ package wtf.metio.ilo.tools;
 
 import org.junit.jupiter.api.DisplayName;
 import wtf.metio.ilo.model.ShellCLI;
+import wtf.metio.ilo.shell.ShellOptions;
 
 @DisplayName("Docker")
 class DockerTest extends DockerPodmanTCK {
@@ -16,6 +17,11 @@ class DockerTest extends DockerPodmanTCK {
   @Override
   public ShellCLI tool() {
     return new Docker();
+  }
+
+  @Override
+  protected ShellOptions options() {
+    return new ShellOptions();
   }
 
   @Override

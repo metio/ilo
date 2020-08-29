@@ -10,26 +10,47 @@ package wtf.metio.ilo.tools;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.model.CliTool;
+import wtf.metio.ilo.model.Options;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-abstract class CLI_TOOL_TCK<SHELL extends CliTool<?>> {
+abstract class CLI_TOOL_TCK<OPTIONS extends Options, SHELL extends CliTool<OPTIONS>> {
 
   protected abstract SHELL tool();
-  
+
+  protected abstract OPTIONS options();
+
   protected abstract String name();
 
   @Test
   @DisplayName("has runtime name")
   void shouldHaveName() {
-    // given
-    final var tool = tool();
+    assertEquals(name(), tool().name());
+  }
 
-    // when
-    final var name = tool.name();
+  @Test
+  @DisplayName("non-null pull arguments")
+  void pullArguments() {
+    assertNotNull(tool().pullArguments(options()));
+  }
 
-    // then
-    assertEquals(name(), name);
+  @Test
+  @DisplayName("non-null build arguments")
+  void buildArguments() {
+    assertNotNull(tool().buildArguments(options()));
+  }
+
+  @Test
+  @DisplayName("non-null run arguments")
+  void runArguments() {
+    assertNotNull(tool().runArguments(options()));
+  }
+
+  @Test
+  @DisplayName("non-null cleanup arguments")
+  void cleanupArguments() {
+    assertNotNull(tool().cleanupArguments(options()));
   }
 
 }

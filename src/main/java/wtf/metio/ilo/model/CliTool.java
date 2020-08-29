@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * CLI tools are used by 'ilo' in order to do most of its work. This interface represents such a tool.
  */
-public interface CliTool<OPTIONS> {
+public interface CliTool<OPTIONS extends Options> {
 
   /**
    * @return The name of the CLI tool.

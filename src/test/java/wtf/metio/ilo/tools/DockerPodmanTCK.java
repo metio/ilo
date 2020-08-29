@@ -17,14 +17,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
+abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
 
   @Test
   @DisplayName("generate pull arguments")
   void pullArguments() {
-    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
-    options.runtime = runtime;
     options.pull = true;
     options.image = "example:test";
     final var arguments = tool().pullArguments(options);
@@ -34,7 +32,6 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
   @Test
   @DisplayName("generate build arguments")
   void buildArguments() {
-    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.image = "example:test";
     options.dockerfile = "Dockerfile";
@@ -45,7 +42,6 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
   @Test
   @DisplayName("generate build arguments with pull")
   void buildArgumentsWithPull() {
-    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.pull = true;
     options.image = "example:test";
@@ -57,7 +53,6 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
   @Test
   @DisplayName("generate run arguments")
   void runArguments() {
-    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.image = "example:test";
     final var arguments = tool().runArguments(options);
@@ -67,7 +62,6 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
   @Test
   @DisplayName("generate clean arguments")
   void cleanArguments() {
-    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.image = "example:test";
     options.removeImage = true;
@@ -78,7 +72,6 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
   @Test
   @DisplayName("interactive run")
   void interactive() {
-    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.image = "example:test";
     options.interactive = true;
@@ -89,7 +82,6 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
   @Test
   @DisplayName("custom command run")
   void mount() {
-    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.commands = List.of("example:test", "/bin/bash", "-c", "whoami");
     final var arguments = tool().runArguments(options);
@@ -99,7 +91,6 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellCLI> {
   @Test
   @DisplayName("pass-through runtime options")
   void runtimeOptions() {
-    final var runtime = ShellRuntime.fromAlias(name());
     final var options = new ShellOptions();
     options.commands = List.of("--volume=/abc/123:/abc:Z", "example:test", "/bin/bash", "-c", "whoami");
     final var arguments = tool().runArguments(options);
