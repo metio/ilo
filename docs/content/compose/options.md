@@ -180,3 +180,18 @@ $ ilo compose
 ```
 
 By default, `--runtime-cleanup-option` is set to an empty array.
+
+## `--debug`
+
+The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
+
+```shell script
+# print runtime commands
+$ ilo compose --debug
+
+# do not print runtime commands
+$ ilo compose --debug=false
+$ ilo compose
+```
+
+By default, `--debug` is not enabled.
