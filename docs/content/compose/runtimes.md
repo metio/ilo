@@ -42,7 +42,7 @@ $ ilo shell --runtime pc
 
 ## pods-compose
 
-**WORK IN PROGRESS**
+[**WORK IN PROGRESS**](https://github.com/metio/ilo/issues/42)
 
 Force `ilo` to use [pods-compose](https://github.com/abalage/pods-compose) like this:
 
@@ -55,7 +55,7 @@ $ ilo shell --runtime pods
 
 ## footloose
 
-**WORK IN PROGRESS**
+[**WORK IN PROGRESS**](https://github.com/metio/ilo/issues/43)
 
 Force `ilo` to use [footloose](https://github.com/weaveworks/footloose) like this:
 
@@ -68,7 +68,7 @@ $ ilo compose --runtime fl
 
 ## vagrant
 
-**WORK IN PROGRESS**
+[**WORK IN PROGRESS**](https://github.com/metio/ilo/issues/44)
 
 Force `ilo` to use [vagrant](https://www.vagrantup.com/) like this:
 
