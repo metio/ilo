@@ -5,15 +5,16 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.shell;
+package wtf.metio.ilo.compose;
 
+import wtf.metio.ilo.shell.ShellRuntimes;
 import wtf.metio.ilo.test.TestCliExecutor;
 
-class TestShellExecutor extends TestCliExecutor<ShellRuntime, ShellCLI> {
+class TestComposeExecutor extends TestCliExecutor<ComposeRuntime, ComposeCLI> {
 
   @Override
-  public ShellCLI selectRuntime(final ShellRuntime runtime) {
-    return ShellRuntimes.allRuntimes().stream()
+  public ComposeCLI selectRuntime(final ComposeRuntime runtime) {
+    return ComposeRuntimes.allRuntimes().stream()
         .filter(cli -> runtime.matches(cli.name()))
         .findFirst()
         .orElseThrow(IllegalArgumentException::new);
