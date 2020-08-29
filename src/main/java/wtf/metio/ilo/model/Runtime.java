@@ -7,6 +7,8 @@
 
 package wtf.metio.ilo.model;
 
+import wtf.metio.ilo.errors.NoMatchingRuntimeException;
+
 import java.util.Arrays;
 
 public interface Runtime {
@@ -15,7 +17,7 @@ public interface Runtime {
     return Arrays.stream(matchers)
         .filter(runtime -> runtime.matches(alias))
         .findFirst()
-        .orElseThrow(IllegalArgumentException::new);
+        .orElseThrow(NoMatchingRuntimeException::new);
   }
 
   default boolean matches(final String candidate) {
