@@ -42,7 +42,7 @@ $ ilo shell --runtime p
 
 ## LXC/LXD
 
-**WORK IN PROGRESS**
+[**WORK IN PROGRESS**](https://github.com/metio/ilo/issues/41)
 
 Force `ilo` to use [lxd](https://linuxcontainers.org/lxd/introduction/) like this:
 
