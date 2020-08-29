@@ -16,7 +16,7 @@ abstract class BusinessException extends RuntimeException {
     this.exitCode = exitCode;
   }
 
-  public int getExitCode() {
+  public final int getExitCode() {
     return exitCode;
   }
 
