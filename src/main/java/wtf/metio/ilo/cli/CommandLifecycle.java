@@ -20,15 +20,15 @@ public final class CommandLifecycle {
   public static <OPTIONS extends Options, CLI extends CliTool<OPTIONS>> int run(
       final CLI tool,
       final OPTIONS options,
-      final BiFunction<? super List<String>, ? super Boolean, Integer> api) {
+      final BiFunction<? super List<String>, ? super Boolean, Integer> executor) {
     final var pullArguments = tool.pullArguments(options);
-    final var pullExitCode = api.apply(pullArguments, options.debug());
+    final var pullExitCode = executor.apply(pullArguments, options.debug());
     final var buildArguments = tool.buildArguments(options);
-    final var buildExitCode = api.apply(buildArguments, options.debug());
+    final var buildExitCode = executor.apply(buildArguments, options.debug());
     final var runArguments = tool.runArguments(options);
-    final var runExitCode = api.apply(runArguments, options.debug());
+    final var runExitCode = executor.apply(runArguments, options.debug());
     final var cleanupArguments = tool.cleanupArguments(options);
-    final var cleanupExitCode = api.apply(cleanupArguments, options.debug());
+    final var cleanupExitCode = executor.apply(cleanupArguments, options.debug());
     return IntStream.of(pullExitCode, buildExitCode, runExitCode, cleanupExitCode)
         .max().orElse(CommandLine.ExitCode.SOFTWARE);
   }
