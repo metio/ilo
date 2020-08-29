@@ -57,8 +57,4 @@ You can mix argument files with regular CLI options as well:
 $ ilo shell @default-shell openjdk:11
 ```
 
-The argument file used by `ilo` developers can be seen [here](https://github.com/metio/ilo/blob/master/build/shell) and is used like this:
-
-```shell script
-$ ilo @build/shell
-```
+The argument file used by `ilo` developers can be seen [here](https://github.com/metio/ilo/blob/master/.ilo.rc).
