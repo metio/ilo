@@ -14,13 +14,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import wtf.metio.ilo.compose.ComposeRuntime;
 import wtf.metio.ilo.errors.NoMatchingRuntimeException;
 import wtf.metio.ilo.shell.ShellRuntime;
-import wtf.metio.ilo.test.TestSources;
+import wtf.metio.ilo.test.TestMethodSources;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Runtime")
-class RuntimeTest extends TestSources {
+class RuntimeTest extends TestMethodSources {
 
   @ParameterizedTest
   @MethodSource("shellRuntimes")

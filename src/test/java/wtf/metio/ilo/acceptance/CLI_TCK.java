@@ -12,12 +12,12 @@ import picocli.CommandLine;
 import wtf.metio.ilo.Ilo;
 import wtf.metio.ilo.compose.Compose;
 import wtf.metio.ilo.shell.Shell;
-import wtf.metio.ilo.test.TestSources;
+import wtf.metio.ilo.test.TestMethodSources;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public abstract class CLI_TCK extends TestSources {
+public abstract class CLI_TCK extends TestMethodSources {
 
   protected CommandLine cmd;
   protected StringWriter output;
