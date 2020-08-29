@@ -10,7 +10,7 @@ package wtf.metio.ilo.errors;
 public final class OperatingSystemNotSupportedException extends BusinessException {
 
   public OperatingSystemNotSupportedException(final UnsupportedOperationException exception) {
-    super(103, exception, "Your operating system does not support the creation of processes. Sadly ilo won't work here :-(");
+    super(103, exception, "Your operating system does not support the creation of processes - sadly ilo won't work here.");
   }
 
 }
