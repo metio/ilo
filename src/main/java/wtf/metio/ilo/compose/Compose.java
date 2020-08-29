@@ -9,9 +9,9 @@ package wtf.metio.ilo.compose;
 
 import picocli.CommandLine;
 import wtf.metio.ilo.cli.CommandLifecycle;
+import wtf.metio.ilo.model.CliExecutor;
 import wtf.metio.ilo.model.ComposeCLI;
 
-import java.util.List;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
@@ -28,7 +28,7 @@ public final class Compose implements Callable<Integer> {
   @CommandLine.Mixin
   public ComposeOptions options;
 
-  private final ComposeAPI api;
+  private final CliExecutor<? super ComposeRuntime, ? extends ComposeCLI> executor;
 
   // default constructor for picocli
   public Compose() {
@@ -36,20 +36,14 @@ public final class Compose implements Callable<Integer> {
   }
 
   // constructor for testing
-  Compose(final ComposeAPI api) {
-    this.api = api;
+  Compose(final CliExecutor<? super ComposeRuntime, ? extends ComposeCLI> executor) {
+    this.executor = executor;
   }
 
   @Override
   public Integer call() {
-    final var tool = api.selectRuntime(options.runtime);
-    return CommandLifecycle.run(tool, options, api::execute);
-  }
-
-  interface ComposeAPI {
-    ComposeCLI selectRuntime(ComposeRuntime runtime);
-
-    int execute(List<String> args, boolean debug);
+    final var tool = executor.selectRuntime(options.runtime);
+    return CommandLifecycle.run(tool, options, executor::execute);
   }
 
 }

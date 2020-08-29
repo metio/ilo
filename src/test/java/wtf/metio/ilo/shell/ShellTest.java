@@ -7,15 +7,11 @@
 
 package wtf.metio.ilo.shell;
 
-import wtf.metio.ilo.cli.AutoSelectRuntime;
-import wtf.metio.ilo.model.CliExecutor;
-import wtf.metio.ilo.model.ShellCLI;
+import org.junit.jupiter.api.DisplayName;
 
-final class ShellExecutor implements CliExecutor<ShellRuntime, ShellCLI> {
+import static org.junit.jupiter.api.Assertions.*;
 
-  @Override
-  public ShellCLI selectRuntime(final ShellRuntime runtime) {
-    return AutoSelectRuntime.selectShellRuntime(runtime);
-  }
+@DisplayName("Shell")
+class ShellTest {
 
 }

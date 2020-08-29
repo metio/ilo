@@ -5,17 +5,18 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.shell;
+package wtf.metio.ilo.model;
 
-import wtf.metio.ilo.cli.AutoSelectRuntime;
-import wtf.metio.ilo.model.CliExecutor;
-import wtf.metio.ilo.model.ShellCLI;
+import wtf.metio.ilo.cli.Executables;
 
-final class ShellExecutor implements CliExecutor<ShellRuntime, ShellCLI> {
+import java.util.List;
 
-  @Override
-  public ShellCLI selectRuntime(final ShellRuntime runtime) {
-    return AutoSelectRuntime.selectShellRuntime(runtime);
+public interface CliExecutor<RUNTIME extends Runtime, CLI extends CliTool<?>> {
+
+  CLI selectRuntime(RUNTIME runtime);
+
+  default int execute(final List<String> arguments, final boolean debug) {
+    return Executables.runAndWaitForExit(arguments, debug);
   }
 
 }

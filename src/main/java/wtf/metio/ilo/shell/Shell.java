@@ -9,9 +9,9 @@ package wtf.metio.ilo.shell;
 
 import picocli.CommandLine;
 import wtf.metio.ilo.cli.CommandLifecycle;
+import wtf.metio.ilo.model.CliExecutor;
 import wtf.metio.ilo.model.ShellCLI;
 
-import java.util.List;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
@@ -28,7 +28,7 @@ public final class Shell implements Callable<Integer> {
   @CommandLine.Mixin
   public ShellOptions options;
 
-  private final ShellAPI api;
+  private final CliExecutor<? super ShellRuntime, ? extends ShellCLI> executor;
 
   // default constructor for picocli
   public Shell() {
@@ -36,20 +36,14 @@ public final class Shell implements Callable<Integer> {
   }
 
   // constructor for testing
-  Shell(final ShellAPI api) {
-    this.api = api;
+  Shell(final CliExecutor<? super ShellRuntime, ? extends ShellCLI> executor) {
+    this.executor = executor;
   }
 
   @Override
   public Integer call() {
-    final var tool = api.selectRuntime(options.runtime);
-    return CommandLifecycle.run(tool, options, api::execute);
-  }
-
-  interface ShellAPI {
-    ShellCLI selectRuntime(ShellRuntime runtime);
-
-    int execute(List<String> args, boolean debug);
+    final var tool = executor.selectRuntime(options.runtime);
+    return CommandLifecycle.run(tool, options, executor::execute);
   }
 
 }
