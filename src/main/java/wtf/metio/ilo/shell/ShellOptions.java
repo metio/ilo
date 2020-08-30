@@ -106,7 +106,7 @@ public final class ShellOptions implements Options {
 
   @CommandLine.Option(
       names = {"--publish"},
-      description = "Publish a container ports to the host system."
+      description = "Publish container ports to the host system."
   )
   public List<String> ports;
 
