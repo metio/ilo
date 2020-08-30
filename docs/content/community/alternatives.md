@@ -48,3 +48,8 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [tlbx](https://gitlab.com/uppercat/tlbx): tlbx is a tool that facilitates creating and using mutable, persistent Linux container environments.
 - [mach-nix](https://github.com/DavHau/mach-nix): Mach-nix makes it easy to create and share reproducible python environments.
 - [renv](https://rstudio.github.io/renv/): The renv package helps you create reproducible environments for your R projects.
+- [popper](https://github.com/getpopper/popper): Popper is a tool for defining and executing container-native workflows in Docker, as well as other container engines. 
+- [qus](https://github.com/dbhi/qus): qemu-user-static (qus) is a compilation of utilities, examples and references to build and execute OCI images (aka docker images) for foreign architectures using QEMU's user-mode emulation.
+- [coretoolbox](https://github.com/cgwalters/coretoolbox): This is a new implementation of https://github.com/debarshiray/toolbox/
+- [pyrex](https://github.com/garmin/pyrex): Containerize your bitbake.
+
