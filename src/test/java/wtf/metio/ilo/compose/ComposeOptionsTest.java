@@ -32,7 +32,15 @@ class ComposeOptionsTest {
       "runtime",
       "debug",
       "interactive",
+      "build",
+      "pull",
+      "runtimeOptions",
+      "runtimePullOptions",
+      "runtimeBuildOptions",
+      "runtimeRunOptions",
+      "runtimeCleanupOptions",
       "file",
+      "arguments",
       "service"
   })
   void shouldHavePublicProperty(final String field) throws NoSuchFieldException {

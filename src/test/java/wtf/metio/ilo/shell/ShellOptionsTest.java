@@ -32,6 +32,18 @@ class ShellOptionsTest {
       "runtime",
       "debug",
       "interactive",
+      "pull",
+      "dockerfile",
+      "removeImage",
+      "runtimeOptions",
+      "runtimePullOptions",
+      "runtimeBuildOptions",
+      "runtimeRunOptions",
+      "runtimeCleanupOptions",
+      "volumes",
+      "variables",
+      "ports",
+      "image",
       "mountProjectDir",
       "commands"
   })
