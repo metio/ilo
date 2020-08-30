@@ -18,31 +18,61 @@ Use the following locations in order to download the binary distribution of `ilo
 None of the widely used package managers have `ilo` in their repository yet.
 In case you want to help package `ilo` for your preferred operating system, take a look at the [open packaging issues](https://github.com/metio/ilo/issues/2).
 
-## Package Types
+## Windows
 
-### Java 11 Runtime
-
-This package requires at least [Java 11](https://www.oracle.com/javadownload) installed on your local system. It uses the identifier `java11`.
-
-### Native Binary
-
-The native binary package has no external dependencies and can be used without installing any additional software. It is only available for linux at the moment and uses the identifier `linux`.
-
-## Installation Methods
-
-### Manual Command Line
+The Windows distribution of `ilo` requires at least [Java 11](https://www.oracle.com/javadownload) to be installed.
 
 ```shell script
-$ export ILO_VERSION={release-version}
-$ export ILO_TYPE=java11 # or linux for native binary
+# this has to executed only once per user account
+$ MD %USERPROFILE%\bin
+$ control sysdm.cpl # manually add '%USERPROFILE%\bin' to the PATH of your user account
+$ export ILO_VERSION={release-version} # lookup value from release page above
+$ export ILO_TYPE=java11
 $ cd /path/to/ilo/installation/folder
 $ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-${ILO_TYPE}.zip --output ilo.zip
 $ unzip ilo.zip
+$ chmod +x ilo-${ILO_VERSION}/ilo.bat
+$ ln --symbolic --relative ilo-${ILO_VERSION}/ilo %USERPROFILE%\bin\ilo.bat
+```
+
+## MacOS
+
+The MacOS distribution of `ilo` requires at least [Java 11](https://www.oracle.com/javadownload) to be installed.
+
+```shell script
+$ export ILO_VERSION={release-version} # lookup value from release page above
+$ export ILO_TYPE=java11
+$ cd /path/to/ilo/installation/folder
+$ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-${ILO_TYPE}.zip --output ilo.zip
+$ unzip ilo.zip
+$ chmod +x ilo-${ILO_VERSION}/ilo
+$ ln --symbolic --relative ilo-${ILO_VERSION}/ilo /usr/local/bin/ilo
+```
+
+## Linux
+
+The Linux distribution of `ilo` is a native executable and does not require any additional software to be installed.
+
+```shell script
+$ export ILO_VERSION={release-version} # lookup value from release page above
+$ export ILO_TYPE=linux
+$ cd /path/to/ilo/installation/folder
+$ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-${ILO_TYPE}.zip --output ilo.zip
+$ unzip ilo.zip
+$ chmod +x ilo-${ILO_VERSION}/ilo
 $ ln --symbolic --relative ilo-${ILO_VERSION}/ilo ~/.local/bin/ilo
 ```
 
-### Windows
+## Other
 
-- Download the Java 11 artifact.
-- Extract it into a folder of your choice.
-- Add `ilo.bat` to your `$PATH`
+For all other platforms that support Java, run something like this:
+
+```shell script
+$ export ILO_VERSION={release-version} # lookup value from release page above
+$ export ILO_TYPE=java11
+$ cd /path/to/ilo/installation/folder
+$ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-${ILO_TYPE}.zip --output ilo.zip
+$ unzip ilo.zip
+$ chmod +x ilo-${ILO_VERSION}/ilo
+# move 'ilo' start script to your preferred location
+```
