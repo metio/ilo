@@ -52,4 +52,14 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [qus](https://github.com/dbhi/qus): qemu-user-static (qus) is a compilation of utilities, examples and references to build and execute OCI images (aka docker images) for foreign architectures using QEMU's user-mode emulation.
 - [coretoolbox](https://github.com/cgwalters/coretoolbox): This is a new implementation of https://github.com/debarshiray/toolbox/
 - [pyrex](https://github.com/garmin/pyrex): Containerize your bitbake.
-
+- [lxdock](https://github.com/lxdock/lxdock): LXDock is a wrapper around LXD that allows developers to orchestrate their development environments using a workflow similar to Vagrant.
+- [devlx](https://github.com/bketelsen/devlx): devlx is a development tool that provisions temporary development environments. It uses lxd and zfs to make efficient, copy-on-write, workspaces from a user-provided template.
+- [edi](https://github.com/lueschem/edi): Driven by the DevOps mindset edi helps you to streamline your embedded development infrastructure.
+- [ynh-dev](https://github.com/YunoHost/ynh-dev): ynh-dev is a CLI tool to manage your local development environment for YunoHost.
+- [VVV](https://github.com/Varying-Vagrant-Vagrants/VVV): VVV is a local developer environment, mainly aimed at WordPress developers. It uses Vagrant and VirtualBox, and can be used to build sites, and contribute to WordPress.
+- [shutit](https://github.com/ianmiell/shutit): Automation framework for programmers.
+- [vccw](https://github.com/vccw-team/vccw): A Vagrant based development environment. 
+- [mech](https://github.com/mechboxes/mech): Easy command line virtual machines for VMWare.
+- [dev](https://github.com/teracyhq/dev): The only truly universal productive software development platform for all!
+- [Desktop](https://github.com/Chassis/Desktop): Local WordPress development made easy.
+- [stakkr](https://github.com/stakkr-org/stakkr): Stakkr is a a docker recompose tool that uses docker compose to easily create / maintain a stack of services, for example for web development.
