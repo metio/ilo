@@ -64,3 +64,5 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [Desktop](https://github.com/Chassis/Desktop): Local WordPress development made easy.
 - [stakkr](https://github.com/stakkr-org/stakkr): Stakkr is a a docker recompose tool that uses docker compose to easily create / maintain a stack of services, for example for web development.
 - [buildock](https://github.com/ulikoehler/buildock): Reproducible build environments for local builds using Docker.
+- [takeout](https://github.com/tightenco/takeout): Takeout is a Mac-based CLI tool for spinning up tiny Docker containers, one for each of your development environment dependencies.
+- [valet](https://laravel.com/docs/7.x/valet): Valet is a Laravel development environment for Mac minimalists.
