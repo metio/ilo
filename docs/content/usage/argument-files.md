@@ -24,8 +24,6 @@ node:latest
 $ ilo @some/folder/your-arguments.txt
 ```
 
-By default, `ilo` will look for a `.ilo.rc` and `.ilo/ilo.rc` files in the current directory and adds them automatically as argument files.
-
 The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:
 
 ```shell script
@@ -57,4 +55,4 @@ You can mix argument files with regular CLI options as well:
 $ ilo shell @default-shell openjdk:11
 ```
 
-The argument file used by `ilo` developers can be seen [here](https://github.com/metio/ilo/blob/master/.ilo.rc) and is used by simply calling `ilo` in the root of the project.
+The argument file used by `ilo` developers can be seen [here](https://github.com/metio/ilo/blob/master/.ilo.rc) and is used by simply calling `ilo` in the root of the project because its a [run command](../run-commands) file.
