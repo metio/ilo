@@ -36,10 +36,25 @@ ilo @build-env
 
 In order to use `direnv`, first [install it](https://direnv.net/#basic-installation) and then place a `.envrc` file in the root of your project which contains `ilo` and its arguments as its contents.
 
+```shell script
+[you@hostname project-dir]$ cat .envrc
+ilo @build-env
+```
+
 ## [smartcd](https://github.com/cxreg/smartcd)
 
 In order to use `smartcd`, first [install it](https://github.com/cxreg/smartcd#ok-how-do-i-use-it), enter the root directory of your project and then call `smartcd edit enter` which will open an editor to write a script to execute whenever you enter your project directory. Use something like `ilo @build-env` as the script.
 
+```shell script
+[you@hostname project-dir]$ cat ~/.smartcd/scripts/path/to/project-dir/bash_enter
+ilo @build-env
+```
+
 ## [zsh-autoenv](https://github.com/Tarrasch/zsh-autoenv)
 
 In order to use `zsh-autoenv`, first [install it](https://github.com/Tarrasch/zsh-autoenv#installation) and then place a `.autoenv.zsh` file in the root of your project which contains `ilo` and its arguments as its contents.
+
+```shell script
+[you@hostname project-dir]$ cat .autoenv.zsh
+ilo @build-env
+```
