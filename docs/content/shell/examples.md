@@ -22,7 +22,7 @@ In order to re-use already downloaded dependencies inside the container, specify
 ```shell script
 # Maven project that mounts local m2 repo
 $ ilo shell \
-    --volume $HOME/.m2/repository:/root/.m2/repository:Z \
+    --volume $HOME/.m2:/root/.m2:Z \
     maven:latest
 ```
 
