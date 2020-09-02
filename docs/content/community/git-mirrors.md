@@ -3,7 +3,7 @@ title: Git Mirrors
 date: 2020-04-13
 menu:
   main:
-    parent: 'Contributors'
+    parent: 'Community'
 categories:
 - Contributors
 tags:
@@ -15,7 +15,7 @@ tags:
 
 ## Available Mirrors
 
-Mirrors are automatically updated as explained in this [blog post](https://seb.people.metio.wtf/topic/gitlab-the-git-distributor/).
+Mirrors are updated automatically as explained in this [blog post](https://seb.people.metio.wtf/topic/gitlab-the-git-distributor/).
 
 - https://github.com/metio/ilo
 - https://gitlab.com/metio.wtf/ilo
