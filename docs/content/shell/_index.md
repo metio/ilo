@@ -55,7 +55,3 @@ In case you want to use a local `Dockerfile`, use the `--dockerfile` flag like t
 ```
 
 The resulting image name will be `your.image:latest`. Take a look at all available [options](./options) or use `ilo shell --help` to get a list of all options, and their default values. In order to simplify handling of long command line options, consider using [argument files](../usage/argument-files).
-
-```shell script
-$ ilo @shell
-```
