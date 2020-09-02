@@ -19,7 +19,7 @@ The `ilo shell` command can be used to run a single container either interactive
 [root@container project-dir]#
 
 # run command non-interactive
-[you@hostname project-dir]$ ilo shell --no--interactive openjdk:11 mvn verify
+[you@hostname project-dir]$ ilo shell --no-interactive openjdk:11 mvn verify
 [you@hostname project-dir]$ 
 ```
 
