@@ -32,7 +32,7 @@ In order to exit the container either use `exit` or hit `Ctrl + d`:
 [you@hostname project-dir]$
 ```
 
-Once you have exited the container, `ilo` will automatically stop and remove it. In order to remove the image as well, specify the `--remove-image` as well:
+Once you have exited the container, `ilo` will automatically stop and remove it. In order to remove the image as well, specify the `--remove-image` flag:
 
 ```shell script
 [you@hostname project-dir]$ ilo shell --remove-image openjdk:11
