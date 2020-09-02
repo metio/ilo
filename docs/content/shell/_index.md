@@ -23,7 +23,12 @@ The `ilo shell` command can be used to run a single container either interactive
 [you@hostname project-dir]$ 
 ```
 
-`ilo shell` will delegate most of its work to one of the supported [runtimes](./runtimes).
+`ilo shell` will delegate most of its work to one of the supported [runtimes](./runtimes). In order to override the default command of your image, specify the command you want to execute just after the image, like this:
+
+```shell script
+[you@hostname project-dir]$ ilo shell openjdk:11 /bin/bash
+[root@container project-dir]#
+```
 
 In order to exit the container either use `exit` or hit `Ctrl + d`:
 
