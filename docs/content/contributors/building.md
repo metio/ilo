@@ -24,6 +24,7 @@ tags:
 - [Java JDK](https://jdk.java.net/) to compile the code
 - [Maven](https://maven.apache.org/) to build the project
 - [hugo](https://gohugo.io/) in order to create the website
+- [GraalVM](https://www.graalvm.org/) to build a native executable
 
 ## ilo Setup
 
