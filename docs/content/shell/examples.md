@@ -15,7 +15,7 @@ The following examples show how `ilo shell` can be used.
 
 ## Maven Projects
 
-[Maven](https://maven.apache.org/) caches all downloaded dependencies in your local `~/.m2/repository` directory.
+[Maven](https://maven.apache.org/) caches all downloaded dependencies in your local `~/.m2` directory.
 
 In order to re-use already downloaded dependencies inside the container, specify a `--volumne` like this:
 
