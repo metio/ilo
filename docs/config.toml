@@ -1,7 +1,7 @@
 baseURL = "https://ilo.projects.metio.wtf/"
 languageCode = "en"
 theme = "metio"
-title = "ilo"
+title = "ilo - reproducible build environments"
 
 pygmentsUseClasses=true
 sectionPagesMenu = "main"
