@@ -13,43 +13,48 @@ tags:
 
 The `ilo shell` command can be configured with the following command line options. From your terminal, use `ilo shell --help` to get a list of all options, and their default values.
 
-## `--runtime`
+## `--debug`
 
-The `--runtime` option can be used to force the usage of a specific runtime. See [runtimes](../runtimes) for details.
+The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
 
 ```shell script
-# force to use podman
-$ ilo shell --runtime podman
+# print runtime commands
+$ ilo shell --debug
 
-# force to use docker
-$ ilo shell --runtime docker
-
-# force to use lxd
-$ ilo shell --runtime lxd
-
-# auto select
+# do not print runtime commands
+$ ilo shell --debug=false
 $ ilo shell
 ```
 
-In case no `--runtime` is specified, `ilo shell` will automatically select one of the runtimes installed on your local system and prefers `podman` over `docker` over `lxd`.
+By default, `--debug` is not enabled.
 
-## `--pull`
+## `--dockerfile`
 
-The `--pull` option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only pulled in case the registry contains a newer image than locally available.
+The `--dockerfile` can be used to specify a local `Dockerfile`. Specifying such a file will cause `ilo` to build your image first, and then open a shell into a container based on that image.
 
 ```shell script
-# pull image before opening shell
-$ ilo shell --pull
+# specify custom Dockerfile
+$ ilo shell --dockerfile some/where/your.dockerfile
 
-# do not pull image before opening shell
-$ ilo shell --no-pull
-$ ilo shell --pull=false
-
-# do not pull image before opening shell
+# do not specify Dockerfile
 $ ilo shell
 ```
 
-By default, `--pull` is not enabled.
+By default, `--dockerfile` is not set to any value.
+
+## `--env`
+
+The `--env` option can be used to specify environment variables for your container.
+
+```shell script
+# specify env variable
+$ ilo shell --env key=value
+
+# do not specify env variable
+$ ilo shell
+```
+
+By default, `--env` does not set any environment variables.
 
 ## `--interactive`
 
@@ -87,34 +92,6 @@ $ ilo shell
 
 By default, `--mount-project-dir` is enabled.
 
-## `--volume`
-
-The `--volume` option can be used to mount additional volumes into your container.
-
-```shell script
-# mount extra volume
-$ ilo shell --volume $HOME/.m2/repository:/root/.m2/repository:Z
-
-# do not mount extra volume
-$ ilo shell
-```
-
-By default, `--volume` does not mount any extra volumes.
-
-## `--env`
-
-The `--env` option can be used to specify environment variables for your container.
-
-```shell script
-# specify env variable
-$ ilo shell --env key=value
-
-# do not specify env variable
-$ ilo shell
-```
-
-By default, `--env` does not set any environment variables.
-
 ## `--publish`
 
 The `--publish` option can be used to publish ports of your container to your local system.
@@ -129,19 +106,23 @@ $ ilo shell
 
 By default, `--publish` does not exposes any ports.
 
-## `--dockerfile`
+## `--pull`
 
-The `--dockerfile` can be used to specify a local `Dockerfile`. Specifying such a file will cause `ilo` to build your image first, and then open a shell into a container based on that image.
+The `--pull` option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only pulled in case the registry contains a newer image than locally available.
 
 ```shell script
-# specify custom Dockerfile
-$ ilo shell --dockerfile some/where/your.dockerfile
+# pull image before opening shell
+$ ilo shell --pull
 
-# do not specify Dockerfile
+# do not pull image before opening shell
+$ ilo shell --no-pull
+$ ilo shell --pull=false
+
+# do not pull image before opening shell
 $ ilo shell
 ```
 
-By default, `--dockerfile` is not set to any value.
+By default, `--pull` is not enabled.
 
 ## `--remove-image`
 
@@ -158,6 +139,26 @@ $ ilo shell
 ```
 
 By default, `--remove-image` is not enabled.
+
+## `--runtime`
+
+The `--runtime` option can be used to force the usage of a specific runtime. See [runtimes](../runtimes) for details.
+
+```shell script
+# force to use podman
+$ ilo shell --runtime podman
+
+# force to use docker
+$ ilo shell --runtime docker
+
+# force to use lxd
+$ ilo shell --runtime lxd
+
+# auto select
+$ ilo shell
+```
+
+In case no `--runtime` is specified, `ilo shell` will automatically select one of the runtimes installed on your local system and prefers `podman` over `docker` over `lxd`.
 
 ## `--runtime-option`
 
@@ -234,17 +235,16 @@ $ ilo shell
 
 By default, `--runtime-cleanup-option` is set to an empty array.
 
-## `--debug`
+## `--volume`
 
-The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
+The `--volume` option can be used to mount additional volumes into your container.
 
 ```shell script
-# print runtime commands
-$ ilo shell --debug
+# mount extra volume
+$ ilo shell --volume $HOME/.m2/repository:/root/.m2/repository:Z
 
-# do not print runtime commands
-$ ilo shell --debug=false
+# do not mount extra volume
 $ ilo shell
 ```
 
-By default, `--debug` is not enabled.
+By default, `--volume` does not mount any extra volumes.
