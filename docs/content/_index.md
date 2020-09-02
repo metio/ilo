@@ -1,5 +1,5 @@
 ---
-title: ilo - reproducible build environments
+title: reproducible build environments
 date: 2020-04-13
 ---
 
