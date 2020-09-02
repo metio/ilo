@@ -1,5 +1,5 @@
 ---
-title: 'IntelliJ Idea'
+title: Editors
 date: 2020-04-13
 menu:
   main:
@@ -7,9 +7,12 @@ menu:
 categories:
 - Contributors
 tags:
+- editor
 - idea
 - ide
 ---
+
+## IntelliJ
 
 [IntelliJ Idea](https://www.jetbrains.com/idea/) is a popular IDE by [Jetbrains](https://www.jetbrains.com/). It allows [several ways](https://www.jetbrains.com/help/idea/sharing-your-ide-settings.html) to share settings across team members in a project.
 
