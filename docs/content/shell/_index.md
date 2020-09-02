@@ -41,7 +41,6 @@ Once you have exited the container, `ilo` will automatically stop and remove it.
 
 ```shell script
 [you@hostname project-dir]$ ilo shell --remove-image openjdk:11
-[root@container project-dir]#  // do some work
 [root@container project-dir]# exit
 ```
 
