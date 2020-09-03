@@ -66,3 +66,8 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [buildock](https://github.com/ulikoehler/buildock): Reproducible build environments for local builds using Docker.
 - [takeout](https://github.com/tightenco/takeout): Takeout is a Mac-based CLI tool for spinning up tiny Docker containers, one for each of your development environment dependencies.
 - [valet](https://laravel.com/docs/7.x/valet): Valet is a Laravel development environment for Mac minimalists.
+- [poetry](https://python-poetry.org/): Poetry comes with all the tools you might need to manage your projects in a deterministic way. 
+- [poetry2nix](https://github.com/nix-community/poetry2nix): poetry2nix turns Poetry projects into Nix derivations without the need to actually write Nix expressions.
+- [buildstream](https://www.buildstream.build/): BuildStream is a powerful and flexible software integration toolset.
+- [svbox](https://www.sciviews.org/software/svbox/): A Reproducible Software Environment for Data Science
+- [ck](https://github.com/ctuning/ck): Collective Knowledge framework (CK) helps to organize any software project as a database of reusable components with common automation actions and extensible meta descriptions based on FAIR principles.
