@@ -16,7 +16,7 @@ In order to share build environments within a team, using a [container registry]
 
 ## Docker Hub
 
-[Docker Hub](https://hub.docker.com/) has an [automated build system](https://docs.docker.com/docker-hub/builds/) that can be used to automatically create a build environment which can be used by team members of your project.
+[Docker Hub](https://hub.docker.com/) has an [automated build system](https://docs.docker.com/docker-hub/builds/) that can be used to automatically create a build environment which in turn can be used by team members of your project.
 
 Make sure Docker Hub rebuilds your build environment on every change to master (or any other branch) and have your contributors pull the resulting images to their machines.
 
