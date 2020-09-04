@@ -29,7 +29,7 @@ tags:
 ## ilo Setup
 
 - [ilo](../../usage/install) to open the reproducible build environment for `ilo` itself
-- Anyone of the [runtimes](../../shell/runtimes) that `ilo shell` supports.
+- One of the [runtimes](../../shell/runtimes) that `ilo shell` supports.
 
 ## GitHub Packages
 
