@@ -11,7 +11,7 @@ import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.shell.ShellOptions;
 
 final class DevcontainerOptionsMapper {
-  
+
   static ShellOptions shellOptions(final DevcontainerOptions options, final DevcontainerJson devcontainer) {
     final var opts = new ShellOptions();
     opts.image = devcontainer.image;
@@ -24,7 +24,7 @@ final class DevcontainerOptionsMapper {
     opts.mountProjectDir = options.mountProjectDir;
     return opts;
   }
-  
+
   static ComposeOptions composeOptions(final DevcontainerOptions options, final DevcontainerJson devcontainer) {
     final var opts = new ComposeOptions();
     opts.file = devcontainer.dockerComposeFile;
