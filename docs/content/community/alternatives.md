@@ -75,3 +75,5 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [nixml](https://github.com/luispedro/nixml): Simple, perfectly reproducible, environments with nix specified using an YAML file.
 - [Stack](https://docs.haskellstack.org/en/stable/README/): Stack is a cross-platform program for developing Haskell projects. It is aimed at Haskellers both new and experienced.
 - [Conda](https://conda.io/): Package, dependency and environment management for any language—Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN, and more.
+- [rebench](https://github.com/smarr/rebench): Execute and document benchmarks reproducibly.
+- [build](https://github.com/GreenCape/build): A docker based test and build environment, especially for Joomla!
