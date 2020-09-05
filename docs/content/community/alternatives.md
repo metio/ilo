@@ -71,3 +71,7 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [buildstream](https://www.buildstream.build/): BuildStream is a powerful and flexible software integration toolset.
 - [svbox](https://www.sciviews.org/software/svbox/): A Reproducible Software Environment for Data Science
 - [ck](https://github.com/ctuning/ck): Collective Knowledge framework (CK) helps to organize any software project as a database of reusable components with common automation actions and extensible meta descriptions based on FAIR principles.
+- [docker-devel-env](https://github.com/BrainTwister/docker-devel-env): Fast, reproducible, and portable software development environments
+- [nixml](https://github.com/luispedro/nixml): Simple, perfectly reproducible, environments with nix specified using an YAML file.
+- [Stack](https://docs.haskellstack.org/en/stable/README/): Stack is a cross-platform program for developing Haskell projects. It is aimed at Haskellers both new and experienced.
+- [Conda](https://conda.io/): Package, dependency and environment management for any language—Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN, and more.
