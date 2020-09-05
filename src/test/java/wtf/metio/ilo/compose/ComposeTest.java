@@ -14,9 +14,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import wtf.metio.ilo.test.TestMethodSources;
 
 import java.util.List;
+import java.util.function.Supplier;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Compose")
 class ComposeTest extends TestMethodSources {
@@ -153,6 +153,68 @@ class ComposeTest extends TestMethodSources {
         List.of(tool, "--file", options.file, "down", "--remove-orphans"));
   }
 
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("fail early after pull")
+  void failToPull(final String runtime) {
+    final var tool = useRuntime(runtime);
+    executor.exitCodes(1);
+    options.pull = true;
+    final var exitCode = compose.call();
+    assertAll("command line",
+        () -> assertEquals(1, exitCode, "exitCode"),
+        () -> assertIterableEquals(List.of(tool, "--file", options.file, "pull"), executor.pullArguments(), "pullArguments"),
+        () -> noExecution(executor::buildArguments, "buildArguments"),
+        () -> noExecution(executor::runArguments, "runArguments"),
+        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("fail early after build")
+  void failToBuild(final String runtime) {
+    final var tool = useRuntime(runtime);
+    executor.exitCodes(0, 1);
+    options.build = true;
+    final var exitCode = compose.call();
+    assertAll("command line",
+        () -> assertEquals(1, exitCode, "exitCode"),
+        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
+        () -> assertIterableEquals(List.of(tool, "--file", options.file, "build"), executor.buildArguments(), "buildArguments"),
+        () -> noExecution(executor::runArguments, "runArguments"),
+        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("fail early after run")
+  void failToRun(final String runtime) {
+    final var tool = useRuntime(runtime);
+    executor.exitCodes(0, 0, 1);
+    final var exitCode = compose.call();
+    assertAll("command line",
+        () -> assertEquals(1, exitCode, "exitCode"),
+        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
+        () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
+        () -> assertIterableEquals(List.of(tool, "--file", options.file, "run", "-T"), executor.runArguments(), "runArguments"),
+        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("return cleanup exit code")
+  void failToClean(final String runtime) {
+    final var tool = useRuntime(runtime);
+    executor.exitCodes(0, 0, 0, 1);
+    final var exitCode = compose.call();
+    assertAll("command line",
+        () -> assertEquals(1, exitCode, "exitCode"),
+        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
+        () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
+        () -> assertIterableEquals(List.of(tool, "--file", options.file, "run", "-T"), executor.runArguments(), "runArguments"),
+        () -> assertIterableEquals(List.of(tool, "--file", options.file, "down"), executor.cleanupArguments(), "cleanupArguments"));
+  }
+
   private String useRuntime(final String runtime) {
     options.runtime = ComposeRuntime.fromAlias(runtime);
     return options.runtime.aliases()[0];
@@ -163,12 +225,17 @@ class ComposeTest extends TestMethodSources {
       final List<String> buildArguments,
       final List<String> runArguments,
       final List<String> cleanupArguments) {
-    compose.call();
-    assertAll("command line arguments",
+    final var exitCode = compose.call();
+    assertAll("command line",
+        () -> assertEquals(0, exitCode, "exitCode"),
         () -> assertIterableEquals(pullArguments, executor.pullArguments(), "pullArguments"),
         () -> assertIterableEquals(buildArguments, executor.buildArguments(), "buildArguments"),
         () -> assertIterableEquals(runArguments, executor.runArguments(), "runArguments"),
         () -> assertIterableEquals(cleanupArguments, executor.cleanupArguments(), "cleanupArguments"));
+  }
+
+  private void noExecution(final Supplier<List<String>> arguments, final String name) {
+    assertThrows(IndexOutOfBoundsException.class, arguments::get, name);
   }
 
 }

@@ -23,10 +23,19 @@ public final class CommandLifecycle {
       final BiFunction<? super List<String>, ? super Boolean, Integer> executor) {
     final var pullArguments = tool.pullArguments(options);
     final var pullExitCode = executor.apply(pullArguments, options.debug());
+    if (0 != pullExitCode) {
+      return pullExitCode;
+    }
     final var buildArguments = tool.buildArguments(options);
     final var buildExitCode = executor.apply(buildArguments, options.debug());
+    if (0 != buildExitCode) {
+      return buildExitCode;
+    }
     final var runArguments = tool.runArguments(options);
     final var runExitCode = executor.apply(runArguments, options.debug());
+    if (0 != runExitCode) {
+      return runExitCode;
+    }
     final var cleanupArguments = tool.cleanupArguments(options);
     final var cleanupExitCode = executor.apply(cleanupArguments, options.debug());
     return IntStream.of(pullExitCode, buildExitCode, runExitCode, cleanupExitCode)
