@@ -13,17 +13,17 @@ tags:
 
 The following examples show how `ilo shell` can be used.
 
-## Maven Projects
+## Cargo Projects
 
-[Maven](https://maven.apache.org/) caches all downloaded dependencies in your local `~/.m2` directory.
+[Cargo](https://doc.rust-lang.org/cargo/) caches all downloaded dependencies in your local `~/.cargo` directory.
 
 In order to re-use already downloaded dependencies inside the container, specify a `--volumne` like this:
 
 ```shell script
-# Maven project that mounts local m2 repo
+# Gradle project that mounts local .gradle folder
 $ ilo shell \
-    --volume $HOME/.m2:/root/.m2:Z \
-    maven:latest
+    --volume $HOME/.cargo:/root/.cargo:Z \
+    rust:latest
 ```
 
 ## Gradle Projects
@@ -37,4 +37,17 @@ In order to re-use already downloaded dependencies inside the container, specify
 $ ilo shell \
     --volume $HOME/.gradle:/home/gradle/.gradle:Z \
     gradle:latest
+```
+
+## Maven Projects
+
+[Maven](https://maven.apache.org/) caches all downloaded dependencies in your local `~/.m2` directory.
+
+In order to re-use already downloaded dependencies inside the container, specify a `--volumne` like this:
+
+```shell script
+# Maven project that mounts local m2 repo
+$ ilo shell \
+    --volume $HOME/.m2:/root/.m2:Z \
+    maven:latest
 ```
