@@ -67,7 +67,7 @@ class ShellTest extends TestMethodSources {
     options.dockerfile = "Dockerfile";
     assertCommandLine(
         List.of(),
-        List.of(tool, "build", "--file", options.dockerfile, "--tag", options.image, "."),
+        List.of(tool, "build", "--file", options.dockerfile, "--tag", options.image),
         List.of(tool, "run", "--rm", options.image),
         List.of());
   }
@@ -136,7 +136,7 @@ class ShellTest extends TestMethodSources {
     options.runtimeBuildOptions = List.of("--squash-all");
     assertCommandLine(
         List.of(),
-        List.of(tool, "build", "--file", options.dockerfile, "--squash-all", "--tag", options.image, "."),
+        List.of(tool, "build", "--file", options.dockerfile, "--squash-all", "--tag", options.image),
         List.of(tool, "run", "--rm", options.image),
         List.of());
   }
@@ -195,7 +195,7 @@ class ShellTest extends TestMethodSources {
     assertAll("command line",
         () -> assertEquals(1, exitCode, "exitCode"),
         () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-        () -> assertIterableEquals(List.of(tool, "build", "--file", options.dockerfile, "--tag", options.image, "."), executor.buildArguments(), "buildArguments"),
+        () -> assertIterableEquals(List.of(tool, "build", "--file", options.dockerfile, "--tag", options.image), executor.buildArguments(), "buildArguments"),
         () -> noExecution(executor::runArguments, "runArguments"),
         () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }

@@ -13,6 +13,20 @@ tags:
 
 The `ilo shell` command can be configured with the following command line options. From your terminal, use `ilo shell --help` to get a list of all options, and their default values.
 
+## `--context`
+
+The `--context` option allows to specify the context when building an image with `--dockerfile`.
+
+```shell script
+# specify custom context
+$ ilo shell --context ./local/folder
+
+# do not specify context
+$ ilo shell
+```
+
+By default, `--context` is set to `.` (the current directory).
+
 ## `--debug`
 
 The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.

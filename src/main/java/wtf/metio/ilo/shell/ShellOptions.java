@@ -57,6 +57,13 @@ public final class ShellOptions implements Options {
   public String dockerfile;
 
   @CommandLine.Option(
+      names = {"--context"},
+      description = "The context to use when building an image.",
+      defaultValue = "."
+  )
+  public String context;
+
+  @CommandLine.Option(
       names = {"--remove-image"},
       description = "Remove image after closing the shell."
   )

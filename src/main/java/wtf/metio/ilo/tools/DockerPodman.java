@@ -42,7 +42,8 @@ abstract class DockerPodman implements ShellCLI {
           of("build", "--file", options.dockerfile),
           fromList(options.runtimeBuildOptions),
           maybe(options.pull, "--pull"),
-          of("--tag", options.image, "."));
+          of("--tag", options.image),
+          of(options.context));
     }
     return List.of();
   }

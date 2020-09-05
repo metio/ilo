@@ -35,7 +35,7 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
     options.image = "example:test";
     options.dockerfile = "Dockerfile";
     final var arguments = tool().buildArguments(options);
-    assertEquals(String.format("%s build --file Dockerfile --tag example:test .", name()), String.join(" ", arguments));
+    assertEquals(String.format("%s build --file Dockerfile --tag example:test", name()), String.join(" ", arguments));
   }
 
   @Test
@@ -46,7 +46,7 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
     options.image = "example:test";
     options.dockerfile = "Dockerfile";
     final var arguments = tool().buildArguments(options);
-    assertEquals(String.format("%s build --file Dockerfile --pull --tag example:test .", name()), String.join(" ", arguments));
+    assertEquals(String.format("%s build --file Dockerfile --pull --tag example:test", name()), String.join(" ", arguments));
   }
 
   @Test
@@ -85,6 +85,17 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
     options.commands = List.of("example:test", "/bin/bash", "-c", "whoami");
     final var arguments = tool().runArguments(options);
     assertEquals(String.format("%s run --rm example:test /bin/bash -c whoami", name()), String.join(" ", arguments));
+  }
+
+  @Test
+  @DisplayName("custom build context")
+  void context() {
+    final var options = new ShellOptions();
+    options.context = ".";
+    options.image = "example:test";
+    options.dockerfile = "Dockerfile";
+    final var arguments = tool().buildArguments(options);
+    assertEquals(String.format("%s build --file Dockerfile --tag example:test .", name()), String.join(" ", arguments));
   }
 
   @Test
