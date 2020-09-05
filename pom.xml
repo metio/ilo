@@ -69,8 +69,6 @@
         <version.jdk>11</version.jdk>
         <version.picocli>4.5.1</version.picocli>
         <version.graal>20.2.0</version.graal>
-        <version.checksum-m-p>1.8</version.checksum-m-p>
-        <version.m-assembly-p>3.2.0</version.m-assembly-p>
         <skip.graal>true</skip.graal>
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
         <project.build.outputTimestamp>2019</project.build.outputTimestamp>
@@ -200,7 +198,6 @@
             <plugin>
                 <groupId>org.graalvm.nativeimage</groupId>
                 <artifactId>native-image-maven-plugin</artifactId>
-                <version>${version.graal}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -374,7 +371,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version>${version.m-assembly-p}</version>
                         <executions>
                             <execution>
                                 <id>native-assembly</id>
@@ -409,7 +405,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version>${version.m-assembly-p}</version>
                         <executions>
                             <execution>
                                 <id>native-assembly</id>
@@ -444,7 +439,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version>${version.m-assembly-p}</version>
                         <executions>
                             <execution>
                                 <id>native-assembly</id>
