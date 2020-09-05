@@ -13,6 +13,87 @@ tags:
 
 The `ilo compose` command can be configured with the following command line options. From your terminal, use `ilo compose --help` to get a list of all options, and their default values.
 
+## `--build`
+
+The `--build` option can be used to build images before opening a new shell. Use this option in case you rely on local Dockerfiles.
+
+```shell script
+# build images before opening shell
+$ ilo compose --build
+
+# do not build images before opening shell
+$ ilo compose --build=false
+
+# do not build images before opening shell
+$ ilo compose
+```
+
+By default, `--build` is not enabled.
+
+## `--debug`
+
+The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
+
+```shell script
+# print runtime commands
+$ ilo compose --debug
+
+# do not print runtime commands
+$ ilo compose --debug=false
+$ ilo compose
+```
+
+By default, `--debug` is not enabled.
+
+## `--file`
+
+The `--file` option can be used to specify the file that contains your container definitions, e.g. a `docker-compose.yml` file.
+
+```shell script
+# use custom location
+$ ilo compose --file /path/to/some/file.yaml
+
+# use default location
+$ ilo compose
+```
+
+By default, `--file` is set to `docker-compose.yml`.
+
+## `--interactive`
+
+The `--interactive` option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).
+
+```shell script
+# run interactively
+$ ilo compose --interactive
+
+# run non-interactive
+$ ilo compose --no-interactive
+$ ilo compose --interactive=false
+
+# run interactively
+$ ilo compose
+```
+
+By default, `--interactive` is enabled.
+
+## `--pull`
+
+The `--pull` option can be used to pull images before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only pulled in case the registry contains a newer image than locally available.
+
+```shell script
+# pull image before opening shell
+$ ilo compose --pull
+
+# do not pull image before opening shell
+$ ilo compose --pull=false
+
+# do not pull image before opening shell
+$ ilo compose
+```
+
+By default, `--pull` is not enabled.
+
 ## `--runtime`
 
 The `--runtime` option can be used to force the usage of a specific runtime. See [runtimes](../runtimes) for details.
@@ -38,73 +119,6 @@ $ ilo compose
 ```
 
 In case no `--runtime` is specified, `ilo compose` will automatically select one of the runtimes installed on your local system and prefers `docker-compose` over `podman-compose` over `pods-compose` over `footloose` over `vagrant` at the moment.
-
-## `--pull`
-
-The `--pull` option can be used to pull images before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only pulled in case the registry contains a newer image than locally available.
-
-```shell script
-# pull image before opening shell
-$ ilo compose --pull
-
-# do not pull image before opening shell
-$ ilo compose --pull=false
-
-# do not pull image before opening shell
-$ ilo compose
-```
-
-By default, `--pull` is not enabled.
-
-## `--interactive`
-
-The `--interactive` option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).
-
-```shell script
-# run interactively
-$ ilo compose --interactive
-
-# run non-interactive
-$ ilo compose --no-interactive
-$ ilo compose --interactive=false
-
-# run interactively
-$ ilo compose
-```
-
-By default, `--interactive` is enabled.
-
-## `--build`
-
-The `--build` option can be used to build images before opening a new shell. Use this option in case you rely on local Dockerfiles.
-
-```shell script
-# build images before opening shell
-$ ilo compose --build
-
-# do not build images before opening shell
-$ ilo compose --build=false
-
-# do not build images before opening shell
-$ ilo compose
-```
-
-By default, `--build` is not enabled.
-
-## `--file`
-
-The `--file` option can be used to specify the file that contains your container definitions, e.g. a `docker-compose.yml` file.
-
-```shell script
-# use custom location
-$ ilo compose --file /path/to/some/file.yaml
-
-# use default location
-$ ilo compose
-```
-
-By default, `--file` is set to `docker-compose.yml`.
-
 
 ## `--runtime-option`
 
@@ -180,18 +194,3 @@ $ ilo compose
 ```
 
 By default, `--runtime-cleanup-option` is set to an empty array.
-
-## `--debug`
-
-The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
-
-```shell script
-# print runtime commands
-$ ilo compose --debug
-
-# do not print runtime commands
-$ ilo compose --debug=false
-$ ilo compose
-```
-
-By default, `--debug` is not enabled.
