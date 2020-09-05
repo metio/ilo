@@ -56,31 +56,31 @@ public final class ComposeOptions implements Options {
 
   @CommandLine.Option(
       names = {"--runtime-option"},
-      description = "Options for the selected runtime itself."
+      description = "Options for the selected compose runtime itself."
   )
   public List<String> runtimeOptions;
 
   @CommandLine.Option(
       names = {"--runtime-pull-option"},
-      description = "Options for the pull command of the selected runtime."
+      description = "Options for the pull command of the selected compose runtime."
   )
   public List<String> runtimePullOptions;
 
   @CommandLine.Option(
       names = {"--runtime-build-option"},
-      description = "Options for the build command of the selected runtime."
+      description = "Options for the build command of the selected compose runtime."
   )
   public List<String> runtimeBuildOptions;
 
   @CommandLine.Option(
       names = {"--runtime-run-option"},
-      description = "Options for the run command of the selected runtime."
+      description = "Options for the run command of the selected compose runtime."
   )
   public List<String> runtimeRunOptions;
 
   @CommandLine.Option(
       names = {"--runtime-cleanup-option"},
-      description = "Options for the cleanup command of the selected runtime."
+      description = "Options for the cleanup command of the selected compose runtime."
   )
   public List<String> runtimeCleanupOptions;
 
