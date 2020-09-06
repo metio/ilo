@@ -41,6 +41,15 @@ In order to use [direnv](https://direnv.net/), first [install it](https://direnv
 ilo @build-env
 ```
 
+## envrc-rs
+
+In order to use [envrc-rs](https://github.com/roxma/envrc-rs), first [install it](https://github.com/roxma/envrc-rs#install) and then place a `.envrc` file in the root of your project which contains `ilo` and its arguments as its contents.
+
+```shell script
+[you@hostname project-dir]$ cat .envrc
+ilo @build-env
+```
+
 ## smartcd
 
 In order to use [smartcd](https://github.com/cxreg/smartcd), first [install it](https://github.com/cxreg/smartcd#ok-how-do-i-use-it), enter the root directory of your project and then call `smartcd edit enter` which will open an editor to write a script to execute whenever you enter your project directory. Use something like `ilo @build-env` as the script.
