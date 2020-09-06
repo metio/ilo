@@ -180,11 +180,13 @@ jobs:
       - id: graal
         name: GraalVM Setup
         if: needs.prepare.outputs.commit_count > 0
-        uses: rinx/setup-graalvm-ce@v0.0.4
+        uses: DeLaGuardo/setup-graalvm@2.0
         with:
-          graalvm-version: ${{ env.GRAAL }}
-          java-version: ${{ env.JAVA }}
-          native-image: "true"
+          graalvm-version: "${{ env.GRAAL }}.${{ env.JAVA }}"
+      - id: native-image
+        name: Install native-image
+        if: needs.prepare.outputs.commit_count > 0
+        run: gu install native-image
       - id: cache
         name: Cache Maven Repository
         if: needs.prepare.outputs.commit_count > 0
