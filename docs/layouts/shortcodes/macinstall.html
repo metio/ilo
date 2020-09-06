@@ -1,0 +1,17 @@
+{{ range $.Site.Data.contributors }}
+<!--
+  ~ This file is part of ilo. It is subject to the license terms in the LICENSE file found in the top-level
+  ~ directory of this distribution and at http://creativecommons.org/publicdomain/zero/1.0/. No part of ilo,
+  ~ including this file, may be copied, modified, propagated, or distributed except according to the terms contained
+  ~ in the LICENSE file.
+  -->
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">
+$ cd /path/to/ilo/installation/folder
+$ curl --location https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-mac.zip --output ilo.zip
+$ unzip ilo.zip
+$ chmod +x ilo-${ILO_VERSION}/ilo
+$ ln --symbolic --relative ilo-{{ getenv "ILO_RELEASE" }}/ilo ~/.local/bin/ilo
+</code></pre>
+</div>
+{{ end }}
