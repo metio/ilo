@@ -62,8 +62,8 @@ jobs:
         with:
           tag_name: ${{ steps.release.outputs.version }}
           release_name: Release ${{ steps.release.outputs.version }}
-          draft: true
-          prerelease: true
+          draft: false
+          prerelease: false
           body: |
             # ilo
             Manage reproducible build environments. Take a look at the [website](https://ilo.projects.metio.wtf/) for detailed information.
