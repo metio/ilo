@@ -34,7 +34,7 @@ windows:
 In order to use [teamocil](https://github.com/remi/teamocil), first [install it](https://github.com/remi/teamocil#installation) and then create a new configuration in `~/.teamocil`:
 
 ```shell script
-[you@hostname project-dir]$ cat $XDG_CONFIG_HOME/tmuxp/your-project.yml
+[you@hostname project-dir]$ cat ~/.teamocil/your-project.yml
 windows:
   - name: your-project
     root: ~/path/to/your/project
