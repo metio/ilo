@@ -23,7 +23,6 @@ jobs:
           hugo-version: latest
       - id: previous
         name: Get Last Release
-        if: steps.commits.outputs.count > 0
         run: echo "::set-output name=version::$(git describe --abbrev=0 --tags)"
       - name: Build Website
         run: hugo --minify --i18n-warnings --path-warnings --source docs
