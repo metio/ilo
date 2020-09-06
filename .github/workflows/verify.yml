@@ -5,7 +5,7 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'src/**'
+      - "src/**"
 jobs:
   build:
     runs-on: ubuntu-latest

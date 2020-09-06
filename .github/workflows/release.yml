@@ -1,7 +1,7 @@
 name: Perform Release
 on:
   schedule:
-    - cron:  '45 3 * * MON'
+    - cron:  "45 3 * * MON"
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -136,7 +136,7 @@ jobs:
           server_port: ${{ secrets.MAIL_PORT }}
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: ilo #release ${{ steps.release.outputs.version }}
+          subject: "ilo #release ${{ steps.release.outputs.version }}"
           body: See https://github.com/metio/ilo/releases/tag/${{ steps.release.outputs.version }} for details.
           to: ilo@metio.groups.io
           from: ${{ secrets.MAIL_SENDER }}
@@ -155,7 +155,7 @@ jobs:
           app-id: ${{ secrets.REDDIT_APP_ID }}
           app-secret: ${{ secrets.REDDIT_API_SECRET }}
           subreddit: ${{ secrets.REDDIT_SUBREDDIT }}
-          title: "${{ github.repository }} version ${{ steps.release.outputs.version }} published"
+          title: ${{ github.repository }} version ${{ steps.release.outputs.version }} published
           url: https://github.com/metio/ilo/releases/tag/${{ steps.release.outputs.version }}
           comment: |
             Manage reproducible build environments with [ilo](https://ilo.projects.metio.wtf/)!
