@@ -9,16 +9,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v2
         with:
-          # Hugo: Fetch all history for .GitInfo and .Lastmod
           fetch-depth: 0
-      - name: Setup Hugo
+      - id: hugo
+        name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: latest
+      - id: previous
+        name: Get Last Release
+        if: steps.commits.outputs.count > 0
+        run: echo "::set-output name=version::$(git describe --abbrev=0 --tags)"
       - name: Build Website
         run: hugo --minify --i18n-warnings --path-warnings --source docs
+        with:
+          ILO_RELEASE: ${{ steps.previous.outputs.version }}
       - name: Deploy Website
         uses: peaceiris/actions-gh-pages@v3
         with:

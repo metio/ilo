@@ -23,10 +23,9 @@ In case you want to help package `ilo` for your preferred operating system, take
 The Linux distribution of `ilo` is a native executable and does not require any additional software to be installed.
 
 ```shell script
-$ export ILO_VERSION={release-version} # lookup value from release page above
-$ export ILO_TYPE=linux
+$ export ILO_VERSION={{ getenv "ILO_RELEASE" }}
 $ cd /path/to/ilo/installation/folder
-$ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-${ILO_TYPE}.zip --output ilo.zip
+$ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-linux.zip --output ilo.zip
 $ unzip ilo.zip
 $ chmod +x ilo-${ILO_VERSION}/ilo
 $ ln --symbolic --relative ilo-${ILO_VERSION}/ilo ~/.local/bin/ilo
@@ -34,15 +33,14 @@ $ ln --symbolic --relative ilo-${ILO_VERSION}/ilo ~/.local/bin/ilo
 
 ## MacOS
 
-The MacOS distribution of `ilo` requires at least [Java 11](https://www.oracle.com/javadownload) to be installed.
+The MacOS distribution of `ilo` is a native executable and does not require any additional software to be installed.
 
 **THIS IS UNTESTED** - [help us](https://github.com/metio/ilo/issues/47) to get this working.
 
 ```shell script
-$ export ILO_VERSION={release-version} # lookup value from release page above
-$ export ILO_TYPE=java11
+$ export ILO_VERSION={{ getenv "ILO_RELEASE" }}
 $ cd /path/to/ilo/installation/folder
-$ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-${ILO_TYPE}.zip --output ilo.zip
+$ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-mac.zip --output ilo.zip
 $ unzip ilo.zip
 $ chmod +x ilo-${ILO_VERSION}/ilo
 $ ln --symbolic --relative ilo-${ILO_VERSION}/ilo /usr/local/bin/ilo
@@ -58,10 +56,9 @@ The Windows distribution of `ilo` requires at least [Java 11](https://www.oracle
 # this has to executed only once per user account
 $ MD %USERPROFILE%\bin
 $ control sysdm.cpl # manually add '%USERPROFILE%\bin' to the PATH of your user account
-$ export ILO_VERSION={release-version} # lookup value from release page above
-$ export ILO_TYPE=java11
+$ export ILO_VERSION={{ getenv "ILO_RELEASE" }}
 $ cd /path/to/ilo/installation/folder
-$ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-${ILO_TYPE}.zip --output ilo.zip
+$ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-java11.zip --output ilo.zip
 $ unzip ilo.zip
 $ chmod +x ilo-${ILO_VERSION}/ilo.bat
 $ ln --symbolic --relative ilo-${ILO_VERSION}/ilo %USERPROFILE%\bin\ilo.bat
@@ -69,13 +66,12 @@ $ ln --symbolic --relative ilo-${ILO_VERSION}/ilo %USERPROFILE%\bin\ilo.bat
 
 ## Other
 
-For all other platforms that support Java, run something like this:
+For all other platforms that support at least [Java 11](https://www.oracle.com/javadownload), run something like this:
 
 ```shell script
-$ export ILO_VERSION={release-version} # lookup value from release page above
-$ export ILO_TYPE=java11
+$ export ILO_VERSION={{ getenv "ILO_RELEASE" }}
 $ cd /path/to/ilo/installation/folder
-$ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-${ILO_TYPE}.zip --output ilo.zip
+$ curl --location https://github.com/metio/ilo/releases/download/${ILO_VERSION}/ilo-${ILO_VERSION}-java11.zip --output ilo.zip
 $ unzip ilo.zip
 $ chmod +x ilo-${ILO_VERSION}/ilo
 # move 'ilo' start script to your preferred location
