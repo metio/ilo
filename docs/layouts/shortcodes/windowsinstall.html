@@ -11,6 +11,6 @@ $ cd /path/to/ilo/installation/folder
 $ curl --location https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-java11.zip --output ilo.zip
 $ unzip ilo.zip
 $ chmod +x ilo-{{ getenv "ILO_RELEASE" }}/ilo
-$ ln --symbolic --relative ilo-{{ getenv "ILO_RELEASE" }}/ilo ~/.local/bin/ilo
+$ ln --symbolic --relative ilo-{{ getenv "ILO_RELEASE" }}/ilo %USERPROFILE%\bin\ilo.bat
 </code></pre>
 </div>
