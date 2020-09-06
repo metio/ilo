@@ -1,7 +1,7 @@
 name: Update Parent
 on:
   schedule:
-    - cron:  '0 1 2 * *'
+    - cron:  "0 1 2 * *"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,7 +29,7 @@ jobs:
           commit-message: update parent to latest version
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          title: 'update parent to latest version'
+          title: update parent to latest version
           body: |
             Project updated with: `mvn versions:update-parent`
           labels: enhancement
