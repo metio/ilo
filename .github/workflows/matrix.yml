@@ -39,11 +39,14 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           unreleased: true
+          issues: true
+          issuesWoLabels: true
+          pullRequests: true
+          prWoLabels: true
           filterByMilestone: false
           futureRelease: ${{ steps.release.outputs.version }}
           sinceTag: ${{ steps.previous.outputs.version }}
           stripGeneratorNotice: true
-          stripHeaders: true
       - id: create_release
         name: Create Release
         if: steps.commits.outputs.count > 0
