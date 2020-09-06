@@ -27,7 +27,7 @@ jobs:
         run: echo "::set-output name=version::$(git describe --abbrev=0 --tags)"
       - name: Build Website
         run: hugo --minify --i18n-warnings --path-warnings --source docs
-        with:
+        env:
           ILO_RELEASE: ${{ steps.previous.outputs.version }}
       - name: Deploy Website
         uses: peaceiris/actions-gh-pages@v3
