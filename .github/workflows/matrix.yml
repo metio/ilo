@@ -269,11 +269,6 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - id: gpg
-        name: GPG Key
-        if: needs.prepare.outputs.commit_count > 0
-        run: |
-          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
