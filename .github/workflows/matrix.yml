@@ -13,7 +13,7 @@ jobs:
       commit_count: ${{ steps.commits.outputs.count }}
       release_version: ${{ steps.release.outputs.version }}
       previous_version: ${{ steps.previous.outputs.version }}
-      changelog: ${{ steps.changelog.outputs.changelog }}
+      changelog: ${{ steps.changelog.outputs.content }}
       release_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - id: checkout
@@ -32,7 +32,7 @@ jobs:
         name: Get Last Release
         if: steps.commits.outputs.count > 0
         run: echo "::set-output name=version::$(git describe --abbrev=0 --tags)"
-      - id: changelog
+      - id: generate_changelog
         name: Generate Changelog
         if: steps.commits.outputs.count > 0
         uses: heinrichreimer/github-changelog-generator-action@v2.1.1
@@ -47,6 +47,12 @@ jobs:
           futureRelease: ${{ steps.release.outputs.version }}
           sinceTag: ${{ steps.previous.outputs.version }}
           stripGeneratorNotice: true
+          stripHeaders: true
+      - name: Read Changelog
+        id: changelog
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./CHANGELOG.md
       - id: create_release
         name: Create Release
         if: steps.commits.outputs.count > 0
@@ -61,7 +67,8 @@ jobs:
           body: |
             # ilo
             Manage reproducible build environments. Take a look at the [website](https://ilo.projects.metio.wtf/) for detailed information.
-            ${{ steps.changelog.outputs.changelog }}
+            ## Changes
+            ${{ steps.changelog.outputs.content }}
   linux:
     name: Linux packages
     needs: prepare
