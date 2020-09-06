@@ -5,8 +5,7 @@
   ~ in the LICENSE file.
   -->
 
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">
-$ cd /path/to/ilo/installation/folder
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ cd /path/to/ilo/installation/folder
 $ curl --location https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-linux.zip --output ilo.zip
 $ unzip ilo.zip
 $ chmod +x ilo-${ILO_VERSION}/ilo

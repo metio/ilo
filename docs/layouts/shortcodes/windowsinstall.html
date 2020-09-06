@@ -5,8 +5,7 @@
   ~ in the LICENSE file.
   -->
 
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">
-$ MD %USERPROFILE%\bin
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ MD %USERPROFILE%\bin
 $ control sysdm.cpl <span class="c1"># manually add '%USERPROFILE%\bin' to the PATH of your user account</span>
 $ cd /path/to/ilo/installation/folder
 $ curl --location https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-java11.zip --output ilo.zip
