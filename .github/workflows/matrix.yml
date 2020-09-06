@@ -272,7 +272,7 @@ jobs:
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ needs.prepare.outputs.release_version }} -Dskip.graal=false
+        run: mvn.cmd --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ needs.prepare.outputs.release_version }} -Dskip.graal=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
