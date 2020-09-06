@@ -6,32 +6,39 @@ on:
     branches: [ master ]
     paths:
       - "src/**"
+env:
+  JAVA: "java11"
+  GRAAL: "20.2.0"
 jobs:
-  build:
+  linux:
+    name: Linux packages
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v2
         with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
-      - name: GraalVM Setup
+      - id: graal
+        name: GraalVM Setup
         uses: rinx/setup-graalvm-ce@v0.0.4
         with:
-          graalvm-version: "20.2.0"
-          java-version: "java11"
+          graalvm-version: ${{ env.GRAAL }}
+          java-version: ${{ env.JAVA }}
           native-image: "true"
-      - uses: actions/cache@v1
+      - id: cache
         name: Cache Maven Repository
+        uses: actions/cache@v1
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: GPG Key
-        id: gpg
-        run: |
-          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
-      - name: Build with Maven
+      - id: gpg
+        name: GPG Key
+        run: echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
+      - id: verify
+        name: Verify Project
         run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Dskip.graal=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,3 +53,42 @@ jobs:
         with:
           name: linux
           path: ./target/ilo-*-linux*
+  mac:
+    name: MacOS packages
+    runs-on: macos-latest
+    steps:
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - id: graal
+        name: GraalVM Setup
+        uses: DeLaGuardo/setup-graalvm@2.0
+        with:
+          graalvm-version: "${{ env.GRAAL }}.${{ env.JAVA }}"
+      - id: native-image
+        name: Install native-image
+        run: gu install native-image
+      - id: cache
+        name: Cache Maven Repository
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - id: gpg
+        name: GPG Key
+        run: echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
+      - id: verify
+        name: Verify Project
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Dskip.graal=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+      - name: Upload Mac Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: mac
+          path: ./target/ilo-*-mac*

@@ -1,163 +1,291 @@
-name: Perform Release
+name: Automated Release
 on:
   schedule:
     - cron:  "45 3 * * MON"
+env:
+  JAVA: "java11"
+  GRAAL: "20.2.0"
 jobs:
-  release:
+  prepare:
+    name: Prepare Release
     runs-on: ubuntu-latest
+    outputs:
+      commit_count: ${{ steps.commits.outputs.count }}
+      release_version: ${{ steps.release.outputs.version }}
+      previous_version: ${{ steps.previous.outputs.version }}
+      changelog: ${{ steps.changelog.outputs.content }}
+      release_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
-      - uses: actions/checkout@v2
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v2
         with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
-      - name: GraalVM Setup
-        uses: rinx/setup-graalvm-ce@v0.0.4
-        with:
-          graalvm-version: "20.2.0"
-          java-version: "java11"
-          native-image: "true"
-      - uses: actions/cache@v1
-        name: Cache Maven Repository
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - name: GPG Key
-        id: gpg
-        run: |
-          echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
-      - name: Create Release Version
-        id: release
-        run: echo "::set-output name=version::$(date +'%Y.%-m.%-d-%-H%M%S')"
-      - name: Count Commits
-        id: commits
+      - id: commits
+        name: Count Commits
         run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Monday')"
-      - name: Verify Project
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ steps.release.outputs.version }} -Dskip.graal=false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
-      - name: Generate Changelog
-        id: changelog
+      - id: release
+        name: Create Release Version
+        if: steps.commits.outputs.count > 0
+        run: echo "::set-output name=version::$(date +'%Y.%-m.%-d-%-H%M%S')"
+      - id: previous
+        name: Get Last Release
+        if: steps.commits.outputs.count > 0
+        run: echo "::set-output name=version::$(git describe --abbrev=0 --tags)"
+      - id: generate_changelog
+        name: Generate Changelog
+        if: steps.commits.outputs.count > 0
         uses: heinrichreimer/github-changelog-generator-action@v2.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          unreleasedOnly: true
+          unreleased: true
+          issues: true
+          issuesWoLabels: true
+          pullRequests: true
+          prWoLabels: true
+          filterByMilestone: false
           futureRelease: ${{ steps.release.outputs.version }}
+          sinceTag: ${{ steps.previous.outputs.version }}
           stripGeneratorNotice: true
-      - name: Create Release
+          stripHeaders: true
+      - name: Read Changelog
+        id: changelog
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./CHANGELOG.md
+      - id: create_release
+        name: Create Release
         if: steps.commits.outputs.count > 0
-        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.release.outputs.version }}
           release_name: Release ${{ steps.release.outputs.version }}
-          draft: false
-          prerelease: false
+          draft: true
+          prerelease: true
           body: |
             # ilo
             Manage reproducible build environments. Take a look at the [website](https://ilo.projects.metio.wtf/) for detailed information.
             ## Changes
-            ${{ steps.changelog.outputs.changelog }}
-      - name: Upload Java11 Artifact
-        if: steps.commits.outputs.count > 0
-        id: upload-java11-artifact
+            ${{ steps.changelog.outputs.content }}
+  linux:
+    name: Linux packages
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: Clone Git Repository
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - id: graal
+        name: GraalVM Setup
+        if: needs.prepare.outputs.commit_count > 0
+        uses: rinx/setup-graalvm-ce@v0.0.4
+        with:
+          graalvm-version: ${{ env.GRAAL }}
+          java-version: ${{ env.JAVA }}
+          native-image: "true"
+      - id: cache
+        name: Cache Maven Repository
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - id: gpg
+        name: GPG Key
+        if: needs.prepare.outputs.commit_count > 0
+        run: echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
+      - id: verify
+        if: needs.prepare.outputs.commit_count > 0
+        name: Verify Project
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ needs.prepare.outputs.release_version }} -Dskip.graal=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+      - id: upload-linux-artifact
+        name: Upload Linux Artifact
+        if: needs.prepare.outputs.commit_count > 0
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-java11.zip
-          asset_name: ilo-${{ steps.release.outputs.version }}-java11.zip
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip
           asset_content_type: application/zip
-      - name: Upload Java11 Checksum
-        if: steps.commits.outputs.count > 0
-        id: upload-java11-checksum
+      - id: upload-linux-checksum
+        name: Upload Linux Checksum
+        if: needs.prepare.outputs.commit_count > 0
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-java11.zip.sha512
-          asset_name: ilo-${{ steps.release.outputs.version }}-java11.zip.sha512
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.sha512
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.sha512
           asset_content_type: text/plain
-      - name: Upload Java11 Signature
-        if: steps.commits.outputs.count > 0
-        id: upload-java11-signature
+      - id: upload-linux-signature
+        name: Upload Linux Signature
+        if: needs.prepare.outputs.commit_count > 0
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-java11.zip.asc
-          asset_name: ilo-${{ steps.release.outputs.version }}-java11.zip.asc
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.asc
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.asc
           asset_content_type: text/plain
-      - name: Upload Linux Artifact
-        if: steps.commits.outputs.count > 0
-        id: upload-linux-artifact
+      - id: upload-java11-artifact
+        name: Upload Java11 Artifact
+        if: needs.prepare.outputs.commit_count > 0
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-linux.zip
-          asset_name: ilo-${{ steps.release.outputs.version }}-linux.zip
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-java11.zip
           asset_content_type: application/zip
-      - name: Upload Linux Checksum
-        if: steps.commits.outputs.count > 0
-        id: upload-linux-checksum
+      - id: upload-java11-checksum
+        name: Upload Java11 Checksum
+        if: needs.prepare.outputs.commit_count > 0
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-linux.zip.sha512
-          asset_name: ilo-${{ steps.release.outputs.version }}-linux.zip.sha512
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.sha512
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.sha512
           asset_content_type: text/plain
-      - name: Upload Linux Signature
-        if: steps.commits.outputs.count > 0
-        id: upload-linux-signature
+      - id: upload-java11-signature
+        name: Upload Java11 Signature
+        if: needs.prepare.outputs.commit_count > 0
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./target/ilo-${{ steps.release.outputs.version }}-linux.zip.asc
-          asset_name: ilo-${{ steps.release.outputs.version }}-linux.zip.asc
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.asc
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.asc
           asset_content_type: text/plain
-      - name: Send Mail
-        if: steps.commits.outputs.count > 0
+  mac:
+    name: MacOS packages
+    needs: prepare
+    runs-on: macos-latest
+    steps:
+      - id: checkout
+        name: Clone Git Repository
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - id: graal
+        name: GraalVM Setup
+        if: needs.prepare.outputs.commit_count > 0
+        uses: DeLaGuardo/setup-graalvm@2.0
+        with:
+          graalvm-version: "${{ env.GRAAL }}.${{ env.JAVA }}"
+      - id: native-image
+        name: Install native-image
+        if: needs.prepare.outputs.commit_count > 0
+        run: gu install native-image
+      - id: cache
+        name: Cache Maven Repository
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - id: gpg
+        name: GPG Key
+        if: needs.prepare.outputs.commit_count > 0
+        run: echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
+      - id: verify
+        name: Verify Project
+        if: needs.prepare.outputs.commit_count > 0
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ needs.prepare.outputs.release_version }} -Dskip.graal=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+      - id: upload-mac-artifact
+        name: Upload MacOS Artifact
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip
+          asset_content_type: application/zip
+      - id: upload-mac-checksum
+        name: Upload MacOS Checksum
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha512
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha512
+          asset_content_type: text/plain
+      - id: upload-mac-signature
+        name: Upload MacOS Signature
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
+          asset_content_type: text/plain
+  announce:
+    name: Release Announcement
+    needs: [prepare, linux, mac]
+    runs-on: ubuntu-latest
+    steps:
+      - id: email
+        name: Send Mail
+        if: needs.prepare.outputs.commit_count > 5000
         uses: dawidd6/action-send-mail@v2
         with:
           server_address: ${{ secrets.MAIL_SERVER }}
           server_port: ${{ secrets.MAIL_PORT }}
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "ilo #release ${{ steps.release.outputs.version }}"
-          body: See https://github.com/metio/ilo/releases/tag/${{ steps.release.outputs.version }} for details.
+          subject: "ilo #release ${{ needs.prepare.outputs.release_version }}"
+          body: See https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details.
           to: ilo@metio.groups.io
           from: ${{ secrets.MAIL_SENDER }}
-      - name: Publish Toot
-        if: steps.commits.outputs.count > 0
+      - id: mastodon
+        name: Publish Toot
+        if: needs.prepare.outputs.commit_count > 5000
         uses: rzr/fediverse-action@master
         with:
           access-token: ${{ secrets.MASTODON_TOKEN }}
-          message: "#ilo version ${{ steps.release.outputs.version }} published! https://github.com/metio/ilo/releases/tag/${{ steps.release.outputs.version }} #metio"
+          message: "#ilo version ${{ needs.prepare.outputs.release_version }} published! https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} #metio"
           host: ${{ secrets.MASTODON_SERVER }}
-      - uses: BjornLuG/release-for-reddit-action@v1
-        if: steps.commits.outputs.count > 0
+      - id: reddit
+        uses: BjornLuG/release-for-reddit-action@v1
+        if: needs.prepare.outputs.commit_count > 5000
         with:
           username: ${{ secrets.REDDIT_USERNAME }}
           password: ${{ secrets.REDDIT_PASSWORD }}
           app-id: ${{ secrets.REDDIT_APP_ID }}
           app-secret: ${{ secrets.REDDIT_API_SECRET }}
           subreddit: ${{ secrets.REDDIT_SUBREDDIT }}
-          title: ${{ github.repository }} version ${{ steps.release.outputs.version }} published
-          url: https://github.com/metio/ilo/releases/tag/${{ steps.release.outputs.version }}
+          title: ${{ github.repository }} version ${{ needs.prepare.outputs.release_version }} published
+          url: https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }}
           comment: |
             Manage reproducible build environments with [ilo](https://ilo.projects.metio.wtf/)!
             # Changes
-            ${{ steps.changelog.outputs.changelog }}
+            ${{ needs.prepare.outputs.changelog }}
