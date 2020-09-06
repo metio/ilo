@@ -12,11 +12,11 @@ tags:
 - zsh
 ---
 
-In order to get the most out of `ilo` make sure that it is well integrated into your shell.
+In order to get the most out of `ilo` make sure it is well integrated into your shell.
 
 ## bash
 
-In order to integrate the autocomplete into [bash](https://www.gnu.org/software/bash/), follow these steps:
+In order to integrate autocompletion into [bash](https://www.gnu.org/software/bash/), follow these steps:
 
 1. Create or edit `.bashrc`.
 2. Add the following line
@@ -27,10 +27,21 @@ In order to integrate the autocomplete into [bash](https://www.gnu.org/software/
 
 ## zsh
 
-In order to integrate the autocomplete into [zsh](https://www.zsh.org/), follow these steps:
+In order to integrate autocompletion into [zsh](https://www.zsh.org/), follow these steps:
 
 1. Create or edit `.zshrc`.
 2. Add the following line
+    ```shell script
+    source <(ilo generate-completion)
+    ```
+3. Reload your shell (or create a new one)
+
+## oh-my-bash
+
+In order to integrate autocompletion into [oh my bash](https://github.com/ohmybash/oh-my-bash), follow these steps:
+
+1. Create a new file in `~/.oh-my-bash/custom`, e.g. `~/.oh-my-bash/custom/ilo.sh`.
+2. Use the following template
     ```shell script
     source <(ilo generate-completion)
     ```
