@@ -9,6 +9,6 @@
 $ curl --location https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-mac.zip --output ilo.zip
 $ unzip ilo.zip
 $ chmod +x ilo-{{ getenv "ILO_RELEASE" }}/ilo
-$ ln --symbolic --relative ilo-{{ getenv "ILO_RELEASE" }}/ilo ~/.local/bin/ilo
+$ ln --symbolic --relative ilo-{{ getenv "ILO_RELEASE" }}/ilo /usr/local/bin/ilo
 </code></pre>
 </div>
