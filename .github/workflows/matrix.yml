@@ -258,9 +258,9 @@ jobs:
         with:
           graalvm-version: "${{ env.GRAAL }}.${{ env.JAVA }}"
       - id: native-image
-        name: Install native-image
+        name: Install native-image dependencies
         if: needs.prepare.outputs.commit_count > 0
-        run: gu install native-image
+        run: choco install visualstudio2017-workload-vctools
       - id: cache
         name: Cache Maven Repository
         if: needs.prepare.outputs.commit_count > 0
