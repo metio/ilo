@@ -255,7 +255,7 @@ jobs:
     steps:
       - id: email
         name: Send Mail
-        if: needs.prepare.outputs.commit_count > 5000
+        if: needs.prepare.outputs.commit_count > 0
         uses: dawidd6/action-send-mail@v2
         with:
           server_address: ${{ secrets.MAIL_SERVER }}
@@ -268,7 +268,7 @@ jobs:
           from: ${{ secrets.MAIL_SENDER }}
       - id: mastodon
         name: Publish Toot
-        if: needs.prepare.outputs.commit_count > 5000
+        if: needs.prepare.outputs.commit_count > 0
         uses: rzr/fediverse-action@master
         with:
           access-token: ${{ secrets.MASTODON_TOKEN }}
@@ -276,7 +276,7 @@ jobs:
           host: ${{ secrets.MASTODON_SERVER }}
       - id: reddit
         uses: BjornLuG/release-for-reddit-action@v1
-        if: needs.prepare.outputs.commit_count > 5000
+        if: needs.prepare.outputs.commit_count > 0
         with:
           username: ${{ secrets.REDDIT_USERNAME }}
           password: ${{ secrets.REDDIT_PASSWORD }}
