@@ -27,8 +27,6 @@ The Linux distribution of `ilo` is a native executable and does not require any 
 
 The MacOS distribution of `ilo` is a native executable and does not require any additional software to be installed.
 
-**THIS IS UNTESTED** - [help us](https://github.com/metio/ilo/issues/47) to get this working.
-
 {{< macinstall >}}
 
 ## Windows
