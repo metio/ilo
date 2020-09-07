@@ -274,18 +274,3 @@ jobs:
           access-token: ${{ secrets.MASTODON_TOKEN }}
           message: "#ilo version ${{ needs.prepare.outputs.release_version }} published! https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} #metio"
           host: ${{ secrets.MASTODON_SERVER }}
-      - id: reddit
-        uses: BjornLuG/release-for-reddit-action@v1
-        if: needs.prepare.outputs.commit_count > 0
-        with:
-          username: ${{ secrets.REDDIT_USERNAME }}
-          password: ${{ secrets.REDDIT_PASSWORD }}
-          app-id: ${{ secrets.REDDIT_APP_ID }}
-          app-secret: ${{ secrets.REDDIT_API_SECRET }}
-          subreddit: ${{ secrets.REDDIT_SUBREDDIT }}
-          title: ${{ github.repository }} version ${{ needs.prepare.outputs.release_version }} published
-          url: https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }}
-          comment: |
-            Manage reproducible build environments with [ilo](https://ilo.projects.metio.wtf/)!
-            # Changes
-            ${{ needs.prepare.outputs.changelog }}
