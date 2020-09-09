@@ -1,5 +1,5 @@
 shell
 --no-interactive
---volume $HOME/.m2/repository:/root/.m2/repository:Z
-openjdk:11
+--volume $HOME/.m2:/root/.m2:Z
+maven:3.6.3-jdk-11
 mvn verify
