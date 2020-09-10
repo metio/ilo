@@ -11,6 +11,7 @@ import picocli.CommandLine;
 import wtf.metio.ilo.compose.Compose;
 import wtf.metio.ilo.shell.Shell;
 import wtf.metio.ilo.utils.Strings;
+import wtf.metio.ilo.version.VersionProvider;
 
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
@@ -23,6 +24,7 @@ import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.shellOptions;
 @CommandLine.Command(
     name = "devcontainer",
     description = "Open an (interactive) shell using devcontainer",
+    versionProvider = VersionProvider.class,
     mixinStandardHelpOptions = true,
     usageHelpAutoWidth = true,
     showDefaultValues = true,

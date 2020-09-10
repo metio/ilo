@@ -10,12 +10,14 @@ package wtf.metio.ilo.shell;
 import picocli.CommandLine;
 import wtf.metio.ilo.cli.CommandLifecycle;
 import wtf.metio.ilo.model.CliExecutor;
+import wtf.metio.ilo.version.VersionProvider;
 
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
     name = "shell",
     description = "Opens an (interactive) shell for your build environment",
+    versionProvider = VersionProvider.class,
     mixinStandardHelpOptions = true,
     usageHelpAutoWidth = true,
     showDefaultValues = true,

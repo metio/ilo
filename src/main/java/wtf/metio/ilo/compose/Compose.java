@@ -10,12 +10,14 @@ package wtf.metio.ilo.compose;
 import picocli.CommandLine;
 import wtf.metio.ilo.cli.CommandLifecycle;
 import wtf.metio.ilo.model.CliExecutor;
+import wtf.metio.ilo.version.VersionProvider;
 
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
     name = "compose",
     description = "Open an (interactive) shell using podman-/docker-compose",
+    versionProvider = VersionProvider.class,
     mixinStandardHelpOptions = true,
     usageHelpAutoWidth = true,
     showDefaultValues = true,
