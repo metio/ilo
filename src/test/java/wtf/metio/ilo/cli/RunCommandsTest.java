@@ -9,9 +9,7 @@ package wtf.metio.ilo.cli;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import wtf.metio.ilo.test.TestResources;
 
-import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -94,6 +92,19 @@ class RunCommandsTest {
   @DisplayName("allow to call generate-completion without run commands")
   void noRunCommandsForGenerateCompletion() {
     assertFalse(RunCommands.shouldAddRunCommands(new String[]{"generate-completion"}));
+  }
+
+  @Test
+  @DisplayName("allow to call ilo with run commands")
+  void runCommandsForMainCommand() {
+    assertTrue(RunCommands.shouldAddRunCommands(new String[]{}));
+  }
+  @Test
+  @DisplayName("allow to call 'ilo <command>' with run commands")
+  void runCommandsForSubCommand() {
+    assertTrue(RunCommands.shouldAddRunCommands(new String[]{"shell"}));
+    assertTrue(RunCommands.shouldAddRunCommands(new String[]{"compose"}));
+    assertTrue(RunCommands.shouldAddRunCommands(new String[]{"devcontainer"}));
   }
 
 }
