@@ -63,6 +63,24 @@ class DevcontainerJsonParserTest {
   }
 
   @Test
+  @DisplayName("can parse small devcontainer.json for shell")
+  void shouldParseShellSmallJson() {
+    final var devcontainer = DevcontainerJsonParser.parseJson(findJsonIn("shell-small"));
+    assertAll("shell small",
+        () -> assertEquals("example:123", devcontainer.image, "image"),
+        () -> assertNull(devcontainer.dockerFile, "dockerFile"),
+        () -> assertNull(devcontainer.remoteUser, "remoteUser"),
+        () -> assertNull(devcontainer.containerUser, "containerUser"),
+        () -> assertNull(devcontainer.workspaceFolder, "workspaceFolder"),
+        () -> assertFalse(devcontainer.overrideCommand, "overrideCommand"),
+        () -> assertNull(devcontainer.forwardPorts, "forwardPorts"),
+        () -> assertNull(devcontainer.runArgs, "runArgs"),
+        () -> assertNull(devcontainer.remoteEnv, "remoteEnv"),
+        () -> assertNull(devcontainer.containerEnv, "containerEnv"),
+        () -> assertNull(devcontainer.build, "build"));
+  }
+
+  @Test
   @DisplayName("can parse devcontainer.json for compose")
   void shouldParseComposeJson() {
     final var devcontainer = DevcontainerJsonParser.parseJson(findJsonIn("compose"));
