@@ -27,7 +27,7 @@ $ ilo shell --runtime docker
 $ ilo shell --runtime d
 ```
 
-**Important**: Many images use `root` as their default user. Mounting a local directory and writing files to it from inside the container might cause permission problems. Docker provides a **rootless** mode which alleviates those problems. Take a look at the [official documentation](https://docs.docker.com/engine/security/rootless/) for more details. In case running in a rootless configuration is not possible, either change the image you are using so that it does not use `root` anymore, or use the `--runtime-run-option` to specify the user while running the container.
+**Important**: Many images use `root` as their default user. Mounting a local directory and writing files to it from inside the container might cause permission problems. Docker provides a **rootless** mode which alleviates those problems. Take a look at the [official documentation](https://docs.docker.com/engine/security/rootless/) for more details. In case running in a rootless configuration is not possible, either change the image you are using so that it does not use `root` anymore, or use the `--runtime-run-option` to specify the user while running the container. If all that sounds too confusing, use [podman](https://podman.io/) as your runtime instead.
 
 ## Podman
 
