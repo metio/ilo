@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 /**
  * Support for so called RC files.
- * 
+ *
  * @see <a href="https://en.wikipedia.org/wiki/Run_commands">Run Commands</a>
  */
 public final class RunCommands {
