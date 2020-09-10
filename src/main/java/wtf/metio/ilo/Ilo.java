@@ -52,8 +52,6 @@ public final class Ilo implements Runnable {
   public static void main(final String[] args) {
     final var currentDir = Paths.get(System.getProperty("user.dir"));
     final var arguments = Stream.concat(RunCommands.locate(currentDir), Arrays.stream(args))
-        // workaround for IntelliJ
-        .filter(arg -> !Ilo.class.getCanonicalName().equalsIgnoreCase(arg))
         .toArray(String[]::new);
     System.exit(commandLine().execute(arguments));
   }
