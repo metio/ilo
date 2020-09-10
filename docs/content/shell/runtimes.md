@@ -27,7 +27,7 @@ $ ilo shell --runtime docker
 $ ilo shell --runtime d
 ```
 
-Configure the docker runtime with its [environment variables](https://docs.docker.com/engine/reference/commandline/cli/#environment-variables).
+**Important**: Make sure that you have **rootless** docker installed, otherwise you will probably run into file permission problems. Take a look at the [official documentation](https://docs.docker.com/engine/security/rootless/).
 
 ## Podman
 
