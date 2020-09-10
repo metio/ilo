@@ -50,10 +50,16 @@ public final class Ilo implements Runnable {
   CommandLine.Model.CommandSpec spec;
 
   public static void main(final String[] args) {
-    final var currentDir = Paths.get(System.getProperty("user.dir"));
-    final var arguments = Stream.concat(RunCommands.locate(currentDir), Arrays.stream(args))
-        .toArray(String[]::new);
+    final var arguments = Stream.concat(runCommands(args), Arrays.stream(args)).toArray(String[]::new);
     System.exit(commandLine().execute(arguments));
+  }
+  
+  static Stream<String> runCommands(final String[] args) {
+    if (RunCommands.shouldAddRunCommands(args)) {
+      final var currentDir = Paths.get(System.getProperty("user.dir"));
+      return RunCommands.locate(currentDir);
+    }
+    return Stream.empty();
   }
 
   // visible for testing

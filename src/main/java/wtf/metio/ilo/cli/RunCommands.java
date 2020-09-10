@@ -29,6 +29,15 @@ public final class RunCommands {
         .map("@"::concat);
   }
 
+  public static boolean shouldAddRunCommands(final String[] args) {
+    final var isVersion = (0 < args.length && ("-V".equals(args[0]) || "--version".equals(args[0])))
+        || 1 < args.length && ("-V".equals(args[1]) || "--version".equals(args[1]));
+    final var isHelp = (0 < args.length && ("-h".equals(args[0]) || "--help".equals(args[0])))
+        || (1 < args.length && ("-h".equals(args[1]) || "--help".equals(args[1])));
+    final var isCompletion = 0 < args.length && "generate-completion".equals(args[0]);
+    return !isVersion && !isHelp && !isCompletion;
+  }
+
   private RunCommands() {
     // factory class
   }

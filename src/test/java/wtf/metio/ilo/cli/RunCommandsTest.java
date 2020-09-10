@@ -14,7 +14,7 @@ import wtf.metio.ilo.test.TestResources;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.test.TestResources.testResources;
 
 @DisplayName("RunCommands")
@@ -40,6 +40,60 @@ class RunCommandsTest {
 
   private Stream<String> findRunCommandFiles(final String testDirectory) {
     return RunCommands.locate(testResources(RunCommands.class).resolve(testDirectory));
+  }
+
+  @Test
+  @DisplayName("allow to specify --help")
+  void noRunCommandsForHelp() {
+    assertFalse(RunCommands.shouldAddRunCommands(new String[]{"--help"}));
+  }
+
+  @Test
+  @DisplayName("allow to specify -h")
+  void noRunCommandsForShortHelp() {
+    assertFalse(RunCommands.shouldAddRunCommands(new String[]{"-h"}));
+  }
+
+  @Test
+  @DisplayName("allow to specify --help for a command")
+  void noRunCommandsForHelpOfCommand() {
+    assertFalse(RunCommands.shouldAddRunCommands(new String[]{"shell", "--help"}));
+  }
+
+  @Test
+  @DisplayName("allow to specify -h for a command")
+  void noRunCommandsForShortHelpOfCommand() {
+    assertFalse(RunCommands.shouldAddRunCommands(new String[]{"shell", "-h"}));
+  }
+
+  @Test
+  @DisplayName("allow to specify --version")
+  void noRunCommandsForVersion() {
+    assertFalse(RunCommands.shouldAddRunCommands(new String[]{"--version"}));
+  }
+
+  @Test
+  @DisplayName("allow to specify -V")
+  void noRunCommandsForShortVersion() {
+    assertFalse(RunCommands.shouldAddRunCommands(new String[]{"-V"}));
+  }
+
+  @Test
+  @DisplayName("allow to specify --version for a command")
+  void noRunCommandsForVersionOfCommand() {
+    assertFalse(RunCommands.shouldAddRunCommands(new String[]{"shell", "--version"}));
+  }
+
+  @Test
+  @DisplayName("allow to specify -V for a command")
+  void noRunCommandsForShortVersionOfCommand() {
+    assertFalse(RunCommands.shouldAddRunCommands(new String[]{"shell", "-V"}));
+  }
+
+  @Test
+  @DisplayName("allow to call generate-completion without run commands")
+  void noRunCommandsForGenerateCompletion() {
+    assertFalse(RunCommands.shouldAddRunCommands(new String[]{"generate-completion"}));
   }
 
 }
