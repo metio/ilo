@@ -41,5 +41,9 @@ public final class AutoSelectRuntime {
         .findFirst()
         .orElseThrow(NoMatchingRuntimeException::new);
   }
+  
+  private AutoSelectRuntime() {
+    // factory class
+  }
 
 }

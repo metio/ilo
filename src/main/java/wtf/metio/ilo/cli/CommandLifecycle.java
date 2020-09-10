@@ -41,5 +41,9 @@ public final class CommandLifecycle {
     return IntStream.of(pullExitCode, buildExitCode, runExitCode, cleanupExitCode)
         .max().orElse(CommandLine.ExitCode.SOFTWARE);
   }
+  
+  private CommandLifecycle() {
+    // utility class
+  }
 
 }
