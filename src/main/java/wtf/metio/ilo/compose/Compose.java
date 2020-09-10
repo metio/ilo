@@ -19,6 +19,7 @@ import java.util.concurrent.Callable;
     description = "Open an (interactive) shell using podman-/docker-compose",
     versionProvider = VersionProvider.class,
     mixinStandardHelpOptions = true,
+    showAtFileInUsageHelp = true,
     usageHelpAutoWidth = true,
     showDefaultValues = true,
     descriptionHeading = "%n",

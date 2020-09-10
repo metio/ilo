@@ -26,6 +26,7 @@ import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.shellOptions;
     description = "Open an (interactive) shell using devcontainer",
     versionProvider = VersionProvider.class,
     mixinStandardHelpOptions = true,
+    showAtFileInUsageHelp = true,
     usageHelpAutoWidth = true,
     showDefaultValues = true,
     descriptionHeading = "%n",

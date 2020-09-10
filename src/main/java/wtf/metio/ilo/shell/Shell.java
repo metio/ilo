@@ -19,6 +19,7 @@ import java.util.concurrent.Callable;
     description = "Opens an (interactive) shell for your build environment",
     versionProvider = VersionProvider.class,
     mixinStandardHelpOptions = true,
+    showAtFileInUsageHelp = true,
     usageHelpAutoWidth = true,
     showDefaultValues = true,
     descriptionHeading = "%n",
