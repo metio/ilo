@@ -124,7 +124,10 @@ public final class ShellOptions implements Options {
   )
   public String image;
 
-  @CommandLine.Parameters(index = "1..*")
+  @CommandLine.Parameters(
+      index = "1..*",
+      description = "Command and its option(s) to run inside the container. Overwrites the command specified in the image."
+  )
   public List<String> commands;
 
   @Override
