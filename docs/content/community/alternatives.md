@@ -29,7 +29,7 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [gitpod](https://www.gitpod.io/): Describe your dev environment as code and get fully prebuilt, ready-to-code development environments for any GitLab, GitHub, and Bitbucket project.
 - [vagrant](https://www.vagrantup.com/): Vagrant is a tool for building and managing virtual machine environments in a single workflow.
 - [subuser](https://subuser.org/): Subuser turns Docker containers into normal linux programs
-- [bob](https://bobbuildtool.dev/): Bob is a functional build automation tool with an emphasisis on cross compilation. It is intended for complex embedded projects and thus focuses on reproducible builds while still being nice to developers in agile environments.
+- [bob](https://bobbuildtool.dev/): Bob is a functional build automation tool with an emphasis on cross compilation. It is intended for complex embedded projects and thus focuses on reproducible builds while still being nice to developers in agile environments.
 - [dojo](https://github.com/kudulab/dojo): Containerize your development and operations environment
 - [go2nix](https://github.com/kamilchm/go2nix): Reproducible builds and development environment for Go
 - [dep2nix](https://github.com/nixcloud/dep2nix): dep2nix converts a Gopkgs.lock file into a deps.nix file which is understood by nixpkgs's go abstraction thanks to go2nix effort.
@@ -62,7 +62,7 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [mech](https://github.com/mechboxes/mech): Easy command line virtual machines for VMWare.
 - [dev](https://github.com/teracyhq/dev): The only truly universal productive software development platform for all!
 - [Desktop](https://github.com/Chassis/Desktop): Local WordPress development made easy.
-- [stakkr](https://github.com/stakkr-org/stakkr): Stakkr is a a docker recompose tool that uses docker compose to easily create / maintain a stack of services, for example for web development.
+- [stakkr](https://github.com/stakkr-org/stakkr): Stakkr is a docker recompose tool that uses docker compose to easily create / maintain a stack of services, for example for web development.
 - [buildock](https://github.com/ulikoehler/buildock): Reproducible build environments for local builds using Docker.
 - [takeout](https://github.com/tightenco/takeout): Takeout is a Mac-based CLI tool for spinning up tiny Docker containers, one for each of your development environment dependencies.
 - [valet](https://laravel.com/docs/7.x/valet): Valet is a Laravel development environment for Mac minimalists.
