@@ -36,6 +36,18 @@ class RunCommandsTest {
     assertEquals(2, findRunCommandFiles("multiple").count());
   }
 
+  @Test
+  @DisplayName("finds none in empty directory")
+  void shouldFindNoneInEmptyDirectory() {
+    assertEquals(0, findRunCommandFiles("empty").count());
+  }
+  
+  @Test
+  @DisplayName("ignores directories called .ilo.rc")
+  void shouldIgnoreDirectories() {
+    assertEquals(0, findRunCommandFiles("directory").count());
+  }
+
   private Stream<String> findRunCommandFiles(final String testDirectory) {
     return RunCommands.locate(testResources(RunCommands.class).resolve(testDirectory));
   }

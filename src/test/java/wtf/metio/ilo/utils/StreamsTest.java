@@ -9,6 +9,7 @@ package wtf.metio.ilo.utils;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import wtf.metio.ilo.test.ClassTests;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -46,6 +47,12 @@ class StreamsTest {
   @Test
   void maybeNot() {
     assertEquals(0, Streams.maybe(false, "first", "second").count());
+  }
+
+  @Test
+  @DisplayName("has private constructor")
+  void shouldHavePrivateConstructor() throws NoSuchMethodException {
+    ClassTests.hasPrivateConstructor(Streams.class);
   }
 
 }

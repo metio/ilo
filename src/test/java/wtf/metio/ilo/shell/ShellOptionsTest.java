@@ -15,6 +15,7 @@ import wtf.metio.ilo.test.ClassTests;
 
 import java.lang.reflect.Modifier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("ShellOptions")
@@ -50,6 +51,15 @@ class ShellOptionsTest {
   void shouldHavePublicProperty(final String field) throws NoSuchFieldException {
     final var runtime = ShellOptions.class.getDeclaredField(field);
     assertTrue(Modifier.isPublic(runtime.getModifiers()));
+  }
+
+  @ParameterizedTest
+  @DisplayName("has public fields")
+  @ValueSource(booleans = {true, false})
+  void shouldReturnDebugValue(final boolean value) {
+    final var options = new ShellOptions();
+    options.debug = value;
+    assertEquals(value, options.debug());
   }
 
 }

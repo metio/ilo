@@ -14,6 +14,7 @@ import org.junit.jupiter.api.condition.OS;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -112,8 +113,33 @@ class ExecutablesTest {
     final var tool = "ls";
 
     // when
-    // final var exitCode = Executables.runAndWaitForExit(List.of(tool));
-    final var exitCode = 0;
+    final var exitCode = Executables.runAndWaitForExit(List.of(tool), false);
+
+    // then
+    assertEquals(0, exitCode);
+  }
+
+  @Test
+  @DisplayName("ignores empty lists")
+  void shouldNoExecuteEmptyList() {
+    // given
+    final List<String> arguments = List.of();
+
+    // when
+    final var exitCode = Executables.runAndWaitForExit(arguments, false);
+
+    // then
+    assertEquals(0, exitCode);
+  }
+
+  @Test
+  @DisplayName("ignores null lists")
+  void shouldNoExecuteNullList() {
+    // given
+    final List<String> arguments = null;
+
+    // when
+    final var exitCode = Executables.runAndWaitForExit(arguments, false);
 
     // then
     assertEquals(0, exitCode);

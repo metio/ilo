@@ -89,6 +89,7 @@ abstract class DockerPodman implements ShellCLI {
     final var userHome = System.getProperty("user.home");
     return filter(fromList(values))
         .map(value -> value.replace("$HOME", userHome))
+        .map(value -> value.replace("${HOME}", userHome))
         .map(value -> value.replace("~", userHome))
         .collect(toList());
   }

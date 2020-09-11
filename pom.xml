@@ -18,8 +18,8 @@
     <!-- https://maven.apache.org/pom.html#Inheritance -->
     <parent>
         <groupId>wtf.metio.maven.parents</groupId>
-        <artifactId>maven-parents-java-prototype</artifactId>
-        <version>2020.9.4-12547</version>
+        <artifactId>maven-parents-java-stable</artifactId>
+        <version>2020.9.11-12639</version>
     </parent>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -72,6 +72,8 @@
         <skip.graal>true</skip.graal>
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
         <project.build.outputTimestamp>2019</project.build.outputTimestamp>
+
+        <pit.mutationCoverage>75</pit.mutationCoverage>
     </properties>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->

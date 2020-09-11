@@ -107,4 +107,47 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
     assertEquals(String.format("%s run --rm --volume=/abc/123:/abc:Z example:test /bin/bash -c whoami", name()), String.join(" ", arguments));
   }
 
+  @Test
+  @DisplayName("custom env variables")
+  void variables() {
+    final var options = new ShellOptions();
+    options.image = "example:test";
+    options.variables = List.of("KEY=value", "OTHER=value");
+    final var arguments = tool().runArguments(options);
+    assertEquals(String.format("%s run --rm --env KEY=value --env OTHER=value example:test", name()), String.join(" ", arguments));
+  }
+
+  @Test
+  @DisplayName("expands $HOME")
+  void home() {
+    System.setProperty("user.home", "/home/user");
+    final var options = new ShellOptions();
+    options.image = "example:test";
+    options.volumes = List.of("$HOME/test:/something");
+    final var arguments = tool().runArguments(options);
+    assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
+  }
+
+  @Test
+  @DisplayName("expands ~")
+  void shortHome() {
+    System.setProperty("user.home", "/home/user");
+    final var options = new ShellOptions();
+    options.image = "example:test";
+    options.volumes = List.of("~/test:/something");
+    final var arguments = tool().runArguments(options);
+    assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
+  }
+
+  @Test
+  @DisplayName("expands ${HOME}")
+  void homeWithBrackets() {
+    System.setProperty("user.home", "/home/user");
+    final var options = new ShellOptions();
+    options.image = "example:test";
+    options.volumes = List.of("${HOME}/test:/something");
+    final var arguments = tool().runArguments(options);
+    assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
+  }
+
 }
