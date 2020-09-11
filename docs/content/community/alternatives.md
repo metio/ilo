@@ -80,3 +80,4 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [lorri](https://github.com/target/lorri): lorri is a nix-shell replacement for project development. lorri is based around fast direnv integration for robust CLI and editor integration.
 - [toolbox-njam](https://gitlab.com/njam/toolbox-njam): Experimental Rust-clone of Fedora's toolbox for managing Linux containers for software development.
 - [bioscons](https://github.com/nhoffman/bioscons): Extends the scons build tool for reproducible workflows in bioinformatics.
+- [mock](https://github.com/rpm-software-management/mock): Mock is a tool for a reproducible build of RPM packages. 
