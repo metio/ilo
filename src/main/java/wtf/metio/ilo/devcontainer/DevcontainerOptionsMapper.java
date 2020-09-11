@@ -14,14 +14,19 @@ final class DevcontainerOptionsMapper {
 
   static ShellOptions shellOptions(final DevcontainerOptions options, final DevcontainerJson devcontainer) {
     final var opts = new ShellOptions();
-    opts.image = devcontainer.image;
     opts.debug = options.debug;
     opts.pull = options.pull;
     opts.removeImage = options.removeImage;
     opts.runtime = options.shellRuntime;
-    opts.dockerfile = devcontainer.dockerFile;
-    opts.context = devcontainer.context;
     opts.mountProjectDir = options.mountProjectDir;
+    opts.image = devcontainer.image;
+    if (null != devcontainer.build) {
+      opts.dockerfile = devcontainer.build.dockerFile;
+      opts.context = devcontainer.build.context;
+    } else {
+      opts.dockerfile = devcontainer.dockerFile;
+      opts.context = devcontainer.context;
+    }
     return opts;
   }
 
