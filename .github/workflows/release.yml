@@ -282,17 +282,22 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - id: version-update
         name: Update Release Version
         run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' build/copr/ilo.spec
       - name: Commit changes
         uses: EndBug/add-and-commit@v4
         with:
-          author_name: "Sebastian Hoß"
+          author_name: Sebastian Hoß
           author_email: sebhoss@pm.me
-          message: "Update ilo.spec for latest release"
-          add: "build/copr/ilo.spec"
+          message: Update ilo.spec for latest release
+          add: build/copr/ilo.spec
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - id: webhook
+        name: Trigger COPR Webhook
+        uses: zzzze/webhook-trigger@master
+        with:
+          data: "{\"event_type\":\"release\"}"
+          webhook_url: ${{ secrets.COPR_WEBHOOK }}
+          options: "-H \"Content-Type: application/json\""
