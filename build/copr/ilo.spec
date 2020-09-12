@@ -7,12 +7,14 @@ URL:            https://ilo.projects.metio.wtf/
 BuildArch:      x86_64
 Source0:        https://github.com/metio/%{name}/releases/download/%{version}-34731/%{name}-%{version}-34731-linux.zip
 Requires:       podman
+BuildRequires:  unzip
 
 %description
 Manage Reproducible Build Environments
 
 %prep
-%setup -n %{name}-%{version}-34731
+unzip %{name}-%{version}-34731-linux.zip
+cd %{name}-%{version}-34731
 
 %build
 # no build step
