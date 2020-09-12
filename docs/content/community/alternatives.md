@@ -81,3 +81,4 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [toolbox-njam](https://gitlab.com/njam/toolbox-njam): Experimental Rust-clone of Fedora's toolbox for managing Linux containers for software development.
 - [bioscons](https://github.com/nhoffman/bioscons): Extends the scons build tool for reproducible workflows in bioinformatics.
 - [mock](https://github.com/rpm-software-management/mock): Mock is a tool for a reproducible build of RPM packages. 
+- [jenv](https://github.com/jenv/jenv): jEnv is a command line tool to help you forget how to set the JAVA_HOME environment variable 
