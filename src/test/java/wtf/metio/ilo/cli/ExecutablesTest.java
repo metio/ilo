@@ -7,6 +7,7 @@
 
 package wtf.metio.ilo.cli;
 
+import com.github.stefanbirkner.systemlambda.SystemLambda;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
@@ -117,6 +118,36 @@ class ExecutablesTest {
 
     // then
     assertEquals(0, exitCode);
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("writes debug message to system.out")
+  void shouldWriteDebugMessageToSystemOut() throws Exception {
+    // given
+    final var tool = "ls";
+
+    // when
+    final var text = SystemLambda.tapSystemOutNormalized(
+        () -> Executables.runAndWaitForExit(List.of(tool), true));
+
+    // then
+    assertEquals("ilo executes: ls\n", text);
+  }
+
+  @Test
+  @EnabledOnOs(OS.WINDOWS)
+  @DisplayName("writes debug message to system.out on Windows")
+  void shouldWriteDebugMessageToSystemOutWindows() throws Exception {
+    // given
+    final var tool = "cmd";
+
+    // when
+    final var text = SystemLambda.tapSystemOutNormalized(
+        () -> Executables.runAndWaitForExit(List.of(tool), true));
+
+    // then
+    assertEquals("ilo executes: cmd\n", text);
   }
 
   @Test
