@@ -12,15 +12,17 @@ Requires:       podman
 Manage Reproducible Build Environments
 
 %prep
-# no prep step
+cd %{buildroot}/build/BUILD
+unzip %{buildroot}/build/SOURCES/%{name}-%{version}-34731-linux.zip
+cd %{name}-%{version}-34731
+/usr/bin/chmod -Rf a+rX,u+w,g-w,o-w .
 
 %build
 # no build step
 
 %install
-unzip %{name}-%{version}-34731-linux.zip
 mkdir -p %{buildroot}/%{_bindir}
-install -m 0755 %{name}-%{version}-34731/%{name} %{buildroot}/%{_bindir}/%{name}
+install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 
 %check
 # no checks yet
