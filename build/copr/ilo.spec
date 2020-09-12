@@ -18,8 +18,8 @@ Manage Reproducible Build Environments
 # no build step
 
 %install
-unzip %{buildroot}/build/SOURCES/%{name}-%{version}-34731-linux.zip -d %{name}-%{version}
-cd %{name}-%{version}
+unzip %{buildroot}/build/SOURCES/%{name}-%{version}-34731-linux.zip
+cd %{name}-%{version}-34731
 mkdir -p %{buildroot}/%{_bindir}
 install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 
