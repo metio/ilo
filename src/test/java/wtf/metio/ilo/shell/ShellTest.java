@@ -7,12 +7,12 @@
 
 package wtf.metio.ilo.shell;
 
+import com.github.stefanbirkner.systemlambda.SystemLambda;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import wtf.metio.ilo.test.TestMethodSources;
-import wtf.metio.ilo.test.TestSystem;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -89,16 +89,18 @@ class ShellTest extends TestMethodSources {
   @ParameterizedTest
   @MethodSource("dockerLikeRuntimes")
   @DisplayName("command line arguments with default settings")
-  void dockerLikeWithDefaults(final String runtime) {
+  void dockerLikeWithDefaults(final String runtime) throws Exception {
     final var tool = useRuntime(runtime);
     options.interactive = true;
     options.mountProjectDir = true;
-    TestSystem.withProperty("user.dir", "/some/folder", () ->
-        assertCommandLine(
-            List.of(),
-            List.of(),
-            List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:Z", "--workdir", "/some/folder", "--interactive", "--tty", options.image),
-            List.of()));
+    SystemLambda.restoreSystemProperties(() -> {
+      System.setProperty("user.dir", "/some/folder");
+      assertCommandLine(
+          List.of(),
+          List.of(),
+          List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:Z", "--workdir", "/some/folder", "--interactive", "--tty", options.image),
+          List.of());
+    });
   }
 
   @ParameterizedTest

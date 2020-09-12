@@ -7,11 +7,11 @@
 
 package wtf.metio.ilo.tools;
 
+import com.github.stefanbirkner.systemlambda.SystemLambda;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
-import wtf.metio.ilo.test.TestSystem;
 
 import java.util.List;
 
@@ -120,11 +120,12 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
 
   @Test
   @DisplayName("expands $HOME")
-  void home() {
+  void home() throws Exception {
     final var options = new ShellOptions();
     options.image = "example:test";
     options.volumes = List.of("$HOME/test:/something");
-    TestSystem.withProperty("user.home", "/home/user", () -> {
+    SystemLambda.restoreSystemProperties(() -> {
+      System.setProperty("user.home", "/home/user");
       final var arguments = tool().runArguments(options);
       assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
     });
@@ -132,11 +133,12 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
 
   @Test
   @DisplayName("expands ~")
-  void shortHome() {
+  void shortHome() throws Exception {
     final var options = new ShellOptions();
     options.image = "example:test";
     options.volumes = List.of("~/test:/something");
-    TestSystem.withProperty("user.home", "/home/user", () -> {
+    SystemLambda.restoreSystemProperties(() -> {
+      System.setProperty("user.home", "/home/user");
       final var arguments = tool().runArguments(options);
       assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
     });
@@ -144,11 +146,12 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
 
   @Test
   @DisplayName("expands ${HOME}")
-  void homeWithBrackets() {
+  void homeWithBrackets() throws Exception {
     final var options = new ShellOptions();
     options.image = "example:test";
     options.volumes = List.of("${HOME}/test:/something");
-    TestSystem.withProperty("user.home", "/home/user", () -> {
+    SystemLambda.restoreSystemProperties(() -> {
+      System.setProperty("user.home", "/home/user");
       final var arguments = tool().runArguments(options);
       assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
     });
