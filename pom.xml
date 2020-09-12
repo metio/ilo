@@ -73,7 +73,7 @@
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
         <project.build.outputTimestamp>2019</project.build.outputTimestamp>
 
-        <pit.mutationCoverage>75</pit.mutationCoverage>
+        <pit.mutationCoverage>80</pit.mutationCoverage>
     </properties>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
