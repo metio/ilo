@@ -66,7 +66,7 @@ class DevcontainerOptionsMapperTest {
       // given
       final var options = new DevcontainerOptions();
       final var json = new DevcontainerJson();
-      json.context = ".";
+      json.context = "example";
 
       // when
       final var shellOptions = shellOptions(options, json);
@@ -98,13 +98,28 @@ class DevcontainerOptionsMapperTest {
       final var options = new DevcontainerOptions();
       final var json = new DevcontainerJson();
       json.build = new DevcontainerJson.Build();
-      json.build.context = ".";
+      json.build.context = "example";
 
       // when
       final var shellOptions = shellOptions(options, json);
 
       // then
       assertEquals(json.build.context, shellOptions.context);
+    }
+
+    @Test
+    @DisplayName("uses the context field in case build.context is empty")
+    void shouldFallbackToContext() {
+      // given
+      final var options = new DevcontainerOptions();
+      final var json = new DevcontainerJson();
+      json.context = "example";
+
+      // when
+      final var shellOptions = shellOptions(options, json);
+
+      // then
+      assertEquals(json.context, shellOptions.context);
     }
 
     @Test
@@ -134,6 +149,20 @@ class DevcontainerOptionsMapperTest {
 
       // then
       assertEquals(".", shellOptions.context);
+    }
+
+    @Test
+    @DisplayName("sets the default dockerfile in case none is specified")
+    void shouldUseDefaultForMissingDockerfile() {
+      // given
+      final var options = new DevcontainerOptions();
+      final var json = new DevcontainerJson();
+
+      // when
+      final var shellOptions = shellOptions(options, json);
+
+      // then
+      assertEquals("", shellOptions.dockerfile);
     }
 
   }
