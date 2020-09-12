@@ -1,5 +1,3 @@
-%global prepare() (/usr/bin/curl --location https://github.com/metio/ilo/releases/download/2020.9.7-34731/ilo-2020.9.7-34731-linux.zip --output ilo.zip ; /usr/bin/unzip ilo.zip ; cd ilo-2020.9.7-34731)
-
 Name:           ilo
 Version:        2020.9.7
 Release:        1%{?dist}
@@ -14,14 +12,14 @@ Requires:       podman
 Manage Reproducible Build Environments
 
 %prep
-%prepare
+/usr/bin/curl --location https://github.com/metio/%{name}/releases/download/%{version}-34731/%{name}-%{version}-34731-linux.zip --output ilo.zip ; /usr/bin/unzip ilo.zip
 
 %build
 # no build step
 
 %install
 mkdir -p %{buildroot}/%{_bindir}
-install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
+install -m 0755 %{name}-%{version}-34731/%{name} %{buildroot}/%{_bindir}/%{name}
 
 %check
 # no checks yet
