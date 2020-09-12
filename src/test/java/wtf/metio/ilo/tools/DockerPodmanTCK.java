@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
+import wtf.metio.ilo.test.TestSystem;
 
 import java.util.List;
 
@@ -120,34 +121,37 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @Test
   @DisplayName("expands $HOME")
   void home() {
-    System.setProperty("user.home", "/home/user");
     final var options = new ShellOptions();
     options.image = "example:test";
     options.volumes = List.of("$HOME/test:/something");
-    final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
+    TestSystem.withProperty("user.home", "/home/user", () -> {
+      final var arguments = tool().runArguments(options);
+      assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
+    });
   }
 
   @Test
   @DisplayName("expands ~")
   void shortHome() {
-    System.setProperty("user.home", "/home/user");
     final var options = new ShellOptions();
     options.image = "example:test";
     options.volumes = List.of("~/test:/something");
-    final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
+    TestSystem.withProperty("user.home", "/home/user", () -> {
+      final var arguments = tool().runArguments(options);
+      assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
+    });
   }
 
   @Test
   @DisplayName("expands ${HOME}")
   void homeWithBrackets() {
-    System.setProperty("user.home", "/home/user");
     final var options = new ShellOptions();
     options.image = "example:test";
     options.volumes = List.of("${HOME}/test:/something");
-    final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
+    TestSystem.withProperty("user.home", "/home/user", () -> {
+      final var arguments = tool().runArguments(options);
+      assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
+    });
   }
 
 }

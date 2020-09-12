@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import wtf.metio.ilo.test.TestMethodSources;
+import wtf.metio.ilo.test.TestSystem;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -92,12 +93,12 @@ class ShellTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.interactive = true;
     options.mountProjectDir = true;
-    System.setProperty("user.dir", "/some/folder");
-    assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:Z", "--workdir", "/some/folder", "--interactive", "--tty", options.image),
-        List.of());
+    TestSystem.withProperty("user.dir", "/some/folder", () ->
+        assertCommandLine(
+            List.of(),
+            List.of(),
+            List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:Z", "--workdir", "/some/folder", "--interactive", "--tty", options.image),
+            List.of()));
   }
 
   @ParameterizedTest
