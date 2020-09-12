@@ -21,13 +21,13 @@ Manage Reproducible Build Environments
 
 %install
 mkdir -p %{buildroot}/%{_bindir}
-install -m 0755 %{name}-%{version}-34731/%{name} %{buildroot}/%{_bindir}/%{name}
+install -m 0755 %{name}-%{version}/%{name} %{buildroot}/%{_bindir}/%{name}
 
 %check
 # no checks yet
 
 %files
-%license %{name}-%{version}-34731/LICENSE
+%license %{name}-%{version}/LICENSE
 %{_bindir}/%{name}
 
 %changelog
