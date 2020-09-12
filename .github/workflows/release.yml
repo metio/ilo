@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
       - id: commits
         name: Count Commits
-        run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Monday')"
+        run: echo "::set-output name=count::$(git rev-list --count HEAD --since='last Monday' -- src/main/java)"
       - id: release
         name: Create Release Version
         if: steps.commits.outputs.count > 0
