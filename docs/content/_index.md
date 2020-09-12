@@ -25,7 +25,7 @@ Onboarding new team members into big projects with complex build requirements ca
 
 ### Cross-Platform
 
-`ilo` is available for [Linux](https://www.kernel.org/), [Mac](https://www.apple.com/macos/), [Windows](https://www.microsoft.com/en-us/windows), and others. It supports a wide range of runtimes which makes it easy to both add and remove `ilo` from your project. It plays nicely with tools already available on your local system - use your favorite IDE to write code!
+`ilo` is available for [Linux](https://www.kernel.org/), [MacOS](https://www.apple.com/macos/), [Windows](https://www.microsoft.com/en-us/windows), and others. It supports a wide range of runtimes which makes it easy to both add and remove `ilo` from your project. It plays nicely with tools already available on your local system - use your favorite IDE to write code!
 
 ## Users
 

@@ -21,7 +21,7 @@ None of the widely used package managers have `ilo` in their official repositori
 
 ### Manual
 
-The Linux distribution of `ilo` is a native executable and does not require any additional software to be installed.
+The [Linux](https://www.kernel.org/) distribution of `ilo` is a native executable and does not require any additional software to be installed.
 
 {{< linuxinstall >}}
 
@@ -46,13 +46,13 @@ $ rpm-ostree install ilo
 
 ## MacOS
 
-The MacOS distribution of `ilo` is a native executable and does not require any additional software to be installed.
+The [MacOS](https://www.apple.com/macos/) distribution of `ilo` is a native executable and does not require any additional software to be installed.
 
 {{< macinstall >}}
 
 ## Windows
 
-The Windows distribution of `ilo` requires at least [Java 11](https://www.oracle.com/javadownload) to be installed.
+The [Windows](https://www.microsoft.com/en-us/windows) distribution of `ilo` requires at least [Java 11](https://www.oracle.com/javadownload) to be installed.
 
 **THIS IS UNTESTED** - [help us](https://github.com/metio/ilo/issues/46) to get this working.
 
