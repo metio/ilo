@@ -30,8 +30,18 @@ The Linux distribution of `ilo` is a native executable and does not require any 
 [Fedora](https://getfedora.org/) users can install `ilo` from a [COPR](https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/) repository like this:
 
 ```shell script
-$ dnf copr enable sebhoss/ilo 
-$ dnf install ilo
+$ sudo dnf copr enable sebhoss/ilo 
+$ sudo dnf install ilo
+```
+
+### Fedora Silverblue
+
+[Fedora Silverblue](https://silverblue.fedoraproject.org/) users can install `ilo` from the same [COPR](https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/) by following these steps:
+
+```shell script
+$ curl --location https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/repo/fedora-$(rpm -E %fedora)/sebhoss-ilo-fedora-$(rpm -E %fedora).repo --output ilo.repo
+$ sudo mv ilo.repo /etc/yum.repos.d/ilo.repo
+$ rpm-ostree install ilo
 ```
 
 ## MacOS
