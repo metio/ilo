@@ -13,14 +13,12 @@ BuildRequires:  unzip
 Manage Reproducible Build Environments
 
 %prep
-# no prep step
+%setup -n %{name}-%{version}-34731
 
 %build
 # no build step
 
 %install
-unzip %{buildroot}/build/SOURCES/%{name}-%{version}-34731-linux.zip
-cd %{name}-%{version}-34731
 mkdir -p %{buildroot}/%{_bindir}
 install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 
