@@ -11,8 +11,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.composeOptions;
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.shellOptions;
 
@@ -104,6 +105,35 @@ class DevcontainerOptionsMapperTest {
 
       // then
       assertEquals(json.build.context, shellOptions.context);
+    }
+
+    @Test
+    @DisplayName("maps the forwardPorts field")
+    void shouldMapForwardPorts() {
+      // given
+      final var options = new DevcontainerOptions();
+      final var json = new DevcontainerJson();
+      json.forwardPorts = List.of(123, 456);
+
+      // when
+      final var shellOptions = shellOptions(options, json);
+
+      // then
+      assertIterableEquals(List.of("123:123", "456:456"), shellOptions.ports);
+    }
+
+    @Test
+    @DisplayName("sets the default context in case none is specified")
+    void shouldUseDefaultForMissingContext() {
+      // given
+      final var options = new DevcontainerOptions();
+      final var json = new DevcontainerJson();
+
+      // when
+      final var shellOptions = shellOptions(options, json);
+
+      // then
+      assertEquals(".", shellOptions.context);
     }
 
   }
