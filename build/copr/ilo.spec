@@ -13,16 +13,15 @@ BuildRequires:  unzip
 Manage Reproducible Build Environments
 
 %prep
-unzip %{name}-%{version}-34731-linux.zip
-cd %{name}-%{version}-34731
+# no prep step
 
 %build
 # no build step
 
 %install
+unzip %{name}-%{version}-34731-linux.zip
 mkdir -p %{buildroot}/%{_bindir}
-# install -m 0755 %{name}-%{version}/%{name} %{buildroot}/%{_bindir}/%{name}
-install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
+install -m 0755 %{name}-%{version}-34731/%{name} %{buildroot}/%{_bindir}/%{name}
 
 %check
 # no checks yet
