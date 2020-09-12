@@ -285,7 +285,8 @@ jobs:
       - id: version-update
         name: Update Release Version
         run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' build/copr/ilo.spec
-      - name: Commit changes
+      - id: changes
+        name: Commit Changes
         uses: EndBug/add-and-commit@v4
         with:
           author_name: Sebastian Hoß
