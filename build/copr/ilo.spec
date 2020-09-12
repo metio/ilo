@@ -12,10 +12,10 @@ Requires:       podman
 Manage Reproducible Build Environments
 
 %prep
-curl --location https://github.com/metio/%{name}/releases/download/%{version}-34731/%{name}-%{version}-34731-linux.zip --output ilo.zip
+/usr/bin/curl --location https://github.com/metio/%{name}/releases/download/%{version}-34731/%{name}-%{version}-34731-linux.zip --output ilo.zip
 
 %build
-unzip ilo.zip
+/usr/bin/unzip ilo.zip
 
 %install
 mkdir -p %{buildroot}/%{_bindir}
