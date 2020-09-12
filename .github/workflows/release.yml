@@ -27,7 +27,7 @@ jobs:
       - id: release
         name: Create Release Version
         if: steps.commits.outputs.count > 0
-        run: echo "::set-output name=version::$(date +'%Y.%-m.%-d-%-H%M%S')"
+        run: echo "::set-output name=version::$(date +'%Y.%-m.%-d')"
       - id: previous
         name: Get Last Release
         if: steps.commits.outputs.count > 0
