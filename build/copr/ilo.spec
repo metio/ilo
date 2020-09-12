@@ -1,3 +1,5 @@
+%global prepare() (/usr/bin/unzip /builddir/build/SOURCES/ilo-2020.9.7-34731-linux.zip ; cd ilo-2020.9.7-34731)
+
 Name:           ilo
 Version:        2020.9.7
 Release:        1%{?dist}
@@ -12,7 +14,7 @@ Requires:       podman
 Manage Reproducible Build Environments
 
 %prep
-%setup -n %{name}-%{version}-34731
+%prepare
 
 %build
 # no build step
