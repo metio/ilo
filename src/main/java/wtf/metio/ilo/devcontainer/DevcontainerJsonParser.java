@@ -24,9 +24,8 @@ final class DevcontainerJsonParser {
   static Path findJson(final Path baseDirectory) {
     return Stream.of(".devcontainer/devcontainer.json", ".devcontainer.json")
         .map(baseDirectory::resolve)
-        .filter(Files::exists)
-        .filter(Files::isRegularFile)
         .filter(Files::isReadable)
+        .filter(Files::isRegularFile)
         .map(Path::toAbsolutePath)
         .findFirst()
         .orElseThrow(DevcontainerJsonMissingException::new);

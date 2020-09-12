@@ -21,9 +21,8 @@ public final class RunCommands {
   public static Stream<String> locate(final Path baseDirectory) {
     return Stream.of(".ilo/ilo.rc", ".ilo.rc")
         .map(baseDirectory::resolve)
-        .filter(Files::exists)
-        .filter(Files::isRegularFile)
         .filter(Files::isReadable)
+        .filter(Files::isRegularFile)
         .map(Path::toAbsolutePath)
         .map(Path::toString)
         .map("@"::concat);
