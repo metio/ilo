@@ -10,6 +10,11 @@ package wtf.metio.ilo.devcontainer;
 import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.shell.ShellOptions;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 final class DevcontainerOptionsMapper {
 
   static ShellOptions shellOptions(final DevcontainerOptions options, final DevcontainerJson devcontainer) {
@@ -20,13 +25,18 @@ final class DevcontainerOptionsMapper {
     opts.runtime = options.shellRuntime;
     opts.mountProjectDir = options.mountProjectDir;
     opts.image = devcontainer.image;
-    if (null != devcontainer.build) {
-      opts.dockerfile = devcontainer.build.dockerFile;
-      opts.context = devcontainer.build.context;
-    } else {
-      opts.dockerfile = devcontainer.dockerFile;
-      opts.context = devcontainer.context;
-    }
+    opts.context = Optional.ofNullable(devcontainer.build)
+        .map(build -> build.context)
+        .or(() -> Optional.ofNullable(devcontainer.context))
+        .orElse(".");
+    opts.dockerfile = Optional.ofNullable(devcontainer.build)
+        .map(build -> build.dockerFile)
+        .or(() -> Optional.ofNullable(devcontainer.dockerFile))
+        .orElse("");
+    opts.ports = Stream.ofNullable(devcontainer.forwardPorts)
+        .flatMap(List::stream)
+        .map(port -> port + ":" + port)
+        .collect(Collectors.toList());
     return opts;
   }
 
