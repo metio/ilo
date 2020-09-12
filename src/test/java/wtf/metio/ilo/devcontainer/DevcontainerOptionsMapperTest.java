@@ -118,6 +118,36 @@ class DevcontainerOptionsMapperTest {
       assertNotNull(composeOptions(new DevcontainerOptions(), new DevcontainerJson()));
     }
 
+    @Test
+    @DisplayName("maps the dockerComposeFile field")
+    void shouldMapDockerComposefile() {
+      // given
+      final var options = new DevcontainerOptions();
+      final var json = new DevcontainerJson();
+      json.dockerComposeFile = "your-compose.yml";
+
+      // when
+      final var composeOptions = composeOptions(options, json);
+
+      // then
+      assertEquals(json.dockerComposeFile, composeOptions.file);
+    }
+
+    @Test
+    @DisplayName("maps the service field")
+    void shouldMapService() {
+      // given
+      final var options = new DevcontainerOptions();
+      final var json = new DevcontainerJson();
+      json.service = "some-service";
+
+      // when
+      final var composeOptions = composeOptions(options, json);
+
+      // then
+      assertEquals(json.service, composeOptions.service);
+    }
+
   }
 
 }
