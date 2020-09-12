@@ -5,7 +5,7 @@ Summary:        Manage Reproducible Build Environments
 License:        CC0
 URL:            https://ilo.projects.metio.wtf/
 BuildArch:      x86_64
-Source0:        https://github.com/metio/%{name}/releases/download/%{version}-34731/%{name}-%{version}-34731-linux.zip
+Source0:        https://github.com/metio/%{name}/archive/%{version}.tar.gz
 Requires:       podman
 BuildRequires:  unzip
 BuildRequires:  curl
@@ -14,7 +14,7 @@ BuildRequires:  curl
 Manage Reproducible Build Environments
 
 %prep
-/usr/bin/curl --location https://github.com/metio/%{name}/releases/download/%{version}-34731/%{name}-%{version}-34731-linux.zip --output ilo.zip
+/usr/bin/curl --location https://github.com/metio/%{name}/releases/download/%{version}/%{name}-%{version}-linux.zip --output ilo.zip
 
 %build
 /usr/bin/unzip ilo.zip
