@@ -53,10 +53,12 @@ public final class Ilo implements Runnable {
     System.exit(commandLine().execute(allArguments(userInput)));
   }
 
+  // visible for testing
   static String[] allArguments(final String[] userInput) {
     return Stream.concat(runCommands(userInput), Arrays.stream(userInput)).toArray(String[]::new);
   }
 
+  // visible for testing
   static Stream<String> runCommands(final String[] userInput) {
     if (RunCommands.shouldAddRunCommands(userInput)) {
       final var currentDir = Paths.get(System.getProperty("user.dir"));
