@@ -49,7 +49,7 @@ public final class Ilo implements Runnable {
   @CommandLine.Spec
   CommandLine.Model.CommandSpec spec;
 
-  public static void main(final String[] userInput) {
+  public static void main(final String... userInput) {
     System.exit(commandLine().execute(allArguments(userInput)));
   }
 

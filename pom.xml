@@ -176,6 +176,7 @@
                 <configuration>
                     <!-- open module for junit engine -->
                     <argLine>
+                        --add-opens wtf.metio.ilo/wtf.metio.ilo=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.acceptance=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.architecture=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.cli=ALL-UNNAMED

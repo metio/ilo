@@ -41,7 +41,7 @@ class RunCommandsTest {
   void shouldFindNoneInEmptyDirectory() {
     assertEquals(0, findRunCommandFiles("empty").count());
   }
-  
+
   @Test
   @DisplayName("ignores directories called .ilo.rc")
   void shouldIgnoreDirectories() {
@@ -111,6 +111,7 @@ class RunCommandsTest {
   void runCommandsForMainCommand() {
     assertTrue(RunCommands.shouldAddRunCommands(new String[]{}));
   }
+
   @Test
   @DisplayName("allow to call 'ilo <command>' with run commands")
   void runCommandsForSubCommand() {
