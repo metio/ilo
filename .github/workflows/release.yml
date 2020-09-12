@@ -274,3 +274,16 @@ jobs:
           access-token: ${{ secrets.MASTODON_TOKEN }}
           message: "#ilo version ${{ needs.prepare.outputs.release_version }} published! https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} #metio"
           host: ${{ secrets.MASTODON_SERVER }}
+  copr:
+    name: Release COPR packages
+    needs: [prepare, announce]
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - id: version-update
+        name: Update Release Version
+        run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' build/copr/ilo.spec
