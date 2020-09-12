@@ -20,7 +20,6 @@ Manage Reproducible Build Environments
 %install
 unzip %{buildroot}/build/SOURCES/%{name}-%{version}-34731-linux.zip -d %{name}-%{version}
 cd %{name}-%{version}
-chmod a+rX,u+w,g-w,o-w %{name}
 mkdir -p %{buildroot}/%{_bindir}
 install -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 
