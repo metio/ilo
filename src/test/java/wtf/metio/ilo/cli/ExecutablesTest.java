@@ -131,7 +131,7 @@ class ExecutablesTest {
     final var exitCode = Executables.runAndWaitForExit(arguments, false);
 
     // then
-    assertEquals(2, exitCode);
+    assertTrue(exitCode > 0);
   }
 
   @Test
