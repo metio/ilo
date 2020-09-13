@@ -186,7 +186,7 @@ $ ilo shell --run-as=$(id -u):$(id -g)
 $ ilo shell
 ```
 
-By default, `--run-as-` is not set to any value.
+By default, `--run-as` is not set to any value.
 
 ## `--runtime-option`
 
