@@ -9,12 +9,11 @@ package wtf.metio.ilo.tools;
 
 import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
+import wtf.metio.ilo.utils.OperatingSystem;
 import wtf.metio.ilo.utils.Strings;
 
 import java.util.List;
-import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;
 import static wtf.metio.ilo.utils.Streams.*;
 
@@ -54,16 +53,22 @@ abstract class DockerPodman implements ShellCLI {
     final var projectDir = maybe(options.mountProjectDir,
         "--volume", currentDir + ":" + currentDir + ":Z",
         "--workdir", currentDir);
+    final var user = maybe(Strings.isNotBlank(options.runAs),
+        OperatingSystem.evaluateScripts(options.runAs));
+    final var passwd = maybe(Strings.isNotBlank(options.runAs),
+        "--volume", OperatingSystem.passwdFile(options.runAs));
     return flatten(
         of(name()),
         fromList(options.runtimeOptions),
         of("run", "--rm"),
         fromList(options.runtimeRunOptions),
+        user,
+        passwd,
         projectDir,
         maybe(options.interactive, "--interactive", "--tty"),
         withPrefix("--env", options.variables),
         withPrefix("--publish", options.ports),
-        withPrefix("--volume", expandHomeDirectory(options.volumes)),
+        withPrefix("--volume", OperatingSystem.expandHomeDirectory(options.volumes)),
         of(options.image),
         fromList(options.commands));
   }
@@ -79,19 +84,6 @@ abstract class DockerPodman implements ShellCLI {
           of(options.image));
     }
     return List.of();
-  }
-
-  private static Stream<String> withPrefix(final String prefix, final List<String> values) {
-    return filter(fromList(values)).flatMap(value -> of(prefix, value));
-  }
-
-  private static List<String> expandHomeDirectory(final List<String> values) {
-    final var userHome = System.getProperty("user.home");
-    return filter(fromList(values))
-        .map(value -> value.replace("$HOME", userHome))
-        .map(value -> value.replace("${HOME}", userHome))
-        .map(value -> value.replace("~", userHome))
-        .collect(toList());
   }
 
 }

@@ -122,6 +122,20 @@ class ExecutablesTest {
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("returns exit code on failures")
+  void shouldReturnNonZeroExitCode() {
+    // given
+    final var arguments = List.of("ls", "--unknown");
+
+    // when
+    final var exitCode = Executables.runAndWaitForExit(arguments, false);
+
+    // then
+    assertEquals(2, exitCode);
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("writes debug message to system.out")
   void shouldWriteDebugMessageToSystemOut() throws Exception {
     // given

@@ -50,7 +50,7 @@ class ComposeOptionsTest {
   }
 
   @ParameterizedTest
-  @DisplayName("has public fields")
+  @DisplayName("returns debug value")
   @ValueSource(booleans = {true, false})
   void shouldReturnDebugValue(final boolean value) {
     final var options = new ComposeOptions();

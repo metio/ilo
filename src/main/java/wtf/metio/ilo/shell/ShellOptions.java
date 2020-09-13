@@ -70,6 +70,12 @@ public final class ShellOptions implements Options {
   public boolean removeImage;
 
   @CommandLine.Option(
+      names = {"--run-as"},
+      description = "Run the container as the specified user:group."
+  )
+  public String runAs;
+
+  @CommandLine.Option(
       names = {"--runtime-option"},
       description = "Options for the selected runtime itself."
   )

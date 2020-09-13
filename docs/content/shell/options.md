@@ -174,6 +174,20 @@ $ ilo shell
 
 In case no `--runtime` is specified, `ilo shell` will automatically select one of the runtimes installed on your local system and prefers `podman` over `docker` over `lxd`.
 
+## `--run-as`
+
+The `--run-as` option can be used to override the user inside the container. This is helpful in case you are not able to run the rootless mode of your runtime.
+
+```shell script
+# run as specified user:group
+$ ilo shell --run-as=$(id -u):$(id -g)
+
+# run as user specified in image
+$ ilo shell
+```
+
+By default, `--run-as-` is not set to any value.
+
 ## `--runtime-option`
 
 The `--runtime-option` option can be specified multiple times and contains options for the underlying runtime.

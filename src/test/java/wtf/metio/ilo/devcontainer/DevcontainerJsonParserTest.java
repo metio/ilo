@@ -42,6 +42,12 @@ class DevcontainerJsonParserTest {
   }
 
   @Test
+  @DisplayName("ignores directories called .devcontainer.json")
+  void shouldIgnoreDirectories() {
+    assertThrows(DevcontainerJsonMissingException.class, () -> findJsonIn("directory"));
+  }
+
+  @Test
   @DisplayName("can parse devcontainer.json for shell")
   void shouldParseShellJson() {
     final var devcontainer = DevcontainerJsonParser.parseJson(findJsonIn("shell"));

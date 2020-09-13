@@ -27,7 +27,7 @@ $ ilo shell --runtime docker
 $ ilo shell --runtime d
 ```
 
-**Important**: Many images use `root` as their default user. Mounting a local directory and writing files to it from inside the container might cause permission problems. Docker provides a **rootless** mode which alleviates those problems. Take a look at the [official documentation](https://docs.docker.com/engine/security/rootless/) for more details. In case running in a rootless configuration is not possible, either change the image you are using so that it does not use `root` anymore, or use the `--runtime-run-option` to specify the user while running the container. If all that sounds too confusing, use [podman](https://podman.io/) as your runtime instead.
+**Important**: In case your image uses `root` as its user, and you cannot run [rootless docker](https://docs.docker.com/engine/security/rootless/) (introduced with 19.03), use the [`--run-as`](../options) option to override the user in the image.
 
 ## Podman
 
@@ -39,6 +39,8 @@ $ ilo shell --runtime podman
 # alias
 $ ilo shell --runtime p
 ```
+
+**Important**: In case your images uses `root` as its user, and you cannot run [rootless podman](https://github.com/containers/podman/blob/master/rootless.md), use the [`--run-as`](../options) option to override the user in the image. Take a look at this [article](https://www.redhat.com/sysadmin/behind-scenes-podman) for an in-depth example of how rootless work with podman.
 
 ## LXC/LXD
 

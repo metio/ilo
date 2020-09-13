@@ -9,8 +9,10 @@ package wtf.metio.ilo.cli;
 
 import wtf.metio.ilo.errors.*;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,10 +22,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public final class Executables {
-
-  private Executables() {
-    // utility class
-  }
 
   public static Optional<Path> of(final String tool) {
     return allPaths().map(path -> path.resolve(tool))
@@ -63,6 +61,29 @@ public final class Executables {
     } catch (final IOException exception) {
       throw new RuntimeIOException(exception);
     }
+  }
+
+  public static String runAndReadOutput(final String[] arguments) {
+    try {
+      final var processBuilder = new ProcessBuilder(arguments);
+      final var process = processBuilder.start();
+      try (final var reader = new InputStreamReader(process.getInputStream());
+           final var buffer = new BufferedReader(reader)) {
+        final var builder = new StringBuilder();
+        String line;
+        while (null != (line = buffer.readLine())) {
+          builder.append(line);
+          builder.append(System.lineSeparator());
+        }
+        return builder.toString().strip();
+      }
+    } catch (final IOException exception) {
+      throw new RuntimeIOException(exception);
+    }
+  }
+
+  private Executables() {
+    // utility class
   }
 
 }
