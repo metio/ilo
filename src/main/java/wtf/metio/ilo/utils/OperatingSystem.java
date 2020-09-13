@@ -55,9 +55,10 @@ public final class OperatingSystem {
 
   public static String passwdFile(final String runAs) {
     try {
+      final var username = System.getProperty("user.name");
       final var tempFile = Files.createTempFile("ilo", ".passwd");
       tempFile.toFile().deleteOnExit();
-      final var content = String.format("ilo:x:%s::/home/ilo:/bin/bash", evaluateScripts(runAs));
+      final var content = String.format("%s:x:%s::/home/%s:/bin/bash", username, evaluateScripts(runAs), username);
       Files.writeString(tempFile, content);
       return String.format("%s:/etc/passwd", tempFile.toAbsolutePath().toString());
     } catch (final IOException exception) {
