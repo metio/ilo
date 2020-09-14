@@ -65,7 +65,7 @@ Non-interactive CI builds can use `--no-interactive` like this:
 
 ```shell script
 [you@hostname project-dir]$ ilo compose --no-interactive dev mvn verify
-[root@container project-dir]#
+[you@hostname project-dir]$f
 ```
 
 Take a look at all available [options](./options) or use `ilo compose --help` to get a list of all options, and their default values. In order to simplify handling of long command line options, consider using [argument files](../usage/argument-files) and/or [run commands](../usage/run-commands).
