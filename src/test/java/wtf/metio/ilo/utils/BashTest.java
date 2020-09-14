@@ -13,20 +13,42 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
+import java.nio.file.Files;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("OperatingSystem")
-class OperatingSystemTest {
+@DisplayName("Bash")
+class BashTest {
+
+  @Test
+  @DisplayName("expands ~ to the user's home directory")
+  void expandHomesWithTilde() throws Exception {
+    final var values = List.of("~/test:/something", "");
+    SystemLambda.restoreSystemProperties(() -> {
+      System.setProperty("user.home", "/home/user");
+      final var result = Bash.expand(values);
+      assertIterableEquals(List.of("/home/user/test:/something"), result);
+    });
+  }
 
   @Test
   @DisplayName("expands ~ to the user's home directory")
   void expandHomeWithTilde() throws Exception {
-    final var values = List.of("~/test:/something");
     SystemLambda.restoreSystemProperties(() -> {
       System.setProperty("user.home", "/home/user");
-      final var result = OperatingSystem.expandHomeDirectory(values);
+      final var result = Bash.expand("~/test:/something");
+      assertEquals("/home/user/test:/something", result);
+    });
+  }
+
+  @Test
+  @DisplayName("expands $HOME to the user's home directory")
+  void expandHomes() throws Exception {
+    final var values = List.of("$HOME/test:/something", "");
+    SystemLambda.restoreSystemProperties(() -> {
+      System.setProperty("user.home", "/home/user");
+      final var result = Bash.expand(values);
       assertIterableEquals(List.of("/home/user/test:/something"), result);
     });
   }
@@ -34,47 +56,42 @@ class OperatingSystemTest {
   @Test
   @DisplayName("expands $HOME to the user's home directory")
   void expandHome() throws Exception {
-    final var values = List.of("$HOME/test:/something");
     SystemLambda.restoreSystemProperties(() -> {
       System.setProperty("user.home", "/home/user");
-      final var result = OperatingSystem.expandHomeDirectory(values);
-      assertIterableEquals(List.of("/home/user/test:/something"), result);
+      final var result = Bash.expand("$HOME/test:/something");
+      assertEquals("/home/user/test:/something", result);
     });
   }
 
   @Test
   @DisplayName("expands ${HOME} to the user's home directory")
-  void expandHomeWithBrackets() throws Exception {
-    final var values = List.of("${HOME}/test:/something");
+  void expandHomesWithBrackets() throws Exception {
+    final var values = List.of("${HOME}/test:/something", "");
     SystemLambda.restoreSystemProperties(() -> {
       System.setProperty("user.home", "/home/user");
-      final var result = OperatingSystem.expandHomeDirectory(values);
+      final var result = Bash.expand(values);
       assertIterableEquals(List.of("/home/user/test:/something"), result);
     });
   }
 
   @Test
   @DisplayName("returns other values as-is")
-  void keepOthers() throws Exception {
-    final var values = List.of("something");
-    SystemLambda.restoreSystemProperties(() -> {
-      System.setProperty("user.home", "/home/user");
-      final var result = OperatingSystem.expandHomeDirectory(values);
-      assertIterableEquals(List.of("something"), result);
-    });
+  void keepOthers() {
+    final var result = Bash.expand(List.of("something", ""));
+    assertIterableEquals(List.of("something"), result);
   }
 
   @Test
   @DisplayName("returns constants as-is")
-  void evaluateScriptsWithoutScripts() {
-    assertEquals("1000:1000", OperatingSystem.evaluateScripts("1000:1000"));
+  void keepOther() {
+    assertEquals("1000:1000", Bash.expand("1000:1000"));
   }
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
-  @DisplayName("evaluates scripts and uses their outputs")
-  void evaluateScripts() {
-    final var result = OperatingSystem.evaluateScripts("$(id -u):$(id -g)");
+  @DisplayName("substitutes commands")
+  void substituteCommands() {
+    final var result = Bash.expand("$(id -u):$(id -g)");
     assertAll("result",
         () -> assertNotEquals("$(id -u):(id -g)", result, "no evaluation"),
         () -> assertNotEquals(":", result, "empty results"),
@@ -85,9 +102,9 @@ class OperatingSystemTest {
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
-  @DisplayName("evaluates scripts and keeps constants")
-  void evaluateScriptsPartial() {
-    final var result = OperatingSystem.evaluateScripts("$(id -u):1234");
+  @DisplayName("substitutes commands and keeps constants")
+  void substituteCommandsWithConstant() {
+    final var result = Bash.expand("$(id -u):1234");
     assertAll("result",
         () -> assertNotEquals("$(id -u):1234", result, "no evaluation"),
         () -> assertNotEquals(":1234", result, "empty result"),
@@ -97,9 +114,14 @@ class OperatingSystemTest {
   }
 
   @Test
-  @DisplayName("evaluates scripts and keeps constants")
-  void passwd() {
-    assertTrue(OperatingSystem.passwdFile("1234:5678").contains(":/etc/passwd"), "passwd");
+  @DisplayName("write passwd file")
+  void passwd() throws Exception {
+    SystemLambda.restoreSystemProperties(() -> {
+      System.setProperty("user.name", "testuser");
+      final var passwdFile = Bash.passwdFile("1234:5678");
+      final var content = Files.readString(passwdFile);
+      assertEquals(content, "testuser:x:1234:5678::/home/testuser:/bin/bash");
+    });
   }
 
 }
