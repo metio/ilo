@@ -54,7 +54,7 @@ abstract class DockerPodman implements ShellCLI {
         "--volume", currentDir + ":" + currentDir + ":Z",
         "--workdir", currentDir);
     final var user = maybe(Strings.isNotBlank(options.runAs),
-        OperatingSystem.evaluateScripts(options.runAs));
+        "--user", OperatingSystem.evaluateScripts(options.runAs));
     final var passwd = maybe(Strings.isNotBlank(options.runAs),
         "--volume", OperatingSystem.passwdFile(options.runAs));
     return flatten(
