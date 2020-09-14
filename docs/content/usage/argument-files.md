@@ -11,7 +11,7 @@ tags:
 - argument files
 ---
 
-In order to share the same options/commands across your team, `ilo` supports argument files which contain the options for your project, e.g. which image you are using. Argument files are just plain text files and both name and location can be chosen at will.
+In order to share the same options/commands across your team, `ilo` supports argument files which contain the options for your project, e.g. which image you are using. Argument files are just plain text files and both name and location can be chosen at will. In order to use an argument file, you have to add **@** in front of the file name: `ilo @file-name`.
 
 ```shell script
 # write argument file
@@ -41,7 +41,18 @@ $ ilo @some/other/your-arguments.txt
 $ ilo @some/more/your-arguments.txt
 ```
 
-In order to use an argument file, you have to add **@** in front of the file name: `ilo @file-name`.
+**Important**: In case your option contains a whitespace, you have to either put the entire option with its value in single/double quotes or use a whitespace between option and value like this:
+
+```shell script
+# quote the entire option
+"--run-as=$(id -u):$(id -g)"
+
+# quote the value
+--run-as "$(id -u):$(id -g)"
+
+# THIS WON'T WORK
+--run-as="$(id -u):$(id -g)"
+```
 
 You can use multiple arguments files which are evaluated in-order, e.g like this:
 
