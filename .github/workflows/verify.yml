@@ -121,6 +121,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - id: gpg
+        name: GPG Key
+        uses: timheuer/base64-to-file@v1.0.3
+        with:
+          fileName: signing.key.asc
+          encodedString: ${{ secrets.GPG_KEY }}
       - id: verify
         name: Verify Project
         shell: cmd
