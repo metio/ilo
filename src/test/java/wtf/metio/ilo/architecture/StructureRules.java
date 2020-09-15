@@ -20,22 +20,22 @@ public final class StructureRules {
 
   @ArchTest
   public static final ArchRule modelsDependsOnThemselves = noClasses()
-      .that().resideInAPackage("..model..")
-      .should().dependOnClassesThat().resideOutsideOfPackage("..model..");
+    .that().resideInAPackage("..model..")
+    .should().dependOnClassesThat().resideOutsideOfPackage("..model..");
 
   @ArchTest
   public static final ArchRule toolsDoNoDependOnCommands = noClasses()
-      .that().resideInAPackage("..tools..")
-      .should().dependOnClassesThat().resideInAnyPackage("..compose..", "..devcontainer..", "..shell..");
+    .that().resideInAPackage("..tools..")
+    .should().dependOnClassesThat().resideInAnyPackage("..compose..", "..devcontainer..", "..shell..");
 
   @ArchTest
   public static final ArchRule iloDependsOnCommands = classes()
-      .that().haveFullyQualifiedName("wtf.metio.ilo.Ilo")
-      .should().dependOnClassesThat().resideInAnyPackage("..compose..", "..devcontainer..", "..shell..");
+    .that().haveFullyQualifiedName("wtf.metio.ilo.Ilo")
+    .should().dependOnClassesThat().resideInAnyPackage("..compose..", "..devcontainer..", "..shell..");
 
   @ArchTest
   public static final ArchRule noCycles = slices()
-      .matching("wtf.metio.ilo.(*)..")
-      .should().beFreeOfCycles();
+    .matching("wtf.metio.ilo.(*)..")
+    .should().beFreeOfCycles();
 
 }

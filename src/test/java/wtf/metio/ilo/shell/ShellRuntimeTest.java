@@ -19,8 +19,8 @@ class ShellRuntimeTest {
   @ParameterizedTest
   @DisplayName("defines shell runtime constants")
   @ValueSource(strings = {
-      "PODMAN",
-      "DOCKER"
+    "PODMAN",
+    "DOCKER"
   })
   void shouldHaveRuntime(final String runtime) {
     assertNotNull(ShellRuntime.valueOf(runtime));
@@ -29,14 +29,14 @@ class ShellRuntimeTest {
   @ParameterizedTest
   @DisplayName("supports aliases")
   @ValueSource(strings = {
-      "podman",
-      "docker",
-      "p",
-      "d",
-      "DOCKER",
-      "PODMAN",
-      "dOCkeR",
-      "podMAN"
+    "podman",
+    "docker",
+    "p",
+    "d",
+    "DOCKER",
+    "PODMAN",
+    "dOCkeR",
+    "podMAN"
   })
   void shouldSupportAlias(final String alias) {
     assertNotNull(ShellRuntime.fromAlias(alias));

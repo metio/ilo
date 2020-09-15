@@ -10,7 +10,6 @@ package wtf.metio.ilo.devcontainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.errors.DevcontainerJsonMissingException;
-import wtf.metio.ilo.test.TestResources;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,20 +51,20 @@ class DevcontainerJsonParserTest {
   void shouldParseShellJson() {
     final var devcontainer = DevcontainerJsonParser.parseJson(findJsonIn("shell"));
     assertAll("shell",
-        () -> assertEquals("example:123", devcontainer.image, "image"),
-        () -> assertEquals("my.dockerfile", devcontainer.dockerFile, "dockerFile"),
-        () -> assertEquals("testUser", devcontainer.remoteUser, "remoteUser"),
-        () -> assertEquals("root", devcontainer.containerUser, "containerUser"),
-        () -> assertEquals("/home/testUser/project", devcontainer.workspaceFolder, "workspaceFolder"),
-        () -> assertTrue(devcontainer.overrideCommand, "overrideCommand"),
-        () -> assertIterableEquals(List.of(12345, 9876), devcontainer.forwardPorts, "forwardPorts"),
-        () -> assertIterableEquals(List.of("--pull"), devcontainer.runArgs, "runArgs"),
-        () -> assertEquals("value", devcontainer.remoteEnv.get("key"), "remoteEnv"),
-        () -> assertEquals("yes", devcontainer.containerEnv.get("CI"), "containerEnv"),
-        () -> assertEquals("other.dockerfile", devcontainer.build.dockerFile, "build.dockerFile"),
-        () -> assertEquals(".", devcontainer.build.context, "build.context"),
-        () -> assertEquals("dev", devcontainer.build.target, "build.target"),
-        () -> assertEquals("value", devcontainer.build.args.get("some"), "build.args"));
+      () -> assertEquals("example:123", devcontainer.image, "image"),
+      () -> assertEquals("my.dockerfile", devcontainer.dockerFile, "dockerFile"),
+      () -> assertEquals("testUser", devcontainer.remoteUser, "remoteUser"),
+      () -> assertEquals("root", devcontainer.containerUser, "containerUser"),
+      () -> assertEquals("/home/testUser/project", devcontainer.workspaceFolder, "workspaceFolder"),
+      () -> assertTrue(devcontainer.overrideCommand, "overrideCommand"),
+      () -> assertIterableEquals(List.of(12345, 9876), devcontainer.forwardPorts, "forwardPorts"),
+      () -> assertIterableEquals(List.of("--pull"), devcontainer.runArgs, "runArgs"),
+      () -> assertEquals("value", devcontainer.remoteEnv.get("key"), "remoteEnv"),
+      () -> assertEquals("yes", devcontainer.containerEnv.get("CI"), "containerEnv"),
+      () -> assertEquals("other.dockerfile", devcontainer.build.dockerFile, "build.dockerFile"),
+      () -> assertEquals(".", devcontainer.build.context, "build.context"),
+      () -> assertEquals("dev", devcontainer.build.target, "build.target"),
+      () -> assertEquals("value", devcontainer.build.args.get("some"), "build.args"));
   }
 
   @Test
@@ -73,17 +72,17 @@ class DevcontainerJsonParserTest {
   void shouldParseShellSmallJson() {
     final var devcontainer = DevcontainerJsonParser.parseJson(findJsonIn("shell-small"));
     assertAll("shell small",
-        () -> assertEquals("example:123", devcontainer.image, "image"),
-        () -> assertNull(devcontainer.dockerFile, "dockerFile"),
-        () -> assertNull(devcontainer.remoteUser, "remoteUser"),
-        () -> assertNull(devcontainer.containerUser, "containerUser"),
-        () -> assertNull(devcontainer.workspaceFolder, "workspaceFolder"),
-        () -> assertFalse(devcontainer.overrideCommand, "overrideCommand"),
-        () -> assertNull(devcontainer.forwardPorts, "forwardPorts"),
-        () -> assertNull(devcontainer.runArgs, "runArgs"),
-        () -> assertNull(devcontainer.remoteEnv, "remoteEnv"),
-        () -> assertNull(devcontainer.containerEnv, "containerEnv"),
-        () -> assertNull(devcontainer.build, "build"));
+      () -> assertEquals("example:123", devcontainer.image, "image"),
+      () -> assertNull(devcontainer.dockerFile, "dockerFile"),
+      () -> assertNull(devcontainer.remoteUser, "remoteUser"),
+      () -> assertNull(devcontainer.containerUser, "containerUser"),
+      () -> assertNull(devcontainer.workspaceFolder, "workspaceFolder"),
+      () -> assertFalse(devcontainer.overrideCommand, "overrideCommand"),
+      () -> assertNull(devcontainer.forwardPorts, "forwardPorts"),
+      () -> assertNull(devcontainer.runArgs, "runArgs"),
+      () -> assertNull(devcontainer.remoteEnv, "remoteEnv"),
+      () -> assertNull(devcontainer.containerEnv, "containerEnv"),
+      () -> assertNull(devcontainer.build, "build"));
   }
 
   @Test
@@ -91,10 +90,10 @@ class DevcontainerJsonParserTest {
   void shouldParseComposeJson() {
     final var devcontainer = DevcontainerJsonParser.parseJson(findJsonIn("compose"));
     assertAll("compose",
-        () -> assertEquals("some-file.yml", devcontainer.dockerComposeFile, "dockerComposeFile"),
-        () -> assertEquals("dev", devcontainer.service, "service"),
-        () -> assertEquals("my-name", devcontainer.name, "name"),
-        () -> assertIterableEquals(List.of("first", "second"), devcontainer.runServices, "runServices"));
+      () -> assertEquals("some-file.yml", devcontainer.dockerComposeFile, "dockerComposeFile"),
+      () -> assertEquals("dev", devcontainer.service, "service"),
+      () -> assertEquals("my-name", devcontainer.name, "name"),
+      () -> assertIterableEquals(List.of("first", "second"), devcontainer.runServices, "runServices"));
   }
 
   private Path findJsonIn(final String testDirectory) {

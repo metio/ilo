@@ -1,0 +1,25 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# global rules for all fies
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+trim_trailing_whitespace = true
+
+# Makefile use tabs by convention
+[Makefile]
+indent_style = tab
+
+# Java files use smaller indention because I like that
+[*.java]
+indent_size = 2
+insert_final_newline = true
+
+# XML files use larger indention
+[*.xml]
+indent_size = 4
+insert_final_newline = true

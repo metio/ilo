@@ -166,10 +166,10 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
     final var arguments = tool().runArguments(options);
     final var commandLine = String.join(" ", arguments);
     assertAll("command line",
-        () -> assertTrue(commandLine.startsWith(String.format("%s run --rm --user 1234:5678", name())), "parameters"),
-        () -> assertTrue(commandLine.contains("example:test"), "image missing"),
-        () -> assertTrue(commandLine.contains("ilo"), "ilo"),
-        () -> assertTrue(commandLine.contains(".passwd"), "passwd"));
+      () -> assertTrue(commandLine.startsWith(String.format("%s run --rm --user 1234:5678", name())), "parameters"),
+      () -> assertTrue(commandLine.contains("example:test"), "image missing"),
+      () -> assertTrue(commandLine.contains("ilo"), "ilo"),
+      () -> assertTrue(commandLine.contains(".passwd"), "passwd"));
   }
 
 }

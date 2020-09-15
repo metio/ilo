@@ -21,8 +21,8 @@ public final class Streams {
 
   public static Stream<String> filter(final Stream<String> stream) {
     return stream
-        .filter(Objects::nonNull)
-        .filter(not(String::isBlank));
+      .filter(Objects::nonNull)
+      .filter(not(String::isBlank));
   }
 
   public static Stream<String> fromList(final List<String> list) {

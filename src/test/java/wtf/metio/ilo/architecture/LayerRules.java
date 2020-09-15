@@ -18,14 +18,14 @@ public final class LayerRules {
 
   @ArchTest
   public static final ArchRule layerAccessControl = layeredArchitecture()
-      .withOptionalLayers(true)
-      .layer("CLI").definedBy("wtf.metio.ilo.cli..")
-      .layer("Commands").definedBy("wtf.metio.ilo.compose..", "wtf.metio.ilo.devcontainer..", "wtf.metio.ilo.shell..")
-      .layer("Errors").definedBy("wtf.metio.ilo.errors..")
-      .layer("Factories").definedBy("wtf.metio.ilo.factories..")
-      .layer("Models").definedBy("wtf.metio.ilo.model..")
-      .layer("Tools").definedBy("wtf.metio.ilo.tools..")
-      .layer("Utils").definedBy("wtf.metio.ilo.utils..")
-      .whereLayer("Models").mayOnlyBeAccessedByLayers("Commands");
+    .withOptionalLayers(true)
+    .layer("CLI").definedBy("wtf.metio.ilo.cli..")
+    .layer("Commands").definedBy("wtf.metio.ilo.compose..", "wtf.metio.ilo.devcontainer..", "wtf.metio.ilo.shell..")
+    .layer("Errors").definedBy("wtf.metio.ilo.errors..")
+    .layer("Factories").definedBy("wtf.metio.ilo.factories..")
+    .layer("Models").definedBy("wtf.metio.ilo.model..")
+    .layer("Tools").definedBy("wtf.metio.ilo.tools..")
+    .layer("Utils").definedBy("wtf.metio.ilo.utils..")
+    .whereLayer("Models").mayOnlyBeAccessedByLayers("Commands");
 
 }

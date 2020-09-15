@@ -30,17 +30,17 @@ public final class ArchUnitTests {
   public static DynamicNode in(final Class<?> clazz, final Consumer<? super ArchRule> check) {
     final var displayName = clazz.getAnnotation(DisplayName.class);
     return dynamicContainer(displayName.value(), in(clazz)
-        .map(rule -> dynamicTest(rule.getDescription(), () -> check.accept(rule))));
+      .map(rule -> dynamicTest(rule.getDescription(), () -> check.accept(rule))));
   }
 
   public static Stream<ArchRule> in(final Class<?> clazz) {
     return Arrays.stream(clazz.getDeclaredFields())
-        .filter(field -> field.isAnnotationPresent(ArchTest.class))
-        .filter(field -> ArchRule.class.isAssignableFrom(field.getType()))
-        .filter(field -> isPublic(field.getModifiers()))
-        .filter(field -> isStatic(field.getModifiers()))
-        .filter(field -> isFinal(field.getModifiers()))
-        .map(ArchUnitTests::value);
+      .filter(field -> field.isAnnotationPresent(ArchTest.class))
+      .filter(field -> ArchRule.class.isAssignableFrom(field.getType()))
+      .filter(field -> isPublic(field.getModifiers()))
+      .filter(field -> isStatic(field.getModifiers()))
+      .filter(field -> isFinal(field.getModifiers()))
+      .map(ArchUnitTests::value);
   }
 
   static ArchRule value(final Field field) {

@@ -11,7 +11,6 @@ import wtf.metio.ilo.compose.ComposeRuntime;
 import wtf.metio.ilo.shell.ShellRuntime;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.stream.Stream;
 
 /**
@@ -21,22 +20,22 @@ public abstract class TestMethodSources {
 
   private static Stream<String> shellRuntimes() {
     return Arrays.stream(ShellRuntime.values())
-        .flatMap(runtime -> Arrays.stream(runtime.aliases()));
+      .flatMap(runtime -> Arrays.stream(runtime.aliases()));
   }
 
   private static Stream<String> dockerLikeRuntimes() {
     return Stream.of(ShellRuntime.DOCKER, ShellRuntime.PODMAN)
-        .flatMap(runtime -> Arrays.stream(runtime.aliases()));
+      .flatMap(runtime -> Arrays.stream(runtime.aliases()));
   }
 
   private static Stream<String> composeRuntimes() {
     return Arrays.stream(ComposeRuntime.values())
-        .flatMap(runtime -> Arrays.stream(runtime.aliases()));
+      .flatMap(runtime -> Arrays.stream(runtime.aliases()));
   }
 
   private static Stream<String> dockerComposeLikeRuntimes() {
     return Stream.of(ComposeRuntime.DOCKER_COMPOSE, ComposeRuntime.PODMAN_COMPOSE)
-        .flatMap(runtime -> Arrays.stream(runtime.aliases()));
+      .flatMap(runtime -> Arrays.stream(runtime.aliases()));
   }
 
 }

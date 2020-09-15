@@ -9,15 +9,13 @@ package wtf.metio.ilo.errors;
 
 import picocli.CommandLine;
 
-import java.util.Optional;
-
 public final class PrintingExceptionHandler implements CommandLine.IExecutionExceptionHandler {
 
   @Override
   public int handleExecutionException(
-      final Exception exception,
-      final CommandLine commandLine,
-      final CommandLine.ParseResult parseResult) {
+    final Exception exception,
+    final CommandLine commandLine,
+    final CommandLine.ParseResult parseResult) {
     commandLine.getErr().println(commandLine.getColorScheme().errorText(exception.getMessage()));
     final var mapper = commandLine.getExitCodeExceptionMapper();
     return mapper.getExitCode(exception);

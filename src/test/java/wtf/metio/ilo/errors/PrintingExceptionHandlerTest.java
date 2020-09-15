@@ -14,7 +14,8 @@ import wtf.metio.ilo.Ilo;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("PrintingExceptionHandler")
 class PrintingExceptionHandlerTest {
@@ -32,8 +33,8 @@ class PrintingExceptionHandlerTest {
     final var exitCode = handler.handleExecutionException(exception, commandLine, null);
 
     assertAll("exceptions",
-        () -> assertEquals(exception.getExitCode(), exitCode),
-        () -> assertEquals("No matching runtime was found on your system. Select another runtime using '--runtime' or install your preferred runtime on your system." + System.lineSeparator(), writer.toString()));
+      () -> assertEquals(exception.getExitCode(), exitCode),
+      () -> assertEquals("No matching runtime was found on your system. Select another runtime using '--runtime' or install your preferred runtime on your system." + System.lineSeparator(), writer.toString()));
   }
 
 }

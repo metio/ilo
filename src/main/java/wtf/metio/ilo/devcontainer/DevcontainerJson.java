@@ -46,5 +46,5 @@ final class DevcontainerJson {
     public Map<String, String> args;
     public String target;
   }
-  
+
 }

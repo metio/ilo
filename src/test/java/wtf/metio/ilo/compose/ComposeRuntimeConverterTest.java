@@ -19,17 +19,17 @@ class ComposeRuntimeConverterTest {
   @ParameterizedTest
   @DisplayName("converts String to ComposeRuntime")
   @ValueSource(strings = {
-      "podman-compose",
-      "pods-compose",
-      "docker-compose",
-      "pc",
-      "dc",
-      "pods",
-      "DOCKER-COMPOSE",
-      "PODMAN-COMPOSE",
-      "dOCkeR-cOMpOSe",
-      "pODs-cOMpOSe",
-      "podMAN-compOSe"
+    "podman-compose",
+    "pods-compose",
+    "docker-compose",
+    "pc",
+    "dc",
+    "pods",
+    "DOCKER-COMPOSE",
+    "PODMAN-COMPOSE",
+    "dOCkeR-cOMpOSe",
+    "pODs-cOMpOSe",
+    "podMAN-compOSe"
   })
   void shouldConvertStringToComposeRuntime(final String input) {
     // given

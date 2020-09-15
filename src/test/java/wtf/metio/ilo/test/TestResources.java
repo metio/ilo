@@ -23,5 +23,5 @@ public final class TestResources {
   private TestResources() {
     // utility class
   }
-  
+
 }

@@ -9,13 +9,13 @@ package wtf.metio.ilo.cli;
 
 import wtf.metio.ilo.compose.ComposeCLI;
 import wtf.metio.ilo.compose.ComposeRuntime;
-import wtf.metio.ilo.errors.NoMatchingRuntimeException;
 import wtf.metio.ilo.compose.ComposeRuntimes;
-import wtf.metio.ilo.shell.ShellRuntimes;
+import wtf.metio.ilo.errors.NoMatchingRuntimeException;
+import wtf.metio.ilo.model.CliTool;
 import wtf.metio.ilo.model.Runtime;
 import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellRuntime;
-import wtf.metio.ilo.model.CliTool;
+import wtf.metio.ilo.shell.ShellRuntimes;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,17 +31,17 @@ public final class AutoSelectRuntime {
   }
 
   private static <TOOL extends CliTool<?>> TOOL autoSelect(
-      final Runtime runtime,
-      final List<TOOL> tools) {
+    final Runtime runtime,
+    final List<TOOL> tools) {
     return tools.stream()
-        .filter(CliTool::exists)
-        .filter(tool -> Optional.ofNullable(runtime)
-            .map(selectedRuntime -> selectedRuntime.matches(tool.name()))
-            .orElse(true))
-        .findFirst()
-        .orElseThrow(NoMatchingRuntimeException::new);
+      .filter(CliTool::exists)
+      .filter(tool -> Optional.ofNullable(runtime)
+        .map(selectedRuntime -> selectedRuntime.matches(tool.name()))
+        .orElse(true))
+      .findFirst()
+      .orElseThrow(NoMatchingRuntimeException::new);
   }
-  
+
   private AutoSelectRuntime() {
     // factory class
   }

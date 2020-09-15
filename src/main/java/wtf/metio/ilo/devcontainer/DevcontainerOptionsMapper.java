@@ -26,17 +26,17 @@ final class DevcontainerOptionsMapper {
     opts.mountProjectDir = options.mountProjectDir;
     opts.image = devcontainer.image;
     opts.context = Optional.ofNullable(devcontainer.build)
-        .map(build -> build.context)
-        .or(() -> Optional.ofNullable(devcontainer.context))
-        .orElse(".");
+      .map(build -> build.context)
+      .or(() -> Optional.ofNullable(devcontainer.context))
+      .orElse(".");
     opts.dockerfile = Optional.ofNullable(devcontainer.build)
-        .map(build -> build.dockerFile)
-        .or(() -> Optional.ofNullable(devcontainer.dockerFile))
-        .orElse("");
+      .map(build -> build.dockerFile)
+      .or(() -> Optional.ofNullable(devcontainer.dockerFile))
+      .orElse("");
     opts.ports = Stream.ofNullable(devcontainer.forwardPorts)
-        .flatMap(List::stream)
-        .map(port -> port + ":" + port)
-        .collect(Collectors.toList());
+      .flatMap(List::stream)
+      .map(port -> port + ":" + port)
+      .collect(Collectors.toList());
     return opts;
   }
 

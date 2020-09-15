@@ -18,7 +18,7 @@ public final class CliRules {
 
   @ArchTest
   public static final ArchRule cliPackageCanThrowErrors = classes()
-      .that().resideInAPackage("..cli..")
-      .should().dependOnClassesThat().resideInAPackage("..errors..");
+    .that().resideInAPackage("..cli..")
+    .should().dependOnClassesThat().resideInAPackage("..errors..");
 
 }

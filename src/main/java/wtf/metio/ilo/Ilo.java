@@ -25,24 +25,24 @@ import java.util.stream.Stream;
  * Main entry point for ilo - a little tool to manage reproducible build environments
  */
 @CommandLine.Command(
-    name = "ilo",
-    description = "Manage reproducible build environments",
-    versionProvider = VersionProvider.class,
-    mixinStandardHelpOptions = true,
-    showAtFileInUsageHelp = true,
-    usageHelpAutoWidth = true,
-    synopsisSubcommandLabel = "COMMAND",
-    descriptionHeading = "%n",
-    parameterListHeading = "%n",
-    optionListHeading = "%nOptions:%n",
-    commandListHeading = "%nCommands:%n",
-    subcommands = {
-        Shell.class,
-        Compose.class,
-        Devcontainer.class,
-        AutoComplete.GenerateCompletion.class
-    },
-    showDefaultValues = true
+  name = "ilo",
+  description = "Manage reproducible build environments",
+  versionProvider = VersionProvider.class,
+  mixinStandardHelpOptions = true,
+  showAtFileInUsageHelp = true,
+  usageHelpAutoWidth = true,
+  synopsisSubcommandLabel = "COMMAND",
+  descriptionHeading = "%n",
+  parameterListHeading = "%n",
+  optionListHeading = "%nOptions:%n",
+  commandListHeading = "%nCommands:%n",
+  subcommands = {
+    Shell.class,
+    Compose.class,
+    Devcontainer.class,
+    AutoComplete.GenerateCompletion.class
+  },
+  showDefaultValues = true
 )
 public final class Ilo implements Runnable {
 

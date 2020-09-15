@@ -54,10 +54,10 @@ class ExecutablesTest {
   void shouldBeAbleToExecuteLs() {
     // given
     final var tool = Executables.allPaths()
-        .map(path -> path.resolve("ls"))
-        .filter(Files::exists)
-        .findFirst()
-        .orElseThrow();
+      .map(path -> path.resolve("ls"))
+      .filter(Files::exists)
+      .findFirst()
+      .orElseThrow();
 
     // when
     final var canExecute = Executables.canExecute(tool);
@@ -143,7 +143,7 @@ class ExecutablesTest {
 
     // when
     final var text = SystemLambda.tapSystemOutNormalized(
-        () -> Executables.runAndWaitForExit(List.of(tool), true));
+      () -> Executables.runAndWaitForExit(List.of(tool), true));
 
     // then
     assertEquals("ilo executes: ls\n", text);
@@ -158,7 +158,7 @@ class ExecutablesTest {
 
     // when
     final var text = SystemLambda.tapSystemOutNormalized(
-        () -> Executables.runAndWaitForExit(List.of(tool), true));
+      () -> Executables.runAndWaitForExit(List.of(tool), true));
 
     // then
     assertEquals("ilo executes: cmd\n", text);

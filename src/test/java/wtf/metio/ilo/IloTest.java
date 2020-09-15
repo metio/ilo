@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import static com.github.stefanbirkner.systemlambda.SystemLambda.catchSystemExit;
 import static com.github.stefanbirkner.systemlambda.SystemLambda.restoreSystemProperties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static wtf.metio.ilo.test.TestResources.testResources;
 
 @DisplayName("Ilo")

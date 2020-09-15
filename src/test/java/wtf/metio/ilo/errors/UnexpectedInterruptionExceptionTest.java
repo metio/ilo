@@ -21,8 +21,8 @@ class UnexpectedInterruptionExceptionTest {
   void exception() {
     final var exception = new UnexpectedInterruptionException(new InterruptedException());
     assertAll("exception",
-        () -> assertEquals(106, exception.getExitCode(), "exitCode"),
-        () -> assertEquals("The process was unexpected interrupted. In case you can reproduce this, open a ticket at https://github.com/metio/ilo.", exception.getMessage(), "message"));
+      () -> assertEquals(106, exception.getExitCode(), "exitCode"),
+      () -> assertEquals("The process was unexpected interrupted. In case you can reproduce this, open a ticket at https://github.com/metio/ilo.", exception.getMessage(), "message"));
   }
 
 }

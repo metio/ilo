@@ -30,19 +30,19 @@ class ComposeOptionsTest {
   @ParameterizedTest
   @DisplayName("has public fields")
   @ValueSource(strings = {
-      "runtime",
-      "debug",
-      "interactive",
-      "build",
-      "pull",
-      "runtimeOptions",
-      "runtimePullOptions",
-      "runtimeBuildOptions",
-      "runtimeRunOptions",
-      "runtimeCleanupOptions",
-      "file",
-      "arguments",
-      "service"
+    "runtime",
+    "debug",
+    "interactive",
+    "build",
+    "pull",
+    "runtimeOptions",
+    "runtimePullOptions",
+    "runtimeBuildOptions",
+    "runtimeRunOptions",
+    "runtimeCleanupOptions",
+    "file",
+    "arguments",
+    "service"
   })
   void shouldHavePublicProperty(final String field) throws NoSuchFieldException {
     final var runtime = ComposeOptions.class.getDeclaredField(field);

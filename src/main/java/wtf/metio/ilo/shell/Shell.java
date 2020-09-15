@@ -15,15 +15,15 @@ import wtf.metio.ilo.version.VersionProvider;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
-    name = "shell",
-    description = "Opens an (interactive) shell for your build environment",
-    versionProvider = VersionProvider.class,
-    mixinStandardHelpOptions = true,
-    showAtFileInUsageHelp = true,
-    usageHelpAutoWidth = true,
-    showDefaultValues = true,
-    descriptionHeading = "%n",
-    parameterListHeading = "%n"
+  name = "shell",
+  description = "Opens an (interactive) shell for your build environment",
+  versionProvider = VersionProvider.class,
+  mixinStandardHelpOptions = true,
+  showAtFileInUsageHelp = true,
+  usageHelpAutoWidth = true,
+  showDefaultValues = true,
+  descriptionHeading = "%n",
+  parameterListHeading = "%n"
 )
 public final class Shell implements Callable<Integer> {
 

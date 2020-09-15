@@ -341,6 +341,26 @@
                     <sourceDirectory>${project.build.directory}/generated-picocli-docs</sourceDirectory>
                 </configuration>
             </plugin>
+            <plugin>
+                <!-- See http://ec4j.github.io/editorconfig-maven-plugin/ for full configuration reference -->
+                <groupId>org.ec4j.maven</groupId>
+                <artifactId>editorconfig-maven-plugin</artifactId>
+                <version>0.1.0</version>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>docs/**/*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

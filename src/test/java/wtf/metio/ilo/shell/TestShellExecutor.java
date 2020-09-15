@@ -14,9 +14,9 @@ class TestShellExecutor extends TestCliExecutor<ShellRuntime, ShellCLI> {
   @Override
   public ShellCLI selectRuntime(final ShellRuntime runtime) {
     return ShellRuntimes.allRuntimes().stream()
-        .filter(cli -> runtime.matches(cli.name()))
-        .findFirst()
-        .orElseThrow(IllegalArgumentException::new);
+      .filter(cli -> runtime.matches(cli.name()))
+      .findFirst()
+      .orElseThrow(IllegalArgumentException::new);
   }
 
 }

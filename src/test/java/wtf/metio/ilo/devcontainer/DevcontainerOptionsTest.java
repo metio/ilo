@@ -29,12 +29,12 @@ class DevcontainerOptionsTest {
   @ParameterizedTest
   @DisplayName("has public fields")
   @ValueSource(strings = {
-      "shellRuntime",
-      "composeRuntime",
-      "debug",
-      "mountProjectDir",
-      "pull",
-      "removeImage"
+    "shellRuntime",
+    "composeRuntime",
+    "debug",
+    "mountProjectDir",
+    "pull",
+    "removeImage"
   })
   void shouldHavePublicProperty(final String field) throws NoSuchFieldException {
     final var runtime = DevcontainerOptions.class.getDeclaredField(field);

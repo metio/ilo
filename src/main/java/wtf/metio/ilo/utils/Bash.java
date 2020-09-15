@@ -13,13 +13,10 @@ import wtf.metio.ilo.errors.RuntimeIOException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static wtf.metio.ilo.utils.Streams.filter;
@@ -33,22 +30,22 @@ public final class Bash {
 
   public static List<String> expand(final List<String> values) {
     return filter(fromList(values))
-        .map(Bash::expand)
-        .collect(toList());
+      .map(Bash::expand)
+      .collect(toList());
   }
 
   public static String expand(final String value) {
     return Optional.ofNullable(value)
-        .map(Bash::expandHomeDirectory)
-        .map(Bash::bashExpansion)
-        .orElse(value);
+      .map(Bash::expandHomeDirectory)
+      .map(Bash::bashExpansion)
+      .orElse(value);
   }
 
   public static String expandHomeDirectory(final String value) {
     final var userHome = System.getProperty("user.home");
     return value.replace("$HOME", userHome)
-        .replace("${HOME}", userHome)
-        .replace("~", userHome);
+      .replace("${HOME}", userHome)
+      .replace("~", userHome);
   }
 
   public static String bashExpansion(final String value) {

@@ -21,8 +21,8 @@ class VersionTest extends CLI_TCK {
   void shouldSupportVersionOption(final String flag) {
     final var exitCode = cmd.execute(flag);
     assertAll("version",
-        () -> assertEquals(0, exitCode, "exitCode"),
-        () -> assertTrue(output.toString().startsWith("ilo: "), "version"));
+      () -> assertEquals(0, exitCode, "exitCode"),
+      () -> assertTrue(output.toString().startsWith("ilo: "), "version"));
   }
 
 }

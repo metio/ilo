@@ -23,11 +23,11 @@ abstract class DockerPodman implements ShellCLI {
   public final List<String> pullArguments(final ShellOptions options) {
     if (options.pull && Strings.isBlank(options.dockerfile)) {
       return flatten(
-          of(name()),
-          fromList(Bash.expand(options.runtimeOptions)),
-          of("pull"),
-          fromList(Bash.expand(options.runtimePullOptions)),
-          of(Bash.expand(options.image)));
+        of(name()),
+        fromList(Bash.expand(options.runtimeOptions)),
+        of("pull"),
+        fromList(Bash.expand(options.runtimePullOptions)),
+        of(Bash.expand(options.image)));
     }
     return List.of();
   }
@@ -36,13 +36,13 @@ abstract class DockerPodman implements ShellCLI {
   public final List<String> buildArguments(final ShellOptions options) {
     if (Strings.isNotBlank(options.dockerfile)) {
       return flatten(
-          of(name()),
-          fromList(Bash.expand(options.runtimeOptions)),
-          of("build", "--file", options.dockerfile),
-          fromList(Bash.expand(options.runtimeBuildOptions)),
-          maybe(options.pull, "--pull"),
-          of("--tag", Bash.expand(options.image)),
-          of(Bash.expand(options.context)));
+        of(name()),
+        fromList(Bash.expand(options.runtimeOptions)),
+        of("build", "--file", options.dockerfile),
+        fromList(Bash.expand(options.runtimeBuildOptions)),
+        maybe(options.pull, "--pull"),
+        of("--tag", Bash.expand(options.image)),
+        of(Bash.expand(options.context)));
     }
     return List.of();
   }
@@ -51,37 +51,37 @@ abstract class DockerPodman implements ShellCLI {
   public final List<String> runArguments(final ShellOptions options) {
     final var currentDir = System.getProperty("user.dir");
     final var projectDir = maybe(options.mountProjectDir,
-        "--volume", currentDir + ":" + currentDir + ":Z",
-        "--workdir", currentDir);
+      "--volume", currentDir + ":" + currentDir + ":Z",
+      "--workdir", currentDir);
     final var user = maybe(Strings.isNotBlank(options.runAs),
-        "--user", Bash.expand(options.runAs));
+      "--user", Bash.expand(options.runAs));
     final var passwd = maybe(Strings.isNotBlank(options.runAs),
-        "--volume", Bash.passwdFile(options.runAs) + ":/etc/passwd");
+      "--volume", Bash.passwdFile(options.runAs) + ":/etc/passwd");
     return flatten(
-        of(name()),
-        fromList(Bash.expand(options.runtimeOptions)),
-        of("run", "--rm"),
-        fromList(Bash.expand(options.runtimeRunOptions)),
-        user,
-        passwd,
-        projectDir,
-        maybe(options.interactive, "--interactive", "--tty"),
-        withPrefix("--env", Bash.expand(options.variables)),
-        withPrefix("--publish", Bash.expand(options.ports)),
-        withPrefix("--volume", Bash.expand(options.volumes)),
-        of(Bash.expand(options.image)),
-        fromList(Bash.expand(options.commands)));
+      of(name()),
+      fromList(Bash.expand(options.runtimeOptions)),
+      of("run", "--rm"),
+      fromList(Bash.expand(options.runtimeRunOptions)),
+      user,
+      passwd,
+      projectDir,
+      maybe(options.interactive, "--interactive", "--tty"),
+      withPrefix("--env", Bash.expand(options.variables)),
+      withPrefix("--publish", Bash.expand(options.ports)),
+      withPrefix("--volume", Bash.expand(options.volumes)),
+      of(Bash.expand(options.image)),
+      fromList(Bash.expand(options.commands)));
   }
 
   @Override
   public final List<String> cleanupArguments(final ShellOptions options) {
     if (options.removeImage) {
       return flatten(
-          of(name()),
-          fromList(Bash.expand(options.runtimeOptions)),
-          of("rmi"),
-          fromList(Bash.expand(options.runtimeCleanupOptions)),
-          of(Bash.expand(options.image)));
+        of(name()),
+        fromList(Bash.expand(options.runtimeOptions)),
+        of("rmi"),
+        fromList(Bash.expand(options.runtimeCleanupOptions)),
+        of(Bash.expand(options.image)));
     }
     return List.of();
   }

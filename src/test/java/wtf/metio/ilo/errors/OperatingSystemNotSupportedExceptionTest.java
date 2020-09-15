@@ -21,8 +21,8 @@ class OperatingSystemNotSupportedExceptionTest {
   void exception() {
     final var exception = new OperatingSystemNotSupportedException(new UnsupportedOperationException());
     assertAll("exception",
-        () -> assertEquals(103, exception.getExitCode(), "exitCode"),
-        () -> assertEquals("Your operating system does not support the creation of processes - sadly ilo won't work here.", exception.getMessage(), "message"));
+      () -> assertEquals(103, exception.getExitCode(), "exitCode"),
+      () -> assertEquals("Your operating system does not support the creation of processes - sadly ilo won't work here.", exception.getMessage(), "message"));
   }
 
 }

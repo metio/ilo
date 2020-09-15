@@ -31,8 +31,8 @@ public final class ArchitectureTest {
   @Disabled("figure out why ArchUnit cannot find classes")
   static void importPackages() {
     classes = new ClassFileImporter()
-        .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
-        .importPackagesOf(Ilo.class);
+      .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
+      .importPackagesOf(Ilo.class);
   }
 
   @TestFactory
@@ -40,7 +40,7 @@ public final class ArchitectureTest {
   @Disabled("figure out why ArchUnit cannot find classes")
   Stream<DynamicNode> globalRules() {
     return Stream.of(CodingRules.class, StructureRules.class, LayerRules.class)
-        .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
+      .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
   }
 
   @TestFactory
@@ -48,7 +48,7 @@ public final class ArchitectureTest {
   @Disabled("figure out why ArchUnit cannot find classes")
   Stream<DynamicNode> implementationRules() {
     return Stream.of(CliRules.class, ErrorsRules.class, ToolsRules.class)
-        .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
+      .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
   }
 
   @Test
@@ -56,10 +56,10 @@ public final class ArchitectureTest {
   @Disabled("figure out why ArchUnit cannot find classes")
   void shouldFindClasses() {
     assertAll("classes",
-        () -> assertTrue(classes.contain(Ilo.class), Ilo.class.getName()),
-        () -> assertTrue(classes.contain(Shell.class), Shell.class.getName()),
-        () -> assertTrue(classes.contain(Compose.class), Compose.class.getName()),
-        () -> assertTrue(classes.contain(Devcontainer.class), Devcontainer.class.getName()));
+      () -> assertTrue(classes.contain(Ilo.class), Ilo.class.getName()),
+      () -> assertTrue(classes.contain(Shell.class), Shell.class.getName()),
+      () -> assertTrue(classes.contain(Compose.class), Compose.class.getName()),
+      () -> assertTrue(classes.contain(Devcontainer.class), Devcontainer.class.getName()));
   }
 
 }

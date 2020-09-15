@@ -15,11 +15,11 @@ public final class ComposeRuntimes {
 
   public static List<ComposeCLI> allRuntimes() {
     return List.of(
-        new DockerCompose(),
-        new PodmanCompose(),
-        new PodsCompose(),
-        new Vagrant(),
-        new Footloose());
+      new DockerCompose(),
+      new PodmanCompose(),
+      new PodsCompose(),
+      new Vagrant(),
+      new Footloose());
   }
 
   private ComposeRuntimes() {

@@ -9,9 +9,14 @@
   "containerEnv": {
     "CI": "yes"
   },
-  "runArgs": ["--pull"],
+  "runArgs": [
+    "--pull"
+  ],
   "workspaceFolder": "/home/testUser/project",
-  "forwardPorts": [12345, 9876],
+  "forwardPorts": [
+    12345,
+    9876
+  ],
   "overrideCommand": true,
   "build": {
     "dockerFile": "other.dockerfile",

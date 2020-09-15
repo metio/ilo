@@ -30,24 +30,24 @@ class ShellOptionsTest {
   @ParameterizedTest
   @DisplayName("has public fields")
   @ValueSource(strings = {
-      "runtime",
-      "debug",
-      "interactive",
-      "pull",
-      "dockerfile",
-      "removeImage",
-      "runAs",
-      "runtimeOptions",
-      "runtimePullOptions",
-      "runtimeBuildOptions",
-      "runtimeRunOptions",
-      "runtimeCleanupOptions",
-      "volumes",
-      "variables",
-      "ports",
-      "image",
-      "mountProjectDir",
-      "commands"
+    "runtime",
+    "debug",
+    "interactive",
+    "pull",
+    "dockerfile",
+    "removeImage",
+    "runAs",
+    "runtimeOptions",
+    "runtimePullOptions",
+    "runtimeBuildOptions",
+    "runtimeRunOptions",
+    "runtimeCleanupOptions",
+    "volumes",
+    "variables",
+    "ports",
+    "image",
+    "mountProjectDir",
+    "commands"
   })
   void shouldHavePublicProperty(final String field) throws NoSuchFieldException {
     final var runtime = ShellOptions.class.getDeclaredField(field);

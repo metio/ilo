@@ -15,9 +15,9 @@ public interface Runtime {
 
   static <RUNTIME extends Runtime> RUNTIME firstMatching(final String alias, final RUNTIME[] matchers) {
     return Arrays.stream(matchers)
-        .filter(runtime -> runtime.matches(alias))
-        .findFirst()
-        .orElseThrow(NoMatchingRuntimeException::new);
+      .filter(runtime -> runtime.matches(alias))
+      .findFirst()
+      .orElseThrow(NoMatchingRuntimeException::new);
   }
 
   default boolean matches(final String candidate) {

@@ -40,10 +40,10 @@ class ComposeTest extends TestMethodSources {
   void dockerLikeMinimal(final String runtime) {
     final var tool = useRuntime(runtime);
     assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "--file", options.file, "run", "-T"),
-        List.of(tool, "--file", options.file, "down"));
+      List.of(),
+      List.of(),
+      List.of(tool, "--file", options.file, "run", "-T"),
+      List.of(tool, "--file", options.file, "down"));
   }
 
   @ParameterizedTest
@@ -54,10 +54,10 @@ class ComposeTest extends TestMethodSources {
     options.interactive = true;
     options.service = "dev";
     assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "--file", options.file, "run", options.service),
-        List.of(tool, "--file", options.file, "down"));
+      List.of(),
+      List.of(),
+      List.of(tool, "--file", options.file, "run", options.service),
+      List.of(tool, "--file", options.file, "down"));
   }
 
   @ParameterizedTest
@@ -67,10 +67,10 @@ class ComposeTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.pull = true;
     assertCommandLine(
-        List.of(tool, "--file", options.file, "pull"),
-        List.of(),
-        List.of(tool, "--file", options.file, "run", "-T"),
-        List.of(tool, "--file", options.file, "down"));
+      List.of(tool, "--file", options.file, "pull"),
+      List.of(),
+      List.of(tool, "--file", options.file, "run", "-T"),
+      List.of(tool, "--file", options.file, "down"));
   }
 
   @ParameterizedTest
@@ -80,10 +80,10 @@ class ComposeTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.build = true;
     assertCommandLine(
-        List.of(),
-        List.of(tool, "--file", options.file, "build"),
-        List.of(tool, "--file", options.file, "run", "-T"),
-        List.of(tool, "--file", options.file, "down"));
+      List.of(),
+      List.of(tool, "--file", options.file, "build"),
+      List.of(tool, "--file", options.file, "run", "-T"),
+      List.of(tool, "--file", options.file, "down"));
   }
 
   @ParameterizedTest
@@ -93,10 +93,10 @@ class ComposeTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.runtimeOptions = List.of("--no-ansi");
     assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "--no-ansi", "--file", options.file, "run", "-T"),
-        List.of(tool, "--no-ansi", "--file", options.file, "down"));
+      List.of(),
+      List.of(),
+      List.of(tool, "--no-ansi", "--file", options.file, "run", "-T"),
+      List.of(tool, "--no-ansi", "--file", options.file, "down"));
   }
 
   @ParameterizedTest
@@ -107,10 +107,10 @@ class ComposeTest extends TestMethodSources {
     options.pull = true;
     options.runtimePullOptions = List.of("--parallel");
     assertCommandLine(
-        List.of(tool, "--file", options.file, "pull", "--parallel"),
-        List.of(),
-        List.of(tool, "--file", options.file, "run", "-T"),
-        List.of(tool, "--file", options.file, "down"));
+      List.of(tool, "--file", options.file, "pull", "--parallel"),
+      List.of(),
+      List.of(tool, "--file", options.file, "run", "-T"),
+      List.of(tool, "--file", options.file, "down"));
   }
 
   @ParameterizedTest
@@ -121,10 +121,10 @@ class ComposeTest extends TestMethodSources {
     options.build = true;
     options.runtimeBuildOptions = List.of("--no-cache");
     assertCommandLine(
-        List.of(),
-        List.of(tool, "--file", options.file, "build", "--no-cache"),
-        List.of(tool, "--file", options.file, "run", "-T"),
-        List.of(tool, "--file", options.file, "down"));
+      List.of(),
+      List.of(tool, "--file", options.file, "build", "--no-cache"),
+      List.of(tool, "--file", options.file, "run", "-T"),
+      List.of(tool, "--file", options.file, "down"));
   }
 
   @ParameterizedTest
@@ -134,10 +134,10 @@ class ComposeTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.runtimeRunOptions = List.of("--use-aliases");
     assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "--file", options.file, "run", "--use-aliases", "-T"),
-        List.of(tool, "--file", options.file, "down"));
+      List.of(),
+      List.of(),
+      List.of(tool, "--file", options.file, "run", "--use-aliases", "-T"),
+      List.of(tool, "--file", options.file, "down"));
   }
 
   @ParameterizedTest
@@ -147,10 +147,10 @@ class ComposeTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.runtimeCleanupOptions = List.of("--remove-orphans");
     assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "--file", options.file, "run", "-T"),
-        List.of(tool, "--file", options.file, "down", "--remove-orphans"));
+      List.of(),
+      List.of(),
+      List.of(tool, "--file", options.file, "run", "-T"),
+      List.of(tool, "--file", options.file, "down", "--remove-orphans"));
   }
 
   @ParameterizedTest
@@ -162,11 +162,11 @@ class ComposeTest extends TestMethodSources {
     options.pull = true;
     final var exitCode = compose.call();
     assertAll("command line",
-        () -> assertEquals(1, exitCode, "exitCode"),
-        () -> assertIterableEquals(List.of(tool, "--file", options.file, "pull"), executor.pullArguments(), "pullArguments"),
-        () -> noExecution(executor::buildArguments, "buildArguments"),
-        () -> noExecution(executor::runArguments, "runArguments"),
-        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+      () -> assertEquals(1, exitCode, "exitCode"),
+      () -> assertIterableEquals(List.of(tool, "--file", options.file, "pull"), executor.pullArguments(), "pullArguments"),
+      () -> noExecution(executor::buildArguments, "buildArguments"),
+      () -> noExecution(executor::runArguments, "runArguments"),
+      () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }
 
   @ParameterizedTest
@@ -178,11 +178,11 @@ class ComposeTest extends TestMethodSources {
     options.build = true;
     final var exitCode = compose.call();
     assertAll("command line",
-        () -> assertEquals(1, exitCode, "exitCode"),
-        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-        () -> assertIterableEquals(List.of(tool, "--file", options.file, "build"), executor.buildArguments(), "buildArguments"),
-        () -> noExecution(executor::runArguments, "runArguments"),
-        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+      () -> assertEquals(1, exitCode, "exitCode"),
+      () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
+      () -> assertIterableEquals(List.of(tool, "--file", options.file, "build"), executor.buildArguments(), "buildArguments"),
+      () -> noExecution(executor::runArguments, "runArguments"),
+      () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }
 
   @ParameterizedTest
@@ -193,11 +193,11 @@ class ComposeTest extends TestMethodSources {
     executor.exitCodes(0, 0, 1);
     final var exitCode = compose.call();
     assertAll("command line",
-        () -> assertEquals(1, exitCode, "exitCode"),
-        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-        () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-        () -> assertIterableEquals(List.of(tool, "--file", options.file, "run", "-T"), executor.runArguments(), "runArguments"),
-        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+      () -> assertEquals(1, exitCode, "exitCode"),
+      () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
+      () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
+      () -> assertIterableEquals(List.of(tool, "--file", options.file, "run", "-T"), executor.runArguments(), "runArguments"),
+      () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }
 
   @ParameterizedTest
@@ -208,11 +208,11 @@ class ComposeTest extends TestMethodSources {
     executor.exitCodes(0, 0, 0, 1);
     final var exitCode = compose.call();
     assertAll("command line",
-        () -> assertEquals(1, exitCode, "exitCode"),
-        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-        () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-        () -> assertIterableEquals(List.of(tool, "--file", options.file, "run", "-T"), executor.runArguments(), "runArguments"),
-        () -> assertIterableEquals(List.of(tool, "--file", options.file, "down"), executor.cleanupArguments(), "cleanupArguments"));
+      () -> assertEquals(1, exitCode, "exitCode"),
+      () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
+      () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
+      () -> assertIterableEquals(List.of(tool, "--file", options.file, "run", "-T"), executor.runArguments(), "runArguments"),
+      () -> assertIterableEquals(List.of(tool, "--file", options.file, "down"), executor.cleanupArguments(), "cleanupArguments"));
   }
 
   private String useRuntime(final String runtime) {
@@ -221,17 +221,17 @@ class ComposeTest extends TestMethodSources {
   }
 
   private void assertCommandLine(
-      final List<String> pullArguments,
-      final List<String> buildArguments,
-      final List<String> runArguments,
-      final List<String> cleanupArguments) {
+    final List<String> pullArguments,
+    final List<String> buildArguments,
+    final List<String> runArguments,
+    final List<String> cleanupArguments) {
     final var exitCode = compose.call();
     assertAll("command line",
-        () -> assertEquals(0, exitCode, "exitCode"),
-        () -> assertIterableEquals(pullArguments, executor.pullArguments(), "pullArguments"),
-        () -> assertIterableEquals(buildArguments, executor.buildArguments(), "buildArguments"),
-        () -> assertIterableEquals(runArguments, executor.runArguments(), "runArguments"),
-        () -> assertIterableEquals(cleanupArguments, executor.cleanupArguments(), "cleanupArguments"));
+      () -> assertEquals(0, exitCode, "exitCode"),
+      () -> assertIterableEquals(pullArguments, executor.pullArguments(), "pullArguments"),
+      () -> assertIterableEquals(buildArguments, executor.buildArguments(), "buildArguments"),
+      () -> assertIterableEquals(runArguments, executor.runArguments(), "runArguments"),
+      () -> assertIterableEquals(cleanupArguments, executor.cleanupArguments(), "cleanupArguments"));
   }
 
   private void noExecution(final Supplier<List<String>> arguments, final String name) {
