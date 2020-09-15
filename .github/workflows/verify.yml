@@ -92,3 +92,44 @@ jobs:
         with:
           name: mac
           path: ./target/ilo-*-mac*
+  windows:
+    name: Windows packages
+    runs-on: windows-latest
+    steps:
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - id: graal-download
+        name: GraalVM Download
+        run: Invoke-RestMethod -Uri https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${{ env.GRAAL }}/graalvm-ce-${{ env.JAVA }}-windows-amd64-${{ env.GRAAL }}.zip -OutFile 'graal.zip'
+      - id: graal-expand
+        name: Install GraalVM
+        run: Expand-Archive -path 'graal.zip' -destinationpath '.'
+      - id: native-image
+        name: Install native-image
+        run: graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}\bin\gu.cmd install native-image
+      - id: visual-studio
+        name: Visual C Build Tools
+        run: choco install visualstudio2017-workload-vctools
+      - id: cache
+        name: Cache Maven Repository
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - id: verify
+        name: Verify Project
+        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Dskip.graal=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+          JAVA_HOME: ./graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows
+          path: ./target/ilo-*-windows*
