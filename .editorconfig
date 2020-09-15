@@ -6,7 +6,6 @@ root = true
 # global rules for all fies
 [*]
 charset = utf-8
-end_of_line = lf
 indent_style = space
 trim_trailing_whitespace = true
 
