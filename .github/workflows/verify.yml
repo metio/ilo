@@ -114,6 +114,7 @@ jobs:
         name: Visual C Build Tools
         run: choco install visualstudio2017-workload-vctools
       - id: vctools
+        shell: cmd
         name: Configure Visual C Build Tools
         run: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
       - id: cache
