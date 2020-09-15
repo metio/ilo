@@ -357,7 +357,10 @@
                 </executions>
                 <configuration>
                     <excludes>
+                        <!-- lots of false-positives? TODO: investigate and fix -->
                         <exclude>docs/**/*</exclude>
+                        <!-- exclude for GitHub Actions -->
+                        <exclude>signing.key.asc</exclude>
                     </excludes>
                 </configuration>
             </plugin>
