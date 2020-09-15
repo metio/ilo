@@ -30,7 +30,7 @@ The [Linux](https://www.kernel.org/) distribution of `ilo` is a native executabl
 [Fedora](https://getfedora.org/) users can install `ilo` from a [COPR](https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/) repository like this:
 
 ```shell script
-$ sudo dnf copr enable sebhoss/ilo 
+$ sudo dnf copr enable sebhoss/ilo
 $ sudo dnf install ilo
 ```
 
@@ -52,7 +52,7 @@ The [MacOS](https://www.apple.com/macos/) distribution of `ilo` is a native exec
 
 ## Windows
 
-The [Windows](https://www.microsoft.com/en-us/windows) distribution of `ilo` requires at least [Java 11](https://www.oracle.com/javadownload) to be installed.
+The [Windows](https://www.microsoft.com/en-us/windows) distribution of `ilo` is a native executable and does not require any additional software to be installed.
 
 **THIS IS UNTESTED** - [help us](https://github.com/metio/ilo/issues/46) to get this working.
 

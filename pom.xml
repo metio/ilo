@@ -362,6 +362,11 @@
                         <!-- exclude for GitHub Actions -->
                         <exclude>signing.key.asc</exclude>
                     </excludes>
+                    <includes>
+                        <include>pom.xml</include>
+                        <include>maven-version-rules.xml</include>
+                        <include>src/**/*</include>
+                    </includes>
                 </configuration>
             </plugin>
         </plugins>
