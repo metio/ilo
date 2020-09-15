@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class ExecutablesTest {
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("Should detect tool in PATH")
   void shouldDetectToolInPath() {
     // given
@@ -50,7 +49,7 @@ class ExecutablesTest {
   }
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
   void shouldBeAbleToExecuteLs() {
     // given
     final var tool = Executables.allPaths()
@@ -93,21 +92,7 @@ class ExecutablesTest {
   }
 
   @Test
-  @EnabledOnOs(OS.WINDOWS)
-  @DisplayName("Should detect tool in PATH (Windows)")
-  void shouldDetectToolInPathWindows() {
-    // given
-    final var tool = "cmd";
-
-    // when
-    final var path = Executables.of(tool);
-
-    // then
-    assertTrue(path.isPresent());
-  }
-
-  @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
   @DisplayName("waits until tool exits")
   void shouldWaitForExit() {
     // given
@@ -121,7 +106,7 @@ class ExecutablesTest {
   }
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
   @DisplayName("returns exit code on failures")
   void shouldReturnNonZeroExitCode() {
     // given
@@ -135,7 +120,7 @@ class ExecutablesTest {
   }
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
   @DisplayName("writes debug message to system.out")
   void shouldWriteDebugMessageToSystemOut() throws Exception {
     // given
@@ -147,21 +132,6 @@ class ExecutablesTest {
 
     // then
     assertEquals("ilo executes: ls\n", text);
-  }
-
-  @Test
-  @EnabledOnOs(OS.WINDOWS)
-  @DisplayName("writes debug message to system.out on Windows")
-  void shouldWriteDebugMessageToSystemOutWindows() throws Exception {
-    // given
-    final var tool = "cmd";
-
-    // when
-    final var text = SystemLambda.tapSystemOutNormalized(
-      () -> Executables.runAndWaitForExit(List.of(tool), true));
-
-    // then
-    assertEquals("ilo executes: cmd\n", text);
   }
 
   @Test
