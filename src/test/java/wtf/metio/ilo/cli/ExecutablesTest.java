@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ExecutablesTest {
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC)
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("Should detect tool in PATH")
   void shouldDetectToolInPath() {
     // given
