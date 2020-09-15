@@ -300,5 +300,5 @@ jobs:
         uses: zzzze/webhook-trigger@master
         with:
           data: "{\"event_type\":\"release\"}"
-          webhook_url: ${{ secrets.COPR_WEBHOOK }}/ilo/
+          webhook_url: ${{ secrets.COPR_WEBHOOK }}
           options: "-H \"Content-Type: application/json\""
