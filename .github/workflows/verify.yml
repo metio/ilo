@@ -113,6 +113,9 @@ jobs:
       - id: visual-studio
         name: Visual C Build Tools
         run: choco install visualstudio2017-workload-vctools
+      - id: vctools
+        name: Configure Visual C Build Tools
+        run: call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvars64.bat"
       - id: cache
         name: Cache Maven Repository
         uses: actions/cache@v1
@@ -130,9 +133,7 @@ jobs:
       - id: verify
         name: Verify Project
         shell: cmd
-        run: |
-          set PATH=%cd%/graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }};%PATH%
-          mvn --batch-mode --settings ./build/settings.xml verify -Dskip.graal=false -Dpit.skip=true
+        run: mvn --batch-mode --settings ./build/settings.xml verify -Dskip.graal=false -Dpit.skip=true -Dpgp.secretkey=${{ steps.gpg.outputs.filePath }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
