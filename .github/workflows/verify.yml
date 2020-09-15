@@ -123,6 +123,7 @@ jobs:
             ${{ runner.os }}-maven-
       - id: verify
         name: Verify Project
+        shell: cmd
         run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Dskip.graal=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
