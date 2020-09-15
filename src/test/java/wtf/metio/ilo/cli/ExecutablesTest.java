@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ExecutablesTest {
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC)
   @DisplayName("Should detect tool in PATH")
   void shouldDetectToolInPath() {
     // given
@@ -35,7 +36,6 @@ class ExecutablesTest {
   }
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
   @DisplayName("Should detect missing tool in PATH")
   void shouldHandleMissingTool() {
     // given
@@ -49,7 +49,7 @@ class ExecutablesTest {
   }
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   void shouldBeAbleToExecuteLs() {
     // given
     final var tool = Executables.allPaths()
@@ -66,7 +66,6 @@ class ExecutablesTest {
   }
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
   void shouldNotBeAbleToExecuteMissing() {
     // given
     final var tool = Paths.get("asdfasdfasadaggfksdjfgsdfglsdfglsfg");
@@ -92,7 +91,7 @@ class ExecutablesTest {
   }
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("waits until tool exits")
   void shouldWaitForExit() {
     // given
@@ -106,7 +105,7 @@ class ExecutablesTest {
   }
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("returns exit code on failures")
   void shouldReturnNonZeroExitCode() {
     // given
@@ -120,7 +119,7 @@ class ExecutablesTest {
   }
 
   @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC, OS.WINDOWS})
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("writes debug message to system.out")
   void shouldWriteDebugMessageToSystemOut() throws Exception {
     // given
