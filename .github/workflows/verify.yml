@@ -134,7 +134,7 @@ jobs:
       - id: copy-key
         name: Copy GPG key to correct location
         shell: cmd
-        run: move ${{ steps.gpg.outputs.filePath }} ${{ GITHUB_WORKSPACE }}/signing.key.asc
+        run: move ${{ steps.gpg.outputs.filePath }} %GITHUB_WORKSPACE%/signing.key.asc
       - id: verify
         name: Verify Project
         shell: cmd
