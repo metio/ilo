@@ -138,7 +138,7 @@ jobs:
       - id: verify
         name: Verify Project
         shell: cmd
-        run: mvn --batch-mode --settings ./build/settings.xml verify -Dskip.graal=false -Dpit.skip=true -Dpgp.secretkey=${{ steps.gpg.outputs.filePath }}
+        run: mvn --batch-mode --settings ./build/settings.xml verify -Dskip.graal=false -Dpit.skip=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
