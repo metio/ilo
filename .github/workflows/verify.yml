@@ -131,6 +131,10 @@ jobs:
         with:
           fileName: signing.key.asc
           encodedString: ${{ secrets.GPG_KEY }}
+      - id: copy-key
+        name: Copy GPG key to correct location
+        shell: cmd
+        run: move ${{ steps.gpg.outputs.filePath }} ${{ GITHUB_WORKSPACE }}/signing.key.asc
       - id: verify
         name: Verify Project
         shell: cmd
