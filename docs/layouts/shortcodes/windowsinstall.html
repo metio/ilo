@@ -5,12 +5,13 @@
   ~ in the LICENSE file.
   -->
 
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ MD %USERPROFILE%\bin
-$ control sysdm.cpl <span class="c1"># manually add '%USERPROFILE%\bin' to the PATH of your user account</span>
-$ cd /path/to/ilo/installation/folder
-$ curl --location https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-java11.zip --output ilo.zip
-$ unzip ilo.zip
-$ chmod +x ilo-{{ getenv "ILO_RELEASE" }}/ilo
-$ ln --symbolic --relative ilo-{{ getenv "ILO_RELEASE" }}/ilo %USERPROFILE%\bin\ilo.bat
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># PowerShell</span>
+$ New-Item -Path $env:USERPROFILE -Name "bin" -ItemType "directory" <span class="c1"># create directory if it does not exit</span>
+$ control sysdm.cpl <span class="c1"># manually add '$env:USERPROFILE\bin' to the PATH of your user account</span>
+$ echo $env:PATH <span class="c1"># ensure that the 'bin' directory is in your PATH</span>
+$ Set-Location -Path C:\path\to\ilo\installation\folder
+$ Invoke-RestMethod -Uri https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-windows.zip -OutFile "ilo.zip"
+$ Expand-Archive -Path "ilo.zip" -DestinationPath "."
+$ Copy-Item -Path "ilo-{{ getenv "ILO_RELEASE" }}\ilo.exe" -Destination "$env:USERPROFILE\bin\ilo.exe"
 </code></pre>
 </div>
