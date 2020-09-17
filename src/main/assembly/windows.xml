@@ -20,7 +20,7 @@
             <directory>${project.build.directory}</directory>
             <outputDirectory/>
             <includes>
-                <include>ilo</include>
+                <include>ilo.exe</include>
             </includes>
         </fileSet>
         <fileSet>
