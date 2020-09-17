@@ -362,12 +362,15 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
+        if: needs.prepare.outputs.commit_count > 0
         uses: actions/checkout@v2
       - id: version-update
         name: Update Release Version
+        if: needs.prepare.outputs.commit_count > 0
         run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' build/copr/ilo.spec
       - id: changes
         name: Commit Changes
+        if: needs.prepare.outputs.commit_count > 0
         uses: EndBug/add-and-commit@v4
         with:
           author_name: Sebastian Hoß
@@ -378,6 +381,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: webhook
         name: Trigger COPR Webhook
+        if: needs.prepare.outputs.commit_count > 0
         uses: zzzze/webhook-trigger@master
         with:
           data: "{\"event_type\":\"release\"}"
