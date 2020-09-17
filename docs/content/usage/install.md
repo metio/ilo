@@ -54,8 +54,6 @@ The [MacOS](https://www.apple.com/macos/) distribution of `ilo` is a native exec
 
 The [Windows](https://www.microsoft.com/en-us/windows) distribution of `ilo` is a native executable and does not require any additional software to be installed.
 
-**THIS IS UNTESTED** - [help us](https://github.com/metio/ilo/issues/46) to get this working.
-
 {{< windowsinstall >}}
 
 ## Other
