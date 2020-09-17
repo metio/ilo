@@ -110,6 +110,9 @@ jobs:
       - id: native-image
         name: Install native-image
         run: graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}\bin\gu.cmd install native-image
+      - id: visual-studio
+        name: Visual C Build Tools
+        run: choco install visualstudio2019-workload-vctools
       - id: vctools
         shell: cmd
         name: Configure Visual C Build Tools
