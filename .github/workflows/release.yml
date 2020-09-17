@@ -291,7 +291,7 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
-          mvn --batch-mode --settings .\build\settings.xml verify -Dskip.graal=false
+          mvn --batch-mode --settings .\build\settings.xml verify -Dskip.graal=false -Dpit.skip=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
