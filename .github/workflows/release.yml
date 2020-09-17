@@ -172,7 +172,7 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.asc
           asset_content_type: text/plain
-      - id: bintray
+      - id: bintray-linux-artifact
         name: Upload Linux Packages to Bintray
         if: needs.prepare.outputs.commit_count > 0
         uses: reznikmm/upload-bintray-action@v2
@@ -181,11 +181,24 @@ jobs:
           repository: generic
           package: ilo
           version: ${{ needs.prepare.outputs.release_version }}
-          sourcePath: './target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip*'
+          sourcePath: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip
           override: 0
           username: ${{ secrets.BINTRAY_USER }}
           apiKey: ${{ secrets.BINTRAY_API_KEY }}
-      - id: bintray
+      - id: bintray-linux-checksum
+        name: Upload Linux Checksum to Bintray
+        if: needs.prepare.outputs.commit_count > 0
+        uses: reznikmm/upload-bintray-action@v2
+        with:
+          subject: metio
+          repository: generic
+          package: ilo
+          version: ${{ needs.prepare.outputs.release_version }}
+          sourcePath: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.sha512
+          override: 0
+          username: ${{ secrets.BINTRAY_USER }}
+          apiKey: ${{ secrets.BINTRAY_API_KEY }}
+      - id: bintray-java-artifact
         name: Upload Java Packages to Bintray
         if: needs.prepare.outputs.commit_count > 0
         uses: reznikmm/upload-bintray-action@v2
@@ -194,7 +207,20 @@ jobs:
           repository: generic
           package: ilo
           version: ${{ needs.prepare.outputs.release_version }}
-          sourcePath: './target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip*'
+          sourcePath: ./target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip
+          override: 0
+          username: ${{ secrets.BINTRAY_USER }}
+          apiKey: ${{ secrets.BINTRAY_API_KEY }}
+      - id: bintray-java-checksum
+        name: Upload Java Checksum to Bintray
+        if: needs.prepare.outputs.commit_count > 0
+        uses: reznikmm/upload-bintray-action@v2
+        with:
+          subject: metio
+          repository: generic
+          package: ilo
+          version: ${{ needs.prepare.outputs.release_version }}
+          sourcePath: ./target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.sha512
           override: 0
           username: ${{ secrets.BINTRAY_USER }}
           apiKey: ${{ secrets.BINTRAY_API_KEY }}
@@ -270,7 +296,7 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
           asset_content_type: text/plain
-      - id: bintray
+      - id: bintray-mac-artifact
         name: Upload MacOS Packages to Bintray
         if: needs.prepare.outputs.commit_count > 0
         uses: reznikmm/upload-bintray-action@v2
@@ -279,7 +305,20 @@ jobs:
           repository: generic
           package: ilo
           version: ${{ needs.prepare.outputs.release_version }}
-          sourcePath: './target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip*'
+          sourcePath: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip
+          override: 0
+          username: ${{ secrets.BINTRAY_USER }}
+          apiKey: ${{ secrets.BINTRAY_API_KEY }}
+      - id: bintray-mac-checksum
+        name: Upload MacOS Checksum to Bintray
+        if: needs.prepare.outputs.commit_count > 0
+        uses: reznikmm/upload-bintray-action@v2
+        with:
+          subject: metio
+          repository: generic
+          package: ilo
+          version: ${{ needs.prepare.outputs.release_version }}
+          sourcePath: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha512
           override: 0
           username: ${{ secrets.BINTRAY_USER }}
           apiKey: ${{ secrets.BINTRAY_API_KEY }}
@@ -368,7 +407,7 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
           asset_content_type: text/plain
-      - id: bintray
+      - id: bintray-windows-artifact
         name: Upload Windows Packages to Bintray
         if: needs.prepare.outputs.commit_count > 0
         uses: reznikmm/upload-bintray-action@v2
@@ -377,7 +416,20 @@ jobs:
           repository: generic
           package: ilo
           version: ${{ needs.prepare.outputs.release_version }}
-          sourcePath: './target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip*'
+          sourcePath: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip
+          override: 0
+          username: ${{ secrets.BINTRAY_USER }}
+          apiKey: ${{ secrets.BINTRAY_API_KEY }}
+      - id: bintray-windows-checksum
+        name: Upload Windows Checksum to Bintray
+        if: needs.prepare.outputs.commit_count > 0
+        uses: reznikmm/upload-bintray-action@v2
+        with:
+          subject: metio
+          repository: generic
+          package: ilo
+          version: ${{ needs.prepare.outputs.release_version }}
+          sourcePath: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.sha512
           override: 0
           username: ${{ secrets.BINTRAY_USER }}
           apiKey: ${{ secrets.BINTRAY_API_KEY }}
