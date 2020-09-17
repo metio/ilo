@@ -110,13 +110,9 @@ jobs:
       - id: native-image
         name: Install native-image
         run: graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}\bin\gu.cmd install native-image
-      - id: visual-studio
-        name: Visual C Build Tools
-        run: choco install visualstudio2019-workload-vctools
       - id: vctools
-        shell: cmd
         name: Configure Visual C Build Tools
-        run: call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat"
+        run: call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
       - id: cache
         name: Cache Maven Repository
         uses: actions/cache@v1
