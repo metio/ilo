@@ -100,7 +100,7 @@ jobs:
         run: Invoke-RestMethod -Uri https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${{ env.GRAAL }}/graalvm-ce-${{ env.JAVA }}-windows-amd64-${{ env.GRAAL }}.zip -OutFile 'graal.zip'
       - id: graal-expand
         name: Install GraalVM
-        run: Expand-Archive -path 'graal.zip' -destinationpath '.'
+        run: Expand-Archive -Path 'graal.zip' -DestinationPath '.'
       - id: native-image
         name: Install native-image
         run: graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}\bin\gu.cmd install native-image
