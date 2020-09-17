@@ -114,6 +114,9 @@ jobs:
         shell: cmd
         name: Configure Visual C Build Tools
         run: call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat"
+      - id: vars
+        name: PowerShell PATH
+        run: Import-VisualStudioVars -VisualStudioVersion 2019
       - id: cache
         name: Cache Maven Repository
         uses: actions/cache@v1
