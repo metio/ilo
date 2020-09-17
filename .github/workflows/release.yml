@@ -244,9 +244,94 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
           asset_content_type: text/plain
+  windows:
+    name: Windows packages
+    needs: prepare
+    runs-on: windows-latest
+    steps:
+      - id: checkout
+        name: Clone Git Repository
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/checkout@v2
+      - id: graal-download
+        name: GraalVM Download
+        if: needs.prepare.outputs.commit_count > 0
+        run: Invoke-RestMethod -Uri https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${{ env.GRAAL }}/graalvm-ce-${{ env.JAVA }}-windows-amd64-${{ env.GRAAL }}.zip -OutFile 'graal.zip'
+      - id: graal-expand
+        name: Install GraalVM
+        if: needs.prepare.outputs.commit_count > 0
+        run: Expand-Archive -path 'graal.zip' -destinationpath '.'
+      - id: native-image
+        name: Install native-image
+        if: needs.prepare.outputs.commit_count > 0
+        run: graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}\bin\gu.cmd install native-image
+      - id: cache
+        name: Cache Maven Repository
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - id: gpg
+        name: GPG Key
+        if: needs.prepare.outputs.commit_count > 0
+        uses: timheuer/base64-to-file@v1.0.3
+        with:
+          fileName: signing.key.asc
+          encodedString: ${{ secrets.GPG_KEY }}
+      - id: copy-key
+        name: Copy GPG key to correct location
+        if: needs.prepare.outputs.commit_count > 0
+        run: Copy-Item -Path "${{ steps.gpg.outputs.filePath }}" -Destination "$env:GITHUB_WORKSPACE\signing.key.asc"
+      - id: verify
+        name: Verify Project
+        if: needs.prepare.outputs.commit_count > 0
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
+          mvn --batch-mode --settings .\build\settings.xml verify -Dskip.graal=false -Dpit.skip=true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+          JAVA_HOME: ./graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}
+      - id: upload-windows-artifact
+        name: Upload Windows Artifact
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip
+          asset_content_type: application/zip
+      - id: upload-windows-checksum
+        name: Upload Windows Checksum
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.sha512
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.sha512
+          asset_content_type: text/plain
+      - id: upload-windows-signature
+        name: Upload Windows Signature
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.prepare.outputs.release_url }}
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
+          asset_content_type: text/plain
   announce:
     name: Release Announcement
-    needs: [prepare, linux, mac]
+    needs: [prepare, linux, mac, windows]
     runs-on: ubuntu-latest
     steps:
       - id: email
