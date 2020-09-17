@@ -78,8 +78,6 @@ jobs:
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - id: graal
         name: GraalVM Setup
         if: needs.prepare.outputs.commit_count > 0
@@ -183,8 +181,6 @@ jobs:
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - id: graal
         name: GraalVM Setup
         if: needs.prepare.outputs.commit_count > 0
