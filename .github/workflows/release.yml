@@ -172,6 +172,32 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.asc
           asset_content_type: text/plain
+      - id: bintray
+        name: Upload Linux Packages to Bintray
+        if: needs.prepare.outputs.commit_count > 0
+        uses: reznikmm/upload-bintray-action@v2
+        with:
+          subject: metio
+          repository: generic
+          package: ilo
+          version: ${{ needs.prepare.outputs.release_version }}
+          sourcePath: './target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip*'
+          override: 0
+          username: ${{ secrets.BINTRAY_USER }}
+          apiKey: ${{ secrets.BINTRAY_API_KEY }}
+      - id: bintray
+        name: Upload Java Packages to Bintray
+        if: needs.prepare.outputs.commit_count > 0
+        uses: reznikmm/upload-bintray-action@v2
+        with:
+          subject: metio
+          repository: generic
+          package: ilo
+          version: ${{ needs.prepare.outputs.release_version }}
+          sourcePath: './target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip*'
+          override: 0
+          username: ${{ secrets.BINTRAY_USER }}
+          apiKey: ${{ secrets.BINTRAY_API_KEY }}
   mac:
     name: MacOS packages
     needs: prepare
@@ -244,6 +270,19 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
           asset_content_type: text/plain
+      - id: bintray
+        name: Upload MacOS Packages to Bintray
+        if: needs.prepare.outputs.commit_count > 0
+        uses: reznikmm/upload-bintray-action@v2
+        with:
+          subject: metio
+          repository: generic
+          package: ilo
+          version: ${{ needs.prepare.outputs.release_version }}
+          sourcePath: './target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip*'
+          override: 0
+          username: ${{ secrets.BINTRAY_USER }}
+          apiKey: ${{ secrets.BINTRAY_API_KEY }}
   windows:
     name: Windows packages
     needs: prepare
@@ -329,6 +368,19 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
           asset_content_type: text/plain
+      - id: bintray
+        name: Upload Windows Packages to Bintray
+        if: needs.prepare.outputs.commit_count > 0
+        uses: reznikmm/upload-bintray-action@v2
+        with:
+          subject: metio
+          repository: generic
+          package: ilo
+          version: ${{ needs.prepare.outputs.release_version }}
+          sourcePath: './target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip*'
+          override: 0
+          username: ${{ secrets.BINTRAY_USER }}
+          apiKey: ${{ secrets.BINTRAY_API_KEY }}
   announce:
     name: Release Announcement
     needs: [prepare, linux, mac, windows]
