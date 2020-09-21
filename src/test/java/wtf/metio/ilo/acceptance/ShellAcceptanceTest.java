@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("ilo shell")
-class ShellTest extends CLI_TCK {
+class ShellAcceptanceTest extends CLI_TCK {
 
   @ParameterizedTest
   @MethodSource("shellRuntimes")

@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HelpTest extends CLI_TCK {
+class HelpAcceptanceTest extends CLI_TCK {
 
   @DisplayName("usage help")
   @ParameterizedTest

@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("ilo compose")
-class ComposeTest extends CLI_TCK {
+class ComposeAcceptanceTest extends CLI_TCK {
 
   @ParameterizedTest
   @MethodSource("composeRuntimes")
