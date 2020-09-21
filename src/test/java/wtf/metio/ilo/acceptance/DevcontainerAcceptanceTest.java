@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class DevcontainerTest extends CLI_TCK {
+class DevcontainerAcceptanceTest extends CLI_TCK {
 
   @ParameterizedTest
   @DisplayName("version info")

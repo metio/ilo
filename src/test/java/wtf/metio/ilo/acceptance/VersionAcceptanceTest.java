@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class VersionTest extends CLI_TCK {
+class VersionAcceptanceTest extends CLI_TCK {
 
   @ParameterizedTest
   @DisplayName("version info")

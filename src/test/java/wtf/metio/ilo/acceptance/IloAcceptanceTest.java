@@ -17,7 +17,7 @@ import wtf.metio.ilo.shell.ShellRuntime;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Ilo")
-class IloTest extends CLI_TCK {
+class IloAcceptanceTest extends CLI_TCK {
 
   @Test
   @DisplayName("select runtime automatically by default")
