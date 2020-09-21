@@ -52,7 +52,7 @@ public final class ComposeOptions implements Options {
     description = "Specify the docker-compose.yml/footloose.yaml file to use.",
     defaultValue = "docker-compose.yml"
   )
-  public String file;
+  public List<String> file;
 
   @CommandLine.Option(
     names = {"--runtime-option"},

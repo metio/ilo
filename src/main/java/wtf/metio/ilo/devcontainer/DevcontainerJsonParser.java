@@ -36,6 +36,7 @@ final class DevcontainerJsonParser {
       final var json = Files.readString(devcontainer);
       final var mapper = new ObjectMapper();
       mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+      mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
       return mapper.readValue(json, DevcontainerJson.class);
     } catch (final JsonProcessingException exception) {
       throw new JsonParsingException(exception);

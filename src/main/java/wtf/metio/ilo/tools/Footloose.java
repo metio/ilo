@@ -26,17 +26,17 @@ public final class Footloose implements ComposeCLI {
 
   @Override
   public List<String> buildArguments(final ComposeOptions options) {
-    return List.of(name(), "create", "--config", options.file);
+    return List.of(name(), "create", "--config", options.file.get(0));
   }
 
   @Override
   public List<String> runArguments(final ComposeOptions options) {
-    return List.of(name(), "ssh", "--config", options.file);
+    return List.of(name(), "ssh", "--config", options.file.get(0));
   }
 
   @Override
   public List<String> cleanupArguments(final ComposeOptions options) {
-    return List.of(name(), "delete", "--config", options.file);
+    return List.of(name(), "delete", "--config", options.file.get(0));
   }
 
 }

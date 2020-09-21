@@ -26,7 +26,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool);
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertTrue(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),
@@ -48,7 +48,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--interactive=false");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertFalse(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),
@@ -70,7 +70,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--no-interactive");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertFalse(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),
@@ -92,7 +92,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--debug");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertTrue(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),
@@ -114,7 +114,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--pull");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertTrue(compose.options.interactive, "interactive"),
       () -> assertTrue(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),
@@ -136,7 +136,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--build");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertTrue(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertTrue(compose.options.build, "build"),
@@ -158,7 +158,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--runtime-option=--no-ansi");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertTrue(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),
@@ -180,7 +180,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--runtime-pull-option=--include-deps");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertTrue(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),
@@ -202,7 +202,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--runtime-build-option=--no-cache");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertTrue(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),
@@ -224,7 +224,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--runtime-run-option=--no-deps");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertTrue(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),
@@ -246,7 +246,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--runtime-cleanup-option=--remove-orphans");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertTrue(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),
@@ -268,7 +268,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "your-service");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertTrue(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),
@@ -290,7 +290,7 @@ class ComposeTest extends CLI_TCK {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "your-service", "/bin/bash");
     assertAll("compose options",
       () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertEquals("docker-compose.yml", compose.options.file, "file"),
+      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
       () -> assertTrue(compose.options.interactive, "interactive"),
       () -> assertFalse(compose.options.pull, "pull"),
       () -> assertFalse(compose.options.build, "build"),

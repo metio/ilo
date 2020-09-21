@@ -183,7 +183,7 @@ class DevcontainerOptionsMapperTest {
       // given
       final var options = new DevcontainerOptions();
       final var json = new DevcontainerJson();
-      json.dockerComposeFile = "your-compose.yml";
+      json.dockerComposeFile = List.of("your-compose.yml");
 
       // when
       final var composeOptions = composeOptions(options, json);

@@ -90,7 +90,7 @@ class DevcontainerJsonParserTest {
   void shouldParseComposeJson() {
     final var devcontainer = DevcontainerJsonParser.parseJson(findJsonIn("compose"));
     assertAll("compose",
-      () -> assertEquals("some-file.yml", devcontainer.dockerComposeFile, "dockerComposeFile"),
+      () -> assertIterableEquals(List.of("some-file.yml"), devcontainer.dockerComposeFile, "dockerComposeFile"),
       () -> assertEquals("dev", devcontainer.service, "service"),
       () -> assertEquals("my-name", devcontainer.name, "name"),
       () -> assertIterableEquals(List.of("first", "second"), devcontainer.runServices, "runServices"));

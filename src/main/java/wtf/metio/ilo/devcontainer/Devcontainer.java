@@ -43,7 +43,7 @@ public final class Devcontainer implements Callable<Integer> {
     final var json = findJson(currentDir);
     final var devcontainer = parseJson(json);
 
-    if (Strings.isNotBlank(devcontainer.dockerComposeFile)) {
+    if (null != devcontainer.dockerComposeFile && !devcontainer.dockerComposeFile.isEmpty()) {
       final var command = new Compose();
       command.options = composeOptions(options, devcontainer);
       return command.call();

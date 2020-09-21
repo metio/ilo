@@ -35,7 +35,7 @@ final class DevcontainerJson {
   //endregion
 
   //region compose
-  public String dockerComposeFile;
+  public List<String> dockerComposeFile;
   public String service;
   public List<String> runServices;
   //endregion
