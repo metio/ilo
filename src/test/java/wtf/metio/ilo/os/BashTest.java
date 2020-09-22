@@ -5,15 +5,15 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.utils;
+package wtf.metio.ilo.os;
 
 import com.github.stefanbirkner.systemlambda.SystemLambda;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
-import java.nio.file.Files;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,15 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Bash")
 class BashTest {
 
-  @Test
-  @DisplayName("expands ~ to the user's home directory")
-  void expandHomesWithTilde() throws Exception {
-    final var values = List.of("~/test:/something", "");
-    SystemLambda.restoreSystemProperties(() -> {
-      System.setProperty("user.home", "/home/user");
-      final var result = Bash.expand(values);
-      assertIterableEquals(List.of("/home/user/test:/something"), result);
-    });
+  private Bash bash;
+
+  @BeforeEach
+  void setUp() {
+    bash = new Bash();
   }
 
   @Test
@@ -37,19 +33,8 @@ class BashTest {
   void expandHomeWithTilde() throws Exception {
     SystemLambda.restoreSystemProperties(() -> {
       System.setProperty("user.home", "/home/user");
-      final var result = Bash.expand("~/test:/something");
+      final var result = bash.expandParameters("~/test:/something");
       assertEquals("/home/user/test:/something", result);
-    });
-  }
-
-  @Test
-  @DisplayName("expands $HOME to the user's home directory")
-  void expandHomes() throws Exception {
-    final var values = List.of("$HOME/test:/something", "");
-    SystemLambda.restoreSystemProperties(() -> {
-      System.setProperty("user.home", "/home/user");
-      final var result = Bash.expand(values);
-      assertIterableEquals(List.of("/home/user/test:/something"), result);
     });
   }
 
@@ -58,7 +43,7 @@ class BashTest {
   void expandHome() throws Exception {
     SystemLambda.restoreSystemProperties(() -> {
       System.setProperty("user.home", "/home/user");
-      final var result = Bash.expand("$HOME/test:/something");
+      final var result = bash.expandParameters("$HOME/test:/something");
       assertEquals("/home/user/test:/something", result);
     });
   }
@@ -75,16 +60,9 @@ class BashTest {
   }
 
   @Test
-  @DisplayName("returns other values as-is")
-  void keepOthers() {
-    final var result = Bash.expand(List.of("something", ""));
-    assertIterableEquals(List.of("something"), result);
-  }
-
-  @Test
   @DisplayName("returns constants as-is")
   void keepOther() {
-    assertEquals("1000:1000", Bash.expand("1000:1000"));
+    assertEquals("1000:1000", bash.expandParameters("1000:1000"));
   }
 
   @Test
@@ -111,17 +89,6 @@ class BashTest {
       () -> assertFalse(result.isBlank(), "not empty"),
       () -> assertFalse(result.contains("id -u"), "user"),
       () -> assertTrue(result.contains("1234"), "group"));
-  }
-
-  @Test
-  @DisplayName("write passwd file")
-  void passwd() throws Exception {
-    SystemLambda.restoreSystemProperties(() -> {
-      System.setProperty("user.name", "testuser");
-      final var passwdFile = Bash.passwdFile("1234:5678");
-      final var content = Files.readString(passwdFile);
-      assertEquals(content, "testuser:x:1234:5678::/home/testuser:/bin/bash");
-    });
   }
 
 }

@@ -9,7 +9,7 @@ package wtf.metio.ilo.tools;
 
 import wtf.metio.ilo.compose.ComposeCLI;
 import wtf.metio.ilo.compose.ComposeOptions;
-import wtf.metio.ilo.utils.Bash;
+import wtf.metio.ilo.os.OS;
 
 import java.util.List;
 
@@ -23,10 +23,10 @@ abstract class DockerComposePodmanCompose implements ComposeCLI {
     if (options.pull) {
       return flatten(
         of(name()),
-        fromList(Bash.expand(options.runtimeOptions)),
-        withPrefix("--file", Bash.expand(options.file)),
+        fromList(OS.expand(options.runtimeOptions)),
+        withPrefix("--file", OS.expand(options.file)),
         of("pull"),
-        fromList(Bash.expand(options.runtimePullOptions)));
+        fromList(OS.expand(options.runtimePullOptions)));
     }
     return List.of();
   }
@@ -36,10 +36,10 @@ abstract class DockerComposePodmanCompose implements ComposeCLI {
     if (options.build) {
       return flatten(
         of(name()),
-        fromList(Bash.expand(options.runtimeOptions)),
-        withPrefix("--file", Bash.expand(options.file)),
+        fromList(OS.expand(options.runtimeOptions)),
+        withPrefix("--file", OS.expand(options.file)),
         of("build"),
-        fromList(Bash.expand(options.runtimeBuildOptions)));
+        fromList(OS.expand(options.runtimeBuildOptions)));
     }
     return List.of();
   }
@@ -48,13 +48,13 @@ abstract class DockerComposePodmanCompose implements ComposeCLI {
   public final List<String> runArguments(final ComposeOptions options) {
     return flatten(
       of(name()),
-      fromList(Bash.expand(options.runtimeOptions)),
-      withPrefix("--file", Bash.expand(options.file)),
+      fromList(OS.expand(options.runtimeOptions)),
+      withPrefix("--file", OS.expand(options.file)),
       of("run"),
-      fromList(Bash.expand(options.runtimeRunOptions)),
+      fromList(OS.expand(options.runtimeRunOptions)),
       maybe(!options.interactive, "-T"),
-      of(Bash.expand(options.service)),
-      fromList(Bash.expand(options.arguments)));
+      of(OS.expand(options.service)),
+      fromList(OS.expand(options.arguments)));
   }
 
   @Override
@@ -63,10 +63,10 @@ abstract class DockerComposePodmanCompose implements ComposeCLI {
     // see https://github.com/docker/compose/issues/2791
     return flatten(
       of(name()),
-      fromList(Bash.expand(options.runtimeOptions)),
-      withPrefix("--file", Bash.expand(options.file)),
+      fromList(OS.expand(options.runtimeOptions)),
+      withPrefix("--file", OS.expand(options.file)),
       of("down"),
-      fromList(Bash.expand(options.runtimeCleanupOptions)));
+      fromList(OS.expand(options.runtimeCleanupOptions)));
   }
 
 }
