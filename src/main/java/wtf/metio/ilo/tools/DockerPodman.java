@@ -7,9 +7,9 @@
 
 package wtf.metio.ilo.tools;
 
+import wtf.metio.ilo.os.OS;
 import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
-import wtf.metio.ilo.utils.Bash;
 import wtf.metio.ilo.utils.Strings;
 
 import java.util.List;
@@ -24,10 +24,10 @@ abstract class DockerPodman implements ShellCLI {
     if (options.pull && Strings.isBlank(options.dockerfile)) {
       return flatten(
         of(name()),
-        fromList(Bash.expand(options.runtimeOptions)),
+        fromList(OS.expand(options.runtimeOptions)),
         of("pull"),
-        fromList(Bash.expand(options.runtimePullOptions)),
-        of(Bash.expand(options.image)));
+        fromList(OS.expand(options.runtimePullOptions)),
+        of(OS.expand(options.image)));
     }
     return List.of();
   }
@@ -37,12 +37,12 @@ abstract class DockerPodman implements ShellCLI {
     if (Strings.isNotBlank(options.dockerfile)) {
       return flatten(
         of(name()),
-        fromList(Bash.expand(options.runtimeOptions)),
+        fromList(OS.expand(options.runtimeOptions)),
         of("build", "--file", options.dockerfile),
-        fromList(Bash.expand(options.runtimeBuildOptions)),
+        fromList(OS.expand(options.runtimeBuildOptions)),
         maybe(options.pull, "--pull"),
-        of("--tag", Bash.expand(options.image)),
-        of(Bash.expand(options.context)));
+        of("--tag", OS.expand(options.image)),
+        of(OS.expand(options.context)));
     }
     return List.of();
   }
@@ -54,23 +54,23 @@ abstract class DockerPodman implements ShellCLI {
       "--volume", currentDir + ":" + currentDir + ":Z",
       "--workdir", currentDir);
     final var user = maybe(Strings.isNotBlank(options.runAs),
-      "--user", Bash.expand(options.runAs));
+      "--user", OS.expand(options.runAs));
     final var passwd = maybe(Strings.isNotBlank(options.runAs),
-      "--volume", Bash.passwdFile(options.runAs) + ":/etc/passwd");
+      "--volume", OS.passwdFile(options.runAs) + ":/etc/passwd");
     return flatten(
       of(name()),
-      fromList(Bash.expand(options.runtimeOptions)),
+      fromList(OS.expand(options.runtimeOptions)),
       of("run", "--rm"),
-      fromList(Bash.expand(options.runtimeRunOptions)),
+      fromList(OS.expand(options.runtimeRunOptions)),
       user,
       passwd,
       projectDir,
       maybe(options.interactive, "--interactive", "--tty"),
-      withPrefix("--env", Bash.expand(options.variables)),
-      withPrefix("--publish", Bash.expand(options.ports)),
-      withPrefix("--volume", Bash.expand(options.volumes)),
-      of(Bash.expand(options.image)),
-      fromList(Bash.expand(options.commands)));
+      withPrefix("--env", OS.expand(options.variables)),
+      withPrefix("--publish", OS.expand(options.ports)),
+      withPrefix("--volume", OS.expand(options.volumes)),
+      of(OS.expand(options.image)),
+      fromList(OS.expand(options.commands)));
   }
 
   @Override
@@ -78,10 +78,10 @@ abstract class DockerPodman implements ShellCLI {
     if (options.removeImage) {
       return flatten(
         of(name()),
-        fromList(Bash.expand(options.runtimeOptions)),
+        fromList(OS.expand(options.runtimeOptions)),
         of("rmi"),
-        fromList(Bash.expand(options.runtimeCleanupOptions)),
-        of(Bash.expand(options.image)));
+        fromList(OS.expand(options.runtimeCleanupOptions)),
+        of(OS.expand(options.image)));
     }
     return List.of();
   }

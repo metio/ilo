@@ -5,13 +5,10 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.utils;
+package wtf.metio.ilo.os;
 
 import wtf.metio.ilo.cli.Executables;
-import wtf.metio.ilo.errors.RuntimeIOException;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +19,14 @@ import static java.util.stream.Collectors.toList;
 import static wtf.metio.ilo.utils.Streams.filter;
 import static wtf.metio.ilo.utils.Streams.fromList;
 
-public final class Bash {
+/**
+ * Support for GNU Bash
+ */
+final class Bash implements ParameterExpansion {
 
-  private static final Pattern BASH_NEW_STYLE = Pattern.compile("\\$\\((?<expression>.+)\\)");
-  private static final Pattern BASH_OLD_STYLE = Pattern.compile("`(?<expression>.+)`");
-  public static final String EXPRESSION = "expression";
+  private static final Pattern BASH_COMMAND_NEW_STYLE = Pattern.compile("\\$\\((?<expression>.+)\\)");
+  private static final Pattern BASH_COMMAND_OLD_STYLE = Pattern.compile("`(?<expression>.+)`");
+  private static final String EXPRESSION = "expression";
 
   public static List<String> expand(final List<String> values) {
     return filter(fromList(values))
@@ -55,10 +55,18 @@ public final class Bash {
       .orElse(value);
   }
 
+  @Override
+  public String substituteCommands(final String value) {
+    return Executables.of("bash")
+      .map(Path::toAbsolutePath)
+      .map(bash -> substituteCommands(bash, value))
+      .orElse(value);
+  }
+
   // https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html
   private static String substituteCommands(final Path bash, final String value) {
-    final var newStyle = BASH_NEW_STYLE.matcher(value);
-    final var oldStyle = BASH_OLD_STYLE.matcher(value);
+    final var newStyle = BASH_COMMAND_NEW_STYLE.matcher(value);
+    final var oldStyle = BASH_COMMAND_OLD_STYLE.matcher(value);
     var current = value;
     while (newStyle.find()) {
       current = substitute(bash, newStyle, current);
@@ -77,21 +85,10 @@ public final class Bash {
     return new StringBuilder(current).replace(start, end, replacement).toString();
   }
 
-  public static Path passwdFile(final String runAs) {
-    try {
-      final var username = System.getProperty("user.name");
-      final var tempFile = Files.createTempFile("ilo", ".passwd");
-      tempFile.toFile().deleteOnExit();
-      final var content = String.format("%s:x:%s::/home/%s:/bin/bash", username, expand(runAs), username);
-      Files.writeString(tempFile, content);
-      return tempFile.toAbsolutePath();
-    } catch (final IOException exception) {
-      throw new RuntimeIOException(exception);
-    }
-  }
-
-  private Bash() {
-    // utility class
+  @Override
+  // https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html
+  public String expandParameters(final String value) {
+    return null;
   }
 
 }

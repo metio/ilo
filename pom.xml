@@ -184,6 +184,7 @@
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.devcontainer=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.errors=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.model=ALL-UNNAMED
+                        --add-opens wtf.metio.ilo/wtf.metio.ilo.os=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.shell=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.test=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.tools=ALL-UNNAMED
