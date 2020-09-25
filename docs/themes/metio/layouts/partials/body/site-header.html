@@ -18,11 +18,6 @@
                 <img class="svgimg" src="{{ "/images/email.svg" | absURL }}" alt="email" width="32" height="32">
             </a>
         {{ end }}
-        {{ with .Site.Params.mastodon }}
-            <a rel="me" href="{{ . }}" id="mastodon" title="toot toot toot">
-                <img class="svgimg" src="{{ "/images/mastodon.svg" | absURL }}" alt="mastodon" width="32" height="32">
-            </a>
-        {{ end }}
         {{ with .Site.Params.github }}
             <a href="https://github.com/{{ . }}" id="github" title="want some code?">
                 <img class="svgimg" src="{{ "/images/github.svg" | absURL }}" alt="github" width="32" height="32">
