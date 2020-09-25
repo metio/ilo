@@ -119,37 +119,11 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   }
 
   @Test
-  @DisplayName("expands $HOME")
-  void home() throws Exception {
-    final var options = new ShellOptions();
-    options.image = "example:test";
-    options.volumes = List.of("$HOME/test:/something");
-    SystemLambda.restoreSystemProperties(() -> {
-      System.setProperty("user.home", "/home/user");
-      final var arguments = tool().runArguments(options);
-      assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
-    });
-  }
-
-  @Test
   @DisplayName("expands ~")
   void shortHome() throws Exception {
     final var options = new ShellOptions();
     options.image = "example:test";
     options.volumes = List.of("~/test:/something");
-    SystemLambda.restoreSystemProperties(() -> {
-      System.setProperty("user.home", "/home/user");
-      final var arguments = tool().runArguments(options);
-      assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
-    });
-  }
-
-  @Test
-  @DisplayName("expands ${HOME}")
-  void homeWithBrackets() throws Exception {
-    final var options = new ShellOptions();
-    options.image = "example:test";
-    options.volumes = List.of("${HOME}/test:/something");
     SystemLambda.restoreSystemProperties(() -> {
       System.setProperty("user.home", "/home/user");
       final var arguments = tool().runArguments(options);
