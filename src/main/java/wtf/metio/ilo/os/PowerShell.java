@@ -41,9 +41,14 @@ final class PowerShell extends ParameterExpansion {
 
   @Override
   public String expandParameters(final String value) {
-    return replace(value,
+    return replace(expandTilde(value),
       parameter -> Executables.runAndReadOutput(shellBinary.toString(), "-OutputFormat", "Text", "-Command", "'Write-Output \"" + parameter + "\"'"),
       PARAMETER_PATTERN);
+  }
+
+  private String expandTilde(final String value) {
+    final var userHome = System.getProperty("user.home");
+    return value.replace("~", userHome);
   }
 
 }
