@@ -1,3 +1,0 @@
-shell
---volume $HOME/.m2/repository:/root/.m2/repository:Z
-maven:3-jdk-11

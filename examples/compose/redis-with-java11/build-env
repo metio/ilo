@@ -1,4 +1,0 @@
-compose
---file examples/compose/redis-with-java11/docker-compose.yml
---runtime docker-compose
-build
