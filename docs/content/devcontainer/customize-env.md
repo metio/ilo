@@ -13,4 +13,4 @@ tags:
 
 `ilo` allows you to define your build environment either in a [Dockerfile](https://docs.docker.com/engine/reference/builder/) or any other [OCI Image](https://github.com/opencontainers/image-spec/blob/master/spec.md) compliant way.
 
-If you are using `ilo devcontainer`, make sure to specify `your.image.here:latest` as the image in your `devcontainer.json` file.
+Make sure to specify `your.image.here:some-tag` as the image in your `devcontainer.json` file. Take a look at the [reference documentation](https://code.visualstudio.com/docs/remote/devcontainerjson-reference) for all available options for that JSON file.

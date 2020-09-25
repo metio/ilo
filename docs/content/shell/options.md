@@ -140,7 +140,7 @@ By default, `--pull` is not enabled.
 
 ## `--remove-image`
 
-The `--remove-image` option causes `ilo` to remove the specified image from your local system after you close your shell or the non-interactive commands finishes. This is especially useful in combination with `--dockerfile`.
+The `--remove-image` option causes `ilo` to remove the specified image from your local system after you close your shell, or the non-interactive commands finishes. This is especially useful in combination with `--dockerfile`.
 
 ```shell script
 # remove image after shell was closed
