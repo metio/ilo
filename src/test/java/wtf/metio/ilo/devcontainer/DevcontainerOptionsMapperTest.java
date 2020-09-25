@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Paths;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -174,22 +175,22 @@ class DevcontainerOptionsMapperTest {
     @Test
     @DisplayName("returns non-null values")
     void shouldReturnNonNullValues() {
-      assertNotNull(composeOptions(new DevcontainerOptions(), new DevcontainerJson()));
+      assertNotNull(composeOptions(new DevcontainerOptions(), new DevcontainerJson(), Paths.get(".")));
     }
 
     @Test
     @DisplayName("maps the dockerComposeFile field")
-    void shouldMapDockerComposefile() {
+    void shouldMapDockerComposeFile() {
       // given
       final var options = new DevcontainerOptions();
       final var json = new DevcontainerJson();
       json.dockerComposeFile = List.of("your-compose.yml");
 
       // when
-      final var composeOptions = composeOptions(options, json);
+      final var composeOptions = composeOptions(options, json, Paths.get("."));
 
       // then
-      assertEquals(json.dockerComposeFile, composeOptions.file);
+      assertTrue(composeOptions.file.get(0).endsWith("your-compose.yml"));
     }
 
     @Test
@@ -201,7 +202,7 @@ class DevcontainerOptionsMapperTest {
       json.service = "some-service";
 
       // when
-      final var composeOptions = composeOptions(options, json);
+      final var composeOptions = composeOptions(options, json, Paths.get("."));
 
       // then
       assertEquals(json.service, composeOptions.service);

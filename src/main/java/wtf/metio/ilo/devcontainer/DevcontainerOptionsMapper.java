@@ -10,6 +10,8 @@ package wtf.metio.ilo.devcontainer;
 import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.shell.ShellOptions;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,9 +42,15 @@ final class DevcontainerOptionsMapper {
     return opts;
   }
 
-  static ComposeOptions composeOptions(final DevcontainerOptions options, final DevcontainerJson devcontainer) {
+  static ComposeOptions composeOptions(final DevcontainerOptions options, final DevcontainerJson devcontainer, final Path devcontainerJson) {
     final var opts = new ComposeOptions();
-    opts.file = devcontainer.dockerComposeFile;
+    opts.file = Stream.ofNullable(devcontainer.dockerComposeFile)
+      .flatMap(List::stream)
+      .map(Paths::get)
+      .map(devcontainerJson::relativize)
+      .map(Path::toAbsolutePath)
+      .map(Path::toString)
+      .collect(Collectors.toList());
     opts.service = devcontainer.service;
     opts.debug = options.debug;
     opts.pull = options.pull;

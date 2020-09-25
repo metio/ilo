@@ -45,7 +45,7 @@ public final class Devcontainer implements Callable<Integer> {
 
     if (null != devcontainer.dockerComposeFile && !devcontainer.dockerComposeFile.isEmpty()) {
       final var command = new Compose();
-      command.options = composeOptions(options, devcontainer);
+      command.options = composeOptions(options, devcontainer, json);
       return command.call();
     } else if (Strings.isNotBlank(devcontainer.image)) {
       final var command = new Shell();
