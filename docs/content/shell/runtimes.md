@@ -41,17 +41,3 @@ $ ilo shell --runtime p
 ```
 
 **Important**: In case your images uses `root` as its user, and you cannot run [rootless podman](https://github.com/containers/podman/blob/master/rootless.md), use the [`--run-as`](../options) option to override the user in the image. Take a look at this [article](https://www.redhat.com/sysadmin/behind-scenes-podman) for an in-depth example of how rootless work with podman.
-
-## LXC/LXD
-
-[**WORK IN PROGRESS**](https://github.com/metio/ilo/issues/41)
-
-Force `ilo` to use [lxd](https://linuxcontainers.org/lxd/introduction/) like this:
-
-```shell script
-$ ilo shell --runtime lxd
-
-# aliases
-$ ilo shell --runtime lxc
-$ ilo shell --runtime l
-```
