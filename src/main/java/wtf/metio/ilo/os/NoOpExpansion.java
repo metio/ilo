@@ -7,7 +7,7 @@
 
 package wtf.metio.ilo.os;
 
-public class NoOpExpansion implements ParameterExpansion {
+public class NoOpExpansion extends ParameterExpansion {
 
   @Override
   public String substituteCommands(final String value) {

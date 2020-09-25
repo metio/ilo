@@ -7,25 +7,24 @@
 
 package wtf.metio.ilo.os;
 
+import wtf.metio.ilo.cli.Executables;
 import wtf.metio.ilo.errors.RuntimeIOException;
-import wtf.metio.ilo.utils.Strings;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 import static wtf.metio.ilo.utils.Streams.filter;
 import static wtf.metio.ilo.utils.Streams.fromList;
 
-public final class OS {
+public final class OSSupport {
 
   public static List<String> expand(final List<String> values) {
     return filter(fromList(values))
-      .map(OS::expand)
+      .map(OSSupport::expand)
       .collect(toList());
   }
 
@@ -38,20 +37,26 @@ public final class OS {
   }
 
   static ParameterExpansion expansion() {
-    return detectExpansionForOS(System.getProperty("os.name"));
+    return bourneShell()
+      .or(OSSupport::powerShell)
+      .orElseGet(NoOpExpansion::new);
   }
 
-  private static ParameterExpansion detectExpansionForOS(final String osName) {
-    if (Strings.isNotBlank(osName)) {
-      final var name = osName.toLowerCase(Locale.ENGLISH);
-      if (name.contains("linux") || name.contains("mac")) {
-        return new Bash();
-      }
-      if (name.contains("win")) {
-        return new PowerShell();
-      }
-    }
-    return new NoOpExpansion();
+  // visible for testing
+  static Optional<ParameterExpansion> bourneShell() {
+    return Executables.of("bash")
+      .or(() -> Executables.of("zsh"))
+      .or(() -> Executables.of("sh"))
+      .map(Path::toAbsolutePath)
+      .map(BourneShell::new);
+  }
+
+  static Optional<ParameterExpansion> powerShell() {
+    return Executables.of("pwsh.exe")
+      .or(() -> Executables.of("powershell.exe"))
+      .or(() -> Executables.of("pwsh"))
+      .map(Path::toAbsolutePath)
+      .map(PowerShell::new);
   }
 
   public static Path passwdFile(final String runAs) {
@@ -67,7 +72,7 @@ public final class OS {
     }
   }
 
-  private OS() {
+  private OSSupport() {
     // utility class
   }
 
