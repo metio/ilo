@@ -451,14 +451,6 @@ jobs:
           body: See https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details.
           to: ilo@metio.groups.io
           from: ${{ secrets.MAIL_SENDER }}
-      - id: mastodon
-        name: Publish Toot
-        if: needs.prepare.outputs.commit_count > 0
-        uses: rzr/fediverse-action@master
-        with:
-          access-token: ${{ secrets.MASTODON_TOKEN }}
-          message: "#ilo version ${{ needs.prepare.outputs.release_version }} published! https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} #metio"
-          host: ${{ secrets.MASTODON_SERVER }}
   copr:
     name: Release COPR packages
     needs: [prepare, announce]
