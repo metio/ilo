@@ -63,7 +63,7 @@ public final class Executables {
     }
   }
 
-  public static String runAndReadOutput(final String[] arguments) {
+  public static String runAndReadOutput(final String... arguments) {
     try {
       final var processBuilder = new ProcessBuilder(arguments);
       final var process = processBuilder.start();
