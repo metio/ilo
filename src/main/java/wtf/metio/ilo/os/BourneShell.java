@@ -47,7 +47,7 @@ final class BourneShell extends ParameterExpansion {
   @Override
   public String expandParameters(final String value) {
     return replace(expandTilde(value),
-      parameter -> Executables.runAndReadOutput(shellBinary.toString(), "-c", "'echo \"" + parameter + "\"'"),
+      parameter -> Executables.runAndReadOutput("/usr/bin/env", shellBinary.toString(), "-c", "printf " + parameter),
       PARAMETER_WITH_BRACES_PATTERN, PARAMETER_PATTERN);
   }
 
