@@ -183,6 +183,14 @@ class BourneShellTest {
     }
 
     @Test
+    @DisplayName("expand parameter with their results")
+    void expandParameter() {
+      assertAll("parameter expansion",
+        () -> assertNotEquals("", bourneShell.expandParameters("${HOME}"), "with braces"),
+        () -> assertNotEquals("", bourneShell.expandParameters("$HOME"), "without braces"));
+    }
+
+    @Test
     @DisplayName("substitutes command with its result and keeps constant")
     void substituteCommandAndKeepConstant() {
       assertEquals("hello:1234", bourneShell.substituteCommands("$(echo hello):1234"));
