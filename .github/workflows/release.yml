@@ -478,8 +478,6 @@ jobs:
       - id: webhook
         name: Trigger COPR Webhook
         if: needs.prepare.outputs.commit_count > 0
-        uses: zzzze/webhook-trigger@master
+        uses: joelwmale/webhook-action@aed4f319dce44a4f73cdf0480b94df9e6dfc6cae
         with:
-          data: "{\"event_type\":\"release\"}"
-          webhook_url: ${{ secrets.COPR_WEBHOOK }}
-          options: "-H \"Content-Type: application/json\""
+          url: ${{ secrets.COPR_WEBHOOK }}
