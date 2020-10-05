@@ -31,7 +31,7 @@ public final class Ignite implements ShellCLI {
 
   @Override
   public List<String> runArguments(final ShellOptions options) {
-    return List.of();
+    return List.of(name(), "run");
   }
 
   @Override

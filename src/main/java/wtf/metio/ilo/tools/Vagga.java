@@ -31,7 +31,7 @@ public final class Vagga implements ComposeCLI {
 
   @Override
   public List<String> runArguments(final ComposeOptions options) {
-    return List.of();
+    return List.of(name(), "_run", options.service);
   }
 
   @Override
