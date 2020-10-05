@@ -12,6 +12,7 @@ import wtf.metio.ilo.model.Runtime;
 public enum ShellRuntime implements Runtime {
 
   DOCKER("docker", "d"),
+  IGNITE("ignite", "i"),
   LXD("lxd", "lxc", "l"),
   PODMAN("podman", "p");
 

@@ -15,6 +15,7 @@ public enum ComposeRuntime implements Runtime {
   FOOTLOOSE("footloose", "fl"),
   PODMAN_COMPOSE("podman-compose", "pc"),
   PODS_COMPOSE("pods-compose", "pods"),
+  VAGGA("vagga", "vg"),
   VAGRANT("vagrant", "v");
 
   private final String[] aliases;
