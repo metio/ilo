@@ -26,7 +26,7 @@ public final class PodsCompose implements ComposeCLI {
 
   @Override
   public List<String> buildArguments(final ComposeOptions options) {
-    return List.of();
+    return List.of(name(), "--build");
   }
 
   @Override

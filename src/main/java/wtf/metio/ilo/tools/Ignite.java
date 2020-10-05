@@ -21,7 +21,7 @@ public final class Ignite implements ShellCLI {
 
   @Override
   public List<String> pullArguments(final ShellOptions options) {
-    return List.of();
+    return List.of(name(), "image", "import", options.image);
   }
 
   @Override
