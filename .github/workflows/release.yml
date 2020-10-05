@@ -48,6 +48,19 @@ jobs:
           sinceTag: ${{ steps.previous.outputs.version }}
           stripGeneratorNotice: true
           stripHeaders: true
+      - name: Check Changelog Existence
+        id: check_changelog
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "CHANGELOG.md"
+      - name: Create Empty Changelog
+        id: empty_changelog
+        uses: 1arp/create-a-file-action@0.2
+        if: steps.check_changelog.outputs.files_exists == 'false'
+        with:
+          file: CHANGELOG.md
+          content: |
+            no user facing changes
       - name: Read Changelog
         id: changelog
         uses: juliangruber/read-file-action@v1
