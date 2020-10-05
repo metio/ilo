@@ -19,7 +19,8 @@ public final class ComposeRuntimes {
       new PodmanCompose(),
       new PodsCompose(),
       new Vagrant(),
-      new Footloose());
+      new Footloose(),
+      new Vagga());
   }
 
   private ComposeRuntimes() {
