@@ -31,11 +31,11 @@ public final class Streams {
 
   @SafeVarargs
   public static List<String> flatten(final Stream<String>... streams) {
-    return Streams.filter(Arrays.stream(streams).flatMap(identity())).collect(toList());
+    return filter(Arrays.stream(streams).flatMap(identity())).collect(toList());
   }
 
   public static Stream<String> maybe(final boolean condition, final String... values) {
-    return condition ? Arrays.stream(values) : Stream.empty();
+    return condition ? filter(Arrays.stream(values)) : Stream.empty();
   }
 
   public static Stream<String> withPrefix(final String prefix, final List<String> values) {
