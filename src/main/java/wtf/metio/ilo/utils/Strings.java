@@ -14,7 +14,7 @@ public final class Strings {
   }
 
   public static boolean isNotBlank(final String value) {
-    return null != value && !value.isBlank();
+    return !isBlank(value);
   }
 
   private Strings() {
