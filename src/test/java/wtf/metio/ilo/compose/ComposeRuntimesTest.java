@@ -25,7 +25,7 @@ class ComposeRuntimesTest {
   @Test
   @DisplayName("supports multiple runtimes")
   void shouldSupportMultipleRuntimes() {
-    assertEquals(5, ComposeRuntimes.allRuntimes().size());
+    assertEquals(6, ComposeRuntimes.allRuntimes().size());
   }
 
   @Test
@@ -56,6 +56,12 @@ class ComposeRuntimesTest {
   @DisplayName("footloose is the fifth choice")
   void footloose() {
     assertEquals("footloose", ComposeRuntimes.allRuntimes().get(4).name());
+  }
+
+  @Test
+  @DisplayName("vagga is the sixth choice")
+  void vagga() {
+    assertEquals("vagga", ComposeRuntimes.allRuntimes().get(5).name());
   }
 
 }
