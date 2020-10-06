@@ -185,9 +185,10 @@ class BourneShellTest {
     @Test
     @DisplayName("expand parameter with their results")
     void expandParameter() {
+      final var homeDirectory = System.getProperty("user.home");
       assertAll("parameter expansion",
-        () -> assertNotEquals("", bourneShell.expandParameters("${HOME}"), "with braces"),
-        () -> assertNotEquals("", bourneShell.expandParameters("$HOME"), "without braces"));
+        () -> assertEquals(homeDirectory, bourneShell.expandParameters("${HOME}"), "with braces"),
+        () -> assertEquals(homeDirectory, bourneShell.expandParameters("$HOME"), "without braces"));
     }
 
     @Test
