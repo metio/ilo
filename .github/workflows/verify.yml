@@ -60,7 +60,7 @@ jobs:
         uses: actions/checkout@v2
       - id: graal
         name: GraalVM Setup
-        uses: DeLaGuardo/setup-graalvm@2.0
+        uses: DeLaGuardo/setup-graalvm@898e16cec172695b4b4724bb27b061b971e35b11
         with:
           graalvm-version: "${{ env.GRAAL }}.${{ env.JAVA }}"
       - id: native-image
