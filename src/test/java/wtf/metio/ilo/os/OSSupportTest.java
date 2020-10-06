@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("OS")
 class OSSupportTest {
@@ -24,6 +25,7 @@ class OSSupportTest {
     SystemLambda.restoreSystemProperties(() -> {
       System.setProperty("user.name", "testuser");
       final var passwdFile = OSSupport.passwdFile("1234:5678");
+      assertNotNull(passwdFile);
       final var content = Files.readString(passwdFile);
       assertEquals(content, "testuser:x:1234:5678::/home/testuser:/bin/bash");
     });
