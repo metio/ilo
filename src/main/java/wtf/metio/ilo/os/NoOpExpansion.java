@@ -7,6 +7,9 @@
 
 package wtf.metio.ilo.os;
 
+/**
+ * Fallback implementation that does no parameter expansion.
+ */
 public class NoOpExpansion extends ParameterExpansion {
 
   @Override
