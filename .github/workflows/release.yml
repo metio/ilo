@@ -249,7 +249,7 @@ jobs:
       - id: graal
         name: GraalVM Setup
         if: needs.prepare.outputs.commit_count > 0
-        uses: DeLaGuardo/setup-graalvm@898e16cec172695b4b4724bb27b061b971e35b11
+        uses: DeLaGuardo/setup-graalvm@master
         with:
           graalvm-version: "${{ env.GRAAL }}.${{ env.JAVA }}"
       - id: native-image
