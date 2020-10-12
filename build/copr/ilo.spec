@@ -1,5 +1,5 @@
 Name:           ilo
-Version:        2020.9.28
+Version:        2020.10.12
 Release:        1%{?dist}
 Summary:        Manage Reproducible Build Environments
 License:        CC0
