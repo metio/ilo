@@ -111,7 +111,7 @@ jobs:
       - id: gpg
         name: GPG Key
         if: needs.prepare.outputs.commit_count > 0
-        run: echo "${{ secrets.GPG_SECRET_KEY_BASE64 }}" | base64 --decode > signing.key.asc
+        run: echo "${{ secrets.GPG_SECRET_KEY_BASE64 }}" | base64 --decode > $GITHUB_WORKSPACE/signing.key.asc
       - id: verify
         if: needs.prepare.outputs.commit_count > 0
         name: Verify Project
@@ -213,7 +213,7 @@ jobs:
       - id: gpg
         name: GPG Key
         if: needs.prepare.outputs.commit_count > 0
-        run: echo "${{ secrets.GPG_SECRET_KEY_BASE64 }}" | base64 --decode > signing.key.asc
+        run: echo "${{ secrets.GPG_SECRET_KEY_BASE64 }}" | base64 --decode > $GITHUB_WORKSPACE/signing.key.asc
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
