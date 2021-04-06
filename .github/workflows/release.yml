@@ -102,7 +102,7 @@ jobs:
       - id: cache
         name: Cache Maven Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/cache@v1
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -259,7 +259,7 @@ jobs:
       - id: cache
         name: Cache Maven Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/cache@v1
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -359,7 +359,7 @@ jobs:
       - id: cache
         name: Cache Maven Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/cache@v1
+        uses: actions/cache@v2.1.4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
