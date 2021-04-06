@@ -1,14 +1,14 @@
 name: Verify
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - "src/**"
 env:
   JAVA: "java11"
-  GRAAL: "20.2.0"
+  GRAAL: "21.0.0.2"
 jobs:
   linux:
     name: Linux packages
