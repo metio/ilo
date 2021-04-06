@@ -34,9 +34,6 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - id: gpg
-        name: GPG Key
-        run: echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
       - id: verify
         name: Verify Project
         run: mvn --batch-mode verify -Dskip.graal=false
@@ -73,9 +70,6 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - id: gpg
-        name: GPG Key
-        run: echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
       - id: verify
         name: Verify Project
         run: mvn --batch-mode verify -Dskip.graal=false
@@ -108,21 +102,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - id: gpg
-        name: GPG Key
-        uses: timheuer/base64-to-file@v1.0.3
-        with:
-          fileName: signing.key.asc
-          encodedString: ${{ secrets.GPG_KEY }}
-      - id: copy-key
-        name: Copy GPG key to correct location
-        run: Copy-Item -Path "${{ steps.gpg.outputs.filePath }}" -Destination "$env:GITHUB_WORKSPACE\signing.key.asc"
       - id: verify
         name: Verify Project
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
-          mvn --batch-mode verify -Dskip.graal=false -Dpit.skip=true
+          mvn --batch-mode verify -Dskip.graal=false
         env:
           JAVA_HOME: ./graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}
       - name: Upload Windows Artifact

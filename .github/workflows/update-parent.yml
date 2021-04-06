@@ -11,6 +11,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
+          distribution: 'adopt'
       - uses: actions/cache@v2.1.4
         with:
           path: ~/.m2/repository

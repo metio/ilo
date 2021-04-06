@@ -305,6 +305,13 @@
                         <argument>wtf.metio.ilo.devcontainer.Devcontainer</argument>
                     </arguments>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>info.picocli</groupId>
+                        <artifactId>picocli-codegen</artifactId>
+                        <version>5.6.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.asciidoctor</groupId>
