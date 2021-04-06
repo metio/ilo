@@ -336,7 +336,7 @@ jobs:
           asset_content_type: text/plain
   announce:
     name: Release Announcement
-    needs: [prepare, linux, mac, windows]
+    needs: [linux, mac, windows]
     runs-on: ubuntu-latest
     steps:
       - id: email
@@ -354,7 +354,7 @@ jobs:
           from: ${{ secrets.MAIL_SENDER }}
   copr:
     name: Release COPR packages
-    needs: [prepare, announce]
+    needs: [announce]
     runs-on: ubuntu-latest
     steps:
       - id: checkout
