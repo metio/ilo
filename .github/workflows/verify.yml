@@ -37,10 +37,7 @@ jobs:
         run: echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
       - id: verify
         name: Verify Project
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Dskip.graal=false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+        run: mvn --batch-mode verify -Dskip.graal=false
       - name: Upload Java 11 Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -79,10 +76,7 @@ jobs:
         run: echo "${{ secrets.GPG_KEY }}" | base64 --decode > signing.key.asc
       - id: verify
         name: Verify Project
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Dskip.graal=false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+        run: mvn --batch-mode verify -Dskip.graal=false
       - name: Upload Mac Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -126,10 +120,8 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
-          mvn --batch-mode --settings .\build\settings.xml verify -Dskip.graal=false -Dpit.skip=true
+          mvn --batch-mode verify -Dskip.graal=false -Dpit.skip=true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
           JAVA_HOME: ./graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v2

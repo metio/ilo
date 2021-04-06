@@ -115,10 +115,7 @@ jobs:
       - id: verify
         if: needs.prepare.outputs.commit_count > 0
         name: Verify Project
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ needs.prepare.outputs.release_version }} -Dskip.graal=false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+        run: mvn --batch-mode verify -Drevision=${{ needs.prepare.outputs.release_version }} -Dskip.graal=false
       - id: upload-linux-artifact
         name: Upload Linux Artifact
         if: needs.prepare.outputs.commit_count > 0
@@ -220,10 +217,7 @@ jobs:
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
-        run: mvn --batch-mode --settings $GITHUB_WORKSPACE/build/settings.xml verify -Drevision=${{ needs.prepare.outputs.release_version }} -Dskip.graal=false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
+        run: mvn --batch-mode verify -Drevision=${{ needs.prepare.outputs.release_version }} -Dskip.graal=false
       - id: upload-mac-artifact
         name: Upload MacOS Artifact
         if: needs.prepare.outputs.commit_count > 0
@@ -304,10 +298,8 @@ jobs:
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
-          mvn --batch-mode --settings .\build\settings.xml verify -Drevision=${{ needs.prepare.outputs.release_version }} -Dskip.graal=false -Dpit.skip=true
+          mvn --batch-mode verify -Drevision=${{ needs.prepare.outputs.release_version }} -Dskip.graal=false -Dpit.skip=true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GPG_KEY_PASSPHRASE: ${{ secrets.GPG_KEY_PASSPHRASE }}
           JAVA_HOME: ./graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}
       - id: upload-windows-artifact
         name: Upload Windows Artifact
