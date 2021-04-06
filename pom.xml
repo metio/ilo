@@ -19,7 +19,7 @@
     <parent>
         <groupId>wtf.metio.maven.parents</groupId>
         <artifactId>maven-parents-java-stable</artifactId>
-        <version>2020.12.11</version>
+        <version>2021.4.5</version>
     </parent>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -67,8 +67,6 @@
     <properties>
         <revision>0.0.0-SNAPSHOT</revision>
         <version.jdk>11</version.jdk>
-        <version.picocli>4.5.1</version.picocli>
-        <version.graal>20.2.0</version.graal>
         <skip.graal>true</skip.graal>
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
         <project.build.outputTimestamp>2019</project.build.outputTimestamp>
@@ -84,6 +82,11 @@
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>info.picocli</groupId>
+            <artifactId>picocli-codegen</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -116,7 +119,6 @@
         <dependency>
             <groupId>com.github.stefanbirkner</groupId>
             <artifactId>system-lambda</artifactId>
-            <version>1.1.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -142,13 +144,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <release>${version.jdk}</release>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>info.picocli</groupId>
-                            <artifactId>picocli-codegen</artifactId>
-                            <version>${version.picocli}</version>
-                        </path>
-                    </annotationProcessorPaths>
                     <compilerArgs>
                         <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
                     </compilerArgs>
@@ -304,14 +299,6 @@
                         <argument>wtf.metio.ilo.devcontainer.Devcontainer</argument>
                     </arguments>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>info.picocli</groupId>
-                        <artifactId>picocli-codegen</artifactId>
-                        <version>${version.picocli}</version>
-                        <type>jar</type>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.asciidoctor</groupId>
@@ -374,25 +361,6 @@
     </build>
 
     <profiles>
-        <profile>
-            <id>github</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.kohsuke</groupId>
-                        <artifactId>pgp-maven-plugin</artifactId>
-                        <version>1.1</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>native-linux</id>
             <activation>
