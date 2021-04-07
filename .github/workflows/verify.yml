@@ -46,7 +46,7 @@ jobs:
         with:
           version: latest
           files: |
-            ./target/ilo-*-linux*
+            ./target/ilo
           args: -fq
       - name: Upload Java 11 Artifact
         uses: actions/upload-artifact@v2
@@ -87,13 +87,6 @@ jobs:
       - id: verify
         name: Verify Project
         run: mvn --batch-mode verify -Dskip.graal=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
-      - id: upx
-        name: Run UPX
-        uses: crazy-max/ghaction-upx@v1
-        with:
-          version: latest
-          files: |
-            ./target/ilo-*-mac*
       - name: Upload Mac Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -140,13 +133,6 @@ jobs:
           mvn --batch-mode verify -Dskip.graal=false -Dpgp.secretkey=keyfile:signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
         env:
           JAVA_HOME: ./graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}
-      - id: upx
-        name: Run UPX
-        uses: crazy-max/ghaction-upx@v1
-        with:
-          version: latest
-          files: |
-            ./target/ilo-*-windows*
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v2
         with:
