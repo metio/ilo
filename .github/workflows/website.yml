@@ -4,7 +4,7 @@ on:
     - cron:  "45 4 * * MON"
   push:
     branches:
-      - master
+      - main
     paths:
       - "docs/**"
 jobs:
