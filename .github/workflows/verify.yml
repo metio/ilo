@@ -130,3 +130,16 @@ jobs:
         with:
           name: windows
           path: ./target/ilo-*-windows*
+  announce:
+    name: Release Announcement
+    needs: [linux, mac, windows]
+    runs-on: ubuntu-latest
+    steps:
+      - id: matrix
+        name: Send Matrix Message
+        uses: s3krit/matrix-message-action@v0.0.3
+        with:
+          room_id: ${{ secrets.MATRIX_ROOM_ID }}
+          access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
+          message: "release [${{ needs.prepare.outputs.release_version }}](https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }}) published"
+          server: "matrix.org"
