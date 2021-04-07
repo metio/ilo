@@ -48,6 +48,9 @@ jobs:
           files: |
             ./target/ilo
           args: --best
+      - id: list-files
+        name: Show files
+        run: ls -la ./target
       - name: Upload Java 11 Artifact
         uses: actions/upload-artifact@v2
         with:
