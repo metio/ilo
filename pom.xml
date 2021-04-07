@@ -216,7 +216,8 @@
                     <skip>${skip.graal}</skip>
                     <imageName>ilo</imageName>
                     <buildArgs>
-                        --no-server
+                        --no-fallback
+                        --static
                     </buildArgs>
                 </configuration>
             </plugin>
