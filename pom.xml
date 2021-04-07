@@ -217,6 +217,7 @@
                     <imageName>ilo</imageName>
                     <buildArgs>
                         --no-fallback
+                        -H:+StaticExecutableWithDynamicLibC
                     </buildArgs>
                 </configuration>
             </plugin>
