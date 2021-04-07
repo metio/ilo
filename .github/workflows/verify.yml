@@ -40,17 +40,6 @@ jobs:
       - id: verify
         name: Verify Project
         run: mvn --batch-mode verify -Dskip.graal=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
-      - id: upx
-        name: Run UPX
-        uses: crazy-max/ghaction-upx@v1
-        with:
-          version: latest
-          files: |
-            ./target/ilo
-          args: --best
-      - id: list-files
-        name: Show files
-        run: ls -la ./target
       - name: Upload Java 11 Artifact
         uses: actions/upload-artifact@v2
         with:
