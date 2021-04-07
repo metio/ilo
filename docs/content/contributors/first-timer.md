@@ -12,7 +12,7 @@ tags:
 
 First time contributors have to perform an additional step in order to get their changes merged into the main repository.
 
-The [WAIVER](https://github.com/metio/ilo/blob/master/AUTHORS/WAIVER) has to be signed in order to signal that all contributions can be published into the public domain using the [Creative Commons Zero (CC0)](https://creativecommons.org/publicdomain/zero/1.0/) license.
+The [WAIVER](https://github.com/metio/ilo/blob/main/AUTHORS/WAIVER) has to be signed in order to signal that all contributions can be published into the public domain using the [Creative Commons Zero (CC0)](https://creativecommons.org/publicdomain/zero/1.0/) license.
 
 [minisign](https://jedisct1.github.io/minisign/) is used to sign and verify contributions (see [dev-env](../dev-env)).
 

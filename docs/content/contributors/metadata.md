@@ -10,7 +10,7 @@ tags:
 - metadata
 ---
 
-Every contributor may add/remove her/his metadata to the [list of contributors](https://github.com/metio/ilo/tree/master/ilo-docs/data/contributors) at any time.
+Every contributor may add/remove her/his metadata to the [list of contributors](https://github.com/metio/ilo/tree/main/docs/data/contributors) at any time.
 
 Metadata is currently used in three places:
 
@@ -20,7 +20,7 @@ Metadata is currently used in three places:
 
 ## Adding a new entry
 
-Create a new file called `<YOUR_NAME>.yaml` in the [contributors directory](https://github.com/metio/ilo/tree/master/ilo-docs/data/contributors). Add the following properties to it:
+Create a new file called `<YOUR_NAME>.yaml` in the [contributors directory](https://github.com/metio/ilo/tree/main/docs/data/contributors). Add the following properties to it:
 
 ```yaml
 id: '<YOUR_NAME>'                   # should match file name (required)

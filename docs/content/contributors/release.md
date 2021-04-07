@@ -8,8 +8,8 @@ menu:
 
 The release process of `ilo` is highly automated, therefore you only have to:
 
-1. Push changes into the `master` branch.
-2. Wait until an [GitHub action](https://github.com/metio/ilo/blob/master/.github/workflows/release.yml) will perform a release automatically. Take a look at the [calendar](https://metio.groups.io/g/ilo/calendar) for the next scheduled release.
+1. Push changes into the `main` branch.
+2. Wait until an [GitHub action](https://github.com/metio/ilo/blob/main/.github/workflows/release.yml) will perform a release automatically. Take a look at the [calendar](https://metio.groups.io/g/ilo/calendar) for the next scheduled release.
 
 Each new release will:
 

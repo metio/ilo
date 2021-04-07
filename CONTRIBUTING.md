@@ -9,7 +9,7 @@ Take a look at the [first timer](https://ilo.projects.metio.wtf/contributors/fir
 
 ## Git Branching Model
 
-The `master` branch always contains the latest public stable release.
+The `main` branch always contains the latest public stable release.
 
 ## Issue Management
 
