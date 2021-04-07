@@ -47,7 +47,7 @@ jobs:
           version: latest
           files: |
             ./target/ilo
-          args: -fq
+          args: --best
       - name: Upload Java 11 Artifact
         uses: actions/upload-artifact@v2
         with:
