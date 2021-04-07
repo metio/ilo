@@ -1,4 +1,4 @@
-name: Verify
+name: Verify Commits
 on:
   pull_request:
     branches: [ main ]
