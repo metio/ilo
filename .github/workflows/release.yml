@@ -352,6 +352,14 @@ jobs:
           body: See https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details.
           to: ilo@metio.groups.io
           from: ${{ secrets.MAIL_SENDER }}
+      - id: matrix
+        name: Send Matrix Message
+        uses: s3krit/matrix-message-action@v0.0.3
+        with:
+          room_id: ${{ secrets.MATRIX_ROOM_ID }}
+          access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
+          message: "release [${{ needs.prepare.outputs.release_version }}](https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }}) published"
+          server: "matrix.org"
   copr:
     name: Release COPR packages
     needs: [announce]
