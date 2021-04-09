@@ -29,6 +29,7 @@ HELP_FUN = \
 .PHONY: all
 all: help
 
+.PHONY: help
 help: ##@other Show this help
 	@perl -e '$(HELP_FUN)' $(MAKEFILE_LIST)
 
@@ -48,19 +49,3 @@ clean: ##@hacking Clean build artifacts
 sign-waiver: ##@contributing Sign the WAIVER
 	gpg2 --no-version --armor --sign AUTHORS/WAIVER
 	mv AUTHORS/WAIVER.asc AUTHORS/WAIVER-signed-by-$(USERNAME)-$(CURRENT_DATE).asc
-
-.PHONY: ec-redis-java11
-ec-redis-java11: ##@example Example using 'ilo compose' w/ redis & java 11
-	ilo @examples/compose/redis-with-java11/build-env
-
-.PHONY: es-default
-es-default: ##@example Example using 'ilo shell' w/ default settings
-	ilo @examples/shell/default/build-env
-
-.PHONY: es-openjdk11
-es-openjdk11: ##@example Example using 'ilo shell' w/ openjdk11
-	ilo @examples/shell/openjdk11/build-env
-
-.PHONY: es-maven
-es-maven: ##@example Example using 'ilo shell' w/ maven
-	ilo @examples/shell/maven/build-env
