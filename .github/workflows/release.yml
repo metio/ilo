@@ -334,35 +334,9 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
           asset_content_type: text/plain
-  announce:
-    name: Release Announcement
-    needs: [linux, mac, windows]
-    runs-on: ubuntu-latest
-    steps:
-      - id: email
-        name: Send Mail
-        if: needs.prepare.outputs.commit_count > 0
-        uses: dawidd6/action-send-mail@v2
-        with:
-          server_address: ${{ secrets.MAIL_SERVER }}
-          server_port: ${{ secrets.MAIL_PORT }}
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "release ${{ needs.prepare.outputs.release_version }}"
-          body: See https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details.
-          to: ilo@metio.groups.io
-          from: ${{ secrets.MAIL_SENDER }}
-      - id: matrix
-        name: Send Matrix Message
-        uses: s3krit/matrix-message-action@v0.0.3
-        with:
-          room_id: ${{ secrets.MATRIX_ROOM_ID }}
-          access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
-          message: "release ${{ needs.prepare.outputs.release_version }} published - see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details"
-          server: "matrix.org"
   copr:
     name: Release COPR packages
-    needs: [announce]
+    needs: [prepare, linux]
     runs-on: ubuntu-latest
     steps:
       - id: checkout
@@ -390,3 +364,29 @@ jobs:
         uses: joelwmale/webhook-action@aed4f319dce44a4f73cdf0480b94df9e6dfc6cae
         with:
           url: ${{ secrets.COPR_WEBHOOK }}
+  announce:
+    name: Release Announcement
+    needs: [prepare, copr, mac, windows]
+    runs-on: ubuntu-latest
+    steps:
+      - id: email
+        name: Send Mail
+        if: needs.prepare.outputs.commit_count > 0
+        uses: dawidd6/action-send-mail@v2
+        with:
+          server_address: ${{ secrets.MAIL_SERVER }}
+          server_port: ${{ secrets.MAIL_PORT }}
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "release ${{ needs.prepare.outputs.release_version }}"
+          body: See https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details.
+          to: ilo@metio.groups.io
+          from: ${{ secrets.MAIL_SENDER }}
+      - id: matrix
+        name: Send Matrix Message
+        uses: s3krit/matrix-message-action@v0.0.3
+        with:
+          room_id: ${{ secrets.MATRIX_ROOM_ID }}
+          access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
+          message: "release ${{ needs.prepare.outputs.release_version }} published - see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details"
+          server: "matrix.org"
