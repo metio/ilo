@@ -361,7 +361,7 @@ jobs:
       - id: webhook
         name: Trigger COPR Webhook
         if: needs.prepare.outputs.commit_count > 0
-        uses: joelwmale/webhook-action@aed4f319dce44a4f73cdf0480b94df9e6dfc6cae
+        uses: joelwmale/webhook-action@2.1.0
         with:
           url: ${{ secrets.COPR_WEBHOOK }}
   announce:
