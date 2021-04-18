@@ -384,6 +384,7 @@ jobs:
           from: ${{ secrets.MAIL_SENDER }}
       - id: matrix
         name: Send Matrix Message
+        if: needs.prepare.outputs.commit_count > 0
         uses: s3krit/matrix-message-action@v0.0.3
         with:
           room_id: ${{ secrets.MATRIX_ROOM_ID }}
