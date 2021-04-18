@@ -1,4 +1,4 @@
-# ilo [![Chat](https://img.shields.io/badge/matrix-%23ilo:matrix.org-brightgreen.svg?style=social&label=Matrix)](https://matrix.to/#/#ilo:matrix.org) [![Mailing List](https://img.shields.io/badge/email-ilo%40metio.groups.io%20-brightgreen.svg?style=social&label=Mail)](https://metio.groups.io/g/ilo/topics)
+# ilo [![Chat](https://img.shields.io/badge/matrix-%23ilo:matrix.org-brightgreen.svg?style=social&label=Matrix)](https://matrix.to/#ilo:matrix.org) [![Mailing List](https://img.shields.io/badge/email-ilo%40metio.groups.io%20-brightgreen.svg?style=social&label=Mail)](https://metio.groups.io/g/ilo/topics)
 
 Manage reproducible build environments. Take a look at the [website](https://ilo.projects.metio.wtf/) for detailed information.
 
