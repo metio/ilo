@@ -19,7 +19,7 @@
     <parent>
         <groupId>wtf.metio.maven.parents</groupId>
         <artifactId>maven-parents-java-stable</artifactId>
-        <version>2021.4.5</version>
+        <version>2021.4.23</version>
     </parent>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
