@@ -16,9 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 public final class CodingRules {
 
   @ArchTest
-  public static final ArchRule noSystemOut = GeneralCodingRules.NO_CLASSES_SHOULD_ACCESS_STANDARD_STREAMS;
-
-  @ArchTest
   public static final ArchRule noGenericExceptions = GeneralCodingRules.NO_CLASSES_SHOULD_THROW_GENERIC_EXCEPTIONS;
 
   @ArchTest

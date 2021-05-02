@@ -26,6 +26,6 @@ public final class LayerRules {
     .layer("Models").definedBy("wtf.metio.ilo.model..")
     .layer("Tools").definedBy("wtf.metio.ilo.tools..")
     .layer("Utils").definedBy("wtf.metio.ilo.utils..")
-    .whereLayer("Models").mayOnlyBeAccessedByLayers("Commands");
+    .whereLayer("Models").mayOnlyBeAccessedByLayers("Commands", "CLI", "Tools");
 
 }

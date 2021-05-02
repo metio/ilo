@@ -10,7 +10,7 @@ on:
       - "pom.xml"
 env:
   JAVA: "java11"
-  GRAAL: "21.0.0.2"
+  GRAAL: "21.1.0"
 jobs:
   linux:
     name: Linux packages
@@ -34,12 +34,9 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - id: gpg
-        name: GPG Key
-        run: echo "${{ secrets.GPG_SECRET_KEY_BASE64 }}" | base64 --decode > $GITHUB_WORKSPACE/signing.key.asc
       - id: verify
         name: Verify Project
-        run: mvn --batch-mode verify -Dskip.graal=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
+        run: mvn --batch-mode verify -Dskip.graal=false
       - name: Upload Java 11 Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -73,12 +70,9 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - id: gpg
-        name: GPG Key
-        run: echo "${{ secrets.GPG_SECRET_KEY_BASE64 }}" | base64 --decode > $GITHUB_WORKSPACE/signing.key.asc
       - id: verify
         name: Verify Project
-        run: mvn --batch-mode verify -Dskip.graal=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
+        run: mvn --batch-mode verify -Dskip.graal=false
       - name: Upload Mac Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -108,21 +102,12 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - id: gpg
-        name: GPG Key
-        uses: timheuer/base64-to-file@v1.0.3
-        with:
-          fileName: signing.key.asc
-          encodedString: ${{ secrets.GPG_SECRET_KEY_BASE64 }}
-      - id: copy-key
-        name: Copy GPG key to correct location
-        run: Copy-Item -Path "${{ steps.gpg.outputs.filePath }}" -Destination "$env:GITHUB_WORKSPACE\signing.key.asc"
       - id: verify
         name: Verify Project
         shell: cmd
         run: |
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
-          mvn --batch-mode verify -Dskip.graal=false -Dpgp.secretkey=keyfile:signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
+          mvn --batch-mode verify -Dskip.graal=false
         env:
           JAVA_HOME: ./graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}
       - name: Upload Windows Artifact

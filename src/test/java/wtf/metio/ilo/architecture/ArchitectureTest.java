@@ -12,15 +12,9 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import org.junit.jupiter.api.*;
 import wtf.metio.ilo.Ilo;
-import wtf.metio.ilo.compose.Compose;
-import wtf.metio.ilo.devcontainer.Devcontainer;
-import wtf.metio.ilo.shell.Shell;
 import wtf.metio.ilo.test.ArchUnitTests;
 
 import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Architecture")
 public final class ArchitectureTest {
@@ -28,7 +22,6 @@ public final class ArchitectureTest {
   private static JavaClasses classes;
 
   @BeforeAll
-  @Disabled("figure out why ArchUnit cannot find classes")
   static void importPackages() {
     classes = new ClassFileImporter()
       .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
@@ -37,7 +30,6 @@ public final class ArchitectureTest {
 
   @TestFactory
   @DisplayName("Global Rules")
-  @Disabled("figure out why ArchUnit cannot find classes")
   Stream<DynamicNode> globalRules() {
     return Stream.of(CodingRules.class, StructureRules.class, LayerRules.class)
       .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
@@ -45,21 +37,11 @@ public final class ArchitectureTest {
 
   @TestFactory
   @DisplayName("Implementation Rules")
-  @Disabled("figure out why ArchUnit cannot find classes")
+  @Disabled
   Stream<DynamicNode> implementationRules() {
-    return Stream.of(CliRules.class, ErrorsRules.class, ToolsRules.class)
-      .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
-  }
-
-  @Test
-  @DisplayName("Setup Works")
-  @Disabled("figure out why ArchUnit cannot find classes")
-  void shouldFindClasses() {
-    assertAll("classes",
-      () -> assertTrue(classes.contain(Ilo.class), Ilo.class.getName()),
-      () -> assertTrue(classes.contain(Shell.class), Shell.class.getName()),
-      () -> assertTrue(classes.contain(Compose.class), Compose.class.getName()),
-      () -> assertTrue(classes.contain(Devcontainer.class), Devcontainer.class.getName()));
+    return Stream.of();
+    //return Stream.of(CliRules.class, ErrorsRules.class, ToolsRules.class)
+    //  .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
   }
 
 }

@@ -31,7 +31,7 @@ jobs:
           title: update parent to latest version
           body: |
             Project updated with: `mvn versions:update-parent`
-          labels: enhancement
+          labels: dependencies
           assignees: sebhoss
           draft: false
           branch: update-parent
