@@ -119,7 +119,7 @@ jobs:
       - id: upload-linux-artifact
         name: Upload Linux Artifact
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -130,7 +130,7 @@ jobs:
       - id: upload-linux-checksum
         name: Upload Linux Checksum
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -141,7 +141,7 @@ jobs:
       - id: upload-linux-signature
         name: Upload Linux Signature
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -152,7 +152,7 @@ jobs:
       - id: upload-java11-artifact
         name: Upload Java11 Artifact
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -163,7 +163,7 @@ jobs:
       - id: upload-java11-checksum
         name: Upload Java11 Checksum
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -174,7 +174,7 @@ jobs:
       - id: upload-java11-signature
         name: Upload Java11 Signature
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -221,7 +221,7 @@ jobs:
       - id: upload-mac-artifact
         name: Upload MacOS Artifact
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -232,7 +232,7 @@ jobs:
       - id: upload-mac-checksum
         name: Upload MacOS Checksum
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -243,7 +243,7 @@ jobs:
       - id: upload-mac-signature
         name: Upload MacOS Signature
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -304,7 +304,7 @@ jobs:
       - id: upload-windows-artifact
         name: Upload Windows Artifact
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -315,7 +315,7 @@ jobs:
       - id: upload-windows-checksum
         name: Upload Windows Checksum
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -326,7 +326,7 @@ jobs:
       - id: upload-windows-signature
         name: Upload Windows Signature
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
