@@ -50,7 +50,7 @@ jobs:
           stripHeaders: true
       - name: Check Changelog Existence
         id: check_changelog
-        uses: andstor/file-existence-action@v1
+        uses: andstor/file-existence-action@v1.0.1
         with:
           files: "CHANGELOG.md"
       - name: Create Empty Changelog
