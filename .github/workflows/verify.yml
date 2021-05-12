@@ -18,7 +18,7 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - id: graal
         name: GraalVM Setup
         uses: rinx/setup-graalvm-ce@v0.0.5
@@ -53,7 +53,7 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - id: graal
         name: GraalVM Setup
         uses: DeLaGuardo/setup-graalvm@master
@@ -84,7 +84,7 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - id: graal-download
         name: GraalVM Download
         run: Invoke-RestMethod -Uri https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${{ env.GRAAL }}/graalvm-ce-${{ env.JAVA }}-windows-amd64-${{ env.GRAAL }}.zip -OutFile 'graal.zip'
