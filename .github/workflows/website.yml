@@ -29,7 +29,7 @@ jobs:
         env:
           ILO_RELEASE: ${{ steps.previous.outputs.version }}
       - name: Deploy Website
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v3.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/public
