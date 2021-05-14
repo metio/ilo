@@ -18,7 +18,7 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 0
       - id: commits
@@ -50,7 +50,7 @@ jobs:
           stripHeaders: true
       - name: Check Changelog Existence
         id: check_changelog
-        uses: andstor/file-existence-action@v1
+        uses: andstor/file-existence-action@v1.0.1
         with:
           files: "CHANGELOG.md"
       - name: Create Empty Changelog
@@ -90,7 +90,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - id: graal
         name: GraalVM Setup
         if: needs.prepare.outputs.commit_count > 0
@@ -190,7 +190,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - id: graal
         name: GraalVM Setup
         if: needs.prepare.outputs.commit_count > 0
@@ -259,7 +259,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - id: graal-download
         name: GraalVM Download
         if: needs.prepare.outputs.commit_count > 0
@@ -342,7 +342,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - id: version-update
         name: Update Release Version
         if: needs.prepare.outputs.commit_count > 0
@@ -350,7 +350,7 @@ jobs:
       - id: changes
         name: Commit Changes
         if: needs.prepare.outputs.commit_count > 0
-        uses: EndBug/add-and-commit@v7.2.0
+        uses: EndBug/add-and-commit@v7.2.1
         with:
           author_name: Sebastian Hoß
           author_email: sebhoss@pm.me
