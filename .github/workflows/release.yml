@@ -350,7 +350,7 @@ jobs:
       - id: changes
         name: Commit Changes
         if: needs.prepare.outputs.commit_count > 0
-        uses: EndBug/add-and-commit@v7.2.0
+        uses: EndBug/add-and-commit@v7.2.1
         with:
           author_name: Sebastian Hoß
           author_email: sebhoss@pm.me
