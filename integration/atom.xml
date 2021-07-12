@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">Integration on ilo</title><link href="https://ilo.projects.metio.wtf/integration/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/integration/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/integration/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/integration/</id><entry><title type="html">autoenv</title><link href="https://ilo.projects.metio.wtf/integration/autoenv/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/integration/autoenv/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to simplify the usage of <code>ilo</code>, consider using <a href="../../usage/run-commands">run commands</a>, <a href="../../usage/argument-files">argument files</a> and a <code>autoenv</code>-like tooling. These tools all allow you to just enter a directory and will automatically call <code>ilo</code> for you like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname ~<span class="o">]</span>$ <span class="nb">cd</span> path/to/your/project
+<span class="o">[</span>root@container project-dir<span class="o">]</span><span class="c1">#</span>
+</code></pre></div><p>As soon as you enter the directory of your project, these tools will call <code>ilo</code> which in turn will open your build environment for you.</p>
+<h2 id="autoenv">autoenv</h2>
+<p>In order to use <a href="https://github.com/inishchith/autoenv">autoenv</a>, first <a href="https://github.com/inishchith/autoenv#install">install it</a> and then place a <code>.env</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat .env
+ilo @build-env
+</code></pre></div><h2 id="direnv">direnv</h2>
+<p>In order to use <a href="https://direnv.net/">direnv</a>, first <a href="https://direnv.net/#basic-installation">install it</a> and then place a <code>.envrc</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat .envrc
+ilo @build-env
+</code></pre></div><h2 id="envrc-rs">envrc-rs</h2>
+<p>In order to use <a href="https://github.com/roxma/envrc-rs">envrc-rs</a>, first <a href="https://github.com/roxma/envrc-rs#install">install it</a> and then place a <code>.envrc</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat .envrc
+ilo @build-env
+</code></pre></div><h2 id="smartcd">smartcd</h2>
+<p>In order to use <a href="https://github.com/cxreg/smartcd">smartcd</a>, first <a href="https://github.com/cxreg/smartcd#ok-how-do-i-use-it">install it</a>, enter the root directory of your project and then call <code>smartcd edit enter</code> which will open an editor to write a script to execute whenever you enter your project directory. Use something like <code>ilo @build-env</code> as the script.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat ~/.smartcd/scripts/path/to/project-dir/bash_enter
+ilo @build-env
+</code></pre></div><h2 id="zsh-autoenv">zsh-autoenv</h2>
+<p>In order to use <a href="https://github.com/Tarrasch/zsh-autoenv">zsh-autoenv</a>, first <a href="https://github.com/Tarrasch/zsh-autoenv#installation">install it</a> and then place a <code>.autoenv.zsh</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat .autoenv.zsh
+ilo @build-env
+</code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/integration" term="integration" label="integration"/><category scheme="https://ilo.projects.metio.wtf/tags/autoenv" term="autoenv" label="autoenv"/><category scheme="https://ilo.projects.metio.wtf/tags/direnv" term="direnv" label="direnv"/><category scheme="https://ilo.projects.metio.wtf/tags/smartcd" term="smartcd" label="smartcd"/><category scheme="https://ilo.projects.metio.wtf/tags/zsh-autoenv" term="zsh-autoenv" label="zsh-autoenv"/></entry><entry><title type="html">CI Servers</title><link href="https://ilo.projects.metio.wtf/integration/ci-servers/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/integration/ci-servers/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<h2 id="jenkins">Jenkins</h2>
+<p><a href="https://jenkins.io/">Jenkins</a> knows multiple ways to define jobs. In order to integrate with <code>ilo</code> make sure the <code>ilo</code> is <a href="../../usage/install">installed</a> on your slaves.</p>
+<h3 id="declarative-pipeline">Declarative Pipeline</h3>
+<div class="highlight"><pre class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">pipeline</span> <span class="o">{</span>
+  <span class="n">stages</span> <span class="o">{</span>
+    <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Build with ilo&#39;</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">sh</span> <span class="s1">&#39;ilo @build-things&#39;</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p><code>build-things</code> is an <a href="../../usage/argument-files">arguments</a> file.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/integration" term="integration" label="integration"/><category scheme="https://ilo.projects.metio.wtf/tags/jenkins" term="jenkins" label="jenkins"/></entry><entry><title type="html">Container Registries</title><link href="https://ilo.projects.metio.wtf/integration/container-registries/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/integration/container-registries/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to share build environments within a team, using a <a href="https://github.com/opencontainers/distribution-spec">container registry</a> is highly recommended.</p>
+<h2 id="docker-hub">Docker Hub</h2>
+<p><a href="https://hub.docker.com/">Docker Hub</a> has an <a href="https://docs.docker.com/docker-hub/builds/">automated build system</a> that can be used to automatically create a build environment which in turn can be used by team members of your project.</p>
+<p>Make sure Docker Hub rebuilds your build environment on every change to main (or any other branch) and have your contributors pull the resulting images to their machines.</p>
+<h2 id="github-container-registry">GitHub Container Registry</h2>
+<p>The <a href="https://github.blog/2020-09-01-introducing-github-container-registry/">GitHub container registry</a> can be used together with <a href="https://github.com/features/actions">GitHub actions</a> to publish OCI images for your team. Simply follow their getting started <a href="https://docs.github.com/en/packages/getting-started-with-github-container-registry/migrating-to-github-container-registry-for-docker-images">guide</a> to publish your image(s).</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/integration" term="integration" label="integration"/><category scheme="https://ilo.projects.metio.wtf/tags/docker-hub" term="docker-hub" label="docker hub"/><category scheme="https://ilo.projects.metio.wtf/tags/github-container-registry" term="github-container-registry" label="github container registry"/></entry><entry><title type="html">Shells</title><link href="https://ilo.projects.metio.wtf/integration/shells/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/integration/shells/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to get the most out of <code>ilo</code> make sure it is well integrated into your shell.</p>
+<h2 id="bash">bash</h2>
+<p>In order to integrate autocompletion into <a href="https://www.gnu.org/software/bash/">bash</a>, follow these steps:</p>
+<ol>
+<li>Create or edit <code>.bashrc</code>.</li>
+<li>Add the following line
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+<h2 id="zsh">zsh</h2>
+<p>In order to integrate autocompletion into <a href="https://www.zsh.org/">zsh</a>, follow these steps:</p>
+<ol>
+<li>Create or edit <code>.zshrc</code>.</li>
+<li>Add the following line
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+<h2 id="oh-my-bash">oh-my-bash</h2>
+<p>In order to integrate autocompletion into <a href="https://github.com/ohmybash/oh-my-bash">oh my bash</a>, follow these steps:</p>
+<ol>
+<li>Create a new file in <code>~/.oh-my-bash/custom</code>, e.g. <code>~/.oh-my-bash/custom/ilo.sh</code>.</li>
+<li>Use the following template
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+<h2 id="oh-my-zsh">oh-my-zsh</h2>
+<p>In order to integrate the autocomplete into <a href="https://github.com/ohmyzsh/ohmyzsh">oh my zsh</a>, follow these steps:</p>
+<ol>
+<li>Create a new file in <code>$ZSH_CUSTOM</code>, e.g. <code>$ZSH_CUSTOM/ilo.sh</code>.</li>
+<li>Use the following template
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/integration" term="integration" label="integration"/><category scheme="https://ilo.projects.metio.wtf/tags/bash" term="bash" label="bash"/><category scheme="https://ilo.projects.metio.wtf/tags/zsh" term="zsh" label="zsh"/></entry><entry><title type="html">tmux</title><link href="https://ilo.projects.metio.wtf/integration/tmux/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/integration/tmux/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><a href="https://github.com/tmux/tmux">tmux</a> users can simplify the usage of <code>ilo</code> with a tmux session manager. All of them allow you to configure reusable sessions that open project directories and execute commands for you. Consider combining them with <a href="../../usage/run-commands">run commands</a> and/or <a href="../../usage/argument-files">argument files</a> to simplify this even further.</p>
+<h2 id="tmuxp">tmuxp</h2>
+<p>In order to use <a href="https://github.com/tmux-python/tmuxp">tmuxp</a>, first <a href="https://github.com/tmux-python/tmuxp#installation">install it</a> and then create a new configuration in <code>$XDG_CONFIG_HOME/tmuxp</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat <span class="nv">$XDG_CONFIG_HOME</span>/tmuxp/your-project.yml
+session_name: your-project
+windows:
+- window_name: dev window
+  shell_command_before:
+    - <span class="nb">cd</span> ~/path/to/your/project
+  panes:
+    - shell_command:
+        - ilo @build-env
+</code></pre></div><h2 id="teamocil">teamocil</h2>
+<p>In order to use <a href="https://github.com/remi/teamocil">teamocil</a>, first <a href="https://github.com/remi/teamocil#installation">install it</a> and then create a new configuration in <code>~/.teamocil</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat ~/.teamocil/your-project.yml
+windows:
+  - name: your-project
+    root: ~/path/to/your/project
+    panes:
+      - ilo @build-env
+</code></pre></div><h2 id="tmuxifier">tmuxifier</h2>
+<p>In order to use <a href="https://github.com/jimeh/tmuxifier">tmuxifier</a>, first <a href="https://github.com/jimeh/tmuxifier#installation">install it</a> and then create a new configuration in <code>$TMUXIFIER_LAYOUT_PATH</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat <span class="nv">$TMUXIFIER_LAYOUT_PATH</span>/your-project.sh
+window_root <span class="s2">&#34;~/path/to/your/project&#34;</span>
+new_window <span class="s2">&#34;Your Project&#34;</span>
+split_v <span class="m">20</span>
+run_cmd <span class="s2">&#34;ilo @build-env&#34;</span>
+split_h <span class="m">60</span>
+select_pane <span class="m">0</span>
+</code></pre></div><h2 id="tmuxinator">tmuxinator</h2>
+<p>In order to use <a href="https://github.com/tmuxinator/tmuxinator">tmuxinator</a>, first <a href="https://github.com/tmuxinator/tmuxinator#installation">install it</a> and then create a new configuration in <code>~/.config/tmuxinator</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat ~/.config/tmuxinator/your-project.yml
+name: your-project
+root: ~/path/to/your/project
+windows:
+  - your_project:
+      panes:
+        - ilo @build-env
+</code></pre></div><h2 id="dmux">dmux</h2>
+<p>In order to use <a href="https://github.com/zdcthomas/dmux">dmux</a>, first <a href="https://github.com/zdcthomas/dmux#installation">install it</a> and then create your configuration in <code>$XDG_CONFIG_HOME/dmux/dmux.conf.{file_type}</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat <span class="nv">$XDG_CONFIG_HOME</span>/dmux/dmux.conf.toml
+<span class="o">[</span>your-project<span class="o">]</span>
+<span class="nv">number_of_panes</span> <span class="o">=</span> <span class="m">2</span>
+<span class="nv">session_name</span> <span class="o">=</span> <span class="s2">&#34;Your Project&#34;</span>
+<span class="nv">commands</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;ilo @build-env&#34;</span><span class="o">]</span>
+</code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/integration" term="integration" label="integration"/><category scheme="https://ilo.projects.metio.wtf/tags/tmux" term="tmux" label="tmux"/></entry></feed>

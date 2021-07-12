@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">news on ilo</title><link href="https://ilo.projects.metio.wtf/tags/news/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/tags/news/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/tags/news/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/tags/news/</id><entry><title type="html">News</title><link href="https://ilo.projects.metio.wtf/community/news/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/community/news/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to stay up-to-date, consider the following resources:</p>
+<ul>
+<li><a href="https://matrix.to/#/#ilo:matrix.org">Join the chat room</a></li>
+<li><a href="https://metio.groups.io/g/ilo/topics">Join the mailing list</a></li>
+<li><a href="https://github.com/metio/ilo/releases.atom">Subscribe to the release feed</a></li>
+</ul>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/community" term="community" label="Community"/><category scheme="https://ilo.projects.metio.wtf/tags/news" term="news" label="news"/></entry></feed>

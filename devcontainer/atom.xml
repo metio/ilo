@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">devcontainer on ilo</title><link href="https://ilo.projects.metio.wtf/devcontainer/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/devcontainer/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/devcontainer/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/devcontainer/</id><entry><title type="html">Customize Environment</title><link href="https://ilo.projects.metio.wtf/devcontainer/customize-env/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/shell/customize-env/?utm_source=atom_feed" rel="related" type="text/html" title="Customize Environment"/><link href="https://ilo.projects.metio.wtf/compose/customize-env/?utm_source=atom_feed" rel="related" type="text/html" title="Customize Environment"/><id>https://ilo.projects.metio.wtf/devcontainer/customize-env/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> allows you to define your build environment either in a <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile</a> or any other <a href="https://github.com/opencontainers/image-spec/blob/master/spec.md">OCI Image</a> compliant way.</p>
+<p>Make sure to specify <code>your.image.here:some-tag</code> as the image in your <code>devcontainer.json</code> file. Take a look at the <a href="https://code.visualstudio.com/docs/remote/devcontainerjson-reference">reference documentation</a> for all available options for that JSON file.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/devcontainer" term="devcontainer" label="devcontainer"/><category scheme="https://ilo.projects.metio.wtf/tags/customize" term="customize" label="customize"/></entry><entry><title type="html">Options</title><link href="https://ilo.projects.metio.wtf/devcontainer/options/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/compose/options/?utm_source=atom_feed" rel="related" type="text/html" title="Options"/><link href="https://ilo.projects.metio.wtf/shell/options/?utm_source=atom_feed" rel="related" type="text/html" title="Options"/><id>https://ilo.projects.metio.wtf/devcontainer/options/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The <code>ilo devcontainer</code> command can be configured with the following command line options. From your terminal, use <code>ilo compose --help</code> to get a list of all options, and their default values.</p>
+<h2 id="--debug"><code>--debug</code></h2>
+<p>The <code>--debug</code> option toggles whether <code>ilo</code> should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from <code>ilo</code> and just use your preferred runtime instead.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># print runtime commands</span>
+$ ilo devcontainer --debug
+
+<span class="c1"># do not print runtime commands</span>
+$ ilo devcontainer --debug<span class="o">=</span><span class="nb">false</span>
+$ ilo devcontainer
+</code></pre></div><p>By default, <code>--debug</code> is not enabled.</p>
+<h2 id="--mount-project-dir"><code>--mount-project-dir</code></h2>
+<p>The <code>--mount-project-dir</code> option can be used to toggle whether the current directory should be mounted into the container.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># mount current directory into container</span>
+$ ilo devcontainer --mount-project-dir
+
+<span class="c1"># do not mount directory</span>
+$ ilo devcontainer --no-mount-project-dir
+$ ilo devcontainer --mount-project-dir<span class="o">=</span><span class="nb">false</span>
+
+<span class="c1"># mount directory</span>
+$ ilo devcontainer
+</code></pre></div><p>By default, <code>--mount-project-dir</code> is enabled.</p>
+<h2 id="--pull"><code>--pull</code></h2>
+<p>The <code>--pull</code> option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a <code>latest</code> tag for their image. The image will only pulled in case the registry contains a newer image than locally available.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># pull image before opening shell</span>
+$ ilo devcontainer --pull
+
+<span class="c1"># do not pull image before opening shell</span>
+$ ilo devcontainer --no-pull
+$ ilo devcontainer --pull<span class="o">=</span><span class="nb">false</span>
+
+<span class="c1"># do not pull image before opening shell</span>
+$ ilo devcontainer
+</code></pre></div><p>By default, <code>--pull</code> is not enabled.</p>
+<h2 id="--remove-image"><code>--remove-image</code></h2>
+<p>The <code>--remove-image</code> option causes <code>ilo</code> to remove the specified image from your local system after you close your shell, or the non-interactive commands finishes.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># remove image after shell was closed</span>
+$ ilo devcontainer --remove-image
+
+<span class="c1"># do not remove image</span>
+$ ilo devcontainer --no-remove-image
+$ ilo devcontainer --remove-image<span class="o">=</span><span class="nb">false</span>
+$ ilo devcontainer
+</code></pre></div><p>By default, <code>--remove-image</code> is not enabled.</p>
+<h2 id="--compose-runtime---c"><code>--compose-runtime</code> / <code>-C</code></h2>
+<p>The <code>--compose-runtime</code> option can be used to force the usage of a specific <a href="../../compose/runtimes">compose runtime</a>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># force to use podman-compose</span>
+$ ilo devcontainer --compose-runtime podman-compose
+
+<span class="c1"># force to use docker-compose</span>
+$ ilo devcontainer --compose-runtime docker-compose
+
+<span class="c1"># auto select</span>
+$ ilo devcontainer
+</code></pre></div><p>In case no <code>--compose-runtime</code> is specified, <code>ilo devcontainer</code> will automatically select one of the runtimes installed on your local system and prefers <code>docker-compose</code> over <code>podman-compose</code>.</p>
+<h2 id="--shell-runtime---s"><code>--shell-runtime</code> / <code>-S</code></h2>
+<p>The <code>--shell-runtime</code> option can be used to force the usage of a specific <a href="../../shell/runtimes">shell runtime</a>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># force to use podman</span>
+$ ilo devcontainer --shell-runtime podman
+
+<span class="c1"># force to use docker</span>
+$ ilo devcontainer --shell-runtime docker
+
+<span class="c1"># force to use lxd</span>
+$ ilo devcontainer --shell-runtime lxd
+
+<span class="c1"># auto select</span>
+$ ilo devcontainer
+</code></pre></div><p>In case no <code>--shell-runtime</code> is specified, <code>ilo devcontainer</code> will automatically select one of the runtimes installed on your local system and prefers <code>podman</code> over <code>docker</code> over <code>lxd</code>.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/devcontainer" term="devcontainer" label="devcontainer"/><category scheme="https://ilo.projects.metio.wtf/tags/options" term="options" label="options"/></entry></feed>

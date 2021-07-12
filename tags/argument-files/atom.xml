@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">argument files on ilo</title><link href="https://ilo.projects.metio.wtf/tags/argument-files/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/tags/argument-files/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/tags/argument-files/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/tags/argument-files/</id><entry><title type="html">Argument Files</title><link href="https://ilo.projects.metio.wtf/usage/argument-files/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/argument-files/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to share the same options/commands across your team, <code>ilo</code> supports argument files which contain the options for your project, e.g. which image you are using. Argument files are just plain text files and both name and location can be chosen at will. In order to use an argument file, you have to add <strong>@</strong> in front of the file name: <code>ilo @file-name</code>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># write argument file</span>
+$ cat some/folder/your-arguments.txt
+shell
+node:latest
+/bin/bash
+
+<span class="c1"># use argument file</span>
+$ ilo @some/folder/your-arguments.txt
+</code></pre></div><p>The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># write argument file</span>
+$ cat some/other/your-arguments.txt
+shell node:latest /bin/bash
+
+<span class="c1"># write argument file</span>
+$ cat some/more/your-arguments.txt
+shell
+node:latest /bin/bash
+
+<span class="c1"># use argument file</span>
+$ ilo @some/other/your-arguments.txt
+$ ilo @some/more/your-arguments.txt
+</code></pre></div><p><strong>Important</strong>: In case your option contains a whitespace, you have to either put the entire option with its value in single/double quotes or use a whitespace between option and value like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># quote the entire option</span>
+<span class="s2">&#34;--run-as=</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&#34;</span>
+
+<span class="c1"># quote the value</span>
+--run-as <span class="s2">&#34;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&#34;</span>
+
+<span class="c1"># THIS WON&#39;T WORK</span>
+--run-as<span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&#34;</span>
+</code></pre></div><p>You can use multiple arguments files which are evaluated in-order, e.g like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ ilo @first @second
+</code></pre></div><p>You can mix argument files with regular CLI options as well:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ ilo shell @default-shell openjdk:11
+</code></pre></div><p>The argument file used by <code>ilo</code> developers can be seen <a href="https://github.com/metio/ilo/blob/main/.ilo.rc">here</a> and is used by simply calling <code>ilo</code> in the root of the project because it&rsquo;s a <a href="../run-commands">run command</a> file.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/argument-files" term="argument-files" label="argument files"/></entry></feed>

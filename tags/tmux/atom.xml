@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">tmux on ilo</title><link href="https://ilo.projects.metio.wtf/tags/tmux/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/tags/tmux/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/tags/tmux/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/tags/tmux/</id><entry><title type="html">tmux</title><link href="https://ilo.projects.metio.wtf/integration/tmux/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/integration/tmux/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><a href="https://github.com/tmux/tmux">tmux</a> users can simplify the usage of <code>ilo</code> with a tmux session manager. All of them allow you to configure reusable sessions that open project directories and execute commands for you. Consider combining them with <a href="../../usage/run-commands">run commands</a> and/or <a href="../../usage/argument-files">argument files</a> to simplify this even further.</p>
+<h2 id="tmuxp">tmuxp</h2>
+<p>In order to use <a href="https://github.com/tmux-python/tmuxp">tmuxp</a>, first <a href="https://github.com/tmux-python/tmuxp#installation">install it</a> and then create a new configuration in <code>$XDG_CONFIG_HOME/tmuxp</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat <span class="nv">$XDG_CONFIG_HOME</span>/tmuxp/your-project.yml
+session_name: your-project
+windows:
+- window_name: dev window
+  shell_command_before:
+    - <span class="nb">cd</span> ~/path/to/your/project
+  panes:
+    - shell_command:
+        - ilo @build-env
+</code></pre></div><h2 id="teamocil">teamocil</h2>
+<p>In order to use <a href="https://github.com/remi/teamocil">teamocil</a>, first <a href="https://github.com/remi/teamocil#installation">install it</a> and then create a new configuration in <code>~/.teamocil</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat ~/.teamocil/your-project.yml
+windows:
+  - name: your-project
+    root: ~/path/to/your/project
+    panes:
+      - ilo @build-env
+</code></pre></div><h2 id="tmuxifier">tmuxifier</h2>
+<p>In order to use <a href="https://github.com/jimeh/tmuxifier">tmuxifier</a>, first <a href="https://github.com/jimeh/tmuxifier#installation">install it</a> and then create a new configuration in <code>$TMUXIFIER_LAYOUT_PATH</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat <span class="nv">$TMUXIFIER_LAYOUT_PATH</span>/your-project.sh
+window_root <span class="s2">&#34;~/path/to/your/project&#34;</span>
+new_window <span class="s2">&#34;Your Project&#34;</span>
+split_v <span class="m">20</span>
+run_cmd <span class="s2">&#34;ilo @build-env&#34;</span>
+split_h <span class="m">60</span>
+select_pane <span class="m">0</span>
+</code></pre></div><h2 id="tmuxinator">tmuxinator</h2>
+<p>In order to use <a href="https://github.com/tmuxinator/tmuxinator">tmuxinator</a>, first <a href="https://github.com/tmuxinator/tmuxinator#installation">install it</a> and then create a new configuration in <code>~/.config/tmuxinator</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat ~/.config/tmuxinator/your-project.yml
+name: your-project
+root: ~/path/to/your/project
+windows:
+  - your_project:
+      panes:
+        - ilo @build-env
+</code></pre></div><h2 id="dmux">dmux</h2>
+<p>In order to use <a href="https://github.com/zdcthomas/dmux">dmux</a>, first <a href="https://github.com/zdcthomas/dmux#installation">install it</a> and then create your configuration in <code>$XDG_CONFIG_HOME/dmux/dmux.conf.{file_type}</code>:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="o">[</span>you@hostname project-dir<span class="o">]</span>$ cat <span class="nv">$XDG_CONFIG_HOME</span>/dmux/dmux.conf.toml
+<span class="o">[</span>your-project<span class="o">]</span>
+<span class="nv">number_of_panes</span> <span class="o">=</span> <span class="m">2</span>
+<span class="nv">session_name</span> <span class="o">=</span> <span class="s2">&#34;Your Project&#34;</span>
+<span class="nv">commands</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;ilo @build-env&#34;</span><span class="o">]</span>
+</code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/integration" term="integration" label="integration"/><category scheme="https://ilo.projects.metio.wtf/tags/tmux" term="tmux" label="tmux"/></entry></feed>

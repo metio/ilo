@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">Usage on ilo</title><link href="https://ilo.projects.metio.wtf/usage/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/usage/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/usage/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/usage/</id><entry><title type="html">Argument Files</title><link href="https://ilo.projects.metio.wtf/usage/argument-files/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/argument-files/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to share the same options/commands across your team, <code>ilo</code> supports argument files which contain the options for your project, e.g. which image you are using. Argument files are just plain text files and both name and location can be chosen at will. In order to use an argument file, you have to add <strong>@</strong> in front of the file name: <code>ilo @file-name</code>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># write argument file</span>
+$ cat some/folder/your-arguments.txt
+shell
+node:latest
+/bin/bash
+
+<span class="c1"># use argument file</span>
+$ ilo @some/folder/your-arguments.txt
+</code></pre></div><p>The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># write argument file</span>
+$ cat some/other/your-arguments.txt
+shell node:latest /bin/bash
+
+<span class="c1"># write argument file</span>
+$ cat some/more/your-arguments.txt
+shell
+node:latest /bin/bash
+
+<span class="c1"># use argument file</span>
+$ ilo @some/other/your-arguments.txt
+$ ilo @some/more/your-arguments.txt
+</code></pre></div><p><strong>Important</strong>: In case your option contains a whitespace, you have to either put the entire option with its value in single/double quotes or use a whitespace between option and value like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># quote the entire option</span>
+<span class="s2">&#34;--run-as=</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&#34;</span>
+
+<span class="c1"># quote the value</span>
+--run-as <span class="s2">&#34;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&#34;</span>
+
+<span class="c1"># THIS WON&#39;T WORK</span>
+--run-as<span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span>id -u<span class="k">)</span><span class="s2">:</span><span class="k">$(</span>id -g<span class="k">)</span><span class="s2">&#34;</span>
+</code></pre></div><p>You can use multiple arguments files which are evaluated in-order, e.g like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ ilo @first @second
+</code></pre></div><p>You can mix argument files with regular CLI options as well:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ ilo shell @default-shell openjdk:11
+</code></pre></div><p>The argument file used by <code>ilo</code> developers can be seen <a href="https://github.com/metio/ilo/blob/main/.ilo.rc">here</a> and is used by simply calling <code>ilo</code> in the root of the project because it&rsquo;s a <a href="../run-commands">run command</a> file.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/argument-files" term="argument-files" label="argument files"/></entry><entry><title type="html">CLI Autocomplete</title><link href="https://ilo.projects.metio.wtf/usage/cli-autocomplete/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/cli-autocomplete/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The <code>ilo generate-completion</code> command generates autocompletion configuration for shells such as <a href="https://www.gnu.org/software/bash/">bash</a> and <a href="https://www.zsh.org/">zsh</a>.</p>
+<p>In order to get autocomplete working in your shell, execute the following snippet:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ <span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</code></pre></div><p>See the integration pages for various <a href="../../integration/shells">shells</a> for details.</p>
+<p>Once enabled you can use the <code>&lt;TAB&gt;</code> key to autocomplete ilo commands and their options:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># autocomplete commands</span>
+$ ilo s&lt;TAB&gt;
+$ ilo shell
+
+<span class="c1"># autocomplete options</span>
+$ ilo shell --p&lt;TAB&gt;
+$ ilo shell --pull
+</code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/autocomplete" term="autocomplete" label="autocomplete"/></entry><entry><title type="html">Help</title><link href="https://ilo.projects.metio.wtf/usage/help/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/contributors/first-timer/?utm_source=atom_feed" rel="related" type="text/html" title="First Timer"/><link href="https://ilo.projects.metio.wtf/community/help/?utm_source=atom_feed" rel="related" type="text/html" title="Help"/><link href="https://ilo.projects.metio.wtf/community/security/?utm_source=atom_feed" rel="related" type="text/html" title="Security"/><id>https://ilo.projects.metio.wtf/usage/help/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to see the help information of <code>ilo</code>, run <code>ilo --help</code> or <code>ilo -h</code>. Its output looks something like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ ilo --help
+Usage: ilo <span class="o">[</span>-hV<span class="o">]</span> <span class="o">[</span>@&lt;filename&gt;...<span class="o">]</span> COMMAND
+
+Manage reproducible build environments
+
+      <span class="o">[</span>@&lt;filename&gt;...<span class="o">]</span>   One or more argument files containing options.
+
+Options:
+  -h, --help             Show this <span class="nb">help</span> message and exit.
+  -V, --version          Print version information and exit.
+
+Commands:
+  shell                Opens an <span class="o">(</span>interactive<span class="o">)</span> shell <span class="k">for</span> your build environment
+  compose              Open an <span class="o">(</span>interactive<span class="o">)</span> shell using podman-/docker-compose
+  devcontainer         Open an <span class="o">(</span>interactive<span class="o">)</span> shell using devcontainer
+  generate-completion  Generate bash/zsh completion script <span class="k">for</span> ilo.
+</code></pre></div><p>Note that you can use show help infos for each command as well, e.g. like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ ilo shell --help
+Usage: ilo shell <span class="o">[</span>-hV<span class="o">]</span> <span class="o">[</span>--debug<span class="o">]</span> <span class="o">[</span>--<span class="o">[</span>no-<span class="o">]</span>interactive<span class="o">]</span> <span class="o">[</span>--<span class="o">[</span>no-<span class="o">]</span>mount-project-dir<span class="o">]</span> <span class="o">[</span>--pull<span class="o">]</span> <span class="o">[</span>--remove-image<span class="o">]</span> <span class="o">[</span>--dockerfile<span class="o">=</span>&lt;dockerfile&gt;<span class="o">]</span> <span class="o">[</span>--runtime<span class="o">=</span>&lt;runtime&gt;<span class="o">]</span> <span class="o">[</span>--env<span class="o">=</span>&lt;variables&gt;<span class="o">]</span>... <span class="o">[</span>--publish<span class="o">=</span>&lt;ports&gt;<span class="o">]</span>...
+                 <span class="o">[</span>--runtime-build-option<span class="o">=</span>&lt;runtimeBuildOptions&gt;<span class="o">]</span>... <span class="o">[</span>--runtime-cleanup-option<span class="o">=</span>&lt;runtimeCleanupOptions&gt;<span class="o">]</span>... <span class="o">[</span>--runtime-option<span class="o">=</span>&lt;runtimeOptions&gt;<span class="o">]</span>... <span class="o">[</span>--runtime-pull-option<span class="o">=</span>&lt;runtimePullOptions&gt;<span class="o">]</span>...
+                 <span class="o">[</span>--runtime-run-option<span class="o">=</span>&lt;runtimeRunOptions&gt;<span class="o">]</span>... <span class="o">[</span>--volume<span class="o">=</span>&lt;volumes&gt;<span class="o">]</span>... &lt;image&gt; <span class="o">[</span>&lt;commands&gt;...<span class="o">]</span>
+
+Opens an <span class="o">(</span>interactive<span class="o">)</span> shell <span class="k">for</span> your build environment
+
+      &lt;image&gt;               The OCI image to use. In <span class="k">case</span> --dockerfile is given as well, this defines the name of the resulting image.
+                              Default: fedora:latest
+      <span class="o">[</span>&lt;commands&gt;...<span class="o">]</span>
+      --debug               Show additional debug information.
+      --dockerfile<span class="o">=</span>&lt;dockerfile&gt;
+                            The Dockerfile to use.
+      --env<span class="o">=</span>&lt;variables&gt;     Specify a environment variable <span class="k">for</span> the container.
+  -h, --help                Show this <span class="nb">help</span> message and exit.
+      --<span class="o">[</span>no-<span class="o">]</span>interactive    Open interactive shell or just run a single command.
+      --<span class="o">[</span>no-<span class="o">]</span>mount-project-dir
+                            Mount the project directory into the running container.
+      --publish<span class="o">=</span>&lt;ports&gt;     Publish container ports to the host system.
+      --pull                Pull image before opening shell.
+      --remove-image        Remove image after closing the shell.
+      --runtime<span class="o">=</span>&lt;runtime&gt;   Specify the runtime to use. If none is specified, use auto-selection.
+      --runtime-build-option<span class="o">=</span>&lt;runtimeBuildOptions&gt;
+                            Options <span class="k">for</span> the build <span class="nb">command</span> of the selected runtime.
+      --runtime-cleanup-option<span class="o">=</span>&lt;runtimeCleanupOptions&gt;
+                            Options <span class="k">for</span> the cleanup <span class="nb">command</span> of the selected runtime.
+      --runtime-option<span class="o">=</span>&lt;runtimeOptions&gt;
+                            Options <span class="k">for</span> the selected runtime itself.
+      --runtime-pull-option<span class="o">=</span>&lt;runtimePullOptions&gt;
+                            Options <span class="k">for</span> the pull <span class="nb">command</span> of the selected runtime.
+      --runtime-run-option<span class="o">=</span>&lt;runtimeRunOptions&gt;
+                            Options <span class="k">for</span> the run <span class="nb">command</span> of the selected runtime.
+  -V, --version             Print version information and exit.
+      --volume<span class="o">=</span>&lt;volumes&gt;    Mount a volume into the container.
+</code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/help" term="help" label="help"/></entry><entry><title type="html">Install</title><link href="https://ilo.projects.metio.wtf/usage/install/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/install/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>Use the following locations in order to download the binary distribution of <code>ilo</code>:</p>
+<ul>
+<li><a href="https://github.com/metio/ilo/releases">https://github.com/metio/ilo/releases</a></li>
+</ul>
+<p>None of the widely used package managers have <code>ilo</code> in their official repositories yet. In case you want to help package <code>ilo</code> for your preferred operating system, take a look at the open packaging issues for <a href="https://github.com/metio/ilo/issues/2">Linux</a>, <a href="https://github.com/metio/ilo/issues/12">MacOS</a>, and <a href="https://github.com/metio/ilo/issues/11">Windows</a>.</p>
+<h2 id="linux">Linux</h2>
+<h3 id="manual">Manual</h3>
+<p>The <a href="https://www.kernel.org/">Linux</a> distribution of <code>ilo</code> is a native executable and does not require any additional software to be installed.</p>
+
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ cd /path/to/ilo/installation/folder
+$ curl --location https://github.com/metio/ilo/releases/download/2020.10.12/ilo-2020.10.12-linux.zip --output ilo.zip
+$ unzip ilo.zip
+$ chmod +x ilo-2020.10.12/ilo
+$ ln --symbolic --relative ilo-2020.10.12/ilo ~/.local/bin/ilo
+</code></pre>
+</div>
+
+<h3 id="fedora">Fedora</h3>
+<p><a href="https://getfedora.org/">Fedora</a> users can install <code>ilo</code> from a <a href="https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/">COPR</a> repository like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ sudo dnf copr <span class="nb">enable</span> sebhoss/ilo
+$ sudo dnf install ilo
+</code></pre></div><h3 id="fedora-silverblue">Fedora Silverblue</h3>
+<p><a href="https://silverblue.fedoraproject.org/">Fedora Silverblue</a> users can install <code>ilo</code> from the same <a href="https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/">COPR</a> by following these steps:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ curl --location https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/repo/fedora-<span class="k">$(</span>rpm -E %fedora<span class="k">)</span>/sebhoss-ilo-fedora-<span class="k">$(</span>rpm -E %fedora<span class="k">)</span>.repo --output ilo.repo
+$ sudo mv ilo.repo /etc/yum.repos.d/ilo.repo
+$ rpm-ostree install ilo
+</code></pre></div><h2 id="macos">MacOS</h2>
+<p>The <a href="https://www.apple.com/macos/">MacOS</a> distribution of <code>ilo</code> is a native executable and does not require any additional software to be installed.</p>
+
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ cd /path/to/ilo/installation/folder
+$ curl --location https://github.com/metio/ilo/releases/download/2020.10.12/ilo-2020.10.12-mac.zip --output ilo.zip
+$ unzip ilo.zip
+$ chmod +x ilo-2020.10.12/ilo
+$ ln -s /path/to/ilo/installation/folder/ilo-2020.10.12/ilo /usr/local/bin/ilo
+<span class="c1"># in case the above gives you a permission denied error, execute the same command with sudo, e.g. 'sudo !!'</span>
+<span class="c1"># in order to fix permissions run: sudo chmod -R u=rwX,go=rX /usr/local/bin</span>
+</code></pre>
+</div>
+
+<h2 id="windows">Windows</h2>
+<p>The <a href="https://www.microsoft.com/en-us/windows">Windows</a> distribution of <code>ilo</code> is a native executable and does not require any additional software to be installed.</p>
+
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># PowerShell</span>
+$ New-Item -Path $env:USERPROFILE -Name "bin" -ItemType "directory" <span class="c1"># create directory if it does not exit</span>
+$ control sysdm.cpl <span class="c1"># manually add '$env:USERPROFILE\bin' to the PATH of your user account</span>
+$ echo $env:PATH <span class="c1"># ensure that the 'bin' directory is in your PATH</span>
+$ Set-Location -Path C:\path\to\ilo\installation\folder
+$ Invoke-RestMethod -Uri https://github.com/metio/ilo/releases/download/2020.10.12/ilo-2020.10.12-windows.zip -OutFile "ilo.zip"
+$ Expand-Archive -Path "ilo.zip" -DestinationPath "."
+$ Copy-Item -Path "ilo-2020.10.12\ilo.exe" -Destination "$env:USERPROFILE\bin\ilo.exe"
+</code></pre>
+</div>
+
+<h2 id="other">Other</h2>
+<p>For all other platforms that support at least <a href="https://www.oracle.com/javadownload">Java 11</a>, run something like this:</p>
+
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ cd /path/to/ilo/installation/folder
+$ curl --location https://github.com/metio/ilo/releases/download/2020.10.12/ilo-2020.10.12-java11.zip --output ilo.zip
+$ unzip ilo.zip
+$ chmod +x ilo-2020.10.12/ilo
+<span class="c1"># move 'ilo' start script to your preferred location</span>
+</code></pre>
+</div>
+
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/install" term="install" label="install"/></entry><entry><title type="html">Run Commands</title><link href="https://ilo.projects.metio.wtf/usage/run-commands/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/run-commands/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to simplify/automate its usage, <code>ilo</code> will look for <a href="https://en.wikipedia.org/wiki/Run_commands">run command</a> files in the following locations:</p>
+<ol>
+<li><code>.ilo/ilo.rc</code></li>
+<li><code>.ilo.rc</code></li>
+</ol>
+<p><strong>Each</strong> file found will be added in-order as an <a href="../argument-files">argument file</a> to your invocation of <code>ilo</code> <strong>before</strong> any other options you specify in your terminal.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/run-commands" term="run-commands" label="run commands"/></entry><entry><title type="html">Version</title><link href="https://ilo.projects.metio.wtf/usage/version/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/version/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to see the version of <code>ilo</code> itself, run <code>ilo --version</code> or <code>ilo -V</code>. Its output looks something like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ ilo --version
+ilo: 0.0.0-SNAPSHOT
+JVM: 11.0.8 <span class="o">(</span>Oracle Corporation Substrate VM GraalVM 20.2.0 Java 11<span class="o">)</span>
+OS:  Linux 5.7.17-200.fc32.x86_64 amd64
+</code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/version" term="version" label="version"/></entry></feed>

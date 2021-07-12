@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">jenkins on ilo</title><link href="https://ilo.projects.metio.wtf/tags/jenkins/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/tags/jenkins/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/tags/jenkins/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/tags/jenkins/</id><entry><title type="html">CI Servers</title><link href="https://ilo.projects.metio.wtf/integration/ci-servers/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/integration/ci-servers/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<h2 id="jenkins">Jenkins</h2>
+<p><a href="https://jenkins.io/">Jenkins</a> knows multiple ways to define jobs. In order to integrate with <code>ilo</code> make sure the <code>ilo</code> is <a href="../../usage/install">installed</a> on your slaves.</p>
+<h3 id="declarative-pipeline">Declarative Pipeline</h3>
+<div class="highlight"><pre class="chroma"><code class="language-groovy" data-lang="groovy"><span class="n">pipeline</span> <span class="o">{</span>
+  <span class="n">stages</span> <span class="o">{</span>
+    <span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Build with ilo&#39;</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">sh</span> <span class="s1">&#39;ilo @build-things&#39;</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p><code>build-things</code> is an <a href="../../usage/argument-files">arguments</a> file.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/integration" term="integration" label="integration"/><category scheme="https://ilo.projects.metio.wtf/tags/jenkins" term="jenkins" label="jenkins"/></entry></feed>

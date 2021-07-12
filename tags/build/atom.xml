@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">build on ilo</title><link href="https://ilo.projects.metio.wtf/tags/build/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/tags/build/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/tags/build/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/tags/build/</id><entry><title type="html">Building ilo</title><link href="https://ilo.projects.metio.wtf/contributors/building/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/contributors/building/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> requires a certain set of software installed on your system in order to be built.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><a href="https://git-scm.com/">git</a> for version control</li>
+<li><a href="https://jedisct1.github.io/minisign/">minisign</a> to sign the waiver as a contributor</li>
+<li><a href="https://gnupg.org/">gpg</a> to sign your the commit which adds the waiver</li>
+</ul>
+<h2 id="manual-setup">Manual Setup</h2>
+<ul>
+<li><a href="https://jdk.java.net/">Java JDK</a> to compile the code</li>
+<li><a href="https://maven.apache.org/">Maven</a> to build the project</li>
+<li><a href="https://gohugo.io/">hugo</a> in order to create the website</li>
+<li><a href="https://www.graalvm.org/">GraalVM</a> to build a native executable</li>
+</ul>
+<h2 id="ilo-setup">ilo Setup</h2>
+<ul>
+<li><a href="../../usage/install">ilo</a> to open the reproducible build environment for <code>ilo</code> itself</li>
+<li>One of the <a href="../../shell/runtimes">runtimes</a> that <code>ilo shell</code> supports.</li>
+</ul>
+<h2 id="building">Building</h2>
+<p>In case you have Java and Maven locally installed call:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># run all tests</span>
+$ mvn verify
+</code></pre></div><p>In case you have <code>ilo</code> installed, call this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># build the project</span>
+$ ilo @build/once
+
+<span class="c1"># open a shell with a pre-defined build environment</span>
+$ ilo
+</code></pre></div><p>In case you want to build the website do this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># build website</span>
+$ hugo --minify --i18n-warnings --path-warnings --source docs
+
+<span class="c1"># serve website</span>
+$ hugo server --minify --i18n-warnings --path-warnings --source docs --watch
+</code></pre></div><p>Take a look at the <a href="../makefile">Makefile</a> as an easy way to call all these commands.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/contributors" term="contributors" label="Contributors"/><category scheme="https://ilo.projects.metio.wtf/tags/build" term="build" label="build"/><category scheme="https://ilo.projects.metio.wtf/tags/environment" term="environment" label="environment"/></entry></feed>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">zsh on ilo</title><link href="https://ilo.projects.metio.wtf/tags/zsh/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/tags/zsh/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/tags/zsh/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/tags/zsh/</id><entry><title type="html">Shells</title><link href="https://ilo.projects.metio.wtf/integration/shells/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/integration/shells/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to get the most out of <code>ilo</code> make sure it is well integrated into your shell.</p>
+<h2 id="bash">bash</h2>
+<p>In order to integrate autocompletion into <a href="https://www.gnu.org/software/bash/">bash</a>, follow these steps:</p>
+<ol>
+<li>Create or edit <code>.bashrc</code>.</li>
+<li>Add the following line
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+<h2 id="zsh">zsh</h2>
+<p>In order to integrate autocompletion into <a href="https://www.zsh.org/">zsh</a>, follow these steps:</p>
+<ol>
+<li>Create or edit <code>.zshrc</code>.</li>
+<li>Add the following line
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+<h2 id="oh-my-bash">oh-my-bash</h2>
+<p>In order to integrate autocompletion into <a href="https://github.com/ohmybash/oh-my-bash">oh my bash</a>, follow these steps:</p>
+<ol>
+<li>Create a new file in <code>~/.oh-my-bash/custom</code>, e.g. <code>~/.oh-my-bash/custom/ilo.sh</code>.</li>
+<li>Use the following template
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+<h2 id="oh-my-zsh">oh-my-zsh</h2>
+<p>In order to integrate the autocomplete into <a href="https://github.com/ohmyzsh/ohmyzsh">oh my zsh</a>, follow these steps:</p>
+<ol>
+<li>Create a new file in <code>$ZSH_CUSTOM</code>, e.g. <code>$ZSH_CUSTOM/ilo.sh</code>.</li>
+<li>Use the following template
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/integration" term="integration" label="integration"/><category scheme="https://ilo.projects.metio.wtf/tags/bash" term="bash" label="bash"/><category scheme="https://ilo.projects.metio.wtf/tags/zsh" term="zsh" label="zsh"/></entry></feed>

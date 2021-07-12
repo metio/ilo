@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">help on ilo</title><link href="https://ilo.projects.metio.wtf/tags/help/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/tags/help/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/tags/help/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/tags/help/</id><entry><title type="html">First Timer</title><link href="https://ilo.projects.metio.wtf/contributors/first-timer/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/community/help/?utm_source=atom_feed" rel="related" type="text/html" title="Help"/><link href="https://ilo.projects.metio.wtf/usage/help/?utm_source=atom_feed" rel="related" type="text/html" title="Help"/><link href="https://ilo.projects.metio.wtf/community/security/?utm_source=atom_feed" rel="related" type="text/html" title="Security"/><id>https://ilo.projects.metio.wtf/contributors/first-timer/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>First time contributors have to perform an additional step in order to get their changes merged into the main repository.</p>
+<p>The <a href="https://github.com/metio/ilo/blob/main/AUTHORS/WAIVER">WAIVER</a> has to be signed in order to signal that all contributions can be published into the public domain using the <a href="https://creativecommons.org/publicdomain/zero/1.0/">Creative Commons Zero (CC0)</a> license.</p>
+<p><a href="https://jedisct1.github.io/minisign/">minisign</a> is used to sign and verify contributions (see <a href="../dev-env">dev-env</a>).</p>
+<p>The signed waiver <strong>must</strong> be added to your first pull request. The created git commit <strong>must</strong> be <a href="https://git-scm.com/docs/git-commit#Documentation/git-commit.txt--Sltkeyidgt">GPG signed</a>.</p>
+<p>Additionally, any contributor may add her/his <a href="../metadata">metadata</a> to the project. This is especially useful for <code>minisign</code> public keys since you will have to communicate to the project maintainers anyway.</p>
+<h2 id="prerequisite">Prerequisite</h2>
+<p>Make sure at least version <code>0.8</code> of <code>minisign</code> is installed:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ minisign -v
+minisign 0.8
+</code></pre></div><h2 id="sign">Sign</h2>
+<p>In order to sign the waiver, call the following commands from the root of the project:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ minisign -Sm AUTHORS/WAIVER
+$ mv AUTHORS/WAIVER.minisig AUTHORS/WAIVER.<span class="sb">`</span>id --name --user<span class="sb">`</span>.minisig
+</code></pre></div><p>In case you are into <a href="../makefile">Makefiles</a>, you can use the shorter version:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ make sign-waiver
+</code></pre></div><p>In both cases, a new file called <code>AUTHORS/WAIVER.&lt;USER&gt;.minisign</code> was created. The <code>Makefile</code> will commit the signed waiver to your local repo as well. In case you have not used the <code>Makefile</code>, run this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ git add AUTHORS/WAIVER.<span class="sb">`</span>id --name --user<span class="sb">`</span>.minisig
+$ git commit -m <span class="s1">&#39;sign waiver&#39;</span> --gpg-sign
+</code></pre></div><h2 id="verify">Verify</h2>
+<p>An existing contributor will verify your signature with:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ minisign -V -x AUTHORS/WAIVER.&lt;YOUR_NAME&gt;.minisig -P &lt;YOUR_PUB_KEY&gt; -m AUTHORS/WAIVER
+</code></pre></div><p>In order to verify existing signatures, do any of the following:</p>
+
+
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># verify signature: sebhoss</span>
+$ minisign -V -x AUTHORS/WAIVER.sebhoss.minisig -P RWTwUvueDHNazzoOSJ/rbmIWhvMXIWBUJezoJhSE9jP/Nhv&#43;4SUz3HvS -m AUTHORS/WAIVER
+</code></pre>
+</div>
+
+
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/contributors" term="contributors" label="Contributors"/><category scheme="https://ilo.projects.metio.wtf/tags/help" term="help" label="help"/></entry><entry><title type="html">Help</title><link href="https://ilo.projects.metio.wtf/community/help/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/contributors/first-timer/?utm_source=atom_feed" rel="related" type="text/html" title="First Timer"/><link href="https://ilo.projects.metio.wtf/usage/help/?utm_source=atom_feed" rel="related" type="text/html" title="Help"/><link href="https://ilo.projects.metio.wtf/community/security/?utm_source=atom_feed" rel="related" type="text/html" title="Security"/><id>https://ilo.projects.metio.wtf/community/help/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In case you need help, don’t panic - we’ve all been there! Try the following resources in order to get help:</p>
+<ul>
+<li><a href="https://github.com/metio/ilo/issues/new?assignees=sebhoss&amp;labels=bug&amp;template=bug_report.md&amp;title=">open a new bug report</a></li>
+<li><a href="https://github.com/metio/ilo/issues/new?assignees=&amp;labels=enhancement&amp;template=feature_request.md&amp;title=">create a new feature request</a></li>
+<li><a href="https://github.com/metio/ilo/discussions">open a new discussion</a></li>
+<li><a href="https://matrix.to/#/#ilo:matrix.org">join the chat room</a></li>
+<li><a href="https://metio.groups.io/g/ilo/topics">send an email to the mailing list</a></li>
+<li>Take a walk outside &amp; come back to your issue with a fresh mind</li>
+</ul>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/community" term="community" label="Community"/><category scheme="https://ilo.projects.metio.wtf/tags/help" term="help" label="help"/></entry><entry><title type="html">Help</title><link href="https://ilo.projects.metio.wtf/usage/help/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/contributors/first-timer/?utm_source=atom_feed" rel="related" type="text/html" title="First Timer"/><link href="https://ilo.projects.metio.wtf/community/help/?utm_source=atom_feed" rel="related" type="text/html" title="Help"/><link href="https://ilo.projects.metio.wtf/community/security/?utm_source=atom_feed" rel="related" type="text/html" title="Security"/><id>https://ilo.projects.metio.wtf/usage/help/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to see the help information of <code>ilo</code>, run <code>ilo --help</code> or <code>ilo -h</code>. Its output looks something like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ ilo --help
+Usage: ilo <span class="o">[</span>-hV<span class="o">]</span> <span class="o">[</span>@&lt;filename&gt;...<span class="o">]</span> COMMAND
+
+Manage reproducible build environments
+
+      <span class="o">[</span>@&lt;filename&gt;...<span class="o">]</span>   One or more argument files containing options.
+
+Options:
+  -h, --help             Show this <span class="nb">help</span> message and exit.
+  -V, --version          Print version information and exit.
+
+Commands:
+  shell                Opens an <span class="o">(</span>interactive<span class="o">)</span> shell <span class="k">for</span> your build environment
+  compose              Open an <span class="o">(</span>interactive<span class="o">)</span> shell using podman-/docker-compose
+  devcontainer         Open an <span class="o">(</span>interactive<span class="o">)</span> shell using devcontainer
+  generate-completion  Generate bash/zsh completion script <span class="k">for</span> ilo.
+</code></pre></div><p>Note that you can use show help infos for each command as well, e.g. like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ ilo shell --help
+Usage: ilo shell <span class="o">[</span>-hV<span class="o">]</span> <span class="o">[</span>--debug<span class="o">]</span> <span class="o">[</span>--<span class="o">[</span>no-<span class="o">]</span>interactive<span class="o">]</span> <span class="o">[</span>--<span class="o">[</span>no-<span class="o">]</span>mount-project-dir<span class="o">]</span> <span class="o">[</span>--pull<span class="o">]</span> <span class="o">[</span>--remove-image<span class="o">]</span> <span class="o">[</span>--dockerfile<span class="o">=</span>&lt;dockerfile&gt;<span class="o">]</span> <span class="o">[</span>--runtime<span class="o">=</span>&lt;runtime&gt;<span class="o">]</span> <span class="o">[</span>--env<span class="o">=</span>&lt;variables&gt;<span class="o">]</span>... <span class="o">[</span>--publish<span class="o">=</span>&lt;ports&gt;<span class="o">]</span>...
+                 <span class="o">[</span>--runtime-build-option<span class="o">=</span>&lt;runtimeBuildOptions&gt;<span class="o">]</span>... <span class="o">[</span>--runtime-cleanup-option<span class="o">=</span>&lt;runtimeCleanupOptions&gt;<span class="o">]</span>... <span class="o">[</span>--runtime-option<span class="o">=</span>&lt;runtimeOptions&gt;<span class="o">]</span>... <span class="o">[</span>--runtime-pull-option<span class="o">=</span>&lt;runtimePullOptions&gt;<span class="o">]</span>...
+                 <span class="o">[</span>--runtime-run-option<span class="o">=</span>&lt;runtimeRunOptions&gt;<span class="o">]</span>... <span class="o">[</span>--volume<span class="o">=</span>&lt;volumes&gt;<span class="o">]</span>... &lt;image&gt; <span class="o">[</span>&lt;commands&gt;...<span class="o">]</span>
+
+Opens an <span class="o">(</span>interactive<span class="o">)</span> shell <span class="k">for</span> your build environment
+
+      &lt;image&gt;               The OCI image to use. In <span class="k">case</span> --dockerfile is given as well, this defines the name of the resulting image.
+                              Default: fedora:latest
+      <span class="o">[</span>&lt;commands&gt;...<span class="o">]</span>
+      --debug               Show additional debug information.
+      --dockerfile<span class="o">=</span>&lt;dockerfile&gt;
+                            The Dockerfile to use.
+      --env<span class="o">=</span>&lt;variables&gt;     Specify a environment variable <span class="k">for</span> the container.
+  -h, --help                Show this <span class="nb">help</span> message and exit.
+      --<span class="o">[</span>no-<span class="o">]</span>interactive    Open interactive shell or just run a single command.
+      --<span class="o">[</span>no-<span class="o">]</span>mount-project-dir
+                            Mount the project directory into the running container.
+      --publish<span class="o">=</span>&lt;ports&gt;     Publish container ports to the host system.
+      --pull                Pull image before opening shell.
+      --remove-image        Remove image after closing the shell.
+      --runtime<span class="o">=</span>&lt;runtime&gt;   Specify the runtime to use. If none is specified, use auto-selection.
+      --runtime-build-option<span class="o">=</span>&lt;runtimeBuildOptions&gt;
+                            Options <span class="k">for</span> the build <span class="nb">command</span> of the selected runtime.
+      --runtime-cleanup-option<span class="o">=</span>&lt;runtimeCleanupOptions&gt;
+                            Options <span class="k">for</span> the cleanup <span class="nb">command</span> of the selected runtime.
+      --runtime-option<span class="o">=</span>&lt;runtimeOptions&gt;
+                            Options <span class="k">for</span> the selected runtime itself.
+      --runtime-pull-option<span class="o">=</span>&lt;runtimePullOptions&gt;
+                            Options <span class="k">for</span> the pull <span class="nb">command</span> of the selected runtime.
+      --runtime-run-option<span class="o">=</span>&lt;runtimeRunOptions&gt;
+                            Options <span class="k">for</span> the run <span class="nb">command</span> of the selected runtime.
+  -V, --version             Print version information and exit.
+      --volume<span class="o">=</span>&lt;volumes&gt;    Mount a volume into the container.
+</code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/help" term="help" label="help"/></entry><entry><title type="html">Security</title><link href="https://ilo.projects.metio.wtf/community/security/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/contributors/first-timer/?utm_source=atom_feed" rel="related" type="text/html" title="First Timer"/><link href="https://ilo.projects.metio.wtf/usage/help/?utm_source=atom_feed" rel="related" type="text/html" title="Help"/><link href="https://ilo.projects.metio.wtf/community/help/?utm_source=atom_feed" rel="related" type="text/html" title="Help"/><id>https://ilo.projects.metio.wtf/community/security/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<h2 id="supported-versions">Supported Versions</h2>
+<p><code>ilo</code> is using a continuous delivery mode and therefore only supports the latest released version.</p>
+<h2 id="reporting-a-vulnerability">Reporting a Vulnerability</h2>
+<p>Email <a href="mailto:security@metio.wtf">security@metio.wtf</a> with details about the vulnerability.</p>
+<p>Please include some way to reproduce your problem. We are going to provide a fix as soon as possible and include it in the next release.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/community" term="community" label="Community"/><category scheme="https://ilo.projects.metio.wtf/tags/help" term="help" label="help"/></entry></feed>

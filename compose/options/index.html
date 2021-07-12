@@ -1,0 +1,103 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta content="metio.wtf" name=author><meta content="ilo" name=subject><meta content="manage reproducible build environments" name=description><meta name=viewport content="width=device-width,initial-scale=1"><meta property="og:title" content="Options"><meta property="og:description" content="The ilo compose command can be configured with the following command line options. From your terminal, use ilo compose --help to get a list of all options, and their default values.
+--build The --build option can be used to build images before opening a new shell. Use this option in case you rely on local Dockerfiles.
+# build images before opening shell $ ilo compose --build # do not build images before opening shell $ ilo compose --build=false # do not build images before opening shell $ ilo compose By default, --build is not enabled."><meta property="og:type" content="article"><meta property="og:url" content="https://ilo.projects.metio.wtf/compose/options/"><meta property="article:section" content="compose"><meta property="article:published_time" content="2020-04-13T00:00:00+00:00"><meta property="article:modified_time" content="2020-04-13T00:00:00+00:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Options"><meta name=twitter:description content="The ilo compose command can be configured with the following command line options. From your terminal, use ilo compose --help to get a list of all options, and their default values.
+--build The --build option can be used to build images before opening a new shell. Use this option in case you rely on local Dockerfiles.
+# build images before opening shell $ ilo compose --build # do not build images before opening shell $ ilo compose --build=false # do not build images before opening shell $ ilo compose By default, --build is not enabled."><meta itemprop=name content="Options"><meta itemprop=description content="The ilo compose command can be configured with the following command line options. From your terminal, use ilo compose --help to get a list of all options, and their default values.
+--build The --build option can be used to build images before opening a new shell. Use this option in case you rely on local Dockerfiles.
+# build images before opening shell $ ilo compose --build # do not build images before opening shell $ ilo compose --build=false # do not build images before opening shell $ ilo compose By default, --build is not enabled."><meta itemprop=datePublished content="2020-04-13T00:00:00+00:00"><meta itemprop=dateModified content="2020-04-13T00:00:00+00:00"><meta itemprop=wordCount content="691"><meta itemprop=keywords content="options,"><link href=https://ilo.projects.metio.wtf/compose/options/ rel=canonical><link href=https://ilo.projects.metio.wtf/atom.xml rel=alternate title="ilo Atom" type=application/atom+xml><link href=https://ilo.projects.metio.wtf/index.xml rel=alternate title="ilo RSS" type=application/rss+xml><link href=https://ilo.projects.metio.wtf/sitemap.xml rel=sitemap title="ilo Sitemap" type=application/xml><link rel=author href=https://ilo.projects.metio.wtf/humans.txt><link rel=alternate type=application/rdf+xml title=FOAF href=https://ilo.projects.metio.wtf/foaf.rdf><link rel=license href=https://creativecommons.org/publicdomain/zero/1.0/><link href=https://ilo.projects.metio.wtf/css/mobile.min.f7b2f8e08197e3a93bca2dc49850674c55c72127825448c35fc3dac23935d22a4a86d6f23e946b2ea33e78e2adb319df3e2ebc62184d5957abdba8d693a482a0.css integrity="sha512-97L44IGX46k7yi3EmFBnTFXHISeCVEjDX8Pawjk10ipKhtbyPpRrLqM+eOKtsxnfPi68YhhNWVer26jWk6SCoA==" media="screen and (max-width: 800px)" rel=stylesheet><link href=https://ilo.projects.metio.wtf/css/tablet.min.7b33cca77c2e1d0e0510519f51f6ae57dde200dd55383fb484a5134842741cf9584dc8cee1781a2f205836190cf5185f2879c4e47591c457d27848ee20538ab6.css integrity="sha512-ezPMp3wuHQ4FEFGfUfauV93iAN1VOD+0hKUTSEJ0HPlYTcjO4XgaLyBYNhkM9RhfKHnE5HWRxFfSeEjuIFOKtg==" media="screen and (min-width: 801px) and (max-width: 1199px)" rel=stylesheet><link href=https://ilo.projects.metio.wtf/css/desktop.min.0c16fc38d3db7b1a876dddbf0d236706509184a3bfd47b46940c6486356c31783b46e669d12abf24cabce52b23f7c6e81a14344c0904415ae25c74f89a0186cc.css integrity="sha512-DBb8ONPbexqHbd2/DSNnBlCRhKO/1HtGlAxkhjVsMXg7RuZp0Sq/JMq85Ssj98boGhQ0TAkEQVriXHT4mgGGzA==" media="screen and (min-width: 1200px)" rel=stylesheet><link href=https://ilo.projects.metio.wtf/css/darkmode.min.2a5ba1ebf79d23ac725522a486af2ffebf831a4a634fc1471a4b0007daa25afb4417f20dc4cf0e2c1eeb8eb704183160ff9aaf84e060180993fe1e010ac6907f.css integrity="sha512-Kluh6/edI6xyVSKkhq8v/r+DGkpjT8FHGksAB9qiWvtEF/INxM8OLB7rjrcEGDFg/5qvhOBgGAmT/h4BCsaQfw==" media="screen and (prefers-color-scheme: dark)" rel=stylesheet><title>ilo &ndash; Options</title></head><body id=site><header id=header><h1 id=projectname><a id=rootlink href=https://ilo.projects.metio.wtf/>ilo</a>
+<a href=https://ilo.projects.metio.wtf/sitemap/ title="show me all pages" id=sitemaplink><img class=svgimg src=https://ilo.projects.metio.wtf/images/sitemap.svg alt=sitemap width=30 height=30></a></h1><span id=actions><a href=https://matrix.to/#/%23ilo%3amatrix.org id=matrix title="lets talk"><img class=svgimg src=https://ilo.projects.metio.wtf/images/matrix.svg alt=matrix width=32 height=32></a>
+<a href=https://metio.groups.io/g/ilo/topics id=email title="i want to write you an email"><img class=svgimg src=https://ilo.projects.metio.wtf/images/email.svg alt=email width=32 height=32></a>
+<a href=https://github.com/metio/ilo id=github title="want some code?"><img class=svgimg src=https://ilo.projects.metio.wtf/images/github.svg alt=github width=32 height=32></a>
+<a href=https://metio.groups.io/g/ilo/calendar id=calendar title="release calendar"><img class=svgimg src=https://ilo.projects.metio.wtf/images/calendar.svg alt=github width=32 height=32></a>
+<a href=https://ilo.projects.metio.wtf/atom.xml id=newsfeed title="get notified about updates"><img class=svgimg src=https://ilo.projects.metio.wtf/images/rss.svg alt=newsfeed width=32 height=32></a></span></header><nav id=navigation><ul><h3 class="mobileonly menutitle">Links</h3><li class=mobileonly><a href=https://ilo.projects.metio.wtf/>Home</a></li><li class=mobileonly><a href=https://matrix.to/#/%23ilo%3amatrix.org>Let's talk on Matrix</a></li><li class=mobileonly><a href=mailto:https://metio.groups.io/g/ilo/topics>Send an email</a></li><li class=mobileonly><a href=https://github.com/metio/ilo>See some code at GitHub</a></li><li class=mobileonly><a href=https://metio.groups.io/g/ilo/calendar>Check the release calendar</a></li><li class=mobileonly><a href=https://ilo.projects.metio.wtf/atom.xml>Subscribe to the Atom feed</a></li><li class=mobileonly><a href=https://ilo.projects.metio.wtf/sitemap/>See all pages at the sitemap</a></li><hr class="mobileonly menudivider"><h3 class="mobile-and-tablet menutitle">Navigation</h3><li><a href=/community/>Community</a><ul><li><a href=/community/alternatives/>Alternatives</a></li><li><a href=/community/git-mirrors/>Git Mirrors</a></li><li><a href=/community/help/>Help</a></li><li><a href=/community/news/>News</a></li><li><a href=/community/security/>Security</a></li></ul></li><li><a href=/compose/ class=active>compose</a><ul><li><a href=/compose/customize-env/>Customize Environment</a></li><li class=active><a href=/compose/options/>Options</a></li><li><a href=/compose/runtimes/>Runtimes</a></li></ul></li><li><a href=/contributors/>Contributors</a><ul><li><a href=/contributors/building/>Building ilo</a></li><li><a href=/contributors/editors/>Editors</a></li><li><a href=/contributors/first-timer/>First Timer</a></li><li><a href=/contributors/makefile/>Makefile</a></li><li><a href=/contributors/metadata/>Metadata</a></li><li><a href=/contributors/release/>Release</a></li></ul></li><li><a href=/devcontainer/>devcontainer</a><ul><li><a href=/devcontainer/customize-env/>Customize Environment</a></li><li><a href=/devcontainer/options/>Options</a></li></ul></li><li><a href=/integration/>Integration</a><ul><li><a href=/integration/autoenv/>autoenv</a></li><li><a href=/integration/ci-servers/>CI Servers</a></li><li><a href=/integration/container-registries/>Container Registries</a></li><li><a href=/integration/shells/>Shells</a></li><li><a href=/integration/tmux/>tmux</a></li></ul></li><li><a href=/shell/>shell</a><ul><li><a href=/shell/customize-env/>Customize Environment</a></li><li><a href=/shell/examples/>Examples</a></li><li><a href=/shell/options/>Options</a></li><li><a href=/shell/runtimes/>Runtimes</a></li></ul></li><li><a href=/usage/>Usage</a><ul><li><a href=/usage/argument-files/>Argument Files</a></li><li><a href=/usage/cli-autocomplete/>CLI Autocomplete</a></li><li><a href=/usage/help/>Help</a></li><li><a href=/usage/install/>Install</a></li><li><a href=/usage/run-commands/>Run Commands</a></li><li><a href=/usage/version/>Version</a></li></ul></li></ul></nav><main id=content><h1 class=post-titel><a href=https://ilo.projects.metio.wtf/compose/options/>Options</a>
+<a href=https://github.com/metio/ilo/commits/main/docs/content/compose/options.md><img src=https://ilo.projects.metio.wtf/images/history.svg height=16 width=14 class="icon svgimg"></a>
+<a href=https://github.com/metio/ilo/edit/main/docs/content/compose/options.md><img src=https://ilo.projects.metio.wtf/images/pencil.svg height=16 width=14 class="icon svgimg"></a></h1><div class=subtitle>Talks about:
+<a class="post-tag post-tag-options" href=/tags/options>options</a></div><div id=post-content><p>The <code>ilo compose</code> command can be configured with the following command line options. From your terminal, use <code>ilo compose --help</code> to get a list of all options, and their default values.</p><h2 id=--build><code>--build</code></h2><p>The <code>--build</code> option can be used to build images before opening a new shell. Use this option in case you rely on local Dockerfiles.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># build images before opening shell</span>
+$ ilo compose --build
+
+<span class=c1># do not build images before opening shell</span>
+$ ilo compose --build<span class=o>=</span><span class=nb>false</span>
+
+<span class=c1># do not build images before opening shell</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--build</code> is not enabled.</p><h2 id=--debug><code>--debug</code></h2><p>The <code>--debug</code> option toggles whether <code>ilo</code> should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from <code>ilo</code> and just use your preferred runtime instead.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># print runtime commands</span>
+$ ilo compose --debug
+
+<span class=c1># do not print runtime commands</span>
+$ ilo compose --debug<span class=o>=</span><span class=nb>false</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--debug</code> is not enabled.</p><h2 id=--file><code>--file</code></h2><p>The <code>--file</code> option can be used to specify the file that contains your container definitions, e.g. a <code>docker-compose.yml</code> file.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># use custom location</span>
+$ ilo compose --file /path/to/some/file.yaml
+
+<span class=c1># use default location</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--file</code> is set to <code>docker-compose.yml</code>.</p><h2 id=--interactive><code>--interactive</code></h2><p>The <code>--interactive</code> option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># run interactively</span>
+$ ilo compose --interactive
+
+<span class=c1># run non-interactive</span>
+$ ilo compose --no-interactive
+$ ilo compose --interactive<span class=o>=</span><span class=nb>false</span>
+
+<span class=c1># run interactively</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--interactive</code> is enabled.</p><h2 id=--pull><code>--pull</code></h2><p>The <code>--pull</code> option can be used to pull images before opening a new shell. This is especially useful for teams using a <code>latest</code> tag for their image. The image will only pulled in case the registry contains a newer image than locally available.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># pull image before opening shell</span>
+$ ilo compose --pull
+
+<span class=c1># do not pull image before opening shell</span>
+$ ilo compose --pull<span class=o>=</span><span class=nb>false</span>
+
+<span class=c1># do not pull image before opening shell</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--pull</code> is not enabled.</p><h2 id=--runtime><code>--runtime</code></h2><p>The <code>--runtime</code> option can be used to force the usage of a specific runtime. See <a href=../runtimes>runtimes</a> for details.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># force to use docker-compose</span>
+$ ilo compose --runtime docker-compose
+
+<span class=c1># force to use podman-compose</span>
+$ ilo compose --runtime podman-compose
+
+<span class=c1># force to use pods-compose</span>
+$ ilo compose --runtime pods-compose
+
+<span class=c1># force to use footloose</span>
+$ ilo compose --runtime footloose
+
+<span class=c1># force to use vagrant</span>
+$ ilo compose --runtime vagrant
+
+<span class=c1># auto select</span>
+$ ilo compose
+</code></pre></div><p>In case no <code>--runtime</code> is specified, <code>ilo compose</code> will automatically select one of the runtimes installed on your local system and prefers <code>docker-compose</code> over <code>podman-compose</code> over <code>pods-compose</code> over <code>footloose</code> over <code>vagrant</code> at the moment.</p><h2 id=--runtime-option><code>--runtime-option</code></h2><p>The <code>--runtime-option</code> option can be specified multiple times and contains options for the underlying runtime.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># specify custom option(s)</span>
+$ ilo compose --runtime-option<span class=o>=</span>--no-ansi
+$ ilo compose --runtime-option<span class=o>=</span>--no-ansi --runtime-option<span class=o>=</span>--tls
+
+<span class=c1># do not specify custom option</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--runtime-option</code> is set to an empty array.</p><h2 id=--runtime-pull-option><code>--runtime-pull-option</code></h2><p>The <code>--runtime-pull-option</code> can be specified multiple times and contains options for the runtimes' <code>pull</code> command.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># specify custom option(s)</span>
+$ ilo compose --runtime-pull-option<span class=o>=</span>--ignore-pull-failures
+$ ilo compose --runtime-pull-option<span class=o>=</span>--ignore-pull-failures --runtime-pull-option<span class=o>=</span>--quiet
+
+<span class=c1># do not specify custom option</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--runtime-pull-option</code> is set to an empty array.</p><h2 id=--runtime-build-option><code>--runtime-build-option</code></h2><p>The <code>--runtime-build-option</code> can be specified multiple times and contains options for the runtimes' <code>build</code> command.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># specify custom option(s)</span>
+$ ilo compose --runtime-build-option<span class=o>=</span>--compress
+$ ilo compose --runtime-build-option<span class=o>=</span>--compress --runtime-build-option<span class=o>=</span>--no-cache
+
+<span class=c1># do not specify custom option</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--runtime-build-option</code> is set to an empty array.</p><h2 id=--runtime-run-option><code>--runtime-run-option</code></h2><p>The <code>--runtime-run-option</code> can be specified multiple times and contains options for the runtimes' <code>run</code> command.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># specify custom option(s)</span>
+$ ilo compose --runtime-run-option<span class=o>=</span>--no-deps
+$ ilo compose --runtime-run-option<span class=o>=</span>--no-deps --runtime-run-option<span class=o>=</span>--use-aliases
+
+<span class=c1># do not specify custom option</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--runtime-run-option</code> is set to an empty array.</p><h2 id=--runtime-cleanup-option><code>--runtime-cleanup-option</code></h2><p>The <code>--runtime-cleanup-option</code> can be specified multiple times and contains options for the runtimes' cleanup command, e.g. <code>down</code> for <code>docker-compose</code>.</p><div class=highlight><pre class=chroma><code class=language-shell data-lang=shell><span class=c1># specify custom option(s)</span>
+$ ilo compose --runtime-cleanup-option<span class=o>=</span>--remove-orphans
+$ ilo compose --runtime-cleanup-option<span class=o>=</span>--remove-orphans --runtime-cleanup-option<span class=o>=</span>--volumes
+
+<span class=c1># do not specify custom option</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--runtime-cleanup-option</code> is set to an empty array.</p></div></main><footer id=footer><p xmlns:dct=http://purl.org/dc/terms/ xmlns:vcard=http://www.w3.org/2001/vcard-rdf/3.0#><a rel=license href=https://creativecommons.org/publicdomain/zero/1.0/><img src=https://ilo.projects.metio.wtf/images/cc0.png style=border-style:none alt=CC0 width=88px height=31px></a><br>To the extent possible under law,
+<a rel=dct:publisher href=https://ilo.projects.metio.wtf/><span property="dct:title">metio.wtf</span></a>
+has waived all copyright and related or neighboring rights to
+<span property="dct:title">ilo.projects.metio.wtf</span>.
+This work is published from:
+<span property="vcard:Country" datatype="dct:ISO3166" content="EN" about="https://ilo.projects.metio.wtf/">Germany</span></p></footer></body></html>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">lxd on ilo</title><link href="https://ilo.projects.metio.wtf/tags/lxd/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/tags/lxd/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/tags/lxd/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/tags/lxd/</id><entry><title type="html">Runtimes</title><link href="https://ilo.projects.metio.wtf/shell/runtimes/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/compose/runtimes/?utm_source=atom_feed" rel="related" type="text/html" title="Runtimes"/><id>https://ilo.projects.metio.wtf/shell/runtimes/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo shell</code> by default searches your local system for supported runtimes. It prefers <code>podman</code> over <code>docker</code> over <code>lxd</code> at the moment. In order to force the usage of a specific runtime, use the <code>--runtime</code> flag.</p>
+<h2 id="docker">Docker</h2>
+<p>Force <code>ilo</code> to use <a href="https://www.docker.com/">docker</a>  like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ ilo shell --runtime docker
+
+<span class="c1"># alias</span>
+$ ilo shell --runtime d
+</code></pre></div><p><strong>Important</strong>: In case your image uses <code>root</code> as its user, and you cannot run <a href="https://docs.docker.com/engine/security/rootless/">rootless docker</a> (introduced with 19.03), use the <a href="../options"><code>--run-as</code></a> option to override the user in the image.</p>
+<h2 id="podman">Podman</h2>
+<p>Force <code>ilo</code> to use <a href="https://podman.io/">podman</a> like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ ilo shell --runtime podman
+
+<span class="c1"># alias</span>
+$ ilo shell --runtime p
+</code></pre></div><p><strong>Important</strong>: In case your images uses <code>root</code> as its user, and you cannot run <a href="https://github.com/containers/podman/blob/master/rootless.md">rootless podman</a>, use the <a href="../options"><code>--run-as</code></a> option to override the user in the image. Take a look at this <a href="https://www.redhat.com/sysadmin/behind-scenes-podman">article</a> for an in-depth example of how rootless work with podman.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/shell" term="shell" label="shell"/><category scheme="https://ilo.projects.metio.wtf/tags/runtime" term="runtime" label="runtime"/><category scheme="https://ilo.projects.metio.wtf/tags/docker" term="docker" label="docker"/><category scheme="https://ilo.projects.metio.wtf/tags/podman" term="podman" label="podman"/><category scheme="https://ilo.projects.metio.wtf/tags/lxd" term="lxd" label="lxd"/></entry></feed>

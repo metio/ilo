@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">options on ilo</title><link href="https://ilo.projects.metio.wtf/tags/options/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/tags/options/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/tags/options/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/tags/options/</id><entry><title type="html">Options</title><link href="https://ilo.projects.metio.wtf/compose/options/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/devcontainer/options/?utm_source=atom_feed" rel="related" type="text/html" title="Options"/><link href="https://ilo.projects.metio.wtf/shell/options/?utm_source=atom_feed" rel="related" type="text/html" title="Options"/><id>https://ilo.projects.metio.wtf/compose/options/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The <code>ilo compose</code> command can be configured with the following command line options. From your terminal, use <code>ilo compose --help</code> to get a list of all options, and their default values.</p>
+<h2 id="--build"><code>--build</code></h2>
+<p>The <code>--build</code> option can be used to build images before opening a new shell. Use this option in case you rely on local Dockerfiles.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># build images before opening shell</span>
+$ ilo compose --build
+
+<span class="c1"># do not build images before opening shell</span>
+$ ilo compose --build<span class="o">=</span><span class="nb">false</span>
+
+<span class="c1"># do not build images before opening shell</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--build</code> is not enabled.</p>
+<h2 id="--debug"><code>--debug</code></h2>
+<p>The <code>--debug</code> option toggles whether <code>ilo</code> should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from <code>ilo</code> and just use your preferred runtime instead.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># print runtime commands</span>
+$ ilo compose --debug
+
+<span class="c1"># do not print runtime commands</span>
+$ ilo compose --debug<span class="o">=</span><span class="nb">false</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--debug</code> is not enabled.</p>
+<h2 id="--file"><code>--file</code></h2>
+<p>The <code>--file</code> option can be used to specify the file that contains your container definitions, e.g. a <code>docker-compose.yml</code> file.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># use custom location</span>
+$ ilo compose --file /path/to/some/file.yaml
+
+<span class="c1"># use default location</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--file</code> is set to <code>docker-compose.yml</code>.</p>
+<h2 id="--interactive"><code>--interactive</code></h2>
+<p>The <code>--interactive</code> option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># run interactively</span>
+$ ilo compose --interactive
+
+<span class="c1"># run non-interactive</span>
+$ ilo compose --no-interactive
+$ ilo compose --interactive<span class="o">=</span><span class="nb">false</span>
+
+<span class="c1"># run interactively</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--interactive</code> is enabled.</p>
+<h2 id="--pull"><code>--pull</code></h2>
+<p>The <code>--pull</code> option can be used to pull images before opening a new shell. This is especially useful for teams using a <code>latest</code> tag for their image. The image will only pulled in case the registry contains a newer image than locally available.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># pull image before opening shell</span>
+$ ilo compose --pull
+
+<span class="c1"># do not pull image before opening shell</span>
+$ ilo compose --pull<span class="o">=</span><span class="nb">false</span>
+
+<span class="c1"># do not pull image before opening shell</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--pull</code> is not enabled.</p>
+<h2 id="--runtime"><code>--runtime</code></h2>
+<p>The <code>--runtime</code> option can be used to force the usage of a specific runtime. See <a href="../runtimes">runtimes</a> for details.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># force to use docker-compose</span>
+$ ilo compose --runtime docker-compose
+
+<span class="c1"># force to use podman-compose</span>
+$ ilo compose --runtime podman-compose
+
+<span class="c1"># force to use pods-compose</span>
+$ ilo compose --runtime pods-compose
+
+<span class="c1"># force to use footloose</span>
+$ ilo compose --runtime footloose
+
+<span class="c1"># force to use vagrant</span>
+$ ilo compose --runtime vagrant
+
+<span class="c1"># auto select</span>
+$ ilo compose
+</code></pre></div><p>In case no <code>--runtime</code> is specified, <code>ilo compose</code> will automatically select one of the runtimes installed on your local system and prefers <code>docker-compose</code> over <code>podman-compose</code> over <code>pods-compose</code> over <code>footloose</code> over <code>vagrant</code> at the moment.</p>
+<h2 id="--runtime-option"><code>--runtime-option</code></h2>
+<p>The <code>--runtime-option</code> option can be specified multiple times and contains options for the underlying runtime.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom option(s)</span>
+$ ilo compose --runtime-option<span class="o">=</span>--no-ansi
+$ ilo compose --runtime-option<span class="o">=</span>--no-ansi --runtime-option<span class="o">=</span>--tls
+
+<span class="c1"># do not specify custom option</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--runtime-option</code> is set to an empty array.</p>
+<h2 id="--runtime-pull-option"><code>--runtime-pull-option</code></h2>
+<p>The <code>--runtime-pull-option</code> can be specified multiple times and contains options for the runtimes' <code>pull</code> command.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom option(s)</span>
+$ ilo compose --runtime-pull-option<span class="o">=</span>--ignore-pull-failures
+$ ilo compose --runtime-pull-option<span class="o">=</span>--ignore-pull-failures --runtime-pull-option<span class="o">=</span>--quiet
+
+<span class="c1"># do not specify custom option</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--runtime-pull-option</code> is set to an empty array.</p>
+<h2 id="--runtime-build-option"><code>--runtime-build-option</code></h2>
+<p>The <code>--runtime-build-option</code> can be specified multiple times and contains options for the runtimes' <code>build</code> command.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom option(s)</span>
+$ ilo compose --runtime-build-option<span class="o">=</span>--compress
+$ ilo compose --runtime-build-option<span class="o">=</span>--compress --runtime-build-option<span class="o">=</span>--no-cache
+
+<span class="c1"># do not specify custom option</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--runtime-build-option</code> is set to an empty array.</p>
+<h2 id="--runtime-run-option"><code>--runtime-run-option</code></h2>
+<p>The <code>--runtime-run-option</code> can be specified multiple times and contains options for the runtimes' <code>run</code> command.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom option(s)</span>
+$ ilo compose --runtime-run-option<span class="o">=</span>--no-deps
+$ ilo compose --runtime-run-option<span class="o">=</span>--no-deps --runtime-run-option<span class="o">=</span>--use-aliases
+
+<span class="c1"># do not specify custom option</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--runtime-run-option</code> is set to an empty array.</p>
+<h2 id="--runtime-cleanup-option"><code>--runtime-cleanup-option</code></h2>
+<p>The <code>--runtime-cleanup-option</code> can be specified multiple times and contains options for the runtimes' cleanup command, e.g. <code>down</code> for <code>docker-compose</code>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom option(s)</span>
+$ ilo compose --runtime-cleanup-option<span class="o">=</span>--remove-orphans
+$ ilo compose --runtime-cleanup-option<span class="o">=</span>--remove-orphans --runtime-cleanup-option<span class="o">=</span>--volumes
+
+<span class="c1"># do not specify custom option</span>
+$ ilo compose
+</code></pre></div><p>By default, <code>--runtime-cleanup-option</code> is set to an empty array.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/compose" term="compose" label="compose"/><category scheme="https://ilo.projects.metio.wtf/tags/options" term="options" label="options"/></entry><entry><title type="html">Options</title><link href="https://ilo.projects.metio.wtf/devcontainer/options/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/compose/options/?utm_source=atom_feed" rel="related" type="text/html" title="Options"/><link href="https://ilo.projects.metio.wtf/shell/options/?utm_source=atom_feed" rel="related" type="text/html" title="Options"/><id>https://ilo.projects.metio.wtf/devcontainer/options/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The <code>ilo devcontainer</code> command can be configured with the following command line options. From your terminal, use <code>ilo compose --help</code> to get a list of all options, and their default values.</p>
+<h2 id="--debug"><code>--debug</code></h2>
+<p>The <code>--debug</code> option toggles whether <code>ilo</code> should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from <code>ilo</code> and just use your preferred runtime instead.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># print runtime commands</span>
+$ ilo devcontainer --debug
+
+<span class="c1"># do not print runtime commands</span>
+$ ilo devcontainer --debug<span class="o">=</span><span class="nb">false</span>
+$ ilo devcontainer
+</code></pre></div><p>By default, <code>--debug</code> is not enabled.</p>
+<h2 id="--mount-project-dir"><code>--mount-project-dir</code></h2>
+<p>The <code>--mount-project-dir</code> option can be used to toggle whether the current directory should be mounted into the container.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># mount current directory into container</span>
+$ ilo devcontainer --mount-project-dir
+
+<span class="c1"># do not mount directory</span>
+$ ilo devcontainer --no-mount-project-dir
+$ ilo devcontainer --mount-project-dir<span class="o">=</span><span class="nb">false</span>
+
+<span class="c1"># mount directory</span>
+$ ilo devcontainer
+</code></pre></div><p>By default, <code>--mount-project-dir</code> is enabled.</p>
+<h2 id="--pull"><code>--pull</code></h2>
+<p>The <code>--pull</code> option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a <code>latest</code> tag for their image. The image will only pulled in case the registry contains a newer image than locally available.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># pull image before opening shell</span>
+$ ilo devcontainer --pull
+
+<span class="c1"># do not pull image before opening shell</span>
+$ ilo devcontainer --no-pull
+$ ilo devcontainer --pull<span class="o">=</span><span class="nb">false</span>
+
+<span class="c1"># do not pull image before opening shell</span>
+$ ilo devcontainer
+</code></pre></div><p>By default, <code>--pull</code> is not enabled.</p>
+<h2 id="--remove-image"><code>--remove-image</code></h2>
+<p>The <code>--remove-image</code> option causes <code>ilo</code> to remove the specified image from your local system after you close your shell, or the non-interactive commands finishes.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># remove image after shell was closed</span>
+$ ilo devcontainer --remove-image
+
+<span class="c1"># do not remove image</span>
+$ ilo devcontainer --no-remove-image
+$ ilo devcontainer --remove-image<span class="o">=</span><span class="nb">false</span>
+$ ilo devcontainer
+</code></pre></div><p>By default, <code>--remove-image</code> is not enabled.</p>
+<h2 id="--compose-runtime---c"><code>--compose-runtime</code> / <code>-C</code></h2>
+<p>The <code>--compose-runtime</code> option can be used to force the usage of a specific <a href="../../compose/runtimes">compose runtime</a>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># force to use podman-compose</span>
+$ ilo devcontainer --compose-runtime podman-compose
+
+<span class="c1"># force to use docker-compose</span>
+$ ilo devcontainer --compose-runtime docker-compose
+
+<span class="c1"># auto select</span>
+$ ilo devcontainer
+</code></pre></div><p>In case no <code>--compose-runtime</code> is specified, <code>ilo devcontainer</code> will automatically select one of the runtimes installed on your local system and prefers <code>docker-compose</code> over <code>podman-compose</code>.</p>
+<h2 id="--shell-runtime---s"><code>--shell-runtime</code> / <code>-S</code></h2>
+<p>The <code>--shell-runtime</code> option can be used to force the usage of a specific <a href="../../shell/runtimes">shell runtime</a>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># force to use podman</span>
+$ ilo devcontainer --shell-runtime podman
+
+<span class="c1"># force to use docker</span>
+$ ilo devcontainer --shell-runtime docker
+
+<span class="c1"># force to use lxd</span>
+$ ilo devcontainer --shell-runtime lxd
+
+<span class="c1"># auto select</span>
+$ ilo devcontainer
+</code></pre></div><p>In case no <code>--shell-runtime</code> is specified, <code>ilo devcontainer</code> will automatically select one of the runtimes installed on your local system and prefers <code>podman</code> over <code>docker</code> over <code>lxd</code>.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/devcontainer" term="devcontainer" label="devcontainer"/><category scheme="https://ilo.projects.metio.wtf/tags/options" term="options" label="options"/></entry><entry><title type="html">Options</title><link href="https://ilo.projects.metio.wtf/shell/options/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/compose/options/?utm_source=atom_feed" rel="related" type="text/html" title="Options"/><link href="https://ilo.projects.metio.wtf/devcontainer/options/?utm_source=atom_feed" rel="related" type="text/html" title="Options"/><id>https://ilo.projects.metio.wtf/shell/options/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The <code>ilo shell</code> command can be configured with the following command line options. From your terminal, use <code>ilo shell --help</code> to get a list of all options, and their default values.</p>
+<h2 id="--context"><code>--context</code></h2>
+<p>The <code>--context</code> option allows to specify the context when building an image with <code>--dockerfile</code>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom context</span>
+$ ilo shell --context ./local/folder
+
+<span class="c1"># do not specify context</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--context</code> is set to <code>.</code> (the current directory).</p>
+<h2 id="--debug"><code>--debug</code></h2>
+<p>The <code>--debug</code> option toggles whether <code>ilo</code> should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from <code>ilo</code> and just use your preferred runtime instead.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># print runtime commands</span>
+$ ilo shell --debug
+
+<span class="c1"># do not print runtime commands</span>
+$ ilo shell --debug<span class="o">=</span><span class="nb">false</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--debug</code> is not enabled.</p>
+<h2 id="--dockerfile"><code>--dockerfile</code></h2>
+<p>The <code>--dockerfile</code> can be used to specify a local <code>Dockerfile</code>. Specifying such a file will cause <code>ilo</code> to build your image first, and then open a shell into a container based on that image.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom Dockerfile</span>
+$ ilo shell --dockerfile some/where/your.dockerfile
+
+<span class="c1"># do not specify Dockerfile</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--dockerfile</code> is not set to any value.</p>
+<h2 id="--env"><code>--env</code></h2>
+<p>The <code>--env</code> option can be used to specify environment variables for your container.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify env variable</span>
+$ ilo shell --env <span class="nv">key</span><span class="o">=</span>value
+
+<span class="c1"># do not specify env variable</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--env</code> does not set any environment variables.</p>
+<h2 id="--interactive"><code>--interactive</code></h2>
+<p>The <code>--interactive</code> option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># run interactively</span>
+$ ilo shell --interactive
+
+<span class="c1"># run non-interactive</span>
+$ ilo shell --no-interactive
+$ ilo shell --interactive<span class="o">=</span><span class="nb">false</span>
+
+<span class="c1"># run interactively</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--interactive</code> is enabled.</p>
+<h2 id="--mount-project-dir"><code>--mount-project-dir</code></h2>
+<p>The <code>--mount-project-dir</code> option can be used to toggle whether the current directory should be mounted into the container.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># mount current directory into container</span>
+$ ilo shell --mount-project-dir
+
+<span class="c1"># do not mount directory</span>
+$ ilo shell --no-mount-project-dir
+$ ilo shell --mount-project-dir<span class="o">=</span><span class="nb">false</span>
+
+<span class="c1"># mount directory</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--mount-project-dir</code> is enabled.</p>
+<h2 id="--publish"><code>--publish</code></h2>
+<p>The <code>--publish</code> option can be used to publish ports of your container to your local system.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># binds your local 8080 port to port 80 of the container</span>
+$ ilo shell --publish 8080:80
+
+<span class="c1"># do not expose any ports</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--publish</code> does not exposes any ports.</p>
+<h2 id="--pull"><code>--pull</code></h2>
+<p>The <code>--pull</code> option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a <code>latest</code> tag for their image. The image will only pulled in case the registry contains a newer image than locally available.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># pull image before opening shell</span>
+$ ilo shell --pull
+
+<span class="c1"># do not pull image before opening shell</span>
+$ ilo shell --no-pull
+$ ilo shell --pull<span class="o">=</span><span class="nb">false</span>
+
+<span class="c1"># do not pull image before opening shell</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--pull</code> is not enabled.</p>
+<h2 id="--remove-image"><code>--remove-image</code></h2>
+<p>The <code>--remove-image</code> option causes <code>ilo</code> to remove the specified image from your local system after you close your shell, or the non-interactive commands finishes. This is especially useful in combination with <code>--dockerfile</code>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># remove image after shell was closed</span>
+$ ilo shell --remove-image
+
+<span class="c1"># do not remove image</span>
+$ ilo shell --no-remove-image
+$ ilo shell --remove-image<span class="o">=</span><span class="nb">false</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--remove-image</code> is not enabled.</p>
+<h2 id="--runtime"><code>--runtime</code></h2>
+<p>The <code>--runtime</code> option can be used to force the usage of a specific runtime. See <a href="../runtimes">runtimes</a> for details.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># force to use podman</span>
+$ ilo shell --runtime podman
+
+<span class="c1"># force to use docker</span>
+$ ilo shell --runtime docker
+
+<span class="c1"># force to use lxd</span>
+$ ilo shell --runtime lxd
+
+<span class="c1"># auto select</span>
+$ ilo shell
+</code></pre></div><p>In case no <code>--runtime</code> is specified, <code>ilo shell</code> will automatically select one of the runtimes installed on your local system and prefers <code>podman</code> over <code>docker</code> over <code>lxd</code>.</p>
+<h2 id="--run-as"><code>--run-as</code></h2>
+<p>The <code>--run-as</code> option can be used to override the user inside the container. This is helpful in case you are not able to run the rootless mode of your runtime.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># run as specified user:group</span>
+$ ilo shell --run-as<span class="o">=</span><span class="k">$(</span>id -u<span class="k">)</span>:<span class="k">$(</span>id -g<span class="k">)</span>
+
+<span class="c1"># run as user specified in image</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--run-as</code> is not set to any value.</p>
+<h2 id="--runtime-option"><code>--runtime-option</code></h2>
+<p>The <code>--runtime-option</code> option can be specified multiple times and contains options for the underlying runtime.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom option(s)</span>
+$ ilo shell --runtime-option<span class="o">=</span>--remote
+$ ilo shell --runtime-option<span class="o">=</span>--remote --runtime-option<span class="o">=</span>--syslog
+
+<span class="c1"># do not specify custom option</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--runtime-option</code> is set to an empty array.</p>
+<h2 id="--runtime-pull-option"><code>--runtime-pull-option</code></h2>
+<p>The <code>--runtime-pull-option</code> can be specified multiple times and contains options for the runtimes' <code>pull</code> command.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom option(s)</span>
+$ ilo shell --runtime-pull-option<span class="o">=</span>--all-tags
+$ ilo shell --runtime-pull-option<span class="o">=</span>--all-tags --runtime-pull-option<span class="o">=</span>--quiet
+
+<span class="c1"># do not specify custom option</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--runtime-pull-option</code> is set to an empty array.</p>
+<h2 id="--runtime-build-option"><code>--runtime-build-option</code></h2>
+<p>The <code>--runtime-build-option</code> can be specified multiple times and contains options for the runtimes' <code>build</code> command.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom option(s)</span>
+$ ilo shell --runtime-build-option<span class="o">=</span>--squash
+$ ilo shell --runtime-build-option<span class="o">=</span>--squash --runtime-build-option<span class="o">=</span>--no-cache
+
+<span class="c1"># do not specify custom option</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--runtime-build-option</code> is set to an empty array.</p>
+<h2 id="--runtime-run-option"><code>--runtime-run-option</code></h2>
+<p>The <code>--runtime-run-option</code> can be specified multiple times and contains options for the runtimes' <code>run</code> command.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom option(s)</span>
+$ ilo shell --runtime-run-option<span class="o">=</span>--privileged
+$ ilo shell --runtime-run-option<span class="o">=</span>--privileged --runtime-run-option<span class="o">=</span>--replace
+
+<span class="c1"># do not specify custom option</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--runtime-run-option</code> is set to an empty array.</p>
+<h2 id="--runtime-cleanup-option"><code>--runtime-cleanup-option</code></h2>
+<p>The <code>--runtime-cleanup-option</code> can be specified multiple times and contains options for the runtimes' <code>rmi</code> command.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># specify custom option(s)</span>
+$ ilo shell --runtime-cleanup-option<span class="o">=</span>--force
+$ ilo shell --runtime-cleanup-option<span class="o">=</span>--force --runtime-cleanup-option<span class="o">=</span>--all
+
+<span class="c1"># do not specify custom option</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--runtime-cleanup-option</code> is set to an empty array.</p>
+<h2 id="--volume"><code>--volume</code></h2>
+<p>The <code>--volume</code> option can be used to mount additional volumes into your container.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># mount extra volume</span>
+$ ilo shell --volume <span class="nv">$HOME</span>/.m2/repository:/root/.m2/repository:Z
+
+<span class="c1"># do not mount extra volume</span>
+$ ilo shell
+</code></pre></div><p>By default, <code>--volume</code> does not mount any extra volumes.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/shell" term="shell" label="shell"/><category scheme="https://ilo.projects.metio.wtf/tags/options" term="options" label="options"/></entry></feed>

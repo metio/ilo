@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.85.0">Hugo</generator><title type="html">install on ilo</title><link href="https://ilo.projects.metio.wtf/tags/install/" rel="alternate" type="text/html" title="HTML"/><link href="https://ilo.projects.metio.wtf/tags/install/index.xml" rel="alternate" type="application/rss+xml" title="RSS"/><link href="https://ilo.projects.metio.wtf/tags/install/atom.xml" rel="self" type="application/atom+xml" title="Atom"/><updated>2021-07-12T04:56:11+00:00</updated><id>https://ilo.projects.metio.wtf/tags/install/</id><entry><title type="html">Install</title><link href="https://ilo.projects.metio.wtf/usage/install/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/install/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>Use the following locations in order to download the binary distribution of <code>ilo</code>:</p>
+<ul>
+<li><a href="https://github.com/metio/ilo/releases">https://github.com/metio/ilo/releases</a></li>
+</ul>
+<p>None of the widely used package managers have <code>ilo</code> in their official repositories yet. In case you want to help package <code>ilo</code> for your preferred operating system, take a look at the open packaging issues for <a href="https://github.com/metio/ilo/issues/2">Linux</a>, <a href="https://github.com/metio/ilo/issues/12">MacOS</a>, and <a href="https://github.com/metio/ilo/issues/11">Windows</a>.</p>
+<h2 id="linux">Linux</h2>
+<h3 id="manual">Manual</h3>
+<p>The <a href="https://www.kernel.org/">Linux</a> distribution of <code>ilo</code> is a native executable and does not require any additional software to be installed.</p>
+
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ cd /path/to/ilo/installation/folder
+$ curl --location https://github.com/metio/ilo/releases/download/2020.10.12/ilo-2020.10.12-linux.zip --output ilo.zip
+$ unzip ilo.zip
+$ chmod +x ilo-2020.10.12/ilo
+$ ln --symbolic --relative ilo-2020.10.12/ilo ~/.local/bin/ilo
+</code></pre>
+</div>
+
+<h3 id="fedora">Fedora</h3>
+<p><a href="https://getfedora.org/">Fedora</a> users can install <code>ilo</code> from a <a href="https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/">COPR</a> repository like this:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ sudo dnf copr <span class="nb">enable</span> sebhoss/ilo
+$ sudo dnf install ilo
+</code></pre></div><h3 id="fedora-silverblue">Fedora Silverblue</h3>
+<p><a href="https://silverblue.fedoraproject.org/">Fedora Silverblue</a> users can install <code>ilo</code> from the same <a href="https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/">COPR</a> by following these steps:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ curl --location https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/repo/fedora-<span class="k">$(</span>rpm -E %fedora<span class="k">)</span>/sebhoss-ilo-fedora-<span class="k">$(</span>rpm -E %fedora<span class="k">)</span>.repo --output ilo.repo
+$ sudo mv ilo.repo /etc/yum.repos.d/ilo.repo
+$ rpm-ostree install ilo
+</code></pre></div><h2 id="macos">MacOS</h2>
+<p>The <a href="https://www.apple.com/macos/">MacOS</a> distribution of <code>ilo</code> is a native executable and does not require any additional software to be installed.</p>
+
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ cd /path/to/ilo/installation/folder
+$ curl --location https://github.com/metio/ilo/releases/download/2020.10.12/ilo-2020.10.12-mac.zip --output ilo.zip
+$ unzip ilo.zip
+$ chmod +x ilo-2020.10.12/ilo
+$ ln -s /path/to/ilo/installation/folder/ilo-2020.10.12/ilo /usr/local/bin/ilo
+<span class="c1"># in case the above gives you a permission denied error, execute the same command with sudo, e.g. 'sudo !!'</span>
+<span class="c1"># in order to fix permissions run: sudo chmod -R u=rwX,go=rX /usr/local/bin</span>
+</code></pre>
+</div>
+
+<h2 id="windows">Windows</h2>
+<p>The <a href="https://www.microsoft.com/en-us/windows">Windows</a> distribution of <code>ilo</code> is a native executable and does not require any additional software to be installed.</p>
+
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># PowerShell</span>
+$ New-Item -Path $env:USERPROFILE -Name "bin" -ItemType "directory" <span class="c1"># create directory if it does not exit</span>
+$ control sysdm.cpl <span class="c1"># manually add '$env:USERPROFILE\bin' to the PATH of your user account</span>
+$ echo $env:PATH <span class="c1"># ensure that the 'bin' directory is in your PATH</span>
+$ Set-Location -Path C:\path\to\ilo\installation\folder
+$ Invoke-RestMethod -Uri https://github.com/metio/ilo/releases/download/2020.10.12/ilo-2020.10.12-windows.zip -OutFile "ilo.zip"
+$ Expand-Archive -Path "ilo.zip" -DestinationPath "."
+$ Copy-Item -Path "ilo-2020.10.12\ilo.exe" -Destination "$env:USERPROFILE\bin\ilo.exe"
+</code></pre>
+</div>
+
+<h2 id="other">Other</h2>
+<p>For all other platforms that support at least <a href="https://www.oracle.com/javadownload">Java 11</a>, run something like this:</p>
+
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ cd /path/to/ilo/installation/folder
+$ curl --location https://github.com/metio/ilo/releases/download/2020.10.12/ilo-2020.10.12-java11.zip --output ilo.zip
+$ unzip ilo.zip
+$ chmod +x ilo-2020.10.12/ilo
+<span class="c1"># move 'ilo' start script to your preferred location</span>
+</code></pre>
+</div>
+
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/install" term="install" label="install"/></entry></feed>
