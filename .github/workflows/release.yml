@@ -18,7 +18,7 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
         with:
           fetch-depth: 0
       - id: commits
@@ -90,7 +90,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
       - id: graal
         name: GraalVM Setup
         if: needs.prepare.outputs.commit_count > 0
@@ -190,7 +190,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
       - id: graal
         name: GraalVM Setup
         if: needs.prepare.outputs.commit_count > 0
@@ -259,7 +259,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
       - id: graal-download
         name: GraalVM Download
         if: needs.prepare.outputs.commit_count > 0
@@ -342,7 +342,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
       - id: version-update
         name: Update Release Version
         if: needs.prepare.outputs.commit_count > 0
