@@ -21,7 +21,7 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v2
       - id: graal
         name: GraalVM Setup
         uses: graalvm/setup-graalvm@v1
@@ -32,7 +32,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: cache
         name: Cache Maven Repository
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v2
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}

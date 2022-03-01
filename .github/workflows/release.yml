@@ -18,7 +18,7 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - id: commits
@@ -90,7 +90,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v2
       - id: graal
         name: GraalVM Setup
         if: needs.prepare.outputs.commit_count > 0
@@ -102,7 +102,7 @@ jobs:
       - id: cache
         name: Cache Maven Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v2
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -190,7 +190,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v2
       - id: graal
         name: GraalVM Setup
         if: needs.prepare.outputs.commit_count > 0
@@ -204,7 +204,7 @@ jobs:
       - id: cache
         name: Cache Maven Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v2
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -259,7 +259,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v2
       - id: graal-download
         name: GraalVM Download
         if: needs.prepare.outputs.commit_count > 0
@@ -275,7 +275,7 @@ jobs:
       - id: cache
         name: Cache Maven Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v2
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -342,7 +342,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v2
       - id: version-update
         name: Update Release Version
         if: needs.prepare.outputs.commit_count > 0
