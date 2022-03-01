@@ -17,7 +17,7 @@
         <div class="subtitle">
             Talks about:
             {{ $sort := sort . }}
-            {{ $links := apply $sort "partial" "post-tag-link" "." }}
+            {{ $links := apply $sort "partial" "body/post-tag-link" "." }}
             {{ $clean := apply $links "chomp" "." }}
             {{ delimit $clean ", " ", and " }}
         </div>
