@@ -22,7 +22,7 @@ In order to re-use already downloaded dependencies inside the container, specify
 ```shell script
 # Gradle project that mounts local .gradle folder
 $ ilo shell \
-    --volume $HOME/.cargo:/root/.cargo:Z \
+    --volume $HOME/.cargo:/root/.cargo:z \
     rust:latest
 ```
 
@@ -35,7 +35,7 @@ In order to re-use already downloaded dependencies inside the container, specify
 ```shell script
 # Gradle project that mounts local .gradle folder
 $ ilo shell \
-    --volume $HOME/.gradle:/home/gradle/.gradle:Z \
+    --volume $HOME/.gradle:/home/gradle/.gradle:z \
     gradle:latest
 ```
 
@@ -48,6 +48,6 @@ In order to re-use already downloaded dependencies inside the container, specify
 ```shell script
 # Maven project that mounts local m2 repo
 $ ilo shell \
-    --volume $HOME/.m2:/root/.m2:Z \
+    --volume $HOME/.m2:/root/.m2:z \
     maven:latest
 ```

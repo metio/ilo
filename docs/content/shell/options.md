@@ -269,7 +269,7 @@ The `--volume` option can be used to mount additional volumes into your containe
 
 ```shell script
 # mount extra volume
-$ ilo shell --volume $HOME/.m2/repository:/root/.m2/repository:Z
+$ ilo shell --volume $HOME/.m2/repository:/root/.m2/repository:z
 
 # do not mount extra volume
 $ ilo shell

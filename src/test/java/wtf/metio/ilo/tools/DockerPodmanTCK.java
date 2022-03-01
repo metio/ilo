@@ -103,9 +103,9 @@ abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("pass-through runtime options")
   void runtimeOptions() {
     final var options = new ShellOptions();
-    options.commands = List.of("--volume=/abc/123:/abc:Z", "example:test", "/bin/bash", "-c", "whoami");
+    options.commands = List.of("--volume=/abc/123:/abc:z", "example:test", "/bin/bash", "-c", "whoami");
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --volume=/abc/123:/abc:Z example:test /bin/bash -c whoami", name()), String.join(" ", arguments));
+    assertEquals(String.format("%s run --rm --volume=/abc/123:/abc:z example:test /bin/bash -c whoami", name()), String.join(" ", arguments));
   }
 
   @Test

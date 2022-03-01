@@ -51,7 +51,7 @@ abstract class DockerPodman implements ShellCLI {
   public final List<String> runArguments(final ShellOptions options) {
     final var currentDir = System.getProperty("user.dir");
     final var projectDir = maybe(options.mountProjectDir,
-      "--volume", currentDir + ":" + currentDir + ":Z",
+      "--volume", currentDir + ":" + currentDir + ":z",
       "--workdir", currentDir);
     final var user = maybe(Strings.isNotBlank(options.runAs),
       "--user", OSSupport.expand(options.runAs));

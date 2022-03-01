@@ -98,7 +98,7 @@ class ShellTest extends TestMethodSources {
       assertCommandLine(
         List.of(),
         List.of(),
-        List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:Z", "--workdir", "/some/folder", "--interactive", "--tty", options.image),
+        List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:z", "--workdir", "/some/folder", "--interactive", "--tty", options.image),
         List.of());
     });
   }
