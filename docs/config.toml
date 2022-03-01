@@ -6,7 +6,7 @@ title = "ilo"
 pygmentsUseClasses=true
 sectionPagesMenu = "main"
 enableRobotsTXT = true
-DefaultContentLanguage = "en"
+defaultContentLanguage = "en"
 enableInlineShortcodes = true
 
 [outputs]
