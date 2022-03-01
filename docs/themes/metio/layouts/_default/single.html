@@ -16,7 +16,10 @@
     {{ with .Params.tags }}
         <div class="subtitle">
             Talks about:
-            {{ delimit (apply (apply (sort .) "partial" "body/post-tag-link" ".") "chomp" ".") ", " ", and " }}
+            {{ $sort := sort . }}
+            {{ $links := apply $sort "partial" "post-tag-link" "." }}
+            {{ $clean := apply $links "chomp" "." }}
+            {{ delimit $clean ", " ", and " }}
         </div>
     {{ end }}
     <div id="post-content">
