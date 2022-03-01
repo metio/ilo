@@ -1,7 +1,7 @@
 name: Update Parent
 on:
   schedule:
-    - cron:  "0 1 2 * *"
+    - cron:  0 1 2 * *
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,7 +11,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 11
-          distribution: 'adopt'
+          distribution: adopt
       - uses: actions/cache@v2.1.7
         with:
           path: ~/.m2/repository

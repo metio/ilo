@@ -5,12 +5,12 @@ on:
   push:
     branches: [ main ]
     paths:
-      - ".github/workflows/*"
-      - "src/**"
-      - "pom.xml"
+      - .github/workflows/*
+      - src/**
+      - pom.xml
 env:
-  JAVA: "java11"
-  GRAAL: "21.1.0"
+  JAVA: java11
+  GRAAL: 22.0.0.2
 jobs:
   linux:
     name: Linux packages

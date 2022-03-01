@@ -1,10 +1,10 @@
 name: Automated Release
 on:
   schedule:
-    - cron:  "45 3 * * MON"
+    - cron:  45 3 * * MON
 env:
-  JAVA: "java11"
-  GRAAL: "21.1.0"
+  JAVA: java11
+  GRAAL: 22.0.0.2
 jobs:
   prepare:
     name: Prepare Release

@@ -1,12 +1,12 @@
 name: Publish Website
 on:
   schedule:
-    - cron:  "45 4 * * MON"
+    - cron:  45 4 * * MON
   push:
     branches:
       - main
     paths:
-      - "docs/**"
+      - docs/**
 jobs:
   build:
     runs-on: ubuntu-latest
