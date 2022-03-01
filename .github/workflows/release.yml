@@ -3,8 +3,8 @@ on:
   schedule:
     - cron:  45 3 * * MON
 env:
-  JAVA: java11
-  GRAAL: 22.0.0.2
+  JAVA: 11
+  GRAAL: 21.2.0
 jobs:
   prepare:
     name: Prepare Release
@@ -93,12 +93,12 @@ jobs:
         uses: actions/checkout@v2
       - id: graal
         name: GraalVM Setup
-        if: needs.prepare.outputs.commit_count > 0
-        uses: rinx/setup-graalvm-ce@v0.0.5
+        uses: graalvm/setup-graalvm@v1
         with:
-          graalvm-version: ${{ env.GRAAL }}
+          version: ${{ env.GRAAL }}
           java-version: ${{ env.JAVA }}
-          native-image: "true"
+          components: native-image
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: cache
         name: Cache Maven Repository
         if: needs.prepare.outputs.commit_count > 0
@@ -193,14 +193,12 @@ jobs:
         uses: actions/checkout@v2
       - id: graal
         name: GraalVM Setup
-        if: needs.prepare.outputs.commit_count > 0
-        uses: DeLaGuardo/setup-graalvm@master
+        uses: graalvm/setup-graalvm@v1
         with:
-          graalvm-version: "${{ env.GRAAL }}.${{ env.JAVA }}"
-      - id: native-image
-        name: Install native-image
-        if: needs.prepare.outputs.commit_count > 0
-        run: gu install native-image
+          version: ${{ env.GRAAL }}
+          java-version: ${{ env.JAVA }}
+          components: native-image
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: cache
         name: Cache Maven Repository
         if: needs.prepare.outputs.commit_count > 0
@@ -260,18 +258,14 @@ jobs:
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
         uses: actions/checkout@v2
-      - id: graal-download
-        name: GraalVM Download
-        if: needs.prepare.outputs.commit_count > 0
-        run: Invoke-RestMethod -Uri https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${{ env.GRAAL }}/graalvm-ce-${{ env.JAVA }}-windows-amd64-${{ env.GRAAL }}.zip -OutFile 'graal.zip'
-      - id: graal-expand
-        name: Install GraalVM
-        if: needs.prepare.outputs.commit_count > 0
-        run: Expand-Archive -path 'graal.zip' -destinationpath '.'
-      - id: native-image
-        name: Install native-image
-        if: needs.prepare.outputs.commit_count > 0
-        run: graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}\bin\gu.cmd install native-image
+      - id: graal
+        name: GraalVM Setup
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: ${{ env.GRAAL }}
+          java-version: ${{ env.JAVA }}
+          components: native-image
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: cache
         name: Cache Maven Repository
         if: needs.prepare.outputs.commit_count > 0
@@ -295,12 +289,7 @@ jobs:
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
-          mvn --batch-mode verify -Drevision=${{ needs.prepare.outputs.release_version }} -DskipGraal=false -Dpit.skip=true -Dpgp.secretkey=keyfile:signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
-        env:
-          JAVA_HOME: ./graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}
+        run: mvn --batch-mode verify -Drevision=${{ needs.prepare.outputs.release_version }} -DskipGraal=false -Dpit.skip=true -Dpgp.secretkey=keyfile:signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
       - id: upload-windows-artifact
         name: Upload Windows Artifact
         if: needs.prepare.outputs.commit_count > 0
@@ -353,7 +342,7 @@ jobs:
         uses: EndBug/add-and-commit@v8.0.2
         with:
           author_name: Sebastian Hoß
-          author_email: sebhoss@pm.me
+          author_email: seb@hoß.de
           message: Update ilo.spec for latest release
           add: build/copr/ilo.spec
         env:

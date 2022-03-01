@@ -26,9 +26,9 @@ jobs:
         name: GraalVM Setup
         uses: graalvm/setup-graalvm@v1
         with:
-          version: "21.2.0"
-          java-version: "11"
-          components: "native-image"
+          version: 21.2.0
+          java-version: 11
+          components: native-image
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: cache
         name: Cache Maven Repository
