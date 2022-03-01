@@ -1,0 +1,4 @@
+shell
+--volume $HOME/.m2:/root/.m2:z
+maven:3.8.3-jdk-11
+/bin/bash
