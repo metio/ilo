@@ -147,7 +147,7 @@
                         <path>
                             <groupId>info.picocli</groupId>
                             <artifactId>picocli-codegen</artifactId>
-                            <version>4.6.2</version>
+                            <version>4.6.3</version>
                         </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
@@ -309,7 +309,7 @@
                     <dependency>
                         <groupId>info.picocli</groupId>
                         <artifactId>picocli-codegen</artifactId>
-                        <version>4.6.1</version>
+                        <version>4.6.3</version>
                         <type>jar</type>
                     </dependency>
                 </dependencies>
