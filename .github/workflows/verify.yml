@@ -8,24 +8,28 @@ on:
       - .github/workflows/*
       - src/**
       - pom.xml
-env:
-  JAVA: java11
-  GRAAL: 22.0.0.2
 jobs:
-  linux:
-    name: Linux packages
-    runs-on: ubuntu-latest
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
     steps:
       - id: checkout
         name: Clone Git Repository
         uses: actions/checkout@v2.4.0
       - id: graal
         name: GraalVM Setup
-        uses: rinx/setup-graalvm-ce@v0.0.5
+        uses: graalvm/setup-graalvm@v1
         with:
-          graalvm-version: ${{ env.GRAAL }}
-          java-version: ${{ env.JAVA }}
-          native-image: "true"
+          version: "22.0.0.2"
+          java-version: "11"
+          components: "native-image"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: cache
         name: Cache Maven Repository
         uses: actions/cache@v2.1.7
@@ -37,81 +41,31 @@ jobs:
       - id: verify
         name: Verify Project
         run: mvn --batch-mode verify -Dskip.graal=false
-      - name: Upload Java 11 Artifact
+      - id: upload-java
+        name: Upload Java 11 Artifact
         uses: actions/upload-artifact@v2
         with:
           name: java11
           path: ./target/ilo-*-java11*
-      - name: Upload Linux Artifact
+        if: runner.os == 'Linux'
+      - id: upload-linux
+        name: Upload Linux Artifact
         uses: actions/upload-artifact@v2
         with:
           name: linux
           path: ./target/ilo-*-linux*
-  mac:
-    name: MacOS packages
-    runs-on: macos-latest
-    steps:
-      - id: checkout
-        name: Clone Git Repository
-        uses: actions/checkout@v2.4.0
-      - id: graal
-        name: GraalVM Setup
-        uses: DeLaGuardo/setup-graalvm@master
-        with:
-          graalvm-version: "${{ env.GRAAL }}.${{ env.JAVA }}"
-      - id: native-image
-        name: Install native-image
-        run: gu install native-image
-      - id: cache
-        name: Cache Maven Repository
-        uses: actions/cache@v2.1.7
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - id: verify
-        name: Verify Project
-        run: mvn --batch-mode verify -Dskip.graal=false
-      - name: Upload Mac Artifact
+        if: runner.os == 'Linux'
+      - id: upload-mac
+        name: Upload Mac Artifact
         uses: actions/upload-artifact@v2
         with:
           name: mac
           path: ./target/ilo-*-mac*
-  windows:
-    name: Windows packages
-    runs-on: windows-latest
-    steps:
-      - id: checkout
-        name: Clone Git Repository
-        uses: actions/checkout@v2.4.0
-      - id: graal-download
-        name: GraalVM Download
-        run: Invoke-RestMethod -Uri https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${{ env.GRAAL }}/graalvm-ce-${{ env.JAVA }}-windows-amd64-${{ env.GRAAL }}.zip -OutFile 'graal.zip'
-      - id: graal-expand
-        name: Install GraalVM
-        run: Expand-Archive -Path 'graal.zip' -DestinationPath '.'
-      - id: native-image
-        name: Install native-image
-        run: graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}\bin\gu.cmd install native-image
-      - id: cache
-        name: Cache Maven Repository
-        uses: actions/cache@v2.1.7
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - id: verify
-        name: Verify Project
-        shell: cmd
-        run: |
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64
-          mvn --batch-mode verify -Dskip.graal=false
-        env:
-          JAVA_HOME: ./graalvm-ce-${{ env.JAVA }}-${{ env.GRAAL }}
-      - name: Upload Windows Artifact
+        if: runner.os == 'macOS'
+      - id: upload-windows
+        name: Upload Windows Artifact
         uses: actions/upload-artifact@v2
         with:
           name: windows
           path: ./target/ilo-*-windows*
+        if: runner.os == 'Windows'
