@@ -67,7 +67,7 @@
     <properties>
         <revision>0.0.0-SNAPSHOT</revision>
         <version.jdk>11</version.jdk>
-        <skip.graal>true</skip.graal>
+        <skipGraal>true</skipGraal>
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
         <project.build.outputTimestamp>2019</project.build.outputTimestamp>
 
@@ -218,7 +218,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skip>${skip.graal}</skip>
+                    <skip>${skipGraal}</skip>
                     <imageName>ilo</imageName>
                     <buildArgs>
                         --no-fallback
@@ -379,7 +379,7 @@
             <id>native-linux</id>
             <activation>
                 <property>
-                    <name>skip.graal</name>
+                    <name>skipGraal</name>
                     <value>false</value>
                 </property>
                 <os>
@@ -413,7 +413,7 @@
             <id>native-mac</id>
             <activation>
                 <property>
-                    <name>skip.graal</name>
+                    <name>skipGraal</name>
                     <value>false</value>
                 </property>
                 <os>
@@ -447,7 +447,7 @@
             <id>native-windows</id>
             <activation>
                 <property>
-                    <name>skip.graal</name>
+                    <name>skipGraal</name>
                     <value>false</value>
                 </property>
                 <os>

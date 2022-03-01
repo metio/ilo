@@ -40,7 +40,7 @@ jobs:
             ${{ runner.os }}-maven-
       - id: verify
         name: Verify Project
-        run: mvn --batch-mode verify -Dskip.graal=false
+        run: mvn --batch-mode verify -DskipGraal=false
       - id: upload-java
         name: Upload Java 11 Artifact
         uses: actions/upload-artifact@v2

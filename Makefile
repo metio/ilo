@@ -39,7 +39,7 @@ build: ##@hacking Build everything
 
 .PHONY: native-image
 native-image: ##@hacking Create a native image using GraalVM
-	mvn verify -Dskip.graal=false
+	mvn verify -DskipGraal=false
 
 .PHONY: clean
 clean: ##@hacking Clean build artifacts
