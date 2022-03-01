@@ -52,7 +52,7 @@ jobs:
         id: check_changelog
         uses: andstor/file-existence-action@v1.1.0
         with:
-          files: "CHANGELOG.md"
+          files: CHANGELOG.md
       - name: Create Empty Changelog
         id: empty_changelog
         uses: 1arp/create-a-file-action@0.2
@@ -378,7 +378,7 @@ jobs:
           server_port: ${{ secrets.MAIL_PORT }}
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "release ${{ needs.prepare.outputs.release_version }}"
+          subject: release ${{ needs.prepare.outputs.release_version }}
           body: See https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details.
           to: ilo@metio.groups.io
           from: ${{ secrets.MAIL_SENDER }}
@@ -389,5 +389,5 @@ jobs:
         with:
           room_id: ${{ secrets.MATRIX_ROOM_ID }}
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
-          message: "release ${{ needs.prepare.outputs.release_version }} published - see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details"
-          server: "matrix.org"
+          message: release ${{ needs.prepare.outputs.release_version }} published - see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          server: matrix.org

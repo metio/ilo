@@ -7,6 +7,7 @@ pygmentsUseClasses=true
 sectionPagesMenu = "main"
 enableRobotsTXT = true
 DefaultContentLanguage = "en"
+enableInlineShortcodes = true
 
 [outputs]
   home = [ "HTML", "RSS", "ATOM", "HUMANS", "FOAF"]
@@ -22,3 +23,6 @@ DefaultContentLanguage = "en"
   work = "ilo.projects.metio.wtf"
   calendar = "https://metio.groups.io/g/ilo/calendar"
   description = "manage reproducible build environments"
+
+[security.funcs]
+  getenv = ['^HUGO_', '^ILO_']
