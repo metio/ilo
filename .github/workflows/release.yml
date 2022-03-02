@@ -18,7 +18,7 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - id: commits
@@ -90,7 +90,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - id: graal
         name: GraalVM Setup
         uses: graalvm/setup-graalvm@v1
@@ -190,7 +190,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - id: graal
         name: GraalVM Setup
         uses: graalvm/setup-graalvm@v1
@@ -257,7 +257,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - id: graal
         name: GraalVM Setup
         uses: graalvm/setup-graalvm@v1
@@ -331,7 +331,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - id: version-update
         name: Update Release Version
         if: needs.prepare.outputs.commit_count > 0
