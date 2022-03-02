@@ -17,7 +17,7 @@ import java.util.List;
 import static java.util.stream.Stream.of;
 import static wtf.metio.ilo.utils.Streams.*;
 
-abstract class DockerPodman implements ShellCLI {
+abstract class DockerLike implements ShellCLI {
 
   @Override
   public final List<String> pullArguments(final ShellOptions options) {

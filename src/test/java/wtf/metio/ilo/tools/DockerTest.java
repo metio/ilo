@@ -12,7 +12,7 @@ import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
 
 @DisplayName("Docker")
-class DockerTest extends DockerPodmanTCK {
+class DockerTest extends DockerLikeTCK {
 
   @Override
   public ShellCLI tool() {

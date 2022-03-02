@@ -7,10 +7,7 @@
 
 package wtf.metio.ilo.shell;
 
-import wtf.metio.ilo.tools.Docker;
-import wtf.metio.ilo.tools.Ignite;
-import wtf.metio.ilo.tools.LXD;
-import wtf.metio.ilo.tools.Podman;
+import wtf.metio.ilo.tools.*;
 
 import java.util.List;
 
@@ -19,6 +16,7 @@ public final class ShellRuntimes {
   public static List<ShellCLI> allRuntimes() {
     return List.of(
       new Podman(),
+      new Nerdctl(),
       new Docker(),
       new LXD(),
       new Ignite());

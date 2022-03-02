@@ -14,6 +14,7 @@ public enum ShellRuntime implements Runtime {
   DOCKER("docker", "d"),
   IGNITE("ignite", "i"),
   LXD("lxd", "lxc", "l"),
+  NERDCTL("nerdctl", "n"),
   PODMAN("podman", "p");
 
   private final String[] aliases;

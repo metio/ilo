@@ -11,12 +11,12 @@ import org.junit.jupiter.api.DisplayName;
 import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
 
-@DisplayName("Podman")
-class PodmanTest extends DockerLikeTCK {
+@DisplayName("Nerdctl")
+class NerdctlTest extends DockerLikeTCK {
 
   @Override
   public ShellCLI tool() {
-    return new Podman();
+    return new Nerdctl();
   }
 
   @Override
@@ -26,7 +26,7 @@ class PodmanTest extends DockerLikeTCK {
 
   @Override
   protected String name() {
-    return "podman";
+    return "nerdctl";
   }
 
 }

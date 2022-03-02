@@ -24,7 +24,7 @@ public abstract class TestMethodSources {
   }
 
   private static Stream<String> dockerLikeRuntimes() {
-    return Stream.of(ShellRuntime.DOCKER, ShellRuntime.PODMAN)
+    return Stream.of(ShellRuntime.DOCKER, ShellRuntime.PODMAN, ShellRuntime.NERDCTL)
       .flatMap(runtime -> Arrays.stream(runtime.aliases()));
   }
 

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.tools.Docker;
 import wtf.metio.ilo.tools.LXD;
+import wtf.metio.ilo.tools.Nerdctl;
 import wtf.metio.ilo.tools.Podman;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,7 +31,7 @@ class ShellExecutorTest {
   @Test
   @DisplayName("returns non-null values for auto-selection")
   void shouldReturnNonNullValueForAutoSelection() {
-    assumeTrue(new Podman().exists() || new Docker().exists() || new LXD().exists());
+    assumeTrue(new Podman().exists() || new Docker().exists() || new LXD().exists() || new Nerdctl().exists());
     assertNotNull(shellExecutor.selectRuntime(null));
   }
 
@@ -46,6 +47,13 @@ class ShellExecutorTest {
   void shouldReturnNonNullValueForDocker() {
     assumeTrue(new Docker().exists());
     assertNotNull(shellExecutor.selectRuntime(ShellRuntime.DOCKER));
+  }
+
+  @Test
+  @DisplayName("returns non-null values for forced nerdctl usage")
+  void shouldReturnNonNullValueForNerdctl() {
+    assumeTrue(new Nerdctl().exists());
+    assertNotNull(shellExecutor.selectRuntime(ShellRuntime.NERDCTL));
   }
 
   @Test

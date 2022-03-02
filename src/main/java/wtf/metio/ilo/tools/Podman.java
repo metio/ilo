@@ -7,7 +7,7 @@
 
 package wtf.metio.ilo.tools;
 
-public final class Podman extends DockerPodman {
+public final class Podman extends DockerLike {
 
   @Override
   public String name() {

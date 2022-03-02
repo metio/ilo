@@ -7,26 +7,11 @@
 
 package wtf.metio.ilo.tools;
 
-import org.junit.jupiter.api.DisplayName;
-import wtf.metio.ilo.shell.ShellCLI;
-import wtf.metio.ilo.shell.ShellOptions;
-
-@DisplayName("Podman")
-class PodmanTest extends DockerLikeTCK {
+public final class Nerdctl extends DockerLike {
 
   @Override
-  public ShellCLI tool() {
-    return new Podman();
-  }
-
-  @Override
-  protected ShellOptions options() {
-    return new ShellOptions();
-  }
-
-  @Override
-  protected String name() {
-    return "podman";
+  public String name() {
+    return "nerdctl";
   }
 
 }

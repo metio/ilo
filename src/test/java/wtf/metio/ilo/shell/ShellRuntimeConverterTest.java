@@ -26,7 +26,11 @@ class ShellRuntimeConverterTest {
     "DOCKER",
     "PODMAN",
     "dOCkeR",
-    "podMAN"
+    "podMAN",
+    "NERDCTL",
+    "nerdctl",
+    "nerdCTL",
+    "n"
   })
   void shouldConvertStringToComposeRuntime(final String input) {
     // given

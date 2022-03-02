@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-abstract class DockerPodmanTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
+abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
 
   @Test
   @DisplayName("generate pull arguments")

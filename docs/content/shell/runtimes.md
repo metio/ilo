@@ -12,6 +12,7 @@ tags:
 - docker
 - podman
 - lxd
+- nerdctl
 ---
 
 `ilo shell` by default searches your local system for supported runtimes. It prefers `podman` over `docker` over `lxd` at the moment. In order to force the usage of a specific runtime, use the `--runtime` flag.
@@ -40,4 +41,17 @@ $ ilo shell --runtime podman
 $ ilo shell --runtime p
 ```
 
-**Important**: In case your images uses `root` as its user, and you cannot run [rootless podman](https://github.com/containers/podman/blob/master/rootless.md), use the [`--run-as`](../options) option to override the user in the image. Take a look at this [article](https://www.redhat.com/sysadmin/behind-scenes-podman) for an in-depth example of how rootless work with podman.
+**Important**: In case your images uses `root` as its user, and you cannot run [rootless podman](https://github.com/containers/podman/blob/main/rootless.md), use the [`--run-as`](../options) option to override the user in the image. Take a look at this [article](https://www.redhat.com/sysadmin/behind-scenes-podman) for an in-depth example of how rootless work with podman.
+
+## nerdctl
+
+Force `ilo` to use [nerdctl](https://github.com/containerd/nerdctl) like this:
+
+```shell script
+$ ilo shell --runtime nerdctl
+
+# alias
+$ ilo shell --runtime n
+```
+
+**Important**: In case your images uses `root` as its user, and you cannot run [rootless nerdctl](https://github.com/containerd/nerdctl/blob/master/docs/rootless.md), use the [`--run-as`](../options) option to override the user in the image.
