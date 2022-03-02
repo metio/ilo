@@ -16,7 +16,7 @@ import java.util.List;
 import static java.util.stream.Stream.of;
 import static wtf.metio.ilo.utils.Streams.*;
 
-abstract class DockerComposePodmanCompose implements ComposeCLI {
+abstract class DockerComposeLike implements ComposeCLI {
 
   @Override
   public final List<String> pullArguments(final ComposeOptions options) {

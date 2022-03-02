@@ -7,7 +7,7 @@
 
 package wtf.metio.ilo.tools;
 
-public final class DockerCompose extends DockerComposePodmanCompose {
+public final class DockerCompose extends DockerComposeLike {
 
   @Override
   public String name() {
