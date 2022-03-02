@@ -4,5 +4,5 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    assigness:
+    assignees:
       - sebhoss
