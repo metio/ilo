@@ -21,7 +21,7 @@ abstract class DockerLike implements ShellCLI {
 
   @Override
   public final List<String> pullArguments(final ShellOptions options) {
-    if (options.pull && Strings.isBlank(options.dockerfile)) {
+    if (options.pull && Strings.isBlank(options.containerfile)) {
       return flatten(
         of(name()),
         fromList(OSSupport.expand(options.runtimeOptions)),
@@ -34,11 +34,11 @@ abstract class DockerLike implements ShellCLI {
 
   @Override
   public final List<String> buildArguments(final ShellOptions options) {
-    if (Strings.isNotBlank(options.dockerfile)) {
+    if (Strings.isNotBlank(options.containerfile)) {
       return flatten(
         of(name()),
         fromList(OSSupport.expand(options.runtimeOptions)),
-        of("build", "--file", options.dockerfile),
+        of("build", "--file", options.containerfile),
         fromList(OSSupport.expand(options.runtimeBuildOptions)),
         maybe(options.pull, "--pull"),
         of("--tag", OSSupport.expand(options.image)),

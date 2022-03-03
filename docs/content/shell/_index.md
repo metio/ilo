@@ -20,7 +20,7 @@ The `ilo shell` command can be used to run a single container either interactive
 
 # run command non-interactive
 [you@hostname project-dir]$ ilo shell --no-interactive openjdk:11 mvn verify
-[you@hostname project-dir]$ 
+[you@hostname project-dir]$
 ```
 
 `ilo shell` will delegate most of its work to one of the supported [runtimes](./runtimes). In order to override the default command of your image, specify the command you want to execute just after the image, like this:
@@ -51,10 +51,10 @@ In order to pull an image first before opening a new shell, use the `--pull` fla
 [root@container project-dir]#
 ```
 
-In case you want to use a local `Dockerfile`, use the `--dockerfile` flag like this:
+In case you want to use a local `Containerfile`/`Dockerfile`, use the `--containerfile`/`--dockerfile` flag like this:
 
 ```shell script
-[you@hostname project-dir]$ ilo shell --dockerfile your.dockerfile your.image:latest
+[you@hostname project-dir]$ ilo shell --containerfile your.containerfile your.image:latest
 [root@container project-dir]#
 ```
 

@@ -50,10 +50,10 @@ public final class ShellOptions implements Options {
   public boolean mountProjectDir;
 
   @CommandLine.Option(
-    names = {"--dockerfile"},
-    description = "The Dockerfile to use."
+    names = {"--containerfile", "--dockerfile"},
+    description = "The Containerfile to use."
   )
-  public String dockerfile;
+  public String containerfile;
 
   @CommandLine.Option(
     names = {"--context"},
@@ -124,7 +124,7 @@ public final class ShellOptions implements Options {
 
   @CommandLine.Parameters(
     index = "0",
-    description = "The OCI image to use. In case --dockerfile is given as well, this defines the name of the resulting image.",
+    description = "The OCI image to use. In case --containerfile or --dockerfile is given as well, this defines the name of the resulting image.",
     defaultValue = "fedora:latest"
   )
   public String image;

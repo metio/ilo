@@ -34,7 +34,7 @@ class ShellOptionsTest {
     "debug",
     "interactive",
     "pull",
-    "dockerfile",
+    "containerfile",
     "removeImage",
     "runAs",
     "runtimeOptions",

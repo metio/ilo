@@ -34,7 +34,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   void buildArguments() {
     final var options = new ShellOptions();
     options.image = "example:test";
-    options.dockerfile = "Dockerfile";
+    options.containerfile = "Dockerfile";
     final var arguments = tool().buildArguments(options);
     assertEquals(String.format("%s build --file Dockerfile --tag example:test", name()), String.join(" ", arguments));
   }
@@ -45,7 +45,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
     final var options = new ShellOptions();
     options.pull = true;
     options.image = "example:test";
-    options.dockerfile = "Dockerfile";
+    options.containerfile = "Dockerfile";
     final var arguments = tool().buildArguments(options);
     assertEquals(String.format("%s build --file Dockerfile --pull --tag example:test", name()), String.join(" ", arguments));
   }
@@ -94,7 +94,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
     final var options = new ShellOptions();
     options.context = ".";
     options.image = "example:test";
-    options.dockerfile = "Dockerfile";
+    options.containerfile = "Dockerfile";
     final var arguments = tool().buildArguments(options);
     assertEquals(String.format("%s build --file Dockerfile --tag example:test .", name()), String.join(" ", arguments));
   }

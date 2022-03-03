@@ -58,7 +58,7 @@ class DevcontainerOptionsMapperTest {
       final var shellOptions = shellOptions(options, json);
 
       // then
-      assertEquals(json.dockerFile, shellOptions.dockerfile);
+      assertEquals(json.dockerFile, shellOptions.containerfile);
     }
 
     @Test
@@ -89,7 +89,7 @@ class DevcontainerOptionsMapperTest {
       final var shellOptions = shellOptions(options, json);
 
       // then
-      assertEquals(json.build.dockerFile, shellOptions.dockerfile);
+      assertEquals(json.build.dockerFile, shellOptions.containerfile);
     }
 
     @Test
@@ -163,7 +163,7 @@ class DevcontainerOptionsMapperTest {
       final var shellOptions = shellOptions(options, json);
 
       // then
-      assertEquals("", shellOptions.dockerfile);
+      assertEquals("", shellOptions.containerfile);
     }
 
   }

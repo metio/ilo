@@ -31,7 +31,7 @@ final class DevcontainerOptionsMapper {
       .map(build -> build.context)
       .or(() -> Optional.ofNullable(devcontainer.context))
       .orElse(".");
-    opts.dockerfile = Optional.ofNullable(devcontainer.build)
+    opts.containerfile = Optional.ofNullable(devcontainer.build)
       .map(build -> build.dockerFile)
       .or(() -> Optional.ofNullable(devcontainer.dockerFile))
       .orElse("");

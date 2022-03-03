@@ -36,7 +36,7 @@ Note that you can use show help infos for each command as well, e.g. like this:
 
 ```shell script
 $ ilo shell --help
-Usage: ilo shell [-hV] [--debug] [--[no-]interactive] [--[no-]mount-project-dir] [--pull] [--remove-image] [--dockerfile=<dockerfile>] [--runtime=<runtime>] [--env=<variables>]... [--publish=<ports>]...
+Usage: ilo shell [-hV] [--debug] [--[no-]interactive] [--[no-]mount-project-dir] [--pull] [--remove-image] [--containerfile=<dockerfile>] [--runtime=<runtime>] [--env=<variables>]... [--publish=<ports>]...
                  [--runtime-build-option=<runtimeBuildOptions>]... [--runtime-cleanup-option=<runtimeCleanupOptions>]... [--runtime-option=<runtimeOptions>]... [--runtime-pull-option=<runtimePullOptions>]...
                  [--runtime-run-option=<runtimeRunOptions>]... [--volume=<volumes>]... <image> [<commands>...]
 
@@ -46,8 +46,8 @@ Opens an (interactive) shell for your build environment
                               Default: fedora:latest
       [<commands>...]
       --debug               Show additional debug information.
-      --dockerfile=<dockerfile>
-                            The Dockerfile to use.
+      --containerfile=<containerfile>
+                            The Containerfile to use.
       --env=<variables>     Specify a environment variable for the container.
   -h, --help                Show this help message and exit.
       --[no-]interactive    Open interactive shell or just run a single command.

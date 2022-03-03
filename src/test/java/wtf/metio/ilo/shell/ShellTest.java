@@ -65,10 +65,10 @@ class ShellTest extends TestMethodSources {
   @DisplayName("command line arguments with build")
   void dockerLikeWithBuild(final String runtime) {
     final var tool = useRuntime(runtime);
-    options.dockerfile = "Dockerfile";
+    options.containerfile = "Dockerfile";
     assertCommandLine(
       List.of(),
-      List.of(tool, "build", "--file", options.dockerfile, "--tag", options.image),
+      List.of(tool, "build", "--file", options.containerfile, "--tag", options.image),
       List.of(tool, "run", "--rm", options.image),
       List.of());
   }
@@ -135,11 +135,11 @@ class ShellTest extends TestMethodSources {
   @DisplayName("command line arguments with runtime build option")
   void dockerLikeWithRuntimeBuildOption(final String runtime) {
     final var tool = useRuntime(runtime);
-    options.dockerfile = "Dockerfile";
+    options.containerfile = "Dockerfile";
     options.runtimeBuildOptions = List.of("--squash-all");
     assertCommandLine(
       List.of(),
-      List.of(tool, "build", "--file", options.dockerfile, "--squash-all", "--tag", options.image),
+      List.of(tool, "build", "--file", options.containerfile, "--squash-all", "--tag", options.image),
       List.of(tool, "run", "--rm", options.image),
       List.of());
   }
@@ -193,12 +193,12 @@ class ShellTest extends TestMethodSources {
   void failToBuild(final String runtime) {
     final var tool = useRuntime(runtime);
     executor.exitCodes(0, 1);
-    options.dockerfile = "Dockerfile";
+    options.containerfile = "Dockerfile";
     final var exitCode = shell.call();
     assertAll("command line",
       () -> assertEquals(1, exitCode, "exitCode"),
       () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-      () -> assertIterableEquals(List.of(tool, "build", "--file", options.dockerfile, "--tag", options.image), executor.buildArguments(), "buildArguments"),
+      () -> assertIterableEquals(List.of(tool, "build", "--file", options.containerfile, "--tag", options.image), executor.buildArguments(), "buildArguments"),
       () -> noExecution(executor::runArguments, "runArguments"),
       () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }

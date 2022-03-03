@@ -15,7 +15,7 @@ The `ilo shell` command can be configured with the following command line option
 
 ## `--context`
 
-The `--context` option allows to specify the context when building an image with `--dockerfile`.
+The `--context` option allows to specify the context when building an image with `--containerfile`/`--dockerfile`.
 
 ```shell script
 # specify custom context
@@ -42,19 +42,19 @@ $ ilo shell
 
 By default, `--debug` is not enabled.
 
-## `--dockerfile`
+## `--containerfile`/`--dockerfile`
 
-The `--dockerfile` can be used to specify a local `Dockerfile`. Specifying such a file will cause `ilo` to build your image first, and then open a shell into a container based on that image.
+The `--containerfile`/`--dockerfile` option can be used to specify a local `Containerfile`/`Dockerfile`. Specifying such a file will cause `ilo` to build your image first, and then open a shell into a container based on that image.
 
 ```shell script
-# specify custom Dockerfile
-$ ilo shell --dockerfile some/where/your.dockerfile
+# specify custom Containerfile
+$ ilo shell --containerfile some/where/your.containerfile
 
-# do not specify Dockerfile
+# do not specify Containerfile
 $ ilo shell
 ```
 
-By default, `--dockerfile` is not set to any value.
+By default, `--containerfile`/`--dockerfile` is not set to any value.
 
 ## `--env`
 
@@ -140,7 +140,7 @@ By default, `--pull` is not enabled.
 
 ## `--remove-image`
 
-The `--remove-image` option causes `ilo` to remove the specified image from your local system after you close your shell, or the non-interactive commands finishes. This is especially useful in combination with `--dockerfile`.
+The `--remove-image` option causes `ilo` to remove the specified image from your local system after you close your shell, or the non-interactive commands finishes. This is especially useful in combination with `--containerfile`/`--dockerfile`.
 
 ```shell script
 # remove image after shell was closed
