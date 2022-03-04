@@ -11,7 +11,7 @@ tags:
 - customize
 ---
 
-The `ilo shell` command uses the `fedora:latest` image by default. In most cases `fedora:latest` will not be enough to compile/test/package/run your software. While you can install additional packages inside the container, those changes will be lost once you remove the container. In contrast to [toolbox](https://github.com/containers/toolbox), `ilo` relies on immutable containers.
+The `ilo shell` command uses the `fedora:latest` image by default. In most cases `fedora:latest` will not be enough to compile/test/package/run your software. While you can install additional packages inside the container, those changes will be lost once you remove the container. In contrast to [toolbx](https://containertoolbx.org/), `ilo` relies on immutable containers.
 
 `ilo` allows you to define your build environment either in a [Containerfile/Dockerfile](https://docs.docker.com/engine/reference/builder/) or any other [OCI Image](https://github.com/opencontainers/image-spec/blob/master/spec.md) compliant way.
 
