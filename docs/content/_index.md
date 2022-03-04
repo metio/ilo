@@ -5,9 +5,9 @@ date: 2020-04-13
 
 # ilo
 
-> manage reproducible build environments 
+> manage reproducible build environments
 
-`ilo` is a [toolbox](https://github.com/containers/toolbox) inspired tool to create/manage environments for [reproducible builds](https://reproducible-builds.org/) based on [OCI](https://www.opencontainers.org/) container images.
+`ilo` is a [toolbx](https://containertoolbx.org/) inspired tool to create/manage environments for [reproducible builds](https://reproducible-builds.org/) based on [OCI](https://www.opencontainers.org/) container images.
 
 ## Features
 
