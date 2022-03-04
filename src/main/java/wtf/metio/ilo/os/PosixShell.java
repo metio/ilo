@@ -13,12 +13,11 @@ import java.nio.file.Path;
 import java.util.regex.Pattern;
 
 /**
- * Support for bourne compatible shells.
+ * Support for POSIX compatible shells.
  *
- * @see <a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">Command Substitution</a>
- * @see <a href="https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html">Parameter Expansion</a>
+ * @see <a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html">Shell Command Language</a>
  */
-final class BourneShell extends ParameterExpansion {
+final class PosixShell extends ParameterExpansion {
 
   private static final String NEW_COMMAND_STYLE = String.format("\\$\\((?<%s>[^)]+)\\)", MATCHER_GROUP_NAME);
   private static final String OLD_COMMAND_STYLE = String.format("`(?<%s>[^`]+)`", MATCHER_GROUP_NAME);
@@ -33,7 +32,7 @@ final class BourneShell extends ParameterExpansion {
 
   private final Path shellBinary;
 
-  BourneShell(final Path shellBinary) {
+  PosixShell(final Path shellBinary) {
     this.shellBinary = shellBinary;
   }
 

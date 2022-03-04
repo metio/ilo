@@ -49,7 +49,7 @@ public final class OSSupport {
       .or(() -> Executables.of("zsh"))
       .or(() -> Executables.of("sh"))
       .map(Path::toAbsolutePath)
-      .map(BourneShell::new);
+      .map(PosixShell::new);
   }
 
   static Optional<ParameterExpansion> powerShell() {

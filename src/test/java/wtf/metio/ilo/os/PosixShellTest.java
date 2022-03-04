@@ -19,16 +19,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.os.ParameterExpansion.MATCHER_GROUP_NAME;
 
 @DisplayName("Bourne Shell")
-class BourneShellTest {
+class PosixShellTest {
 
   @Nested
   @DisplayName("regex")
-  class Regex {
+  class RegexTest {
 
     @Test
     @DisplayName("regex for command using new style")
     void regexMatchesCommandWithNewStyle() {
-      final var matcher = BourneShell.NEW_COMMAND_PATTERN.matcher("$(some-command --with-option)");
+      final var matcher = PosixShell.NEW_COMMAND_PATTERN.matcher("$(some-command --with-option)");
       assertAll("new style",
         () -> assertTrue(matcher.find(), "matches"),
         () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "extraction"));
@@ -37,7 +37,7 @@ class BourneShellTest {
     @Test
     @DisplayName("regex for command using old style")
     void regexMatchesCommandWithOldStyle() {
-      final var matcher = BourneShell.OLD_COMMAND_PATTERN.matcher("`some-command --with-option`");
+      final var matcher = PosixShell.OLD_COMMAND_PATTERN.matcher("`some-command --with-option`");
       assertAll("old style",
         () -> assertTrue(matcher.find(), "matches"),
         () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "extraction"));
@@ -46,7 +46,7 @@ class BourneShellTest {
     @Test
     @DisplayName("regex for commands using new style")
     void regexMatchesCommandsWithNewStyle() {
-      final var matcher = BourneShell.NEW_COMMAND_PATTERN.matcher("$(some-command --with-option):$(other --option)");
+      final var matcher = PosixShell.NEW_COMMAND_PATTERN.matcher("$(some-command --with-option):$(other --option)");
       assertAll("new style",
         () -> assertTrue(matcher.find(), "first match"),
         () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
@@ -57,7 +57,7 @@ class BourneShellTest {
     @Test
     @DisplayName("regex for commands using old style")
     void regexMatchesCommandsWithOldStyle() {
-      final var matcher = BourneShell.OLD_COMMAND_PATTERN.matcher("`some-command --with-option`:`other --option`");
+      final var matcher = PosixShell.OLD_COMMAND_PATTERN.matcher("`some-command --with-option`:`other --option`");
       assertAll("old style",
         () -> assertTrue(matcher.find(), "first match"),
         () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
@@ -68,7 +68,7 @@ class BourneShellTest {
     @Test
     @DisplayName("regex for parameter")
     void regexMatchesParameter() {
-      final var matcher = BourneShell.PARAMETER_PATTERN.matcher("$HOME");
+      final var matcher = PosixShell.PARAMETER_PATTERN.matcher("$HOME");
       assertAll("new style",
         () -> assertTrue(matcher.find(), "matches"),
         () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "extraction"));
@@ -77,7 +77,7 @@ class BourneShellTest {
     @Test
     @DisplayName("regex for parameters")
     void regexMatchesParameters() {
-      final var matcher = BourneShell.PARAMETER_PATTERN.matcher("$HOME:$OTHER");
+      final var matcher = PosixShell.PARAMETER_PATTERN.matcher("$HOME:$OTHER");
       assertAll("new style",
         () -> assertTrue(matcher.find(), "first matches"),
         () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
@@ -88,7 +88,7 @@ class BourneShellTest {
     @Test
     @DisplayName("regex for parameter with braces")
     void regexMatchesParameterWithBraces() {
-      final var matcher = BourneShell.PARAMETER_WITH_BRACES_PATTERN.matcher("${HOME}");
+      final var matcher = PosixShell.PARAMETER_WITH_BRACES_PATTERN.matcher("${HOME}");
       assertAll("new style",
         () -> assertTrue(matcher.find(), "matches"),
         () -> assertEquals("${HOME}", matcher.group(MATCHER_GROUP_NAME), "extraction"));
@@ -97,7 +97,7 @@ class BourneShellTest {
     @Test
     @DisplayName("regex for parameters with braces")
     void regexMatchesParametersWithBraces() {
-      final var matcher = BourneShell.PARAMETER_WITH_BRACES_PATTERN.matcher("${HOME}:${OTHER}");
+      final var matcher = PosixShell.PARAMETER_WITH_BRACES_PATTERN.matcher("${HOME}:${OTHER}");
       assertAll("new style",
         () -> assertTrue(matcher.find(), "matches"),
         () -> assertEquals("${HOME}", matcher.group(MATCHER_GROUP_NAME), "extraction"),
@@ -110,7 +110,7 @@ class BourneShellTest {
   @Nested
   @DisplayName("expansion")
   @EnabledOnOs({OS.LINUX, OS.MAC})
-  class Expansion {
+  class ExpansionTest {
 
     private ParameterExpansion bourneShell;
 
@@ -122,35 +122,35 @@ class BourneShellTest {
     @Test
     @DisplayName("replaces parameter")
     void replacesParameter() {
-      final var result = bourneShell.replace("$HOME:abc", input -> "test", BourneShell.PARAMETER_PATTERN);
+      final var result = bourneShell.replace("$HOME:abc", input -> "test", PosixShell.PARAMETER_PATTERN);
       assertEquals("test:abc", result);
     }
 
     @Test
     @DisplayName("replaces parameter with braces")
     void replacesParameterWithBraces() {
-      final var result = bourneShell.replace("${HOME}:abc", input -> "test", BourneShell.PARAMETER_WITH_BRACES_PATTERN);
+      final var result = bourneShell.replace("${HOME}:abc", input -> "test", PosixShell.PARAMETER_WITH_BRACES_PATTERN);
       assertEquals("test:abc", result);
     }
 
     @Test
     @DisplayName("replaces command with new style")
     void replacesCommandWithNewStyle() {
-      final var result = bourneShell.replace("$(id -u):abc", input -> "test", BourneShell.NEW_COMMAND_PATTERN);
+      final var result = bourneShell.replace("$(id -u):abc", input -> "test", PosixShell.NEW_COMMAND_PATTERN);
       assertEquals("test:abc", result);
     }
 
     @Test
     @DisplayName("replaces commands with new style")
     void replacesCommandsWithNewStyle() {
-      final var result = bourneShell.replace("$(id -u):$(id -u)", input -> "test", BourneShell.NEW_COMMAND_PATTERN);
+      final var result = bourneShell.replace("$(id -u):$(id -u)", input -> "test", PosixShell.NEW_COMMAND_PATTERN);
       assertEquals("test:test", result);
     }
 
     @Test
     @DisplayName("replaces command with old style")
     void replacesCommandWithOldStyle() {
-      final var result = bourneShell.replace("`id -u`:abc", input -> "test", BourneShell.OLD_COMMAND_PATTERN);
+      final var result = bourneShell.replace("`id -u`:abc", input -> "test", PosixShell.OLD_COMMAND_PATTERN);
       assertEquals("test:abc", result);
     }
 
