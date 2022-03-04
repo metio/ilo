@@ -116,7 +116,7 @@ class BourneShellTest {
 
     @BeforeEach
     void setUp() {
-      bourneShell = OSSupport.bourneShell().orElseThrow();
+      bourneShell = OSSupport.posixShell().orElseThrow();
     }
 
     @Test

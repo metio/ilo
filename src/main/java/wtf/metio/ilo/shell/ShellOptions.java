@@ -63,6 +63,12 @@ public final class ShellOptions implements Options {
   public String context;
 
   @CommandLine.Option(
+    names = {"--hostname"},
+    description = "The hostname of the running container."
+  )
+  public String hostname;
+
+  @CommandLine.Option(
     names = {"--remove-image"},
     description = "Remove image after closing the shell."
   )

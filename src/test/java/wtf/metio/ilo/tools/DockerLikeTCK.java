@@ -80,8 +80,18 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   }
 
   @Test
+  @DisplayName("hostname run")
+  void hostname() {
+    final var options = new ShellOptions();
+    options.image = "example:test";
+    options.hostname = "some-test";
+    final var arguments = tool().runArguments(options);
+    assertEquals(String.format("%s run --rm --hostname some-test example:test", name()), String.join(" ", arguments));
+  }
+
+  @Test
   @DisplayName("custom command run")
-  void mount() {
+  void customCommand() {
     final var options = new ShellOptions();
     options.commands = List.of("example:test", "/bin/bash", "-c", "whoami");
     final var arguments = tool().runArguments(options);

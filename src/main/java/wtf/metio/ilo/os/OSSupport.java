@@ -38,13 +38,13 @@ public final class OSSupport {
   }
 
   static ParameterExpansion expansion() {
-    return bourneShell()
+    return posixShell()
       .or(OSSupport::powerShell)
       .orElseGet(NoOpExpansion::new);
   }
 
   // visible for testing
-  static Optional<ParameterExpansion> bourneShell() {
+  static Optional<ParameterExpansion> posixShell() {
     return Executables.of("bash")
       .or(() -> Executables.of("zsh"))
       .or(() -> Executables.of("sh"))

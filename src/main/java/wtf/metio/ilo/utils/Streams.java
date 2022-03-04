@@ -38,6 +38,10 @@ public final class Streams {
     return condition ? filter(Arrays.stream(values)) : Stream.empty();
   }
 
+  public static Stream<String> optional(final String prefix, final String value) {
+    return Objects.nonNull(value) && !value.isBlank() ? of(prefix, value) : Stream.empty();
+  }
+
   public static Stream<String> withPrefix(final String prefix, final List<String> values) {
     return filter(fromList(values)).flatMap(value -> of(prefix, value));
   }

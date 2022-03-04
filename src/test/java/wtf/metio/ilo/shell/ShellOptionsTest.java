@@ -35,6 +35,7 @@ class ShellOptionsTest {
     "interactive",
     "pull",
     "containerfile",
+    "hostname",
     "removeImage",
     "runAs",
     "runtimeOptions",

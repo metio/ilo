@@ -50,6 +50,21 @@ class StreamsTest {
   }
 
   @Test
+  void optional() {
+    assertEquals(2, Streams.optional("--option", "value").count());
+  }
+
+  @Test
+  void optionalNot() {
+    assertEquals(0, Streams.optional("--option", null).count());
+  }
+
+  @Test
+  void optionalEmpty() {
+    assertEquals(0, Streams.optional("--option", "").count());
+  }
+
+  @Test
   @DisplayName("has private constructor")
   void shouldHavePrivateConstructor() throws NoSuchMethodException {
     ClassTests.hasPrivateConstructor(Streams.class);

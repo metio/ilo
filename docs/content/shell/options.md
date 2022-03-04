@@ -27,6 +27,20 @@ $ ilo shell
 
 By default, `--context` is set to `.` (the current directory).
 
+## `--containerfile`/`--dockerfile`
+
+The `--containerfile`/`--dockerfile` option can be used to specify a local `Containerfile`/`Dockerfile`. Specifying such a file will cause `ilo` to build your image first, and then open a shell into a container based on that image.
+
+```shell script
+# specify custom Containerfile
+$ ilo shell --containerfile some/where/your.containerfile
+
+# do not specify Containerfile
+$ ilo shell
+```
+
+By default, `--containerfile`/`--dockerfile` is not set to any value.
+
 ## `--debug`
 
 The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
@@ -42,20 +56,6 @@ $ ilo shell
 
 By default, `--debug` is not enabled.
 
-## `--containerfile`/`--dockerfile`
-
-The `--containerfile`/`--dockerfile` option can be used to specify a local `Containerfile`/`Dockerfile`. Specifying such a file will cause `ilo` to build your image first, and then open a shell into a container based on that image.
-
-```shell script
-# specify custom Containerfile
-$ ilo shell --containerfile some/where/your.containerfile
-
-# do not specify Containerfile
-$ ilo shell
-```
-
-By default, `--containerfile`/`--dockerfile` is not set to any value.
-
 ## `--env`
 
 The `--env` option can be used to specify environment variables for your container.
@@ -69,6 +69,20 @@ $ ilo shell
 ```
 
 By default, `--env` does not set any environment variables.
+
+## `--hostname`
+
+The `--hostname` option can be used to set the hostname of your container.
+
+```shell script
+# set hostname
+$ ilo shell --hostname you.home.arpa
+
+# do not set hostname
+$ ilo shell
+```
+
+By default, `--hostname` is not set to any value.
 
 ## `--interactive`
 
