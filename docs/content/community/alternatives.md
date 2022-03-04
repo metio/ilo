@@ -12,7 +12,7 @@ tags:
 
 It's highly likely that `ilo` does not provide the functionality you are looking for. Here is a list of alternatives that might cover your needs:
 
-- [toolbox](https://github.com/containers/toolbox): Toolbox is a tool that offers a familiar package based environment for developing and debugging software that runs fully unprivileged using Podman.
+- [toolbx](https://containertoolbx.org/): Toolbx is a tool for Linux operating systems, which allows the use of containerized command line environments.
 - [gitian](https://gitian.org/): Gitian is a secure source-control oriented software distribution method.
 - [rbm](https://rbm.torproject.org/): Reproducible Build Manager (rbm) is a tool that helps you create and build packages for multiple linux distributions, and automate the parts that can be automated.
 - [rez](https://github.com/nerdvegas/rez): Rez is a cross-platform package manager with a difference.
@@ -48,7 +48,7 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [tlbx](https://gitlab.com/uppercat/tlbx): tlbx is a tool that facilitates creating and using mutable, persistent Linux container environments.
 - [mach-nix](https://github.com/DavHau/mach-nix): Mach-nix makes it easy to create and share reproducible python environments.
 - [renv](https://rstudio.github.io/renv/): The renv package helps you create reproducible environments for your R projects.
-- [popper](https://github.com/getpopper/popper): Popper is a tool for defining and executing container-native workflows in Docker, as well as other container engines. 
+- [popper](https://github.com/getpopper/popper): Popper is a tool for defining and executing container-native workflows in Docker, as well as other container engines.
 - [qus](https://github.com/dbhi/qus): qemu-user-static (qus) is a compilation of utilities, examples and references to build and execute OCI images (aka docker images) for foreign architectures using QEMU's user-mode emulation.
 - [coretoolbox](https://github.com/cgwalters/coretoolbox): This is a new implementation of https://github.com/debarshiray/toolbox/
 - [pyrex](https://github.com/garmin/pyrex): Containerize your bitbake.
@@ -58,7 +58,7 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [ynh-dev](https://github.com/YunoHost/ynh-dev): ynh-dev is a CLI tool to manage your local development environment for YunoHost.
 - [VVV](https://github.com/Varying-Vagrant-Vagrants/VVV): VVV is a local developer environment, mainly aimed at WordPress developers. It uses Vagrant and VirtualBox, and can be used to build sites, and contribute to WordPress.
 - [shutit](https://github.com/ianmiell/shutit): Automation framework for programmers.
-- [vccw](https://github.com/vccw-team/vccw): A Vagrant based development environment. 
+- [vccw](https://github.com/vccw-team/vccw): A Vagrant based development environment.
 - [mech](https://github.com/mechboxes/mech): Easy command line virtual machines for VMWare.
 - [dev](https://github.com/teracyhq/dev): The only truly universal productive software development platform for all!
 - [Desktop](https://github.com/Chassis/Desktop): Local WordPress development made easy.
@@ -66,7 +66,7 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [buildock](https://github.com/ulikoehler/buildock): Reproducible build environments for local builds using Docker.
 - [takeout](https://github.com/tightenco/takeout): Takeout is a Mac-based CLI tool for spinning up tiny Docker containers, one for each of your development environment dependencies.
 - [valet](https://laravel.com/docs/7.x/valet): Valet is a Laravel development environment for Mac minimalists.
-- [poetry](https://python-poetry.org/): Poetry comes with all the tools you might need to manage your projects in a deterministic way. 
+- [poetry](https://python-poetry.org/): Poetry comes with all the tools you might need to manage your projects in a deterministic way.
 - [poetry2nix](https://github.com/nix-community/poetry2nix): poetry2nix turns Poetry projects into Nix derivations without the need to actually write Nix expressions.
 - [buildstream](https://www.buildstream.build/): BuildStream is a powerful and flexible software integration toolset.
 - [svbox](https://www.sciviews.org/software/svbox/): A Reproducible Software Environment for Data Science
@@ -80,6 +80,6 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [lorri](https://github.com/target/lorri): lorri is a nix-shell replacement for project development. lorri is based around fast direnv integration for robust CLI and editor integration.
 - [toolbox-njam](https://gitlab.com/njam/toolbox-njam): Experimental Rust-clone of Fedora's toolbox for managing Linux containers for software development.
 - [bioscons](https://github.com/nhoffman/bioscons): Extends the scons build tool for reproducible workflows in bioinformatics.
-- [mock](https://github.com/rpm-software-management/mock): Mock is a tool for a reproducible build of RPM packages. 
-- [jenv](https://github.com/jenv/jenv): jEnv is a command line tool to help you forget how to set the JAVA_HOME environment variable 
+- [mock](https://github.com/rpm-software-management/mock): Mock is a tool for a reproducible build of RPM packages.
+- [jenv](https://github.com/jenv/jenv): jEnv is a command line tool to help you forget how to set the JAVA_HOME environment variable
 - [asdf](https://asdf-vm.com/): Manage multiple runtime versions with a single CLI tool
