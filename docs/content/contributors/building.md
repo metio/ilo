@@ -79,5 +79,3 @@ $ hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates -
 # serve website
 $ hugo server --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs --watch
 ```
-
-Take a look at the [Makefile](../makefile) as an easy way to call all these commands.
