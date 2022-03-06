@@ -5,6 +5,7 @@ menu:
   main:
     parent: usage
     identifier: usage_build_envs
+    weight: 101
 categories:
 - usage
 tags:

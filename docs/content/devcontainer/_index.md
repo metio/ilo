@@ -1,6 +1,8 @@
 ---
 title: ilo devcontainer
 date: 2020-04-13
+menu: main
+weight: 130
 ---
 
 The `devcontainer` command allows interacting with [devcontainers](https://code.visualstudio.com/docs/remote/containers) as used by [Visual Studio Code](https://code.visualstudio.com/) and [GitHub Codespaces](https://docs.github.com/en/codespaces/overview).

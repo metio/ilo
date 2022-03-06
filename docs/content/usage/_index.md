@@ -2,6 +2,7 @@
 title: Usage
 date: 2020-04-13
 menu: main
+weight: 100
 ---
 
 Make sure that `ilo` is [installed](./install) in your PATH or otherwise accessible from your terminal. The following subcommands are currently available:

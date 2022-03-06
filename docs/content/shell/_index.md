@@ -1,6 +1,8 @@
 ---
 title: ilo shell
 date: 2020-04-13
+menu: main
+weight: 110
 ---
 
 The `ilo shell` command can be used to run a single container either interactively (default) or in non-interactive mode (e.g. for CI builds). It can build an image, mount directories automatically, stop containers, remove images, and customize the build environment according to the needs of your project.

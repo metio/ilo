@@ -1,6 +1,8 @@
 ---
 title: ilo compose
 date: 2020-04-13
+menu: main
+weight: 120
 ---
 
 The `ilo compose` command allows interacting with complex build environments, e.g. your project requires a database in order to be build. It integrates with widely used [tools](./runtimes) such as [docker-compose](https://docs.docker.com/compose/) in order to re-use your existing setup as much as possible.

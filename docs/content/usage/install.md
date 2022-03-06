@@ -5,6 +5,7 @@ menu:
   main:
     parent: usage
     identifier: usage_install
+    weight: 100
 categories:
 - usage
 tags:
