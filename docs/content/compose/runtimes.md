@@ -16,17 +16,17 @@ tags:
 - vagrant
 ---
 
-`ilo compose` by default searches your local system for supported runtimes. It prefers `docker-compose` over `podman-compose` over `pods-compose` over `footloose` over `vagrant` at the moment. In order to force the usage of a specific runtime, use the `--runtime` flag.
+`ilo compose` by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the `--runtime` flag.
 
 ## docker-compose
 
 Force `ilo` to use [docker-compose](https://docs.docker.com/compose/) like this:
 
 ```shell script
-$ ilo shell --runtime docker-compose
+$ ilo compose --runtime docker-compose
 
 # alias
-$ ilo shell --runtime dc
+$ ilo compose --runtime dc
 ```
 
 ## podman-compose
@@ -34,8 +34,15 @@ $ ilo shell --runtime dc
 Force `ilo` to use [podman-compose](https://github.com/containers/podman-compose) like this:
 
 ```shell script
-$ ilo shell --runtime podman-copose
+$ ilo compose --runtime podman-copose
 
 # alias
-$ ilo shell --runtime pc
+$ ilo compose --runtime pc
 ```
+
+## Auto Selection
+
+If not otherwise specified, `ilo` always picks runtimes in this order, depending on which are available on your system:
+
+1. docker-compose
+2. podman-compose

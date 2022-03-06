@@ -105,20 +105,9 @@ $ ilo compose --runtime docker-compose
 # force to use podman-compose
 $ ilo compose --runtime podman-compose
 
-# force to use pods-compose
-$ ilo compose --runtime pods-compose
-
-# force to use footloose
-$ ilo compose --runtime footloose
-
-# force to use vagrant
-$ ilo compose --runtime vagrant
-
 # auto select
 $ ilo compose
 ```
-
-In case no `--runtime` is specified, `ilo compose` will automatically select one of the runtimes installed on your local system and prefers `docker-compose` over `podman-compose` over `pods-compose` over `footloose` over `vagrant` at the moment.
 
 ## `--runtime-option`
 

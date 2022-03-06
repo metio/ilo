@@ -1,0 +1,5 @@
+shell
+--no-interactive
+--publish=1313:1313
+docker.io/klakegg/hugo:latest
+server --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs

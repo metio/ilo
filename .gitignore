@@ -11,4 +11,5 @@ target
 .classpath
 docs/public
 docs/resources
+docs/.hugo_build.lock
 ilo.iml

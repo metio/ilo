@@ -15,5 +15,3 @@ Each new release will:
 
 - Publish a new GitHub [release](https://github.com/metio/ilo/releases)
 - Publish an [email](https://metio.groups.io/g/ilo/topics)
-- Publish a [toot](https://fosstodon.org/@metiobuild)
-- Publish a post to [reddit](https://www.reddit.com/r/metiowtf/)

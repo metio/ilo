@@ -108,11 +108,9 @@ $ ilo devcontainer --shell-runtime podman
 # force to use docker
 $ ilo devcontainer --shell-runtime docker
 
-# force to use lxd
-$ ilo devcontainer --shell-runtime lxd
+# force to use nerdctl
+$ ilo devcontainer --shell-runtime nerdctl
 
 # auto select
 $ ilo devcontainer
 ```
-
-In case no `--shell-runtime` is specified, `ilo devcontainer` will automatically select one of the runtimes installed on your local system and prefers `podman` over `docker` over `lxd`.

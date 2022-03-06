@@ -28,8 +28,6 @@ $ ilo shell --runtime docker
 $ ilo shell --runtime d
 ```
 
-**Important**: In case your image uses `root` as its user, and you cannot run [rootless docker](https://docs.docker.com/engine/security/rootless/) (introduced with 19.03), use the [`--run-as`](../options) option to override the user in the image.
-
 ## Podman
 
 Force `ilo` to use [podman](https://podman.io/) like this:
@@ -40,8 +38,6 @@ $ ilo shell --runtime podman
 # alias
 $ ilo shell --runtime p
 ```
-
-**Important**: In case your images uses `root` as its user, and you cannot run [rootless podman](https://github.com/containers/podman/blob/main/rootless.md), use the [`--run-as`](../options) option to override the user in the image. Take a look at this [article](https://www.redhat.com/sysadmin/behind-scenes-podman) for an in-depth example of how rootless work with podman.
 
 ## nerdctl
 
@@ -54,4 +50,10 @@ $ ilo shell --runtime nerdctl
 $ ilo shell --runtime n
 ```
 
-**Important**: In case your images uses `root` as its user, and you cannot run [rootless nerdctl](https://github.com/containerd/nerdctl/blob/master/docs/rootless.md), use the [`--run-as`](../options) option to override the user in the image.
+## Auto Selection
+
+If not otherwise specified, `ilo` always picks runtimes in this order, depending on which are available on your system:
+
+1. podman
+2. nerdctl
+3. docker

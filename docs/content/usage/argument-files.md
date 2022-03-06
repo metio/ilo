@@ -15,30 +15,30 @@ In order to share the same options/commands across your team, `ilo` supports arg
 
 ```shell script
 # write argument file
-$ cat some/folder/your-arguments.txt
+$ cat some/folder/your-arguments
 shell
 node:latest
 /bin/bash
 
 # use argument file
-$ ilo @some/folder/your-arguments.txt
+$ ilo @some/folder/your-arguments
 ```
 
 The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:
 
 ```shell script
 # write argument file
-$ cat some/other/your-arguments.txt
+$ cat some/other/your-arguments
 shell node:latest /bin/bash
 
 # write argument file
-$ cat some/more/your-arguments.txt
+$ cat some/more/of/your-arguments
 shell
 node:latest /bin/bash
 
 # use argument file
-$ ilo @some/other/your-arguments.txt
-$ ilo @some/more/your-arguments.txt
+$ ilo @some/other/your-arguments
+$ ilo @some/more/of/your-arguments
 ```
 
 **Important**: In case your option contains a whitespace, you have to either put the entire option with its value in single/double quotes or use a whitespace between option and value like this:
@@ -66,4 +66,13 @@ You can mix argument files with regular CLI options as well:
 $ ilo shell @default-shell openjdk:11
 ```
 
-The argument file used by `ilo` developers can be seen [here](https://github.com/metio/ilo/blob/main/.ilo.rc) and is used by simply calling `ilo` in the root of the project because it's a [run command](../run-commands) file.
+The argument file used by `ilo` developers can be seen [here](https://github.com/metio/ilo/blob/main/dev/env) and is used by calling `ilo @dev/env`.
+
+## RC Files
+
+In order to simplify/automate its usage, `ilo` will look for [run command](https://en.wikipedia.org/wiki/Run_commands) files in the following locations:
+
+1. `.ilo/ilo.rc`
+2. `.ilo.rc`
+
+**Each** file found will be added in-order as an argument file to your invocation of `ilo` **before** any other options you specify in your terminal.
