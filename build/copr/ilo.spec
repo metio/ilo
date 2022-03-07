@@ -4,7 +4,6 @@ Release:        1%{?dist}
 Summary:        Manage Reproducible Build Environments
 License:        CC0
 URL:            https://ilo.projects.metio.wtf/
-BuildArch:      x86_64
 Source0:        https://github.com/metio/%{name}/archive/refs/tags/%{version}.tar.gz
 Requires:       podman
 BuildRequires:  unzip
