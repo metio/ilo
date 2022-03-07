@@ -1,11 +1,11 @@
 Name:           ilo
-Version:        2020.10.12
+Version:        2022.3.7
 Release:        1%{?dist}
 Summary:        Manage Reproducible Build Environments
 License:        CC0
 URL:            https://ilo.projects.metio.wtf/
 BuildArch:      x86_64
-Source0:        https://github.com/metio/%{name}/archive/%{version}.tar.gz
+Source0:        https://github.com/metio/%{name}/archive/refs/tags/%{version}.tar.gz
 Requires:       podman
 BuildRequires:  unzip
 BuildRequires:  curl
