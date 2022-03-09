@@ -15,8 +15,18 @@ Make sure to specify `your.image.here:some-tag` as the image in your `devcontain
 [root@container project-dir]#
 ```
 
-`ilo` will automatically try the following locations for your `devcontainer.json` file:
+`ilo` will automatically try the following locations for your `devcontainer.json` file relative to your current directory:
 
 1. `.devcontainer/devcontainer.json`
 2. `.devcontainer.json`
 
+In case you want to load/use a different location for your `devconatiner.json` file, specify one or more locations like this:
+
+```shell script
+# use custom locations
+[you@hostname project-dir]$ ilo devcontainer some-where-local.json /an/absolute/path/appears.json
+```
+
+The first location that actually exists and can be read by the current user will be used.
+
+Take a look at all available [options](./options) or use `ilo devcontainer --help` to get a list of all options, and their default values. In order to simplify handling of long command line options, consider using [argument files](../usage/argument-files).

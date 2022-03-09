@@ -34,7 +34,8 @@ class DevcontainerOptionsTest {
     "debug",
     "mountProjectDir",
     "pull",
-    "removeImage"
+    "removeImage",
+    "locations"
   })
   void shouldHavePublicProperty(final String field) throws NoSuchFieldException {
     final var runtime = DevcontainerOptions.class.getDeclaredField(field);

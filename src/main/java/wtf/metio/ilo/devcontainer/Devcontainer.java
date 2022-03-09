@@ -40,7 +40,7 @@ public final class Devcontainer implements Callable<Integer> {
   @Override
   public Integer call() {
     final var currentDir = Paths.get(System.getProperty("user.dir"));
-    final var json = findJson(currentDir);
+    final var json = findJson(currentDir, options.locations);
     final var devcontainer = parseJson(json);
 
     if (null != devcontainer.dockerComposeFile && !devcontainer.dockerComposeFile.isEmpty()) {

@@ -13,6 +13,8 @@ import wtf.metio.ilo.compose.ComposeRuntimeConverter;
 import wtf.metio.ilo.shell.ShellRuntime;
 import wtf.metio.ilo.shell.ShellRuntimeConverter;
 
+import java.util.List;
+
 public final class DevcontainerOptions {
 
   @CommandLine.Option(
@@ -54,5 +56,13 @@ public final class DevcontainerOptions {
     description = "Remove image after closing the shell."
   )
   public boolean removeImage;
+
+  @CommandLine.Parameters(
+    index = "0..*",
+    description = "List of possible locations for a devcontainer.json file. First found will be used. ",
+    defaultValue = ".devcontainer/devcontainer.json .devcontainer.json",
+    split = " "
+  )
+  public List<String> locations;
 
 }

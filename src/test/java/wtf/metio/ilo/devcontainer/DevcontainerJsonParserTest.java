@@ -22,6 +22,8 @@ import static wtf.metio.ilo.test.TestResources.testResources;
 @DisplayName("DevcontainerJsonParser")
 class DevcontainerJsonParserTest {
 
+  private static final List<String> DEFAULT_LOCATIONS = List.of(".devcontainer/devcontainer.json", ".devcontainer.json");
+
   @Test
   @DisplayName("finds devcontainer.json in project root")
   void shouldFindRootJson() {
@@ -97,7 +99,7 @@ class DevcontainerJsonParserTest {
   }
 
   private Path findJsonIn(final String testDirectory) {
-    return findJson(testResources(DevcontainerJsonParser.class).resolve(testDirectory));
+    return findJson(testResources(DevcontainerJsonParser.class).resolve(testDirectory), DEFAULT_LOCATIONS);
   }
 
 }

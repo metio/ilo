@@ -32,3 +32,5 @@ $ podman build --tag your.image:your.tag --file your.containerfile path/to/build
 ```
 
 The idea behind `ilo` is that you use this image to start a container that mounts your project directory and is able to execute any command that you are using to build/test/package your project.
+
+Take a look at the detailed instructions for [ilo shell](../../shell), [ilo compose](../../compose), and [ilo devcontainer](../../devcontainer) for details on how to use your created image.

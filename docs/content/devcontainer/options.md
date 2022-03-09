@@ -11,7 +11,7 @@ tags:
 - options
 ---
 
-The `ilo devcontainer` command can be configured with the following command line options. From your terminal, use `ilo compose --help` to get a list of all options, and their default values.
+The `ilo devcontainer` command can be configured with the following command line options. From your terminal, use `ilo devcontainer --help` to get a list of all options, and their default values.
 
 ## `--debug`
 

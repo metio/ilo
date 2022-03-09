@@ -13,16 +13,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import wtf.metio.ilo.errors.DevcontainerJsonMissingException;
 import wtf.metio.ilo.errors.JsonParsingException;
 import wtf.metio.ilo.errors.RuntimeIOException;
+import wtf.metio.ilo.utils.Streams;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.stream.Stream;
 
 final class DevcontainerJsonParser {
 
-  static Path findJson(final Path baseDirectory) {
-    return Stream.of(".devcontainer/devcontainer.json", ".devcontainer.json")
+  static Path findJson(final Path baseDirectory, final List<String> locations) {
+    return Streams.fromList(locations)
       .map(baseDirectory::resolve)
       .filter(Files::isReadable)
       .filter(Files::isRegularFile)

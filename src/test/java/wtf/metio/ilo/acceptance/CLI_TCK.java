@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import picocli.CommandLine;
 import wtf.metio.ilo.Ilo;
 import wtf.metio.ilo.compose.Compose;
+import wtf.metio.ilo.devcontainer.Devcontainer;
 import wtf.metio.ilo.shell.Shell;
 import wtf.metio.ilo.test.TestMethodSources;
 
@@ -39,6 +40,12 @@ public abstract class CLI_TCK extends TestMethodSources {
     final var parseResult = cmd.parseArgs(args);
     final var subcommand = parseResult.subcommand();
     return (Compose) subcommand.commandSpec().userObject();
+  }
+
+  protected final Devcontainer parseDevcontainerCommand(final String... args) {
+    final var parseResult = cmd.parseArgs(args);
+    final var subcommand = parseResult.subcommand();
+    return (Devcontainer) subcommand.commandSpec().userObject();
   }
 
 }
