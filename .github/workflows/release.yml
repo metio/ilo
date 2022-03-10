@@ -278,14 +278,11 @@ jobs:
       - id: gpg
         name: GPG Key
         if: needs.prepare.outputs.commit_count > 0
-        uses: timheuer/base64-to-file@v1.0.3
+        uses: timheuer/base64-to-file@v1.1
         with:
           fileName: signing.key.asc
+          fileDir: ${{ github.workspace}}
           encodedString: ${{ secrets.GPG_SECRET_KEY_BASE64 }}
-      - id: copy-key
-        name: Copy GPG key to correct location
-        if: needs.prepare.outputs.commit_count > 0
-        run: Copy-Item -Path "${{ steps.gpg.outputs.filePath }}" -Destination "$env:GITHUB_WORKSPACE\signing.key.asc"
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
