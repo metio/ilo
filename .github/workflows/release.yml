@@ -115,7 +115,7 @@ jobs:
       - id: verify
         if: needs.prepare.outputs.commit_count > 0
         name: Verify Project
-        run: mvn --batch-mode verify -Drevision=${{ needs.prepare.outputs.release_version }} -DskipGraal=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
+        run: mvn --batch-mode verify --activate-profiles release -Drevision=${{ needs.prepare.outputs.release_version }} -DskipGraal=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
       - id: upload-linux-artifact
         name: Upload Linux Artifact
         if: needs.prepare.outputs.commit_count > 0
@@ -215,7 +215,7 @@ jobs:
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
-        run: mvn --batch-mode verify -Drevision=${{ needs.prepare.outputs.release_version }} -DskipGraal=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
+        run: mvn --batch-mode verify --activate-profiles release -Drevision=${{ needs.prepare.outputs.release_version }} -DskipGraal=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
       - id: upload-mac-artifact
         name: Upload MacOS Artifact
         if: needs.prepare.outputs.commit_count > 0
@@ -289,7 +289,7 @@ jobs:
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
-        run: mvn --batch-mode verify "-Drevision=${{ needs.prepare.outputs.release_version }}" "-DskipGraal=false" "-Dpit.skip=true" "-Dpgp.secretkey=keyfile:signing.key.asc" "-Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}"
+        run: mvn --batch-mode verify --activate-profiles release "-Drevision=${{ needs.prepare.outputs.release_version }}" "-DskipGraal=false" "-Dpit.skip=true" "-Dpgp.secretkey=keyfile:signing.key.asc" "-Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}"
       - id: upload-windows-artifact
         name: Upload Windows Artifact
         if: needs.prepare.outputs.commit_count > 0
