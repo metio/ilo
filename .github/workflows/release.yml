@@ -289,7 +289,7 @@ jobs:
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
-        run: mvn --batch-mode verify -Drevision=${{ needs.prepare.outputs.release_version }} -DskipGraal=false -Dpit.skip=true -Dpgp.secretkey=keyfile:signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
+        run: mvn --batch-mode verify "-Drevision=${{ needs.prepare.outputs.release_version }}" "-DskipGraal=false" "-Dpit.skip=true" "-Dpgp.secretkey=keyfile:signing.key.asc" "-Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}"
       - id: upload-windows-artifact
         name: Upload Windows Artifact
         if: needs.prepare.outputs.commit_count > 0
