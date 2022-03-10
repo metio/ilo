@@ -7,8 +7,11 @@
 
 package wtf.metio.ilo.cli;
 
+import com.github.stefanbirkner.systemlambda.SystemLambda;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
@@ -104,6 +107,54 @@ class RunCommandsTest {
   @DisplayName("allow to call generate-completion without run commands")
   void noRunCommandsForGenerateCompletion() {
     assertFalse(RunCommands.shouldAddRunCommands(new String[]{"generate-completion"}));
+  }
+
+  @Test
+  @DisplayName("allow to disable run commands")
+  void turnOffRunCommands() {
+    assertFalse(RunCommands.shouldAddRunCommands(new String[]{"--no-rc"}));
+  }
+
+  @Test
+  @DisplayName("allow to configure different run command file")
+  void configureRunCommandFile() throws Exception {
+    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "some-name.rc")
+      .execute(() -> assertEquals(1, findRunCommandFiles("different").count()));
+  }
+
+  @Test
+  @DisplayName("allow to configure different run command files")
+  void configureRunCommandFiles() throws Exception {
+    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "some-name.rc,another.rc")
+      .execute(() -> assertEquals(2, findRunCommandFiles("different").count()));
+  }
+
+  @Test
+  @DisplayName("allow to configure different run command files where one is missing")
+  void configureRunCommandFilesWithMissing() throws Exception {
+    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc,some-name.rc")
+      .execute(() -> assertEquals(1, findRunCommandFiles("different").count()));
+  }
+
+  @Test
+  @DisplayName("handle missing run command file")
+  void configureMissingRunCommandFile() throws Exception {
+    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc")
+      .execute(() -> assertEquals(0, findRunCommandFiles("different").count()));
+  }
+
+  @Test
+  @DisplayName("handle missing run command files")
+  void configureMissingRunCommandFiles() throws Exception {
+    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc,deleted.rc")
+      .execute(() -> assertEquals(0, findRunCommandFiles("different").count()));
+  }
+
+  @Test
+  @DisplayName("allow to configure run command files with whitespace after the comma")
+  void configureRunCommandFilesWithWhitespace() throws Exception {
+    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc, some-name.rc")
+      .execute(() -> assertEquals(1, findRunCommandFiles("different").count()));
   }
 
   @Test

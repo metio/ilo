@@ -75,4 +75,19 @@ In order to simplify/automate its usage, `ilo` will look for [run command](https
 1. `.ilo/ilo.rc`
 2. `.ilo.rc`
 
-**Each** file found will be added in-order as an argument file to your invocation of `ilo` **before** any other options you specify in your terminal.
+**Each** file found will be added in-order as an argument file to your invocation of `ilo` **before** any other options you specify in your terminal. You can change the locations to check by specifying the `ILO_RC` environment variable. Multiple locations can be given by separating them with a comma like this:
+
+```shell
+$ export ILO_RC=some-file.rc,another-one.rc
+$ ilo ...
+```
+
+In order to disable loading `.rc` files entirely, specify `--no-rc` in the command line before the actual `ilo` subcommand, like this:
+
+```shell
+# do not load .rc files
+$ ilo --no-rc shell ...
+$ ilo --no-rc compose ...
+$ ilo --no-rc devcontainer ...
+$ ilo --no-rc @some-argument-file ...
+```
