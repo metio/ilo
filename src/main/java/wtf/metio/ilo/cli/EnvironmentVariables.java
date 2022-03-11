@@ -7,10 +7,6 @@
 
 package wtf.metio.ilo.cli;
 
-/**
- * Enumeration of all known environment variables that ilo is using. Their expected environment name matches the output
- * of their {@link Enum#name()} method.
- */
 public enum EnvironmentVariables {
 
   ILO_RC;
