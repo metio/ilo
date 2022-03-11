@@ -28,6 +28,10 @@ jobs:
         run: hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
         env:
           ILO_RELEASE: ${{ steps.previous.outputs.version }}
+      - name: Run htmltest
+        uses: wjdp/htmltest-action@master
+        with:
+          config: .htmltest.yml
       - name: Deploy Website
         uses: peaceiris/actions-gh-pages@v3
         with:
