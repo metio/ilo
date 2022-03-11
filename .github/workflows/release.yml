@@ -111,7 +111,11 @@ jobs:
       - id: gpg
         name: GPG Key
         if: needs.prepare.outputs.commit_count > 0
-        run: echo "${{ secrets.GPG_SECRET_KEY_BASE64 }}" | base64 --decode > $GITHUB_WORKSPACE/signing.key.asc
+        uses: timheuer/base64-to-file@v1.1
+        with:
+          fileName: signing.key.asc
+          fileDir: ${{ github.workspace}}
+          encodedString: ${{ secrets.GPG_SECRET_KEY_BASE64 }}
       - id: verify
         if: needs.prepare.outputs.commit_count > 0
         name: Verify Project
@@ -211,7 +215,11 @@ jobs:
       - id: gpg
         name: GPG Key
         if: needs.prepare.outputs.commit_count > 0
-        run: echo "${{ secrets.GPG_SECRET_KEY_BASE64 }}" | base64 --decode > $GITHUB_WORKSPACE/signing.key.asc
+        uses: timheuer/base64-to-file@v1.1
+        with:
+          fileName: signing.key.asc
+          fileDir: ${{ github.workspace}}
+          encodedString: ${{ secrets.GPG_SECRET_KEY_BASE64 }}
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
