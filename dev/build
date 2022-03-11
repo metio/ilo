@@ -1,5 +1,5 @@
 shell
 --no-interactive
 --volume $HOME/.m2:/root/.m2:z
-docker.io/library/maven:3.8.3-jdk-11
+docker.io/library/maven:3.8.4-openjdk-17
 mvn verify

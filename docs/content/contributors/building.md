@@ -67,7 +67,7 @@ In order to build `ilo` without having `ilo` installed call:
 $ mvn verify
 
 # build native executable
-$ mvn verify --define skipGraal=false
+$ mvn verify --define skipNativeBuild=false
 ```
 
 In case you want to build or work on the website do this:

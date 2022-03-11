@@ -3,7 +3,7 @@ on:
   schedule:
     - cron:  45 3 * * MON
 env:
-  JAVA: 11
+  JAVA: 17
   GRAAL: 22.0.0.2
 jobs:
   prepare:
@@ -115,7 +115,7 @@ jobs:
       - id: verify
         if: needs.prepare.outputs.commit_count > 0
         name: Verify Project
-        run: mvn --batch-mode verify --activate-profiles release -Drevision=${{ needs.prepare.outputs.release_version }} -DskipGraal=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
+        run: mvn --batch-mode verify --activate-profiles release -Drevision=${{ needs.prepare.outputs.release_version }} -DskipNativeBuild=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
       - id: upload-linux-artifact
         name: Upload Linux Artifact
         if: needs.prepare.outputs.commit_count > 0
@@ -149,38 +149,38 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.asc
           asset_content_type: text/plain
-      - id: upload-java11-artifact
-        name: Upload Java11 Artifact
+      - id: upload-jvm-artifact
+        name: Upload JVM Artifact
         if: needs.prepare.outputs.commit_count > 0
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-java11.zip
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip
           asset_content_type: application/zip
-      - id: upload-java11-checksum
-        name: Upload Java11 Checksum
+      - id: upload-jvm-checksum
+        name: Upload JVM Checksum
         if: needs.prepare.outputs.commit_count > 0
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.sha512
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.sha512
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.sha512
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.sha512
           asset_content_type: text/plain
-      - id: upload-java11-signature
-        name: Upload Java11 Signature
+      - id: upload-jvm-signature
+        name: Upload JVM Signature
         if: needs.prepare.outputs.commit_count > 0
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.asc
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-java11.zip.asc
+          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.asc
+          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.asc
           asset_content_type: text/plain
   mac:
     name: MacOS packages
@@ -215,7 +215,7 @@ jobs:
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
-        run: mvn --batch-mode verify --activate-profiles release -Drevision=${{ needs.prepare.outputs.release_version }} -DskipGraal=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
+        run: mvn --batch-mode verify --activate-profiles release -Drevision=${{ needs.prepare.outputs.release_version }} -DskipNativeBuild=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
       - id: upload-mac-artifact
         name: Upload MacOS Artifact
         if: needs.prepare.outputs.commit_count > 0
@@ -286,7 +286,7 @@ jobs:
       - id: verify
         name: Verify Project
         if: needs.prepare.outputs.commit_count > 0
-        run: mvn --batch-mode verify --activate-profiles release "-Drevision=${{ needs.prepare.outputs.release_version }}" "-DskipGraal=false" "-Dpit.skip=true" "-Dpgp.secretkey=keyfile:signing.key.asc" "-Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}"
+        run: mvn --batch-mode verify --activate-profiles release "-Drevision=${{ needs.prepare.outputs.release_version }}" "-DskipNativeBuild=false" "-Dpit.skip=true" "-Dpgp.secretkey=keyfile:signing.key.asc" "-Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}"
       - id: upload-windows-artifact
         name: Upload Windows Artifact
         if: needs.prepare.outputs.commit_count > 0

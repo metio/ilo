@@ -59,6 +59,6 @@ The [Windows](https://www.microsoft.com/en-us/windows) distribution of `ilo` is 
 
 ## Other
 
-For all other platforms that support at least [Java 11](https://www.oracle.com/javadownload), run something like this:
+For all other platforms that support at least [Java 17](https://www.oracle.com/javadownload), run something like this:
 
 {{< otherinstall >}}

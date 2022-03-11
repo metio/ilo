@@ -66,8 +66,8 @@
     <!-- https://maven.apache.org/pom.html#Properties -->
     <properties>
         <revision>0.0.0-SNAPSHOT</revision>
-        <version.jdk>11</version.jdk>
-        <skipGraal>true</skipGraal>
+        <version.jdk>17</version.jdk>
+        <skipNativeBuild>true</skipNativeBuild>
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
         <project.build.outputTimestamp>2019</project.build.outputTimestamp>
 
@@ -141,7 +141,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.0</version>
                 <configuration>
                     <annotationProcessorPaths>
                         <path>
@@ -191,7 +190,16 @@
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.tools=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.utils=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.version=ALL-UNNAMED
+                        --add-opens java.base/java.util=ALL-UNNAMED
                     </argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <configuration>
+                    <!-- fails in Java 17 -->
+                    <excludedTestClasses>wtf.metio.ilo.cli.RunCommandsTest</excludedTestClasses>
                 </configuration>
             </plugin>
             <plugin>
@@ -225,7 +233,7 @@
                     <buildArgs>
                         <buildArg>--no-fallback</buildArg>
                     </buildArgs>
-                    <skipNativeBuild>${skipGraal}</skipNativeBuild>
+                    <skipNativeBuild>${skipNativeBuild}</skipNativeBuild>
                 </configuration>
             </plugin>
             <plugin>
@@ -263,7 +271,7 @@
                         </goals>
                         <configuration>
                             <descriptors>
-                                <descriptor>${project.basedir}/src/main/assembly/java11.xml</descriptor>
+                                <descriptor>${project.basedir}/src/main/assembly/jvm.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>
@@ -382,7 +390,7 @@
             <id>native-linux</id>
             <activation>
                 <property>
-                    <name>skipGraal</name>
+                    <name>skipNativeBuild</name>
                     <value>false</value>
                 </property>
                 <os>
@@ -416,7 +424,7 @@
             <id>native-mac</id>
             <activation>
                 <property>
-                    <name>skipGraal</name>
+                    <name>skipNativeBuild</name>
                     <value>false</value>
                 </property>
                 <os>
@@ -450,7 +458,7 @@
             <id>native-windows</id>
             <activation>
                 <property>
-                    <name>skipGraal</name>
+                    <name>skipNativeBuild</name>
                     <value>false</value>
                 </property>
                 <os>

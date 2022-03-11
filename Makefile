@@ -39,7 +39,7 @@ build: ##@hacking Build everything
 
 .PHONY: native-image
 native-image: ##@hacking Create a native image using GraalVM
-	mvn verify -DskipGraal=false
+	mvn verify --define skipNativeBuild=false
 
 .PHONY: clean
 clean: ##@hacking Clean build artifacts
@@ -49,3 +49,23 @@ clean: ##@hacking Clean build artifacts
 sign-waiver: ##@contributing Sign the WAIVER
 	gpg2 --no-version --armor --sign AUTHORS/WAIVER
 	mv AUTHORS/WAIVER.asc AUTHORS/WAIVER-signed-by-$(USERNAME)-$(CURRENT_DATE).asc
+
+.PHONY: ilo-build
+ilo-build: ##@hacking Build everything with ilo
+	ilo @dev/build
+
+.PHONY: ilo-native
+ilo-native: ##@hacking Create a native image using GraalVM with ilo
+	ilo @dev/native
+
+.PHONY: ilo-env
+ilo-env: ##@hacking Open a new development environment with ilo
+	ilo @dev/env
+
+.PHONY: ilo-website
+ilo-website: ##@hacking Build the website with ilo
+	ilo @dev/website
+
+.PHONY: ilo-serve
+ilo-serve: ##@hacking Serve the website locally with ilo
+	ilo @dev/serve

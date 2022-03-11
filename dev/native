@@ -3,4 +3,4 @@ shell
 --volume $HOME/.m2:/root/.m2:z
 --dockerfile dev/native.containerfile
 metio/ilo:latest-native
-mvn verify --define skipGraal=false
+mvn verify --define skipNativeBuild=false

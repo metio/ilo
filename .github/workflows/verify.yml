@@ -27,7 +27,7 @@ jobs:
         uses: graalvm/setup-graalvm@v1
         with:
           version: 22.0.0.2
-          java-version: 11
+          java-version: 17
           components: native-image
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: cache
@@ -40,13 +40,13 @@ jobs:
             ${{ runner.os }}-maven-
       - id: verify
         name: Verify Project
-        run: mvn --batch-mode verify -DskipGraal=false
+        run: mvn --batch-mode verify -DskipNativeBuild=false
       - id: upload-java
-        name: Upload Java 11 Artifact
+        name: Upload JVM Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: java11
-          path: ./target/ilo-*-java11*
+          name: jvm
+          path: ./target/ilo-*-jvm*
         if: runner.os == 'Linux'
       - id: upload-linux
         name: Upload Linux Artifact
