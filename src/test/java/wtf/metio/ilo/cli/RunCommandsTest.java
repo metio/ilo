@@ -10,6 +10,8 @@ package wtf.metio.ilo.cli;
 import com.github.stefanbirkner.systemlambda.SystemLambda;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -116,6 +118,7 @@ class RunCommandsTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("allow to configure different run command file")
   void configureRunCommandFile() throws Exception {
     SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "some-name.rc")
@@ -123,6 +126,7 @@ class RunCommandsTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("allow to configure different run command files")
   void configureRunCommandFiles() throws Exception {
     SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "some-name.rc,another.rc")
@@ -130,6 +134,7 @@ class RunCommandsTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("allow to configure different run command files where one is missing")
   void configureRunCommandFilesWithMissing() throws Exception {
     SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc,some-name.rc")
@@ -137,6 +142,7 @@ class RunCommandsTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("handle missing run command file")
   void configureMissingRunCommandFile() throws Exception {
     SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc")
@@ -144,6 +150,7 @@ class RunCommandsTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("handle missing run command files")
   void configureMissingRunCommandFiles() throws Exception {
     SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc,deleted.rc")
@@ -151,6 +158,7 @@ class RunCommandsTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("allow to configure run command files with whitespace after the comma")
   void configureRunCommandFilesWithWhitespace() throws Exception {
     SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc, some-name.rc")
