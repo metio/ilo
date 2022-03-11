@@ -51,7 +51,7 @@ Metadata is currently used in three places:
 
 1. To generate a list of existing [minisign](https://jedisct1.github.io/minisign/) signatures in the [first timer](../first-timer) documentation.
 2. To generate a [humans.txt](https://humanstxt.org/) file of [all contributors](https://ilo.projects.metio.wtf/humans.txt).
-3. To generate a [FOAF](https://www.foaf-project.org/) for the [entire project](https://ilo.projects.metio.wtf/foaf.rdf).
+3. To generate a [FOAF](https://xmlns.com/foaf/spec/) for the [entire project](https://ilo.projects.metio.wtf/foaf.rdf).
 
 ## Adding a new entry
 
