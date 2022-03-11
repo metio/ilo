@@ -207,22 +207,25 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.graalvm.nativeimage</groupId>
-                <artifactId>native-image-maven-plugin</artifactId>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <extensions>true</extensions>
                 <executions>
                     <execution>
+                        <id>build-native</id>
                         <goals>
-                            <goal>native-image</goal>
+                            <goal>build</goal>
                         </goals>
                         <phase>package</phase>
                     </execution>
                 </executions>
                 <configuration>
-                    <skip>${skipGraal}</skip>
                     <imageName>ilo</imageName>
+                    <mainClass>${ilo.mainClass}</mainClass>
                     <buildArgs>
-                        --no-fallback
+                        <buildArg>--no-fallback</buildArg>
                     </buildArgs>
+                    <skipNativeBuild>${skipGraal}</skipNativeBuild>
                 </configuration>
             </plugin>
             <plugin>

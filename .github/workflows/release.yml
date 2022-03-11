@@ -4,7 +4,7 @@ on:
     - cron:  45 3 * * MON
 env:
   JAVA: 11
-  GRAAL: 21.2.0
+  GRAAL: 22.0.0.2
 jobs:
   prepare:
     name: Prepare Release
