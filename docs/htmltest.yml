@@ -3,3 +3,5 @@ IgnoreDirectoryMissingTrailingSlash: true
 EnforceHTML5: true
 EnforceHTTPS: true
 IgnoreExternalBrokenLinks: true
+IgnoreURLs:
+  - https://www.microsoft.com/en-us/windows
