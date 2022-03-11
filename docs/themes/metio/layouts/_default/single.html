@@ -7,10 +7,10 @@
             {{ .Title }}
         </a>
         <a href="https://github.com/metio/ilo/commits/main/docs/content/{{ .File }}">
-            <img src="{{ "/images/history.svg" | absURL }}" height="16" width="14" class="icon svgimg">
+            <img src="{{ "/images/history.svg" | absURL }}" height="16" width="14" class="icon svgimg" alt="see history">
         </a>
         <a href="https://github.com/metio/ilo/edit/main/docs/content/{{ .File }}">
-            <img src="{{ "/images/pencil.svg" | absURL }}" height="16" width="14" class="icon svgimg">
+            <img src="{{ "/images/pencil.svg" | absURL }}" height="16" width="14" class="icon svgimg" alt="edit this page">
         </a>
     </h1>
     {{ with .Params.tags }}
