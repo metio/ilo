@@ -1,6 +1,6 @@
 name = "Metio Project Theme"
 license = "CC0"
-licenselink = "http://creativecommons.org/publicdomain/zero/1.0/"
+licenselink = "https://creativecommons.org/publicdomain/zero/1.0/"
 description = "Standard theme for all projects @ metio.wtf"
 homepage = "https://github.com/metio/metio-hugo-theme"
 tags = ["metio", "theme"]
