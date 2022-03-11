@@ -1,0 +1,3 @@
+DirectoryPath: "docs/public"
+# Hugo's directory structure triggers this:
+IgnoreDirectoryMissingTrailingSlash: true
