@@ -1,0 +1,5 @@
+DirectoryPath: docs/public
+IgnoreDirectoryMissingTrailingSlash: true
+EnforceHTML5: true
+EnforceHTTPS: true
+IgnoreExternalBrokenLinks: true
