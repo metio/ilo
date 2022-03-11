@@ -5,7 +5,7 @@
         <li class="mobileonly"><a href="{{ "/" | absLangURL }}">Home</a></li>
     {{ end }}
     <li class="mobileonly"><a href="https://matrix.to/#/{{ .Site.Params.matrix }}">Let's talk on Matrix</a></li>
-    <li class="mobileonly"><a href="mailto:{{ .Site.Params.email }}">Send an email</a></li>
+    <li class="mobileonly"><a href="{{ .Site.Params.email }}">Send an email</a></li>
     <li class="mobileonly"><a href="https://github.com/{{ .Site.Params.github }}">See some code at GitHub</a></li>
     <li class="mobileonly"><a href="https://metio.groups.io/g/ilo/calendar">Check the release calendar</a></li>
     <li class="mobileonly"><a href="{{ "/atom.xml" | absURL }}">Subscribe to the Atom feed</a></li>
