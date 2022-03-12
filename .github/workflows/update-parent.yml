@@ -6,22 +6,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v3
+      - id: jdk
+        name: Setup Java
         uses: actions/setup-java@v2
         with:
           java-version: 17
           distribution: temurin
-      - uses: actions/cache@v2
+      - id: cache
+        uses: actions/cache@v2
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - name: Update parent
-        run: mvn --batch-mode versions:update-parent -DgenerateBackupPoms=false
-      - name: Create Pull Request
-        id: cpr
+      - id: parent
+        name: Update parent
+        run: mvn --batch-mode versions:update-parent --define generateBackupPoms=false
+      - id: create-pull-request
+        name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

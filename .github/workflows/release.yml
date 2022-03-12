@@ -82,10 +82,16 @@ jobs:
             Manage reproducible build environments. Take a look at the [website](https://ilo.projects.metio.wtf/) for detailed information.
             ## Changes
             ${{ steps.changelog.outputs.content }}
-  linux:
-    name: Linux packages
+  build:
+    name: Build on ${{ matrix.os }}
     needs: prepare
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
     steps:
       - id: checkout
         name: Clone Git Repository
@@ -119,10 +125,10 @@ jobs:
       - id: verify
         if: needs.prepare.outputs.commit_count > 0
         name: Verify Project
-        run: mvn --batch-mode verify --activate-profiles release -Drevision=${{ needs.prepare.outputs.release_version }} -DskipNativeBuild=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
+        run: mvn --batch-mode verify --activate-profiles release --define revision=${{ needs.prepare.outputs.release_version }} --define skipNativeBuild=false --define pgp.secretkey=keyfile:signing.key.asc --define pgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
       - id: upload-linux-artifact
         name: Upload Linux Artifact
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -133,7 +139,7 @@ jobs:
           asset_content_type: application/zip
       - id: upload-linux-checksum
         name: Upload Linux Checksum
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -144,7 +150,7 @@ jobs:
           asset_content_type: text/plain
       - id: upload-linux-signature
         name: Upload Linux Signature
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -155,7 +161,7 @@ jobs:
           asset_content_type: text/plain
       - id: upload-jvm-artifact
         name: Upload JVM Artifact
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -166,7 +172,7 @@ jobs:
           asset_content_type: application/zip
       - id: upload-jvm-checksum
         name: Upload JVM Checksum
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -177,7 +183,7 @@ jobs:
           asset_content_type: text/plain
       - id: upload-jvm-signature
         name: Upload JVM Signature
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -186,47 +192,9 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.asc
           asset_content_type: text/plain
-  mac:
-    name: MacOS packages
-    needs: prepare
-    runs-on: macos-latest
-    steps:
-      - id: checkout
-        name: Clone Git Repository
-        if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v3
-      - id: graal
-        name: GraalVM Setup
-        uses: graalvm/setup-graalvm@v1
-        with:
-          version: ${{ env.GRAAL }}
-          java-version: ${{ env.JAVA }}
-          components: native-image
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - id: cache
-        name: Cache Maven Repository
-        if: needs.prepare.outputs.commit_count > 0
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - id: gpg
-        name: GPG Key
-        if: needs.prepare.outputs.commit_count > 0
-        uses: timheuer/base64-to-file@v1.1
-        with:
-          fileName: signing.key.asc
-          fileDir: ${{ github.workspace}}
-          encodedString: ${{ secrets.GPG_SECRET_KEY_BASE64 }}
-      - id: verify
-        name: Verify Project
-        if: needs.prepare.outputs.commit_count > 0
-        run: mvn --batch-mode verify --activate-profiles release -Drevision=${{ needs.prepare.outputs.release_version }} -DskipNativeBuild=false -Dpgp.secretkey=keyfile:$GITHUB_WORKSPACE/signing.key.asc -Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
       - id: upload-mac-artifact
         name: Upload MacOS Artifact
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -237,7 +205,7 @@ jobs:
           asset_content_type: application/zip
       - id: upload-mac-checksum
         name: Upload MacOS Checksum
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -248,7 +216,7 @@ jobs:
           asset_content_type: text/plain
       - id: upload-mac-signature
         name: Upload MacOS Signature
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -257,47 +225,9 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
           asset_content_type: text/plain
-  windows:
-    name: Windows packages
-    needs: prepare
-    runs-on: windows-latest
-    steps:
-      - id: checkout
-        name: Clone Git Repository
-        if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v3
-      - id: graal
-        name: GraalVM Setup
-        uses: graalvm/setup-graalvm@v1
-        with:
-          version: ${{ env.GRAAL }}
-          java-version: ${{ env.JAVA }}
-          components: native-image
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - id: cache
-        name: Cache Maven Repository
-        if: needs.prepare.outputs.commit_count > 0
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-      - id: gpg
-        name: GPG Key
-        if: needs.prepare.outputs.commit_count > 0
-        uses: timheuer/base64-to-file@v1.1
-        with:
-          fileName: signing.key.asc
-          fileDir: ${{ github.workspace}}
-          encodedString: ${{ secrets.GPG_SECRET_KEY_BASE64 }}
-      - id: verify
-        name: Verify Project
-        if: needs.prepare.outputs.commit_count > 0
-        run: mvn --batch-mode verify --activate-profiles release "-Drevision=${{ needs.prepare.outputs.release_version }}" "-DskipNativeBuild=false" "-Dpit.skip=true" "-Dpgp.secretkey=keyfile:signing.key.asc" "-Dpgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}"
       - id: upload-windows-artifact
         name: Upload Windows Artifact
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -308,7 +238,7 @@ jobs:
           asset_content_type: application/zip
       - id: upload-windows-checksum
         name: Upload Windows Checksum
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -319,7 +249,7 @@ jobs:
           asset_content_type: text/plain
       - id: upload-windows-signature
         name: Upload Windows Signature
-        if: needs.prepare.outputs.commit_count > 0
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -330,7 +260,7 @@ jobs:
           asset_content_type: text/plain
   copr:
     name: Release COPR packages
-    needs: [prepare, linux]
+    needs: [prepare, build]
     runs-on: ubuntu-latest
     steps:
       - id: checkout
@@ -346,8 +276,8 @@ jobs:
         if: needs.prepare.outputs.commit_count > 0
         uses: EndBug/add-and-commit@v8
         with:
-          author_name: Sebastian Hoß
-          author_email: seb@hoß.de
+          author_name: ${{ github.actor }}
+          author_email: ${{ github.actor }}@users.noreply.github.com
           message: Update ilo.spec for latest release
           add: build/copr/ilo.spec
         env:
@@ -360,7 +290,7 @@ jobs:
           url: ${{ secrets.COPR_WEBHOOK }}
   announce:
     name: Release Announcement
-    needs: [prepare, copr, mac, windows]
+    needs: [prepare, copr]
     runs-on: ubuntu-latest
     steps:
       - id: email

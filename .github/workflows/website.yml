@@ -24,15 +24,18 @@ jobs:
       - id: previous
         name: Get Last Release
         run: echo "::set-output name=version::$(git describe --abbrev=0 --tags)"
-      - name: Build Website
+      - id: build
+        name: Build Website
         run: hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
         env:
           ILO_RELEASE: ${{ steps.previous.outputs.version }}
-      - name: Run htmltest
+      - id: htmltest
+        name: Run htmltest
         uses: wjdp/htmltest-action@master
         with:
           config: ./docs/htmltest.yml
-      - name: Deploy Website
+      - id: deploy
+        name: Deploy Website
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

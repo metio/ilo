@@ -23,7 +23,7 @@ jobs:
         name: Clone Git Repository
         uses: actions/checkout@v3
       - id: graal
-        name: GraalVM Setup
+        name: Setup GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
           version: 22.0.0.2
@@ -40,7 +40,7 @@ jobs:
             ${{ runner.os }}-maven-
       - id: verify
         name: Verify Project
-        run: mvn --batch-mode verify -DskipNativeBuild=false
+        run: mvn --batch-mode verify
       - id: upload-java
         name: Upload JVM Artifact
         uses: actions/upload-artifact@v2
