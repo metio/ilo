@@ -274,6 +274,10 @@ jobs:
         name: Update COPR Version
         if: needs.prepare.outputs.commit_count > 0
         run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' build/copr/ilo.spec
+      - id: update-nixos-version
+        name: Update NixOS Flake Version
+        if: needs.prepare.outputs.commit_count > 0
+        run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' build/nixos/flake.nix
       - id: update-homebrew-version
         name: Update Homebrew Version
         if: needs.prepare.outputs.commit_count > 0
@@ -290,7 +294,7 @@ jobs:
           author_name: ${{ github.actor }}
           author_email: ${{ github.actor }}@users.noreply.github.com
           message: Update package-manager infos for latest release
-          add: "['build/copr/ilo.spec', 'HomebrewFormula/ilo.rb']"
+          add: "['build/copr/ilo.spec', 'build/nixos/flake.nix', 'HomebrewFormula/ilo.rb']"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: webhook
