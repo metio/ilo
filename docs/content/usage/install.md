@@ -47,9 +47,20 @@ $ rpm-ostree install ilo
 
 ## MacOS
 
+### Manual
+
 The [MacOS](https://www.apple.com/macos/) distribution of `ilo` is a native executable and does not require any additional software to be installed.
 
 {{< macinstall >}}
+
+### Homebrew
+
+[Homebrew](https://brew.sh/) users can install `ilo` from our tap like this:
+
+```shell
+$ brew tap metio/ilo https://github.com/metio/ilo
+$ brew install metio/ilo/ilo
+```
 
 ## Windows
 

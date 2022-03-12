@@ -85,6 +85,8 @@ jobs:
   build:
     name: Build on ${{ matrix.os }}
     needs: prepare
+    outputs:
+      mac_sha256: ${{ steps.mac-checksum.outputs.sha256 }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -225,6 +227,10 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
           asset_content_type: text/plain
+      - id: mac-checksum
+        name: Capture MacOSX SHA256 Checksum
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
+        run: echo "::set-output name=sha256::$(cat ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha256)"
       - id: upload-windows-artifact
         name: Upload Windows Artifact
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
@@ -258,8 +264,8 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
           asset_content_type: text/plain
-  copr:
-    name: Release COPR packages
+  packages:
+    name: Update Packages
     needs: [prepare, build]
     runs-on: ubuntu-latest
     steps:
@@ -267,10 +273,18 @@ jobs:
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
         uses: actions/checkout@v3
-      - id: version-update
-        name: Update Release Version
+      - id: update-copr-version
+        name: Update COPR Version
         if: needs.prepare.outputs.commit_count > 0
         run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' build/copr/ilo.spec
+      - id: update-homebrew-version
+        name: Update Homebrew Version
+        if: needs.prepare.outputs.commit_count > 0
+        run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' HomebrewFormula/ilo.rb
+      - id: update-homebrew-checksum
+        name: Update Homebrew Checksum
+        if: needs.prepare.outputs.commit_count > 0
+        run: sed -i -- 's/sha256 \".*\"/sha256 \"${{ needs.build.outputs.mac_sha256 }}\"/g' HomebrewFormula/ilo.rb
       - id: changes
         name: Commit Changes
         if: needs.prepare.outputs.commit_count > 0
@@ -278,8 +292,8 @@ jobs:
         with:
           author_name: ${{ github.actor }}
           author_email: ${{ github.actor }}@users.noreply.github.com
-          message: Update ilo.spec for latest release
-          add: build/copr/ilo.spec
+          message: Update package-manager infos for latest release
+          add: "['build/copr/ilo.spec', 'HomebrewFormula/ilo.rb']"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: webhook
@@ -290,7 +304,7 @@ jobs:
           url: ${{ secrets.COPR_WEBHOOK }}
   announce:
     name: Release Announcement
-    needs: [prepare, copr]
+    needs: [prepare, build, packages]
     runs-on: ubuntu-latest
     steps:
       - id: email
