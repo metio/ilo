@@ -2,9 +2,6 @@ name: Automated Release
 on:
   schedule:
     - cron:  45 3 * * MON
-env:
-  JAVA: 17
-  GRAAL: 22.0.0.2
 jobs:
   prepare:
     name: Prepare Release
@@ -103,8 +100,8 @@ jobs:
         name: GraalVM Setup
         uses: graalvm/setup-graalvm@v1
         with:
-          version: ${{ env.GRAAL }}
-          java-version: ${{ env.JAVA }}
+          version: 22.0.0.2
+          java-version: 17
           components: native-image
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: cache
