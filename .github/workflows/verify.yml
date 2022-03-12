@@ -40,7 +40,7 @@ jobs:
             ${{ runner.os }}-maven-
       - id: verify
         name: Verify Project
-        run: mvn --batch-mode verify
+        run: mvn --batch-mode verify --define skipNativeBuild=false
       - id: upload-java
         name: Upload JVM Artifact
         uses: actions/upload-artifact@v2
