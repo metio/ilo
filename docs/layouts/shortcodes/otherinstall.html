@@ -8,7 +8,7 @@
 <div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ cd /path/to/ilo/installation/folder
 $ curl --location https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-jvm.zip --output ilo.zip
 $ unzip ilo.zip
-$ chmod +x ilo-{{ getenv "ILO_RELEASE" }}/ilo
-<span class="c1"># move 'ilo' start script to your preferred location</span>
+$ chmod +x ilo-{{ getenv "ILO_RELEASE" }}/bin/ilo
+<span class="c1"># place 'bin' folder in your PATH</span>
 </code></pre>
 </div>
