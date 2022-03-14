@@ -289,7 +289,7 @@ jobs:
       - id: changes
         name: Commit Changes
         if: needs.prepare.outputs.commit_count > 0
-        uses: EndBug/add-and-commit@v8
+        uses: EndBug/add-and-commit@v9
         with:
           author_name: ${{ github.actor }}
           author_email: ${{ github.actor }}@users.noreply.github.com
