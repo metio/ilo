@@ -16,7 +16,7 @@ class Ilo < Formula
   depends_on "nerdctl" => :optional
 
   def install
-    bin.install "ilo-2022.3.14/ilo"
+    bin.install "ilo"
   end
 
   test do
