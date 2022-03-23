@@ -27,7 +27,7 @@ jobs:
         run: mvn --batch-mode versions:update-parent --define generateBackupPoms=false
       - id: create-pull-request
         name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: update parent to latest version
