@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Chat Room
+    url: https://matrix.to/#ilo:matrix.org
+    about: Chat with the developers
+  - name: Mailing List
+    url: https://metio.groups.io/g/ilo/topics
+    about: Ask questions on the mailing list
+  - name: GitHub Discussion
+    url: https://github.com/metio/ilo/discussions
+    about: Start a discussion on GitHub
