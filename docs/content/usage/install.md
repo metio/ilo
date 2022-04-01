@@ -15,6 +15,7 @@ tags:
 Use the following locations in order to download the binary distribution of `ilo`:
 
 - https://github.com/metio/ilo/releases
+- https://cloudsmith.io/~metio/repos/ilo/packages/
 
 Almost none of the widely used package managers have `ilo` in their official repositories yet. In case you want to help package `ilo` for your preferred operating system, take a look at the open packaging issues for [Linux](https://github.com/metio/ilo/issues/2) and [Windows](https://github.com/metio/ilo/issues/11).
 

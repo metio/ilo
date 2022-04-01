@@ -225,7 +225,7 @@ jobs:
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
           asset_content_type: text/plain
       - id: mac-checksum
-        name: Capture MacOSX SHA256 Checksum
+        name: Capture MacOS SHA256 Checksum
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
         run: echo "::set-output name=sha256::$(cat ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha256)"
       - id: upload-windows-artifact
@@ -261,6 +261,186 @@ jobs:
           asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
           asset_name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
           asset_content_type: text/plain
+      - id: cloudsmith-linux-artifact
+        name: Upload Linux Artifact to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip
+          name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip
+          summary: Linux Binary ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
+      - id: cloudsmith-linux-checksum
+        name: Upload Linux Checksum to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.sha512
+          name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.sha512
+          summary: Linux Checksum ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
+      - id: cloudsmith-linux-signature
+        name: Upload Linux Signature to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.asc
+          name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.asc
+          summary: Linux Signature ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
+      - id: cloudsmith-jvm-artifact
+        name: Upload JVM Artifact to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip
+          name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip
+          summary: JVM Binary ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
+      - id: cloudsmith-jvm-checksum
+        name: Upload JVM Checksum to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.sha512
+          name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.sha512
+          summary: JVM Checksum ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
+      - id: cloudsmith-jvm-signature
+        name: Upload JVM Signature to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.asc
+          name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.asc
+          summary: JVM Signature ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
+      - id: cloudsmith-mac-artifact
+        name: Upload MacOS Artifact to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip
+          name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip
+          summary: MacOS Binary ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
+      - id: cloudsmith-mac-checksum
+        name: Upload MacOS Checksum to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha512
+          name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha512
+          summary: MacOS Checksum ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
+      - id: cloudsmith-mac-signature
+        name: Upload MacOS Signature to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
+          name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
+          summary: MacOS Signature ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
+      - id: cloudsmith-windows-artifact
+        name: Upload Windows Artifact to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip
+          name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip
+          summary: Windows Binary ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
+      - id: cloudsmith-windows-checksum
+        name: Upload Windows Checksum to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.sha512
+          name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.sha512
+          summary: Windows Checksum ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
+      - id: cloudsmith-windows-signature
+        name: Upload Windows Signature to Cloudsmith
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
+        uses: cloudsmith-io/action@master
+        with:
+          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
+          command: push
+          format: raw
+          owner: metio
+          repo: ilo
+          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
+          name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
+          summary: Windows Signature ${{ needs.prepare.outputs.release_version }}
+          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          version: ${{ needs.prepare.outputs.release_version }}
   packages:
     name: Update Packages
     needs: [prepare, build]
