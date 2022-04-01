@@ -143,10 +143,10 @@ In order to use [airmux](https://github.com/dermoumi/airmux), first [install it]
 
 ```shell script
 [you@hostname project-dir]$ cat ${XDG_CONFIG_HOME}/airmux/your-project.yml
-name: ilo
+name: your-project
 root: ~/path/to/your/project
 windows:
-  - ilo:
+  - your_project:
       panes:
         - command: ilo @build-env
 ```
@@ -157,10 +157,10 @@ In order to use [smug](https://github.com/ivaaaan/smug), first [install it](http
 
 ```shell script
 [you@hostname project-dir]$ cat ${XDG_CONFIG_HOME}/smug/your-project.yml
-session: ilo
+session: your-project
 root: ~/path/to/your/project
 windows:
-  - name: ilo
+  - name: your_project
     commands:
       - ilo @build-env
 ```
