@@ -136,3 +136,17 @@ number_of_panes = 2
 session_name = "Your Project"
 commands = ["ilo @build-env"]
 ```
+
+## airmux
+
+In order to use [airmux](https://github.com/dermoumi/airmux), first [install it](https://github.com/dermoumi/airmux#installation) and then create a new configuration in `$XDG_CONFIG_HOME/airmux`:
+
+```shell script
+[you@hostname project-dir]$ cat $XDG_CONFIG_HOME/airmux/your-project.yml
+name: ilo
+root: ~/path/to/your/project
+windows:
+  - ilo:
+      panes:
+        - command: ilo @build-env
+```
