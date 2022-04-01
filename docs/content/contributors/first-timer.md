@@ -10,59 +10,51 @@ tags:
 - help
 ---
 
-First time contributors have to perform an additional step in order to get their changes merged into the main repository: The [WAIVER](https://github.com/metio/ilo/blob/main/AUTHORS/WAIVER) has to be signed in order to signal that all contributions can be published into the public domain using the [Creative Commons Zero (CC0)](https://creativecommons.org/publicdomain/zero/1.0/) license. [minisign](https://jedisct1.github.io/minisign/) is used to sign and verify contributions (see [building](../building)). The signed waiver **must** be added to your first pull request. The created git commit **must** be [GPG signed](https://git-scm.com/docs/git-commit#Documentation/git-commit.txt--Sltkeyidgt). Note that recent versions of Git allow you to use your SSH key to *gpg-sign* your commits. Additionally, any contributor may add her/his metadata to the project. This is especially useful for `minisign` public keys since you will have to communicate to the project maintainers anyway.
+`ilo` is an open source product released under the [CC0 1.0 Universal license](https://creativecommons.org/publicdomain/zero/1.0/). In order to make sure that each contribution is correctly attributed and licensed, the Developer Certificate of Origin (DCO) **MUST** be signed by each contributor with their first commit. In order to do so, simply add a `Signed-off-by` statement at the end of your commit yourself or use `git commit -s` to do that automatically. The DCO can be seen below or at https://developercertificate.org/
 
-## Sign
-
-In order to sign the waiver, call the following commands from the root of the project:
-
-```shell script
-$ minisign -Sm AUTHORS/WAIVER
-$ mv AUTHORS/WAIVER.minisig AUTHORS/WAIVER.`id --name --user`.minisig
-
-# or use the Makefile
-$ make sign-waiver
 ```
+Developer's Certificate of Origin 1.1
 
-In both cases, a new file called `AUTHORS/WAIVER.<USER>.minisign` was created. The `Makefile` will commit the signed waiver to your local repo as well. In case you have not used the `Makefile`, run this:
+By making a contribution to this project, I certify that:
 
-```shell script
-$ git add AUTHORS/WAIVER.`id --name --user`.minisig
-$ git commit -m 'sign waiver' --gpg-sign
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the
+    best of my knowledge, is covered under an appropriate open
+    source license and I have the right under that license to
+    submit that work with modifications, whether created in whole
+    or in part by me, under the same open source license (unless
+    I am permitted to submit under a different license), as
+    Indicated in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including
+    all personal information I submit with it, including my
+    sign-off) is maintained indefinitely and may be redistributed
+    consistent with this project or the open source license(s)
+    involved.
 ```
-
-## Verify
-
-An existing contributor will verify your signature with:
-
-```shell script
-$ minisign -V -x AUTHORS/WAIVER.<YOUR_NAME>.minisig -P <YOUR_PUB_KEY> -m AUTHORS/WAIVER
-```
-
-In order to verify existing signatures, do any of the following:
-
-{{< minisignatures >}}
 
 ## Metadata
 
-Every contributor may add/remove her/his metadata to the list of contributors at any time.
-
-Metadata is currently used in three places:
-
-1. To generate a list of existing [minisign](https://jedisct1.github.io/minisign/) signatures in the [first timer](../first-timer) documentation.
-2. To generate a [humans.txt](https://humanstxt.org/) file of [all contributors](https://ilo.projects.metio.wtf/humans.txt).
-3. To generate a [FOAF](http://xmlns.com/foaf/spec/) for the [entire project](https://ilo.projects.metio.wtf/foaf.rdf).
-
-## Adding a new entry
-
-Create a new file called `<YOUR_NAME>.yaml` in the [contributors directory](https://github.com/metio/ilo/tree/main/docs/data/contributors). Add the following properties to it:
+Every contributor **MAY** add/remove their metadata to the list of contributors at any time. Simply add a file called `<YOUR_NAME>.yaml` in the [contributors directory](https://github.com/metio/ilo/tree/main/docs/data/contributors) with the following properties:
 
 ```yaml
 id: '<YOUR_NAME>'                   # should match file name (required)
-minisign: '<YOUR_MINISIGN_PUB_KEY>' # used for key verification (required)
 title: '<YOUR_TITLE>'               # used by FOAF/humans.txt (optional)
 first_name: '<YOUR_FIRST_NAME>'     # used by FOAF/humans.txt (optional)
 last_name: '<YOUR_LAST_NAME>'       # used by FOAF/humans.txt (optional)
 email: '<YOUR_EMAIL>'               # used by FOAF (optional)
 website: '<YOUR_URL>'               # used by FOAF/humans.txt (optional)
 ```
+
+Metadata is currently used in three places:
+
+1. To generate a [humans.txt](https://humanstxt.org/) file of [all contributors](https://ilo.projects.metio.wtf/humans.txt).
+2. To generate a [FOAF](http://xmlns.com/foaf/spec/) for the [entire project](https://ilo.projects.metio.wtf/foaf.rdf).

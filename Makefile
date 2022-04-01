@@ -45,11 +45,6 @@ native-image: ##@hacking Create a native image using GraalVM
 clean: ##@hacking Clean build artifacts
 	mvn clean
 
-.PHONY: sign-waiver
-sign-waiver: ##@contributing Sign the WAIVER
-	gpg2 --no-version --armor --sign AUTHORS/WAIVER
-	mv AUTHORS/WAIVER.asc AUTHORS/WAIVER-signed-by-$(USERNAME)-$(CURRENT_DATE).asc
-
 .PHONY: ilo-build
 ilo-build: ##@hacking Build everything with ilo
 	ilo @dev/build

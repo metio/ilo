@@ -16,8 +16,6 @@ tags:
 ## Prerequisites
 
 - [git](https://git-scm.com/) to fetch the [source code](../git-mirrors) of `ilo`
-- [minisign](https://jedisct1.github.io/minisign/) to sign the waiver as a contributor
-- [gpg](https://gnupg.org/) or [ssh](https://www.openssh.com/) to sign your the commit which adds the waiver
 
 ## ilo Setup
 
