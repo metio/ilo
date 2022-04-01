@@ -70,10 +70,10 @@ ilo @build-env
 
 ## tmuxp
 
-In order to use [tmuxp](https://github.com/tmux-python/tmuxp), first [install it](https://github.com/tmux-python/tmuxp#installation) and then create a new configuration in `$XDG_CONFIG_HOME/tmuxp`:
+In order to use [tmuxp](https://github.com/tmux-python/tmuxp), first [install it](https://github.com/tmux-python/tmuxp#installation) and then create a new configuration in `${XDG_CONFIG_HOME}/tmuxp`:
 
 ```shell script
-[you@hostname project-dir]$ cat $XDG_CONFIG_HOME/tmuxp/your-project.yml
+[you@hostname project-dir]$ cat ${XDG_CONFIG_HOME}/tmuxp/your-project.yml
 session_name: your-project
 windows:
 - window_name: dev window
@@ -127,10 +127,10 @@ windows:
 
 ## dmux
 
-In order to use [dmux](https://github.com/zdcthomas/dmux), first [install it](https://github.com/zdcthomas/dmux#installation) and then create your configuration in `$XDG_CONFIG_HOME/dmux/dmux.conf.{file_type}`:
+In order to use [dmux](https://github.com/zdcthomas/dmux), first [install it](https://github.com/zdcthomas/dmux#installation) and then create your configuration in `${XDG_CONFIG_HOME}/dmux/dmux.conf.{file_type}`:
 
 ```shell script
-[you@hostname project-dir]$ cat $XDG_CONFIG_HOME/dmux/dmux.conf.toml
+[you@hostname project-dir]$ cat ${XDG_CONFIG_HOME}/dmux/dmux.conf.toml
 [your-project]
 number_of_panes = 2
 session_name = "Your Project"
@@ -139,14 +139,28 @@ commands = ["ilo @build-env"]
 
 ## airmux
 
-In order to use [airmux](https://github.com/dermoumi/airmux), first [install it](https://github.com/dermoumi/airmux#installation) and then create a new configuration in `$XDG_CONFIG_HOME/airmux`:
+In order to use [airmux](https://github.com/dermoumi/airmux), first [install it](https://github.com/dermoumi/airmux#installation) and then create a new configuration in `${XDG_CONFIG_HOME}/airmux`:
 
 ```shell script
-[you@hostname project-dir]$ cat $XDG_CONFIG_HOME/airmux/your-project.yml
+[you@hostname project-dir]$ cat ${XDG_CONFIG_HOME}/airmux/your-project.yml
 name: ilo
 root: ~/path/to/your/project
 windows:
   - ilo:
       panes:
         - command: ilo @build-env
+```
+
+## smug
+
+In order to use [smug](https://github.com/ivaaaan/smug), first [install it](https://github.com/ivaaaan/smug#installation) and then create a new configuration in `${XDG_CONFIG_HOME}/smug`:
+
+```shell script
+[you@hostname project-dir]$ cat ${XDG_CONFIG_HOME}/smug/your-project.yml
+session: ilo
+root: ~/path/to/your/project
+windows:
+  - name: ilo
+    commands:
+      - ilo @build-env
 ```
