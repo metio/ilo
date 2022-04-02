@@ -9,59 +9,60 @@ package wtf.metio.ilo;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
+import uk.org.webcompere.systemstubs.security.AbortExecutionException;
+import uk.org.webcompere.systemstubs.security.SystemExit;
 
-import static com.github.stefanbirkner.systemlambda.SystemLambda.catchSystemExit;
-import static com.github.stefanbirkner.systemlambda.SystemLambda.restoreSystemProperties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static wtf.metio.ilo.test.TestResources.testResources;
 
 @DisplayName("Ilo")
+@ExtendWith(SystemStubsExtension.class)
 class IloTest {
 
   @Test
   @DisplayName("--help return exit code 0")
-  void exitCodeForHelp() throws Exception {
-    final var exitCode = catchSystemExit(() -> Ilo.main("--help"));
-    assertEquals(0, exitCode);
+  void exitCodeForHelp(final SystemExit systemExit) {
+    assertThrows(AbortExecutionException.class, () -> Ilo.main("--help"));
+    assertEquals(0, systemExit.getExitCode());
   }
 
   @Test
   @DisplayName("-h return exit code 0")
-  void exitCodeForShortHelp() throws Exception {
-    final var exitCode = catchSystemExit(() -> Ilo.main("-h"));
-    assertEquals(0, exitCode);
+  void exitCodeForShortHelp(final SystemExit systemExit) {
+    assertThrows(AbortExecutionException.class, () -> Ilo.main("-h"));
+    assertEquals(0, systemExit.getExitCode());
   }
 
   @Test
   @DisplayName("--version return exit code 0")
-  void exitCodeForVersion() throws Exception {
-    final var exitCode = catchSystemExit(() -> Ilo.main("--version"));
-    assertEquals(0, exitCode);
+  void exitCodeForVersion(final SystemExit systemExit) {
+    assertThrows(AbortExecutionException.class, () -> Ilo.main("--version"));
+    assertEquals(0, systemExit.getExitCode());
   }
 
   @Test
   @DisplayName("-V return exit code 0")
-  void exitCodeForShortVersion() throws Exception {
-    final var exitCode = catchSystemExit(() -> Ilo.main("-V"));
-    assertEquals(0, exitCode);
+  void exitCodeForShortVersion(final SystemExit systemExit) {
+    assertThrows(AbortExecutionException.class, () -> Ilo.main("-V"));
+    assertEquals(0, systemExit.getExitCode());
   }
 
   @Test
   @DisplayName("reads .rc files")
-  void supportsRunCommands() throws Exception {
-    restoreSystemProperties(() -> {
-      System.setProperty("user.dir", testResources(Ilo.class).resolve("root").toAbsolutePath().toString());
-      assertEquals(1, Ilo.runCommands(new String[]{}).count());
-    });
+  void supportsRunCommands(final SystemProperties properties) {
+    properties.set("user.dir", testResources(Ilo.class).resolve("root").toAbsolutePath().toString());
+    assertEquals(1, Ilo.runCommands(new String[]{}).count());
   }
 
   @Test
   @DisplayName("does not need .rc files")
-  void runsWithRunCommands() throws Exception {
-    restoreSystemProperties(() -> {
-      System.setProperty("user.dir", testResources(Ilo.class).resolve("empty").toAbsolutePath().toString());
-      assertEquals(0, Ilo.runCommands(new String[]{}).count());
-    });
+  void runsWithRunCommands(final SystemProperties properties) {
+    properties.set("user.dir", testResources(Ilo.class).resolve("empty").toAbsolutePath().toString());
+    assertEquals(0, Ilo.runCommands(new String[]{}).count());
   }
 
 }

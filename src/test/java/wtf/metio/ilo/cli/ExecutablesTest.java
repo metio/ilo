@@ -7,11 +7,13 @@
 
 package wtf.metio.ilo.cli;
 
-import com.github.stefanbirkner.systemlambda.SystemLambda;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.stream.SystemOut;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,6 +21,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(SystemStubsExtension.class)
 class ExecutablesTest {
 
   @Test
@@ -121,16 +124,15 @@ class ExecutablesTest {
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("writes debug message to system.out")
-  void shouldWriteDebugMessageToSystemOut() throws Exception {
+  void shouldWriteDebugMessageToSystemOut(final SystemOut systemOut) {
     // given
     final var tool = "ls";
 
     // when
-    final var text = SystemLambda.tapSystemOutNormalized(
-      () -> Executables.runAndWaitForExit(List.of(tool), true));
+    Executables.runAndWaitForExit(List.of(tool), true);
 
     // then
-    assertEquals("ilo executes: ls\n", text);
+    assertEquals("ilo executes: ls\n", systemOut.getText());
   }
 
   @Test

@@ -7,13 +7,14 @@
 
 package wtf.metio.ilo.cli;
 
-import com.github.stefanbirkner.systemlambda.SystemLambda;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 
 import java.util.stream.Stream;
 
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.test.TestResources.testResources;
 
 @DisplayName("RunCommands")
+@ExtendWith(SystemStubsExtension.class)
 class RunCommandsTest {
 
   @Test
@@ -120,49 +122,49 @@ class RunCommandsTest {
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("allow to configure different run command file")
-  void configureRunCommandFile() throws Exception {
-    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "some-name.rc")
-      .execute(() -> assertEquals(1, findRunCommandFiles("different").count()));
+  void configureRunCommandFile(final uk.org.webcompere.systemstubs.environment.EnvironmentVariables environmentVariables) {
+    environmentVariables.set(EnvironmentVariables.ILO_RC.name(), "some-name.rc");
+    assertEquals(1, findRunCommandFiles("different").count());
   }
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("allow to configure different run command files")
-  void configureRunCommandFiles() throws Exception {
-    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "some-name.rc,another.rc")
-      .execute(() -> assertEquals(2, findRunCommandFiles("different").count()));
+  void configureRunCommandFiles(final uk.org.webcompere.systemstubs.environment.EnvironmentVariables environmentVariables) {
+    environmentVariables.set(EnvironmentVariables.ILO_RC.name(), "some-name.rc,another.rc");
+    assertEquals(2, findRunCommandFiles("different").count());
   }
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("allow to configure different run command files where one is missing")
-  void configureRunCommandFilesWithMissing() throws Exception {
-    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc,some-name.rc")
-      .execute(() -> assertEquals(1, findRunCommandFiles("different").count()));
+  void configureRunCommandFilesWithMissing(final uk.org.webcompere.systemstubs.environment.EnvironmentVariables environmentVariables) {
+    environmentVariables.set(EnvironmentVariables.ILO_RC.name(), "missing.rc,some-name.rc");
+    assertEquals(1, findRunCommandFiles("different").count());
   }
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("handle missing run command file")
-  void configureMissingRunCommandFile() throws Exception {
-    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc")
-      .execute(() -> assertEquals(0, findRunCommandFiles("different").count()));
+  void configureMissingRunCommandFile(final uk.org.webcompere.systemstubs.environment.EnvironmentVariables environmentVariables) {
+    environmentVariables.set(EnvironmentVariables.ILO_RC.name(), "missing.rc");
+    assertEquals(0, findRunCommandFiles("different").count());
   }
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("handle missing run command files")
-  void configureMissingRunCommandFiles() throws Exception {
-    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc,deleted.rc")
-      .execute(() -> assertEquals(0, findRunCommandFiles("different").count()));
+  void configureMissingRunCommandFiles(final uk.org.webcompere.systemstubs.environment.EnvironmentVariables environmentVariables) {
+    environmentVariables.set(EnvironmentVariables.ILO_RC.name(), "missing.rc,deleted.rc");
+    assertEquals(0, findRunCommandFiles("different").count());
   }
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("allow to configure run command files with whitespace after the comma")
-  void configureRunCommandFilesWithWhitespace() throws Exception {
-    SystemLambda.withEnvironmentVariable(EnvironmentVariables.ILO_RC.name(), "missing.rc, some-name.rc")
-      .execute(() -> assertEquals(1, findRunCommandFiles("different").count()));
+  void configureRunCommandFilesWithWhitespace(final uk.org.webcompere.systemstubs.environment.EnvironmentVariables environmentVariables) {
+    environmentVariables.set(EnvironmentVariables.ILO_RC.name(), "missing.rc, some-name.rc");
+    assertEquals(1, findRunCommandFiles("different").count());
   }
 
   @Test

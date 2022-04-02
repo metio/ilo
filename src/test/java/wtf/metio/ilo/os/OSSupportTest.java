@@ -7,9 +7,11 @@
 
 package wtf.metio.ilo.os;
 
-import com.github.stefanbirkner.systemlambda.SystemLambda;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
 
 import java.nio.file.Files;
 
@@ -17,18 +19,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("OS")
+@ExtendWith(SystemStubsExtension.class)
 class OSSupportTest {
 
   @Test
   @DisplayName("write passwd file")
-  void passwd() throws Exception {
-    SystemLambda.restoreSystemProperties(() -> {
-      System.setProperty("user.name", "testuser");
-      final var passwdFile = OSSupport.passwdFile("1234:5678");
-      assertNotNull(passwdFile);
-      final var content = Files.readString(passwdFile);
-      assertEquals(content, "testuser:x:1234:5678::/home/testuser:/bin/bash");
-    });
+  void passwd(final SystemProperties properties) throws Exception {
+    properties.set("user.name", "testuser");
+    final var passwdFile = OSSupport.passwdFile("1234:5678");
+    assertNotNull(passwdFile);
+    final var content = Files.readString(passwdFile);
+    assertEquals(content, "testuser:x:1234:5678::/home/testuser:/bin/bash");
   }
 
 }

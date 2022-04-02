@@ -7,9 +7,11 @@
 
 package wtf.metio.ilo.tools;
 
-import com.github.stefanbirkner.systemlambda.SystemLambda;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
 import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
 
@@ -17,6 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(SystemStubsExtension.class)
 abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
 
   @Test
@@ -130,15 +133,13 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
 
   @Test
   @DisplayName("expands ~")
-  void shortHome() throws Exception {
+  void shortHome(final SystemProperties properties) {
+    properties.set("user.home", "/home/user");
     final var options = new ShellOptions();
     options.image = "example:test";
     options.volumes = List.of("~/test:/something");
-    SystemLambda.restoreSystemProperties(() -> {
-      System.setProperty("user.home", "/home/user");
-      final var arguments = tool().runArguments(options);
-      assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
-    });
+    final var arguments = tool().runArguments(options);
+    assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
   }
 
   @Test

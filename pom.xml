@@ -116,8 +116,18 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.stefanbirkner</groupId>
-            <artifactId>system-lambda</artifactId>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.org.webcompere</groupId>
+            <artifactId>system-stubs-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.org.webcompere</groupId>
+            <artifactId>system-stubs-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -190,17 +200,12 @@
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.tools=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.utils=ALL-UNNAMED
                         --add-opens wtf.metio.ilo/wtf.metio.ilo.version=ALL-UNNAMED
-                        --add-opens java.base/java.util=ALL-UNNAMED
                     </argLine>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <configuration>
-                    <!-- fails in Java 17 -->
-                    <excludedTestClasses>wtf.metio.ilo.cli.RunCommandsTest</excludedTestClasses>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

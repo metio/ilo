@@ -7,13 +7,15 @@
 
 package wtf.metio.ilo.os;
 
-import com.github.stefanbirkner.systemlambda.SystemLambda;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.os.ParameterExpansion.MATCHER_GROUP_NAME;
@@ -110,6 +112,7 @@ class PosixShellTest {
   @Nested
   @DisplayName("expansion")
   @EnabledOnOs({OS.LINUX, OS.MAC})
+  @ExtendWith(SystemStubsExtension.class)
   class ExpansionTest {
 
     private ParameterExpansion bourneShell;
@@ -156,12 +159,10 @@ class PosixShellTest {
 
     @Test
     @DisplayName("expands ~ to the user's home directory")
-    void expandHomeWithTilde() throws Exception {
-      SystemLambda.restoreSystemProperties(() -> {
-        System.setProperty("user.home", "/home/user");
-        final var result = bourneShell.expandParameters("~/test:/something");
-        assertEquals("/home/user/test:/something", result);
-      });
+    void expandHomeWithTilde(final SystemProperties properties) {
+      properties.set("user.home", "/home/user");
+      final var result = bourneShell.expandParameters("~/test:/something");
+      assertEquals("/home/user/test:/something", result);
     }
 
     @Test
