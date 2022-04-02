@@ -359,7 +359,6 @@
                 <!-- See http://ec4j.github.io/editorconfig-maven-plugin/ for full configuration reference -->
                 <groupId>org.ec4j.maven</groupId>
                 <artifactId>editorconfig-maven-plugin</artifactId>
-                <version>0.1.0</version>
                 <executions>
                     <execution>
                         <id>check</id>
