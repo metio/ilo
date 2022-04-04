@@ -5,9 +5,10 @@ on:
   push:
     branches: [ main ]
     paths:
-      - .github/workflows/*
+      - .github/workflows/verify.yml
       - src/**
       - pom.xml
+      - maven-version-rules.xml
 jobs:
   build:
     name: Build on ${{ matrix.os }}
@@ -43,28 +44,28 @@ jobs:
         run: mvn --batch-mode verify --define skipNativeBuild=false
       - id: upload-java
         name: Upload JVM Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: jvm
           path: ./target/ilo-*-jvm*
         if: runner.os == 'Linux'
       - id: upload-linux
         name: Upload Linux Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: linux
           path: ./target/ilo-*-linux*
         if: runner.os == 'Linux'
       - id: upload-mac
         name: Upload Mac Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: mac
           path: ./target/ilo-*-mac*
         if: runner.os == 'macOS'
       - id: upload-windows
         name: Upload Windows Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: windows
           path: ./target/ilo-*-windows*

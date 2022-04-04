@@ -29,56 +29,6 @@ jobs:
         name: Get Last Release
         if: steps.commits.outputs.count > 0
         run: echo "::set-output name=version::$(git describe --abbrev=0 --tags)"
-      - id: generate_changelog
-        name: Generate Changelog
-        if: steps.commits.outputs.count > 0
-        uses: heinrichreimer/github-changelog-generator-action@v2.3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          unreleased: true
-          issues: true
-          issuesWoLabels: true
-          pullRequests: true
-          prWoLabels: true
-          filterByMilestone: false
-          futureRelease: ${{ steps.release.outputs.version }}
-          sinceTag: ${{ steps.previous.outputs.version }}
-          stripGeneratorNotice: true
-          stripHeaders: true
-      - name: Check Changelog Existence
-        id: check_changelog
-        uses: andstor/file-existence-action@v1
-        with:
-          files: CHANGELOG.md
-      - name: Create Empty Changelog
-        id: empty_changelog
-        uses: 1arp/create-a-file-action@0.2
-        if: steps.check_changelog.outputs.files_exists == 'false'
-        with:
-          file: CHANGELOG.md
-          content: |
-            no user facing changes
-      - name: Read Changelog
-        id: changelog
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./CHANGELOG.md
-      - id: create_release
-        name: Create Release
-        if: steps.commits.outputs.count > 0
-        uses: actions/create-release@v1.1.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.release.outputs.version }}
-          release_name: ${{ steps.release.outputs.version }}
-          draft: false
-          prerelease: false
-          body: |
-            # ilo
-            Manage reproducible build environments. Take a look at the [website](https://ilo.projects.metio.wtf/) for detailed information.
-            ## Changes
-            ${{ steps.changelog.outputs.content }}
   build:
     name: Build on ${{ matrix.os }}
     needs: prepare
@@ -125,325 +75,80 @@ jobs:
         if: needs.prepare.outputs.commit_count > 0
         name: Verify Project
         run: mvn --batch-mode verify --activate-profiles release --define revision=${{ needs.prepare.outputs.release_version }} --define skipNativeBuild=false --define pgp.secretkey=keyfile:signing.key.asc --define pgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
-      - id: upload-linux-artifact
-        name: Upload Linux Artifact
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip
-          asset_content_type: application/zip
-      - id: upload-linux-checksum
-        name: Upload Linux Checksum
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.sha512
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.sha512
-          asset_content_type: text/plain
-      - id: upload-linux-signature
-        name: Upload Linux Signature
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.asc
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.asc
-          asset_content_type: text/plain
-      - id: upload-jvm-artifact
-        name: Upload JVM Artifact
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip
-          asset_content_type: application/zip
-      - id: upload-jvm-checksum
-        name: Upload JVM Checksum
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.sha512
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.sha512
-          asset_content_type: text/plain
-      - id: upload-jvm-signature
-        name: Upload JVM Signature
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.asc
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.asc
-          asset_content_type: text/plain
-      - id: upload-mac-artifact
-        name: Upload MacOS Artifact
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip
-          asset_content_type: application/zip
-      - id: upload-mac-checksum
-        name: Upload MacOS Checksum
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha512
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha512
-          asset_content_type: text/plain
-      - id: upload-mac-signature
-        name: Upload MacOS Signature
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
-          asset_content_type: text/plain
       - id: mac-checksum
         name: Capture MacOS SHA256 Checksum
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
         run: echo "::set-output name=sha256::$(cat ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha256)"
-      - id: upload-windows-artifact
+      - id: upload-java
+        name: Upload JVM Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: jvm
+          path: ./target/ilo-*-jvm*
+        if: runner.os == 'Linux'
+      - id: upload-linux
+        name: Upload Linux Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux
+          path: ./target/ilo-*-linux*
+        if: runner.os == 'Linux'
+      - id: upload-mac
+        name: Upload Mac Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: mac
+          path: ./target/ilo-*-mac*
+        if: runner.os == 'macOS'
+      - id: upload-windows
         name: Upload Windows Artifact
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/upload-artifact@v3
         with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip
-          asset_content_type: application/zip
-      - id: upload-windows-checksum
-        name: Upload Windows Checksum
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.sha512
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.sha512
-          asset_content_type: text/plain
-      - id: upload-windows-signature
-        name: Upload Windows Signature
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.prepare.outputs.release_url }}
-          asset_path: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
-          asset_name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
-          asset_content_type: text/plain
-      - id: cloudsmith-linux-artifact
-        name: Upload Linux Artifact to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip
-          name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip
-          summary: Linux Binary ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-      - id: cloudsmith-linux-checksum
-        name: Upload Linux Checksum to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.sha512
-          name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.sha512
-          summary: Linux Checksum ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-      - id: cloudsmith-linux-signature
-        name: Upload Linux Signature to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.asc
-          name: ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.asc
-          summary: Linux Signature ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-      - id: cloudsmith-jvm-artifact
-        name: Upload JVM Artifact to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip
-          name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip
-          summary: JVM Binary ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-      - id: cloudsmith-jvm-checksum
-        name: Upload JVM Checksum to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.sha512
-          name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.sha512
-          summary: JVM Checksum ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-      - id: cloudsmith-jvm-signature
-        name: Upload JVM Signature to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.asc
-          name: ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.asc
-          summary: JVM Signature ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-      - id: cloudsmith-mac-artifact
-        name: Upload MacOS Artifact to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip
-          name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip
-          summary: MacOS Binary ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-      - id: cloudsmith-mac-checksum
-        name: Upload MacOS Checksum to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha512
-          name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha512
-          summary: MacOS Checksum ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-      - id: cloudsmith-mac-signature
-        name: Upload MacOS Signature to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
-          name: ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
-          summary: MacOS Signature ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-      - id: cloudsmith-windows-artifact
-        name: Upload Windows Artifact to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip
-          name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip
-          summary: Windows Binary ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-      - id: cloudsmith-windows-checksum
-        name: Upload Windows Checksum to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.sha512
-          name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.sha512
-          summary: Windows Checksum ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-      - id: cloudsmith-windows-signature
-        name: Upload Windows Signature to Cloudsmith
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
-        uses: cloudsmith-io/action@master
-        with:
-          api-key: ${{ secrets.CLOUDSMITH_API_KEY }}
-          command: push
-          format: raw
-          owner: metio
-          repo: ilo
-          file: ./target/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
-          name: ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
-          summary: Windows Signature ${{ needs.prepare.outputs.release_version }}
-          description: see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
-          version: ${{ needs.prepare.outputs.release_version }}
-  packages:
-    name: Update Packages
+          name: windows
+          path: ./target/ilo-*-windows*
+        if: runner.os == 'Windows'
+  release:
+    name: GitHub Release
     needs: [prepare, build]
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: Clone Git Repository
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - id: download
+        name: Download Artifacts
+        if: needs.prepare.outputs.commit_count > 0
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+      - id: create_release
+        name: Create Release
+        if: needs.prepare.outputs.commit_count > 0
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.release.outputs.version }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            artifacts/jvm/ilo-${{ steps.release.outputs.version }}-jvm.zip
+            artifacts/jvm/ilo-${{ steps.release.outputs.version }}-jvm.zip.asc
+            artifacts/jvm/ilo-${{ steps.release.outputs.version }}-jvm.zip.sha512
+            artifacts/linux/ilo-${{ steps.release.outputs.version }}-linux.zip
+            artifacts/linux/ilo-${{ steps.release.outputs.version }}-linux.zip.asc
+            artifacts/linux/ilo-${{ steps.release.outputs.version }}-linux.zip.sha512
+            artifacts/mac/ilo-${{ steps.release.outputs.version }}-mac.zip
+            artifacts/mac/ilo-${{ steps.release.outputs.version }}-mac.zip.asc
+            artifacts/mac/ilo-${{ steps.release.outputs.version }}-mac.zip.sha512
+            artifacts/windows/ilo-${{ steps.release.outputs.version }}-windows.zip
+            artifacts/windows/ilo-${{ steps.release.outputs.version }}-windows.zip.asc
+            artifacts/windows/ilo-${{ steps.release.outputs.version }}-windows.zip.sha512
+  packages:
+    name: Update Package Managers
+    needs: [prepare, release]
     runs-on: ubuntu-latest
     steps:
       - id: checkout
@@ -477,15 +182,9 @@ jobs:
           add: "['build/copr/ilo.spec', 'build/nixos/flake.nix', 'HomebrewFormula/ilo.rb']"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - id: webhook
-        name: Trigger COPR Webhook
-        if: needs.prepare.outputs.commit_count > 0
-        uses: joelwmale/webhook-action@2.1.0
-        with:
-          url: ${{ secrets.COPR_WEBHOOK }}
   announce:
     name: Release Announcement
-    needs: [prepare, build, packages]
+    needs: [prepare, packages]
     runs-on: ubuntu-latest
     steps:
       - id: email
@@ -510,3 +209,14 @@ jobs:
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
           message: release ${{ needs.prepare.outputs.release_version }} published - see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
           server: matrix.org
+  webhooks:
+    name: Trigger Webhooks
+    needs: [prepare, packages]
+    runs-on: ubuntu-latest
+    steps:
+      - id: copr
+        name: COPR Webhook
+        if: needs.prepare.outputs.commit_count > 0
+        uses: joelwmale/webhook-action@2.1.0
+        with:
+          url: ${{ secrets.COPR_WEBHOOK }}
