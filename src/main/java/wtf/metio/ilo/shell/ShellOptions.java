@@ -117,6 +117,13 @@ public final class ShellOptions implements Options {
   public List<String> volumes;
 
   @CommandLine.Option(
+    names = {"--missing-volumes"},
+    description = "Specifies how missing local volume directories should be handles. Valid values: ${COMPLETION-CANDIDATES}",
+    defaultValue = "CREATE"
+  )
+  public ShellVolumeBehavior missingVolumes;
+
+  @CommandLine.Option(
     names = {"--env"},
     description = "Specify a environment variable for the container."
   )

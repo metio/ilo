@@ -33,6 +33,7 @@ class ShellTest extends TestMethodSources {
   void setUp() {
     executor = new TestShellExecutor();
     options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.image = "fedora:latest";
     shell = new Shell(executor);
     shell.options = options;

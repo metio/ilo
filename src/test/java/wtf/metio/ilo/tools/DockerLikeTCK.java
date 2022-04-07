@@ -11,9 +11,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
-import uk.org.webcompere.systemstubs.properties.SystemProperties;
 import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellOptions;
+import wtf.metio.ilo.shell.ShellVolumeBehavior;
 
 import java.util.List;
 
@@ -26,6 +26,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("generate pull arguments")
   void pullArguments() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.pull = true;
     options.image = "example:test";
     final var arguments = tool().pullArguments(options);
@@ -36,6 +37,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("generate build arguments")
   void buildArguments() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.image = "example:test";
     options.containerfile = "Dockerfile";
     final var arguments = tool().buildArguments(options);
@@ -46,6 +48,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("generate build arguments with pull")
   void buildArgumentsWithPull() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.pull = true;
     options.image = "example:test";
     options.containerfile = "Dockerfile";
@@ -57,6 +60,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("generate run arguments")
   void runArguments() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.image = "example:test";
     final var arguments = tool().runArguments(options);
     assertEquals(String.format("%s run --rm example:test", name()), String.join(" ", arguments));
@@ -66,6 +70,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("generate clean arguments")
   void cleanArguments() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.image = "example:test";
     options.removeImage = true;
     final var arguments = tool().cleanupArguments(options);
@@ -76,6 +81,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("interactive run")
   void interactive() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.image = "example:test";
     options.interactive = true;
     final var arguments = tool().runArguments(options);
@@ -86,6 +92,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("hostname run")
   void hostname() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.image = "example:test";
     options.hostname = "some-test";
     final var arguments = tool().runArguments(options);
@@ -96,6 +103,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("custom command run")
   void customCommand() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.commands = List.of("example:test", "/bin/bash", "-c", "whoami");
     final var arguments = tool().runArguments(options);
     assertEquals(String.format("%s run --rm example:test /bin/bash -c whoami", name()), String.join(" ", arguments));
@@ -105,6 +113,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("custom build context")
   void context() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.context = ".";
     options.image = "example:test";
     options.containerfile = "Dockerfile";
@@ -116,6 +125,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("pass-through runtime options")
   void runtimeOptions() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.commands = List.of("--volume=/abc/123:/abc:z", "example:test", "/bin/bash", "-c", "whoami");
     final var arguments = tool().runArguments(options);
     assertEquals(String.format("%s run --rm --volume=/abc/123:/abc:z example:test /bin/bash -c whoami", name()), String.join(" ", arguments));
@@ -125,6 +135,7 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   @DisplayName("custom env variables")
   void variables() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.image = "example:test";
     options.variables = List.of("KEY=value", "OTHER=value");
     final var arguments = tool().runArguments(options);
@@ -132,20 +143,10 @@ abstract class DockerLikeTCK extends CLI_TOOL_TCK<ShellOptions, ShellCLI> {
   }
 
   @Test
-  @DisplayName("expands ~")
-  void shortHome(final SystemProperties properties) {
-    properties.set("user.home", "/home/user");
-    final var options = new ShellOptions();
-    options.image = "example:test";
-    options.volumes = List.of("~/test:/something");
-    final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --volume /home/user/test:/something example:test", name()), String.join(" ", arguments));
-  }
-
-  @Test
   @DisplayName("runs as specific user")
   void runAs() {
     final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.image = "example:test";
     options.runAs = "1234:5678";
     final var arguments = tool().runArguments(options);

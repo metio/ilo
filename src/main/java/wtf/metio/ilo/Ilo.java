@@ -71,6 +71,7 @@ public final class Ilo implements Runnable {
   public static CommandLine commandLine() {
     final var commandLine = new CommandLine(new Ilo());
     commandLine.setStopAtPositional(true);
+    commandLine.setCaseInsensitiveEnumValuesAllowed(true);
     commandLine.setExecutionExceptionHandler(new PrintingExceptionHandler());
     commandLine.setExitCodeExceptionMapper(new ExitCodes());
     return commandLine;
