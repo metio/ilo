@@ -13,8 +13,8 @@ import java.util.Arrays;
 
 public interface Runtime {
 
-  static <RUNTIME extends Runtime> RUNTIME firstMatching(final String alias, final RUNTIME[] matchers) {
-    return Arrays.stream(matchers)
+  static <RUNTIME extends Runtime> RUNTIME firstMatching(final String alias, final RUNTIME[] runtimes) {
+    return Arrays.stream(runtimes)
       .filter(runtime -> runtime.matches(alias))
       .findFirst()
       .orElseThrow(NoMatchingRuntimeException::new);
