@@ -56,11 +56,4 @@ class ShellExecutorTest {
     assertNotNull(shellExecutor.selectRuntime(ShellRuntime.NERDCTL));
   }
 
-  @Test
-  @DisplayName("returns non-null values for forced lxd usage")
-  void shouldReturnNonNullValueForLXD() {
-    assumeTrue(new LXD().exists());
-    assertNotNull(shellExecutor.selectRuntime(ShellRuntime.LXD));
-  }
-
 }

@@ -17,9 +17,7 @@ public final class ShellRuntimes {
     return List.of(
       new Podman(),
       new Nerdctl(),
-      new Docker(),
-      new LXD(),
-      new Ignite());
+      new Docker());
   }
 
   private ShellRuntimes() {

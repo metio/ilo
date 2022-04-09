@@ -16,11 +16,7 @@ public final class ComposeRuntimes {
   public static List<ComposeCLI> allRuntimes() {
     return List.of(
       new DockerCompose(),
-      new PodmanCompose(),
-      new PodsCompose(),
-      new Vagrant(),
-      new Footloose(),
-      new Vagga());
+      new PodmanCompose());
   }
 
   private ComposeRuntimes() {

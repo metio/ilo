@@ -25,7 +25,7 @@ class ComposeRuntimesTest {
   @Test
   @DisplayName("supports multiple runtimes")
   void shouldSupportMultipleRuntimes() {
-    assertEquals(6, ComposeRuntimes.allRuntimes().size());
+    assertEquals(2, ComposeRuntimes.allRuntimes().size());
   }
 
   @Test
@@ -38,30 +38,6 @@ class ComposeRuntimesTest {
   @DisplayName("podman-compose is the second choice")
   void podmanCompose() {
     assertEquals("podman-compose", ComposeRuntimes.allRuntimes().get(1).name());
-  }
-
-  @Test
-  @DisplayName("pods-compose is the third choice")
-  void podsCompose() {
-    assertEquals("pods-compose", ComposeRuntimes.allRuntimes().get(2).name());
-  }
-
-  @Test
-  @DisplayName("vagrant is the fourth choice")
-  void vagrant() {
-    assertEquals("vagrant", ComposeRuntimes.allRuntimes().get(3).name());
-  }
-
-  @Test
-  @DisplayName("footloose is the fifth choice")
-  void footloose() {
-    assertEquals("footloose", ComposeRuntimes.allRuntimes().get(4).name());
-  }
-
-  @Test
-  @DisplayName("vagga is the sixth choice")
-  void vagga() {
-    assertEquals("vagga", ComposeRuntimes.allRuntimes().get(5).name());
   }
 
 }

@@ -12,11 +12,7 @@ import wtf.metio.ilo.model.Runtime;
 public enum ComposeRuntime implements Runtime {
 
   DOCKER_COMPOSE("docker-compose", "dc"),
-  FOOTLOOSE("footloose", "fl"),
-  PODMAN_COMPOSE("podman-compose", "pc"),
-  PODS_COMPOSE("pods-compose", "pods"),
-  VAGGA("vagga", "va"),
-  VAGRANT("vagrant", "vg");
+  PODMAN_COMPOSE("podman-compose", "pc");
 
   private final String[] aliases;
 

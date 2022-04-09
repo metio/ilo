@@ -25,7 +25,7 @@ class ShellRuntimesTest {
   @Test
   @DisplayName("supports multiple runtimes")
   void shouldSupportMultipleRuntimes() {
-    assertEquals(5, ShellRuntimes.allRuntimes().size());
+    assertEquals(3, ShellRuntimes.allRuntimes().size());
   }
 
   @Test
@@ -44,18 +44,6 @@ class ShellRuntimesTest {
   @DisplayName("docker is the third choice")
   void docker() {
     assertEquals("docker", ShellRuntimes.allRuntimes().get(2).name());
-  }
-
-  @Test
-  @DisplayName("lxd is the fourth choice")
-  void lxd() {
-    assertEquals("lxc", ShellRuntimes.allRuntimes().get(3).name());
-  }
-
-  @Test
-  @DisplayName("ignite is the fifth choice")
-  void ignite() {
-    assertEquals("ignite", ShellRuntimes.allRuntimes().get(4).name());
   }
 
 }

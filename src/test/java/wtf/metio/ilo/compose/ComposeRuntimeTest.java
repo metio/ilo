@@ -20,7 +20,6 @@ class ComposeRuntimeTest {
   @DisplayName("defines compose runtime constants")
   @ValueSource(strings = {
     "PODMAN_COMPOSE",
-    "PODS_COMPOSE",
     "DOCKER_COMPOSE"
   })
   void shouldHaveRuntime(final String runtime) {
@@ -31,15 +30,12 @@ class ComposeRuntimeTest {
   @DisplayName("supports aliases")
   @ValueSource(strings = {
     "podman-compose",
-    "pods-compose",
     "docker-compose",
     "pc",
     "dc",
-    "pods",
     "DOCKER-COMPOSE",
     "PODMAN-COMPOSE",
     "dOCkeR-cOMpOSe",
-    "pODs-cOMpOSe",
     "podMAN-compOSe"
   })
   void shouldSupportAlias(final String alias) {
