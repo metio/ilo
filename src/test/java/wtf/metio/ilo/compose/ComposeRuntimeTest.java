@@ -20,7 +20,8 @@ class ComposeRuntimeTest {
   @DisplayName("defines compose runtime constants")
   @ValueSource(strings = {
     "PODMAN_COMPOSE",
-    "DOCKER_COMPOSE"
+    "DOCKER_COMPOSE",
+    "DOCKER"
   })
   void shouldHaveRuntime(final String runtime) {
     assertNotNull(ComposeRuntime.valueOf(runtime));
@@ -31,10 +32,13 @@ class ComposeRuntimeTest {
   @ValueSource(strings = {
     "podman-compose",
     "docker-compose",
+    "docker",
     "pc",
     "dc",
+    "d",
     "DOCKER-COMPOSE",
     "PODMAN-COMPOSE",
+    "dOCkeR",
     "dOCkeR-cOMpOSe",
     "podMAN-compOSe"
   })

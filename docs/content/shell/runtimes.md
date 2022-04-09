@@ -19,7 +19,7 @@ tags:
 
 ## Docker
 
-Force `ilo` to use [docker](https://www.docker.com/)  like this:
+Force `ilo` to use [docker](https://www.docker.com/) like this:
 
 ```console
 $ ilo shell --runtime docker

@@ -34,7 +34,7 @@ public abstract class TestMethodSources {
   }
 
   private static Stream<String> dockerComposeLikeRuntimes() {
-    return Stream.of(ComposeRuntime.DOCKER_COMPOSE, ComposeRuntime.PODMAN_COMPOSE)
+    return Stream.of(ComposeRuntime.DOCKER_COMPOSE, ComposeRuntime.PODMAN_COMPOSE, ComposeRuntime.DOCKER)
       .flatMap(runtime -> Arrays.stream(runtime.aliases()));
   }
 

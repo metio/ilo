@@ -22,7 +22,7 @@ abstract class DockerComposeLike implements ComposeCLI {
   public final List<String> pullArguments(final ComposeOptions options) {
     if (options.pull) {
       return flatten(
-        of(name()),
+        of(name(), command()),
         fromList(OSSupport.expand(options.runtimeOptions)),
         withPrefix("--file", OSSupport.expand(options.file)),
         of("pull"),
@@ -35,7 +35,7 @@ abstract class DockerComposeLike implements ComposeCLI {
   public final List<String> buildArguments(final ComposeOptions options) {
     if (options.build) {
       return flatten(
-        of(name()),
+        of(name(), command()),
         fromList(OSSupport.expand(options.runtimeOptions)),
         withPrefix("--file", OSSupport.expand(options.file)),
         of("build"),
@@ -47,7 +47,7 @@ abstract class DockerComposeLike implements ComposeCLI {
   @Override
   public final List<String> runArguments(final ComposeOptions options) {
     return flatten(
-      of(name()),
+      of(name(), command()),
       fromList(OSSupport.expand(options.runtimeOptions)),
       withPrefix("--file", OSSupport.expand(options.file)),
       of("run"),
@@ -59,10 +59,10 @@ abstract class DockerComposeLike implements ComposeCLI {
 
   @Override
   public final List<String> cleanupArguments(final ComposeOptions options) {
-    // docker-compose needs an additional cleanup even when using 'run --rm'
+    // docker compose needs an additional cleanup even when using 'run --rm'
     // see https://github.com/docker/compose/issues/2791
     return flatten(
-      of(name()),
+      of(name(), command()),
       fromList(OSSupport.expand(options.runtimeOptions)),
       withPrefix("--file", OSSupport.expand(options.file)),
       of("down"),

@@ -21,10 +21,13 @@ class ComposeRuntimeConverterTest {
   @ValueSource(strings = {
     "podman-compose",
     "docker-compose",
+    "docker",
     "pc",
     "dc",
+    "d",
     "DOCKER-COMPOSE",
     "PODMAN-COMPOSE",
+    "dOCkeR",
     "dOCkeR-cOMpOSe",
     "podMAN-compOSe"
   })
