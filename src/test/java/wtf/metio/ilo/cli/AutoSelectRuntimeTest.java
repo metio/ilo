@@ -10,6 +10,7 @@ package wtf.metio.ilo.cli;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import wtf.metio.ilo.compose.ComposeRuntime;
 import wtf.metio.ilo.errors.NoMatchingRuntimeException;
 import wtf.metio.ilo.tools.*;
 
@@ -104,6 +105,15 @@ class AutoSelectRuntimeTest {
     }
 
     @Test
+    @DisplayName("docker is the third choice")
+    void dockerCompose2() {
+      assumeFalse(new DockerCompose().exists());
+      assumeFalse(new PodmanCompose().exists());
+      assumeTrue(new DockerCompose2().exists());
+      assertEquals("docker", selectComposeRuntime(null).name());
+    }
+
+    @Test
     @DisplayName("can force to use docker-compose")
     void forceDockerCompose() {
       assumeTrue(new DockerCompose().exists());
@@ -118,10 +128,18 @@ class AutoSelectRuntimeTest {
     }
 
     @Test
+    @DisplayName("can force to use docker")
+    void forceDockerCompose2() {
+      assumeTrue(new DockerCompose2().exists());
+      assertEquals("docker", selectComposeRuntime(ComposeRuntime.DOCKER).name());
+    }
+
+    @Test
     @DisplayName("throws in case there are no compose runtimes available")
     void throwsWithoutAnyRuntime() {
       assumeFalse(new DockerCompose().exists());
       assumeFalse(new PodmanCompose().exists());
+      assumeFalse(new DockerCompose2().exists());
       assertThrows(NoMatchingRuntimeException.class, () -> selectComposeRuntime(null));
     }
 
@@ -137,6 +155,13 @@ class AutoSelectRuntimeTest {
     void throwsPodmanCompose() {
       assumeFalse(new PodmanCompose().exists());
       assertThrows(NoMatchingRuntimeException.class, () -> selectComposeRuntime(PODMAN_COMPOSE));
+    }
+
+    @Test
+    @DisplayName("throws in case in case docker is not installed but specified")
+    void throwsDockerCompose2() {
+      assumeFalse(new DockerCompose2().exists());
+      assertThrows(NoMatchingRuntimeException.class, () -> selectComposeRuntime(ComposeRuntime.DOCKER));
     }
 
   }

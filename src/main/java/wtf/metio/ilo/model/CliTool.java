@@ -22,6 +22,13 @@ public interface CliTool<OPTIONS extends Options> {
   String name();
 
   /**
+   * @return The CLI subcommand to use.
+   */
+  default String command() {
+    return "";
+  }
+
+  /**
    * @return Whether this CLI tool is installed and executable.
    */
   default boolean exists() {

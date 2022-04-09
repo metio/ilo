@@ -11,6 +11,7 @@ import wtf.metio.ilo.model.Runtime;
 
 public enum ComposeRuntime implements Runtime {
 
+  DOCKER("docker", "d"),
   DOCKER_COMPOSE("docker-compose", "dc"),
   PODMAN_COMPOSE("podman-compose", "pc");
 

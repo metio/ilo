@@ -10,10 +10,8 @@ categories:
 tags:
 - runtime
 - docker-compose
-- footloose
 - podman-compose
-- pods-compose
-- vagrant
+- docker
 ---
 
 `ilo compose` by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the `--runtime` flag.
@@ -40,9 +38,21 @@ $ ilo compose --runtime podman-copose
 $ ilo compose --runtime pc
 ```
 
+## docker
+
+Force `ilo` to use [docker](https://www.docker.com/) in [compose v2 mode](https://docs.docker.com/compose/cli-command/) like this:
+
+```console
+$ ilo compose --runtime docker
+
+# alias
+$ ilo compose --runtime d
+```
+
 ## Auto Selection
 
 If not otherwise specified, `ilo` always picks runtimes in this order, depending on which are available on your system:
 
 1. docker-compose
 2. podman-compose
+3. docker

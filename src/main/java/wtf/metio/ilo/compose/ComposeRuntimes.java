@@ -16,7 +16,8 @@ public final class ComposeRuntimes {
   public static List<ComposeCLI> allRuntimes() {
     return List.of(
       new DockerCompose(),
-      new PodmanCompose());
+      new PodmanCompose(),
+      new DockerCompose2());
   }
 
   private ComposeRuntimes() {

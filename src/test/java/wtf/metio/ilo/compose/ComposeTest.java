@@ -13,8 +13,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import wtf.metio.ilo.test.TestMethodSources;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,8 +46,8 @@ class ComposeTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "down"));
+      call(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "down"));
   }
 
   @ParameterizedTest
@@ -58,8 +60,8 @@ class ComposeTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "run", options.service),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "down"));
+      call(tool, "--file", DOCKER_COMPOSE_YML, "run", options.service),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "down"));
   }
 
   @ParameterizedTest
@@ -69,10 +71,10 @@ class ComposeTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.pull = true;
     assertCommandLine(
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "pull"),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "pull"),
       List.of(),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "down"));
+      call(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "down"));
   }
 
   @ParameterizedTest
@@ -83,9 +85,9 @@ class ComposeTest extends TestMethodSources {
     options.build = true;
     assertCommandLine(
       List.of(),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "build"),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "down"));
+      call(tool, "--file", DOCKER_COMPOSE_YML, "build"),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "down"));
   }
 
   @ParameterizedTest
@@ -97,8 +99,8 @@ class ComposeTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(),
-      List.of(tool, "--no-ansi", "--file", DOCKER_COMPOSE_YML, "run", "-T"),
-      List.of(tool, "--no-ansi", "--file", DOCKER_COMPOSE_YML, "down"));
+      call(tool, "--no-ansi", "--file", DOCKER_COMPOSE_YML, "run", "-T"),
+      call(tool, "--no-ansi", "--file", DOCKER_COMPOSE_YML, "down"));
   }
 
   @ParameterizedTest
@@ -109,10 +111,10 @@ class ComposeTest extends TestMethodSources {
     options.pull = true;
     options.runtimePullOptions = List.of("--parallel");
     assertCommandLine(
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "pull", "--parallel"),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "pull", "--parallel"),
       List.of(),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "down"));
+      call(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "down"));
   }
 
   @ParameterizedTest
@@ -124,9 +126,9 @@ class ComposeTest extends TestMethodSources {
     options.runtimeBuildOptions = List.of("--no-cache");
     assertCommandLine(
       List.of(),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "build", "--no-cache"),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "down"));
+      call(tool, "--file", DOCKER_COMPOSE_YML, "build", "--no-cache"),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "down"));
   }
 
   @ParameterizedTest
@@ -138,8 +140,8 @@ class ComposeTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "run", "--use-aliases", "-T"),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "down"));
+      call(tool, "--file", DOCKER_COMPOSE_YML, "run", "--use-aliases", "-T"),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "down"));
   }
 
   @ParameterizedTest
@@ -151,8 +153,8 @@ class ComposeTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
-      List.of(tool, "--file", DOCKER_COMPOSE_YML, "down", "--remove-orphans"));
+      call(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"),
+      call(tool, "--file", DOCKER_COMPOSE_YML, "down", "--remove-orphans"));
   }
 
   @ParameterizedTest
@@ -165,7 +167,7 @@ class ComposeTest extends TestMethodSources {
     final var exitCode = compose.call();
     assertAll("command line",
       () -> assertEquals(1, exitCode, "exitCode"),
-      () -> assertIterableEquals(List.of(tool, "--file", DOCKER_COMPOSE_YML, "pull"), executor.pullArguments(), "pullArguments"),
+      () -> assertIterableEquals(call(tool, "--file", DOCKER_COMPOSE_YML, "pull"), executor.pullArguments(), "pullArguments"),
       () -> noExecution(executor::buildArguments, "buildArguments"),
       () -> noExecution(executor::runArguments, "runArguments"),
       () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
@@ -182,7 +184,7 @@ class ComposeTest extends TestMethodSources {
     assertAll("command line",
       () -> assertEquals(1, exitCode, "exitCode"),
       () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-      () -> assertIterableEquals(List.of(tool, "--file", DOCKER_COMPOSE_YML, "build"), executor.buildArguments(), "buildArguments"),
+      () -> assertIterableEquals(call(tool, "--file", DOCKER_COMPOSE_YML, "build"), executor.buildArguments(), "buildArguments"),
       () -> noExecution(executor::runArguments, "runArguments"),
       () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }
@@ -198,7 +200,7 @@ class ComposeTest extends TestMethodSources {
       () -> assertEquals(1, exitCode, "exitCode"),
       () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
       () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-      () -> assertIterableEquals(List.of(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"), executor.runArguments(), "runArguments"),
+      () -> assertIterableEquals(call(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"), executor.runArguments(), "runArguments"),
       () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }
 
@@ -213,13 +215,20 @@ class ComposeTest extends TestMethodSources {
       () -> assertEquals(1, exitCode, "exitCode"),
       () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
       () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-      () -> assertIterableEquals(List.of(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"), executor.runArguments(), "runArguments"),
-      () -> assertIterableEquals(List.of(tool, "--file", DOCKER_COMPOSE_YML, "down"), executor.cleanupArguments(), "cleanupArguments"));
+      () -> assertIterableEquals(call(tool, "--file", DOCKER_COMPOSE_YML, "run", "-T"), executor.runArguments(), "runArguments"),
+      () -> assertIterableEquals(call(tool, "--file", DOCKER_COMPOSE_YML, "down"), executor.cleanupArguments(), "cleanupArguments"));
   }
 
   private String useRuntime(final String runtime) {
     options.runtime = ComposeRuntime.fromAlias(runtime);
     return options.runtime.aliases()[0];
+  }
+
+  private List<String> call(final String runtime, final String... args) {
+    final var cli = "docker".equalsIgnoreCase(runtime)
+      ? Stream.of(runtime, "compose")
+      : Stream.of(runtime);
+    return Stream.concat(cli, Arrays.stream(args)).toList();
   }
 
   private void assertCommandLine(

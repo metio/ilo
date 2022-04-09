@@ -23,10 +23,20 @@ abstract class CLI_TOOL_TCK<OPTIONS extends Options, SHELL extends CliTool<OPTIO
 
   protected abstract String name();
 
+  protected String command() {
+    return "";
+  }
+
   @Test
   @DisplayName("has runtime name")
   void shouldHaveName() {
     assertEquals(name(), tool().name());
+  }
+
+  @Test
+  @DisplayName("has subcommand")
+  void shouldHaveCommand() {
+    assertEquals(command(), tool().command());
   }
 
   @Test
