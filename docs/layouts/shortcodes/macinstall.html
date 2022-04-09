@@ -5,11 +5,11 @@
   ~ in the LICENSE file.
   -->
 
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ cd /path/to/ilo/installation/folder
-$ curl --location https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-mac.zip --output ilo.zip
-$ unzip ilo.zip
-$ chmod +x ilo-{{ getenv "ILO_RELEASE" }}/ilo
-$ ln -s /path/to/ilo/installation/folder/ilo-{{ getenv "ILO_RELEASE" }}/ilo /usr/local/bin/ilo
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"><span class="gp">$</span> cd /path/to/ilo/installation/folder
+<span class="gp">$</span> curl --location https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-mac.zip --output ilo.zip
+<span class="gp">$</span> unzip ilo.zip
+<span class="gp">$</span> chmod +x ilo-{{ getenv "ILO_RELEASE" }}/ilo
+<span class="gp">$</span> ln -s /path/to/ilo/installation/folder/ilo-{{ getenv "ILO_RELEASE" }}/ilo /usr/local/bin/ilo
 <span class="c1"># in case the above gives you a permission denied error, execute the same command with sudo, e.g. 'sudo !!'</span>
 <span class="c1"># in order to fix permissions run: sudo chmod -R u=rwX,go=rX /usr/local/bin</span>
 </code></pre>

@@ -5,10 +5,10 @@
   ~ in the LICENSE file.
   -->
 
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">$ cd /path/to/ilo/installation/folder
-$ curl --location https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-jvm.zip --output ilo.zip
-$ unzip ilo.zip
-$ chmod +x ilo-{{ getenv "ILO_RELEASE" }}/bin/ilo
+<div class="highlight"><pre class="chroma"><code class="language-console" data-lang="console"><span class="gp">$</span> cd /path/to/ilo/installation/folder
+<span class="gp">$</span> curl --location https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-jvm.zip --output ilo.zip
+<span class="gp">$</span> unzip ilo.zip
+<span class="gp">$</span> chmod +x ilo-{{ getenv "ILO_RELEASE" }}/bin/ilo
 <span class="c1"># place 'bin' folder in your PATH</span>
 </code></pre>
 </div>
