@@ -1,6 +1,5 @@
 shell
 --no-interactive
---volume $HOME/.m2:/root/.m2:z
---dockerfile dev/native.containerfile
-metio/ilo:latest-native
+--volume ${XDG_CACHE_HOME}/maven:/root/.m2:z
+ghcr.io/metio/dev-containers/java:latest-graalvm
 mvn verify --define skipNativeBuild=false
