@@ -17,7 +17,7 @@ tags:
 
 As an example, consider the following Containerfile that is based on the official [Maven image](https://hub.docker.com/_/maven) and extends that with another binary ([hugo](https://gohugo.io/) in this case).
 
-```shell script
+```console
 # write some Containerfile
 $ cat your.containerfile
 FROM maven:3-openjdk-11-slim
@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install hugo -y
 
 This image can be build just like any other image with your typical tooling, e.g. using [podman](https://podman.io/):
 
-```shell script
+```console
 $ podman build --tag your.image:your.tag --file your.containerfile path/to/build/context
 ```
 

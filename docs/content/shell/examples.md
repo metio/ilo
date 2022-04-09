@@ -19,7 +19,7 @@ The following examples show how `ilo shell` can be used.
 
 In order to re-use already downloaded dependencies inside the container, specify a `--volumne` like this:
 
-```shell script
+```console
 # Cargo project that mounts local .cargo folder
 $ ilo shell \
     --volume ${HOME}/.cargo:/usr/local/cargo:z \
@@ -34,7 +34,7 @@ $ ilo shell \
 
 In order to re-use already downloaded dependencies inside the container, specify a `--volumne` like this:
 
-```shell script
+```console
 # Gradle project that mounts local .gradle folder
 $ ilo shell \
     --volume ${HOME}/.gradle:/home/gradle/.gradle:z \
@@ -49,7 +49,7 @@ $ ilo shell \
 
 In order to re-use already downloaded dependencies inside the container, specify a `--volumne` like this:
 
-```shell script
+```console
 # Maven project that mounts local m2 repo
 $ ilo shell \
     --volume ${HOME}/.m2:/root/.m2:z \

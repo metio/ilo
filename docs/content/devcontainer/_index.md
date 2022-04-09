@@ -9,7 +9,7 @@ The `devcontainer` command allows interacting with [devcontainers](https://code.
 
 Make sure to specify `your.image.here:some-tag` as the image in your `devcontainer.json` file. Take a look at the [reference documentation](https://code.visualstudio.com/docs/remote/devcontainerjson-reference) for all available options for that JSON file.
 
-```shell script
+```console
 # open shell in devcontainer
 [you@hostname project-dir]$ ilo devcontainer
 [root@container project-dir]#
@@ -22,7 +22,7 @@ Make sure to specify `your.image.here:some-tag` as the image in your `devcontain
 
 In case you want to load/use a different location for your `devconatiner.json` file, specify one or more locations like this:
 
-```shell script
+```console
 # use custom locations
 [you@hostname project-dir]$ ilo devcontainer some-where-local.json /an/absolute/path/appears.json
 ```

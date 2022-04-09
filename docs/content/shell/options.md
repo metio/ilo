@@ -17,7 +17,7 @@ The `ilo shell` command can be configured with the following command line option
 
 The `--context` option allows to specify the context when building an image with `--containerfile`/`--dockerfile`.
 
-```shell script
+```console
 # specify custom context
 $ ilo shell --context ./local/folder
 
@@ -31,7 +31,7 @@ By default, `--context` is set to `.` (the current directory).
 
 The `--containerfile`/`--dockerfile` option can be used to specify a local `Containerfile`/`Dockerfile`. Specifying such a file will cause `ilo` to build your image first, and then open a shell into a container based on that image.
 
-```shell script
+```console
 # specify custom Containerfile
 $ ilo shell --containerfile some/where/your.containerfile
 
@@ -45,7 +45,7 @@ By default, `--containerfile`/`--dockerfile` is not set to any value.
 
 The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
 
-```shell script
+```console
 # print runtime commands
 $ ilo shell --debug
 
@@ -60,7 +60,7 @@ By default, `--debug` is not enabled.
 
 The `--env` option can be used to specify environment variables for your container.
 
-```shell script
+```console
 # specify env variable
 $ ilo shell --env key=value
 
@@ -74,7 +74,7 @@ By default, `--env` does not set any environment variables.
 
 The `--hostname` option can be used to set the hostname of your container.
 
-```shell script
+```console
 # set hostname
 $ ilo shell --hostname you.home.arpa
 
@@ -88,7 +88,7 @@ By default, `--hostname` is not set to any value.
 
 The `--interactive` option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).
 
-```shell script
+```console
 # run interactively
 $ ilo shell --interactive
 
@@ -139,7 +139,7 @@ By default, `--mount-project-dir` is enabled.
 
 The `--publish` option can be used to publish ports of your container to your local system.
 
-```shell script
+```console
 # binds your local 8080 port to port 80 of the container
 $ ilo shell --publish 8080:80
 
@@ -151,9 +151,9 @@ By default, `--publish` does not exposes any ports.
 
 ## `--pull`
 
-The `--pull` option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only pulled in case the registry contains a newer image than locally available.
+The `--pull` option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only be pulled in case the registry contains a newer image than locally available.
 
-```shell script
+```console
 # pull image before opening shell
 $ ilo shell --pull
 
@@ -171,7 +171,7 @@ By default, `--pull` is not enabled.
 
 The `--remove-image` option causes `ilo` to remove the specified image from your local system after you close your shell, or the non-interactive commands finishes. This is especially useful in combination with `--containerfile`/`--dockerfile`.
 
-```shell script
+```console
 # remove image after shell was closed
 $ ilo shell --remove-image
 
@@ -187,7 +187,7 @@ By default, `--remove-image` is not enabled.
 
 The `--runtime` option can be used to force the usage of a specific runtime. See [runtimes](../runtimes) for details.
 
-```shell script
+```console
 # force to use podman
 $ ilo shell --runtime podman
 
@@ -205,7 +205,7 @@ $ ilo shell
 
 The `--runtime-option` option can be specified multiple times and contains options for the underlying runtime.
 
-```shell script
+```console
 # specify custom option(s)
 $ ilo shell --runtime-option=--remote
 $ ilo shell --runtime-option=--remote --runtime-option=--syslog
@@ -220,7 +220,7 @@ By default, `--runtime-option` is set to an empty array.
 
 The `--runtime-pull-option` can be specified multiple times and contains options for the runtimes' `pull` command.
 
-```shell script
+```console
 # specify custom option(s)
 $ ilo shell --runtime-pull-option=--all-tags
 $ ilo shell --runtime-pull-option=--all-tags --runtime-pull-option=--quiet
@@ -235,7 +235,7 @@ By default, `--runtime-pull-option` is set to an empty array.
 
 The `--runtime-build-option` can be specified multiple times and contains options for the runtimes' `build` command.
 
-```shell script
+```console
 # specify custom option(s)
 $ ilo shell --runtime-build-option=--squash
 $ ilo shell --runtime-build-option=--squash --runtime-build-option=--no-cache
@@ -250,7 +250,7 @@ By default, `--runtime-build-option` is set to an empty array.
 
 The `--runtime-run-option` can be specified multiple times and contains options for the runtimes' `run` command.
 
-```shell script
+```console
 # specify custom option(s)
 $ ilo shell --runtime-run-option=--privileged
 $ ilo shell --runtime-run-option=--privileged --runtime-run-option=--replace
@@ -265,7 +265,7 @@ By default, `--runtime-run-option` is set to an empty array.
 
 The `--runtime-cleanup-option` can be specified multiple times and contains options for the runtimes' `rmi` command.
 
-```shell script
+```console
 # specify custom option(s)
 $ ilo shell --runtime-cleanup-option=--force
 $ ilo shell --runtime-cleanup-option=--force --runtime-cleanup-option=--all
@@ -280,7 +280,7 @@ By default, `--runtime-cleanup-option` is set to an empty array.
 
 The `--volume` option can be used to mount additional volumes into your container.
 
-```shell script
+```console
 # mount extra volume
 $ ilo shell --volume $HOME/.m2/repository:/root/.m2/repository:z
 

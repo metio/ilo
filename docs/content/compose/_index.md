@@ -7,7 +7,7 @@ weight: 120
 
 The `ilo compose` command allows interacting with complex build environments, e.g. your project requires a database in order to be build. It integrates with widely used [tools](./runtimes) such as [docker-compose](https://docs.docker.com/compose/) in order to re-use your existing setup as much as possible.
 
-```shell script
+```console
 # use docker-compose.yml in current directory
 [you@hostname project-dir]$ ilo compose
 [root@container project-dir]#
@@ -44,28 +44,28 @@ services:
 
 In order to exit the container either use exit or hit Ctrl + d:
 
-```shell script
+```console
 [root@container project-dir]# exit
 [you@hostname project-dir]$
 ```
 
 In case you want images to be pulled first, specify the `-pull` flag like this:
 
-```shell script
+```console
 [you@hostname project-dir]$ ilo compose --pull
 [root@container project-dir]#
 ```
 
 If you want to force (re-)building your container images first, use the `--build` flag like this:
 
-```shell script
+```console
 [you@hostname project-dir]$ ilo compose --build
 [root@container project-dir]#
 ```
 
 Non-interactive CI builds can use `--no-interactive` like this:
 
-```shell script
+```console
 [you@hostname project-dir]$ ilo compose --no-interactive dev mvn verify
 [you@hostname project-dir]$f
 ```

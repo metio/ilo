@@ -22,7 +22,7 @@ tags:
 
 Force `ilo` to use [docker-compose](https://docs.docker.com/compose/) like this:
 
-```shell script
+```console
 $ ilo compose --runtime docker-compose
 
 # alias
@@ -33,7 +33,7 @@ $ ilo compose --runtime dc
 
 Force `ilo` to use [podman-compose](https://github.com/containers/podman-compose) like this:
 
-```shell script
+```console
 $ ilo compose --runtime podman-copose
 
 # alias

@@ -17,7 +17,7 @@ The `ilo compose` command can be configured with the following command line opti
 
 The `--build` option can be used to build images before opening a new shell. Use this option in case you rely on local Dockerfiles.
 
-```shell script
+```console
 # build images before opening shell
 $ ilo compose --build
 
@@ -34,7 +34,7 @@ By default, `--build` is not enabled.
 
 The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
 
-```shell script
+```console
 # print runtime commands
 $ ilo compose --debug
 
@@ -49,7 +49,7 @@ By default, `--debug` is not enabled.
 
 The `--file` option can be used to specify the file that contains your container definitions, e.g. a `docker-compose.yml` file.
 
-```shell script
+```console
 # use custom location
 $ ilo compose --file /path/to/some/file.yaml
 
@@ -63,7 +63,7 @@ By default, `--file` is set to `docker-compose.yml`.
 
 The `--interactive` option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).
 
-```shell script
+```console
 # run interactively
 $ ilo compose --interactive
 
@@ -81,7 +81,7 @@ By default, `--interactive` is enabled.
 
 The `--pull` option can be used to pull images before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only pulled in case the registry contains a newer image than locally available.
 
-```shell script
+```console
 # pull image before opening shell
 $ ilo compose --pull
 
@@ -98,7 +98,7 @@ By default, `--pull` is not enabled.
 
 The `--runtime` option can be used to force the usage of a specific runtime. See [runtimes](../runtimes) for details.
 
-```shell script
+```console
 # force to use docker-compose
 $ ilo compose --runtime docker-compose
 
@@ -113,7 +113,7 @@ $ ilo compose
 
 The `--runtime-option` option can be specified multiple times and contains options for the underlying runtime.
 
-```shell script
+```console
 # specify custom option(s)
 $ ilo compose --runtime-option=--no-ansi
 $ ilo compose --runtime-option=--no-ansi --runtime-option=--tls
@@ -128,7 +128,7 @@ By default, `--runtime-option` is set to an empty array.
 
 The `--runtime-pull-option` can be specified multiple times and contains options for the runtimes' `pull` command.
 
-```shell script
+```console
 # specify custom option(s)
 $ ilo compose --runtime-pull-option=--ignore-pull-failures
 $ ilo compose --runtime-pull-option=--ignore-pull-failures --runtime-pull-option=--quiet
@@ -143,7 +143,7 @@ By default, `--runtime-pull-option` is set to an empty array.
 
 The `--runtime-build-option` can be specified multiple times and contains options for the runtimes' `build` command.
 
-```shell script
+```console
 # specify custom option(s)
 $ ilo compose --runtime-build-option=--compress
 $ ilo compose --runtime-build-option=--compress --runtime-build-option=--no-cache
@@ -158,7 +158,7 @@ By default, `--runtime-build-option` is set to an empty array.
 
 The `--runtime-run-option` can be specified multiple times and contains options for the runtimes' `run` command.
 
-```shell script
+```console
 # specify custom option(s)
 $ ilo compose --runtime-run-option=--no-deps
 $ ilo compose --runtime-run-option=--no-deps --runtime-run-option=--use-aliases
@@ -173,7 +173,7 @@ By default, `--runtime-run-option` is set to an empty array.
 
 The `--runtime-cleanup-option` can be specified multiple times and contains options for the runtimes' cleanup command, e.g. `down` for `docker-compose`.
 
-```shell script
+```console
 # specify custom option(s)
 $ ilo compose --runtime-cleanup-option=--remove-orphans
 $ ilo compose --runtime-cleanup-option=--remove-orphans --runtime-cleanup-option=--volumes

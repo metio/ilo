@@ -15,7 +15,7 @@ The `ilo generate-completion` command generates autocompletion configuration for
 
 Once enabled you can use the `<TAB>` key to autocomplete ilo commands and their options:
 
-```shell script
+```console
 # autocomplete commands
 $ ilo s<TAB>
 $ ilo shell
@@ -31,7 +31,7 @@ In order to integrate autocompletion into [bash](https://www.gnu.org/software/ba
 
 1. Create or edit `~/.bashrc`.
 2. Add the following line
-    ```shell script
+    ```shell
     source <(ilo generate-completion)
     ```
 3. Reload your shell (or create a new one)
@@ -42,7 +42,7 @@ In order to integrate autocompletion into [zsh](https://www.zsh.org/), follow th
 
 1. Create or edit `$ZDOTDIR/.zshrc`.
 2. Add the following line
-    ```shell script
+    ```shell
     source <(ilo generate-completion)
     ```
 3. Reload your shell (or create a new one)

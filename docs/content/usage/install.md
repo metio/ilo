@@ -30,7 +30,7 @@ The [Linux](https://www.kernel.org/) distribution of `ilo` is a native executabl
 
 [Fedora](https://getfedora.org/) users can install `ilo` from a [COPR](https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/) repository like this:
 
-```shell script
+```console
 $ sudo dnf copr enable sebhoss/ilo
 $ sudo dnf install ilo
 ```
@@ -39,7 +39,7 @@ $ sudo dnf install ilo
 
 [Fedora Silverblue](https://silverblue.fedoraproject.org/) users can install `ilo` from the same [COPR](https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/) by following these steps:
 
-```shell script
+```console
 $ curl --location https://copr.fedorainfracloud.org/coprs/sebhoss/ilo/repo/fedora-$(rpm -E %fedora)/sebhoss-ilo-fedora-$(rpm -E %fedora).repo --output ilo.repo
 $ sudo mv ilo.repo /etc/yum.repos.d/ilo.repo
 $ rpm-ostree install ilo
@@ -49,7 +49,7 @@ $ rpm-ostree install ilo
 
 [NixOS](https://nixos.org/) users can use the following flake that always references the latest release:
 
-```shell
+```console
 $ nix run github:metio/ilo/main?dir=build/nixos
 ```
 
@@ -65,7 +65,7 @@ The [MacOS](https://www.apple.com/macos/) distribution of `ilo` is a native exec
 
 [Homebrew](https://brew.sh/) users can install `ilo` from our tap like this:
 
-```shell
+```console
 $ brew tap metio/ilo https://github.com/metio/ilo
 $ brew install metio/ilo/ilo
 ```

@@ -17,7 +17,7 @@ The `ilo devcontainer` command can be configured with the following command line
 
 The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
 
-```shell script
+```console
 # print runtime commands
 $ ilo devcontainer --debug
 
@@ -32,7 +32,7 @@ By default, `--debug` is not enabled.
 
 The `--mount-project-dir` option can be used to toggle whether the current directory should be mounted into the container.
 
-```shell script
+```console
 # mount current directory into container
 $ ilo devcontainer --mount-project-dir
 
@@ -50,7 +50,7 @@ By default, `--mount-project-dir` is enabled.
 
 The `--pull` option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only pulled in case the registry contains a newer image than locally available.
 
-```shell script
+```console
 # pull image before opening shell
 $ ilo devcontainer --pull
 
@@ -68,7 +68,7 @@ By default, `--pull` is not enabled.
 
 The `--remove-image` option causes `ilo` to remove the specified image from your local system after you close your shell, or the non-interactive commands finishes.
 
-```shell script
+```console
 # remove image after shell was closed
 $ ilo devcontainer --remove-image
 
@@ -84,7 +84,7 @@ By default, `--remove-image` is not enabled.
 
 The `--compose-runtime` option can be used to force the usage of a specific [compose runtime](../../compose/runtimes).
 
-```shell script
+```console
 # force to use podman-compose
 $ ilo devcontainer --compose-runtime podman-compose
 
@@ -101,7 +101,7 @@ In case no `--compose-runtime` is specified, `ilo devcontainer` will automatical
 
 The `--shell-runtime` option can be used to force the usage of a specific [shell runtime](../../shell/runtimes).
 
-```shell script
+```console
 # force to use podman
 $ ilo devcontainer --shell-runtime podman
 

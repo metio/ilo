@@ -21,7 +21,7 @@ tags:
 
 Force `ilo` to use [docker](https://www.docker.com/)  like this:
 
-```shell script
+```console
 $ ilo shell --runtime docker
 
 # alias
@@ -32,7 +32,7 @@ $ ilo shell --runtime d
 
 Force `ilo` to use [podman](https://podman.io/) like this:
 
-```shell script
+```console
 $ ilo shell --runtime podman
 
 # alias
@@ -43,7 +43,7 @@ $ ilo shell --runtime p
 
 Force `ilo` to use [nerdctl](https://github.com/containerd/nerdctl) like this:
 
-```shell script
+```console
 $ ilo shell --runtime nerdctl
 
 # alias

@@ -7,7 +7,7 @@ weight: 110
 
 The `ilo shell` command can be used to run a single container either interactively (default) or in non-interactive mode (e.g. for CI builds). It can build an image, mount directories automatically, stop containers, remove images, and customize the build environment according to the needs of your project.
 
-```shell script
+```console
 # open shell for local builds in default image with default image command
 [you@hostname project-dir]$ ilo shell
 [root@container project-dir]#
@@ -27,35 +27,35 @@ The `ilo shell` command can be used to run a single container either interactive
 
 `ilo shell` will delegate most of its work to one of the supported [runtimes](./runtimes). In order to override the default command of your image, specify the command you want to execute just after the image, like this:
 
-```shell script
+```console
 [you@hostname project-dir]$ ilo shell openjdk:11 /bin/bash
 [root@container project-dir]#
 ```
 
 In order to exit the container either use `exit` or hit `Ctrl + d`:
 
-```shell script
+```console
 [root@container project-dir]# exit
 [you@hostname project-dir]$
 ```
 
 Once you have exited the container, `ilo` will automatically stop and remove it. In order to remove the image as well, specify the `--remove-image` flag:
 
-```shell script
+```console
 [you@hostname project-dir]$ ilo shell --remove-image openjdk:11
 [root@container project-dir]# exit
 ```
 
 In order to pull an image first before opening a new shell, use the `--pull` flag like this:
 
-```shell script
+```console
 [you@hostname project-dir]$ ilo shell --pull openjdk:latest
 [root@container project-dir]#
 ```
 
 In case you want to use a local `Containerfile`/`Dockerfile`, use the `--containerfile`/`--dockerfile` flag like this:
 
-```shell script
+```console
 [you@hostname project-dir]$ ilo shell --containerfile your.containerfile your.image:latest
 [root@container project-dir]#
 ```

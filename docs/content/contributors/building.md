@@ -39,7 +39,7 @@ In case you do not have `ilo` installed on your system, install the following ma
 
 In case you have `ilo` installed, call this:
 
-```shell script
+```console
 # open a shell with a pre-defined build environment
 $ ilo @dev/env
 
@@ -60,7 +60,7 @@ $ ilo @dev/serve
 
 In order to build `ilo` without having `ilo` installed call:
 
-```shell script
+```console
 # build the project
 $ mvn verify
 
@@ -70,7 +70,7 @@ $ mvn verify --define skipNativeBuild=false
 
 In case you want to build or work on the website do this:
 
-```shell script
+```console
 # build website
 $ hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
 
