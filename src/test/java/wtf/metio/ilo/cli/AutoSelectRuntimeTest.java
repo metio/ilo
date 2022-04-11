@@ -10,6 +10,8 @@ package wtf.metio.ilo.cli;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
@@ -67,6 +69,7 @@ class AutoSelectRuntimeTest {
     }
 
     @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
     @DisplayName("can force to use podman with environment variable")
     void forcePodmanWithEnvVariable(final EnvironmentVariables environmentVariables) {
       assumeTrue(new Podman().exists());
@@ -82,6 +85,7 @@ class AutoSelectRuntimeTest {
     }
 
     @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
     @DisplayName("can force to use nerdctl with environment variable")
     void forceNerdctlWithEnvVariable(final EnvironmentVariables environmentVariables) {
       assumeTrue(new Nerdctl().exists());
@@ -97,6 +101,7 @@ class AutoSelectRuntimeTest {
     }
 
     @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
     @DisplayName("can force to use docker with environment variable")
     void forceDockerWithEnvVariable(final EnvironmentVariables environmentVariables) {
       assumeTrue(new Docker().exists());
@@ -121,6 +126,7 @@ class AutoSelectRuntimeTest {
     }
 
     @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
     @DisplayName("throws in case in case podman is not installed but specified with an environment variable")
     void throwsPodmanWithEnvVariable(final EnvironmentVariables environmentVariables) {
       assumeFalse(new Podman().exists());
@@ -136,6 +142,7 @@ class AutoSelectRuntimeTest {
     }
 
     @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
     @DisplayName("throws in case in case nerdctl is not installed but specified with an environment variable")
     void throwsNerdctlWithEnvVariable(final EnvironmentVariables environmentVariables) {
       assumeFalse(new Nerdctl().exists());
@@ -151,6 +158,7 @@ class AutoSelectRuntimeTest {
     }
 
     @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
     @DisplayName("throws in case in case docker is not installed but specified with an environment variable")
     void throwsDockerWithEnvVariable(final EnvironmentVariables environmentVariables) {
       assumeFalse(new Docker().exists());
