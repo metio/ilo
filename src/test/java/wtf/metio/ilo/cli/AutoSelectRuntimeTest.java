@@ -109,6 +109,7 @@ class AutoSelectRuntimeTest {
     void throwsWithoutAnyRuntime() {
       assumeFalse(new Podman().exists());
       assumeFalse(new Docker().exists());
+      assumeFalse(new Nerdctl().exists());
       assertThrows(NoMatchingRuntimeException.class, () -> selectShellRuntime(null));
     }
 
@@ -120,10 +121,11 @@ class AutoSelectRuntimeTest {
     }
 
     @Test
-    @DisplayName("throws in case in case docker is not installed but specified")
-    void throwsDocker() {
-      assumeFalse(new Docker().exists());
-      assertThrows(NoMatchingRuntimeException.class, () -> selectShellRuntime(DOCKER));
+    @DisplayName("throws in case in case podman is not installed but specified with an environment variable")
+    void throwsPodmanWithEnvVariable(final EnvironmentVariables environmentVariables) {
+      assumeFalse(new Podman().exists());
+      environmentVariables.set("ILO_SHELL_RUNTIME", "podman");
+      assertThrows(NoMatchingRuntimeException.class, () -> selectShellRuntime(null));
     }
 
     @Test
@@ -131,6 +133,29 @@ class AutoSelectRuntimeTest {
     void throwsNerdctl() {
       assumeFalse(new Nerdctl().exists());
       assertThrows(NoMatchingRuntimeException.class, () -> selectShellRuntime(NERDCTL));
+    }
+
+    @Test
+    @DisplayName("throws in case in case nerdctl is not installed but specified with an environment variable")
+    void throwsNerdctlWithEnvVariable(final EnvironmentVariables environmentVariables) {
+      assumeFalse(new Nerdctl().exists());
+      environmentVariables.set("ILO_SHELL_RUNTIME", "nerdctl");
+      assertThrows(NoMatchingRuntimeException.class, () -> selectShellRuntime(null));
+    }
+
+    @Test
+    @DisplayName("throws in case in case docker is not installed but specified")
+    void throwsDocker() {
+      assumeFalse(new Docker().exists());
+      assertThrows(NoMatchingRuntimeException.class, () -> selectShellRuntime(DOCKER));
+    }
+
+    @Test
+    @DisplayName("throws in case in case docker is not installed but specified with an environment variable")
+    void throwsDockerWithEnvVariable(final EnvironmentVariables environmentVariables) {
+      assumeFalse(new Docker().exists());
+      environmentVariables.set("ILO_SHELL_RUNTIME", "docker");
+      assertThrows(NoMatchingRuntimeException.class, () -> selectShellRuntime(null));
     }
 
   }
