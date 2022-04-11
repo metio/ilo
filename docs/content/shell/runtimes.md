@@ -11,7 +11,6 @@ tags:
 - runtime
 - docker
 - podman
-- lxd
 - nerdctl
 ---
 
