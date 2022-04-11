@@ -14,7 +14,7 @@ tags:
 - docker
 ---
 
-`ilo compose` by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the `--runtime` flag.
+`ilo compose` by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the `--runtime` flag or set the `ILO_COMPOSE_RUNTIME` environment variable in your system. The `--runtime` flag overwrites the environment variable.
 
 ## docker-compose
 
@@ -23,8 +23,11 @@ Force `ilo` to use [docker-compose](https://docs.docker.com/compose/) like this:
 ```console
 $ ilo compose --runtime docker-compose
 
-# alias
+# use alias
 $ ilo compose --runtime dc
+
+# use env variable
+$ ILO_COMPOSE_RUNTIME=docker-compose ilo compose
 ```
 
 ## podman-compose
@@ -34,8 +37,11 @@ Force `ilo` to use [podman-compose](https://github.com/containers/podman-compose
 ```console
 $ ilo compose --runtime podman-copose
 
-# alias
+# use alias
 $ ilo compose --runtime pc
+
+# use env variable
+$ ILO_COMPOSE_RUNTIME=podman-compose ilo compose
 ```
 
 ## docker
@@ -45,8 +51,11 @@ Force `ilo` to use [docker](https://www.docker.com/) in [compose v2 mode](https:
 ```console
 $ ilo compose --runtime docker
 
-# alias
+# use alias
 $ ilo compose --runtime d
+
+# use env variable
+$ ILO_COMPOSE_RUNTIME=docker ilo compose
 ```
 
 ## Auto Selection

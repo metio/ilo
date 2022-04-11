@@ -10,6 +10,9 @@ package wtf.metio.ilo.cli;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import wtf.metio.ilo.compose.ComposeRuntime;
 import wtf.metio.ilo.errors.NoMatchingRuntimeException;
 import wtf.metio.ilo.tools.*;
@@ -22,10 +25,10 @@ import static wtf.metio.ilo.cli.AutoSelectRuntime.selectComposeRuntime;
 import static wtf.metio.ilo.cli.AutoSelectRuntime.selectShellRuntime;
 import static wtf.metio.ilo.compose.ComposeRuntime.DOCKER_COMPOSE;
 import static wtf.metio.ilo.compose.ComposeRuntime.PODMAN_COMPOSE;
-import static wtf.metio.ilo.shell.ShellRuntime.DOCKER;
-import static wtf.metio.ilo.shell.ShellRuntime.PODMAN;
+import static wtf.metio.ilo.shell.ShellRuntime.*;
 
 @DisplayName("AutoSelectRuntime")
+@ExtendWith(SystemStubsExtension.class)
 class AutoSelectRuntimeTest {
 
   @Nested
@@ -40,9 +43,18 @@ class AutoSelectRuntimeTest {
     }
 
     @Test
-    @DisplayName("docker is the second choice")
+    @DisplayName("nerdctl is the second choice")
+    void nerdctl() {
+      assumeFalse(new Podman().exists());
+      assumeTrue(new Nerdctl().exists());
+      assertEquals("nerdctl", selectShellRuntime(null).name());
+    }
+
+    @Test
+    @DisplayName("docker is the third choice")
     void docker() {
       assumeFalse(new Podman().exists());
+      assumeFalse(new Nerdctl().exists());
       assumeTrue(new Docker().exists());
       assertEquals("docker", selectShellRuntime(null).name());
     }
@@ -55,10 +67,41 @@ class AutoSelectRuntimeTest {
     }
 
     @Test
+    @DisplayName("can force to use podman with environment variable")
+    void forcePodmanWithEnvVariable(final EnvironmentVariables environmentVariables) {
+      assumeTrue(new Podman().exists());
+      environmentVariables.set("ILO_SHELL_RUNTIME", "podman");
+      assertEquals("podman", selectShellRuntime(null).name());
+    }
+
+    @Test
+    @DisplayName("can force to use nerdctl")
+    void forceNerdctl() {
+      assumeTrue(new Nerdctl().exists());
+      assertEquals("nerdctl", selectShellRuntime(NERDCTL).name());
+    }
+
+    @Test
+    @DisplayName("can force to use nerdctl with environment variable")
+    void forceNerdctlWithEnvVariable(final EnvironmentVariables environmentVariables) {
+      assumeTrue(new Nerdctl().exists());
+      environmentVariables.set("ILO_SHELL_RUNTIME", "nerdctl");
+      assertEquals("nerdctl", selectShellRuntime(null).name());
+    }
+
+    @Test
     @DisplayName("can force to use docker")
     void forceDocker() {
       assumeTrue(new Docker().exists());
       assertEquals("docker", selectShellRuntime(DOCKER).name());
+    }
+
+    @Test
+    @DisplayName("can force to use docker with environment variable")
+    void forceDockerWithEnvVariable(final EnvironmentVariables environmentVariables) {
+      assumeTrue(new Docker().exists());
+      environmentVariables.set("ILO_SHELL_RUNTIME", "docker");
+      assertEquals("docker", selectShellRuntime(null).name());
     }
 
     @Test
@@ -81,6 +124,13 @@ class AutoSelectRuntimeTest {
     void throwsDocker() {
       assumeFalse(new Docker().exists());
       assertThrows(NoMatchingRuntimeException.class, () -> selectShellRuntime(DOCKER));
+    }
+
+    @Test
+    @DisplayName("throws in case in case nerdctl is not installed but specified")
+    void throwsNerdctl() {
+      assumeFalse(new Nerdctl().exists());
+      assertThrows(NoMatchingRuntimeException.class, () -> selectShellRuntime(NERDCTL));
     }
 
   }
