@@ -15,7 +15,7 @@ tags:
 - nerdctl
 ---
 
-`ilo shell` by default searches your local system for supported runtimes. It prefers `podman` over `docker` over `lxd` at the moment. In order to force the usage of a specific runtime, use the `--runtime` flag.
+`ilo shell` by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the `--runtime` flag or set the `ILO_SHELL_RUNTIME` environment variable in your system. The `--runtime` flag overwrites the environment variable.
 
 ## Docker
 
@@ -24,19 +24,11 @@ Force `ilo` to use [docker](https://www.docker.com/) like this:
 ```console
 $ ilo shell --runtime docker
 
-# alias
+# use alias
 $ ilo shell --runtime d
-```
 
-## Podman
-
-Force `ilo` to use [podman](https://podman.io/) like this:
-
-```console
-$ ilo shell --runtime podman
-
-# alias
-$ ilo shell --runtime p
+# use env variable
+$ ILO_SHELL_RUNTIME=docker ilo shell
 ```
 
 ## nerdctl
@@ -46,8 +38,25 @@ Force `ilo` to use [nerdctl](https://github.com/containerd/nerdctl) like this:
 ```console
 $ ilo shell --runtime nerdctl
 
-# alias
+# use alias
 $ ilo shell --runtime n
+
+# use env variable
+$ ILO_SHELL_RUNTIME=nerdctl ilo shell
+```
+
+## Podman
+
+Force `ilo` to use [podman](https://podman.io/) like this:
+
+```console
+$ ilo shell --runtime podman
+
+# use alias
+$ ilo shell --runtime p
+
+# use env variable
+$ ILO_SHELL_RUNTIME=podman ilo shell
 ```
 
 ## Auto Selection

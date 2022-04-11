@@ -32,7 +32,11 @@ public final class AutoSelectRuntime {
    * @return The selected shell runtime.
    */
   public static ShellCLI selectShellRuntime(final ShellRuntime runtime) {
-    return autoSelect(runtime, ShellRuntimes.allRuntimes());
+    final var preferredRuntime = Optional.ofNullable(runtime)
+      .or(() -> Optional.ofNullable(System.getenv(EnvironmentVariables.ILO_SHELL_RUNTIME.name()))
+        .map(ShellRuntime::fromAlias))
+      .orElse(null);
+    return autoSelect(preferredRuntime, ShellRuntimes.allRuntimes());
   }
 
   /**
@@ -42,7 +46,11 @@ public final class AutoSelectRuntime {
    * @return The selected compose runtime.
    */
   public static ComposeCLI selectComposeRuntime(final ComposeRuntime runtime) {
-    return autoSelect(runtime, ComposeRuntimes.allRuntimes());
+    final var preferredRuntime = Optional.ofNullable(runtime)
+      .or(() -> Optional.ofNullable(System.getenv(EnvironmentVariables.ILO_COMPOSE_RUNTIME.name()))
+        .map(ComposeRuntime::fromAlias))
+      .orElse(null);
+    return autoSelect(preferredRuntime, ComposeRuntimes.allRuntimes());
   }
 
   private static <TOOL extends CliTool<?>> TOOL autoSelect(

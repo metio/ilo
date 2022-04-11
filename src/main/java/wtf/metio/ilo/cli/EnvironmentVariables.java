@@ -18,6 +18,20 @@ public enum EnvironmentVariables {
    *
    * @see RunCommands#locate(java.nio.file.Path)
    */
-  ILO_RC
+  ILO_RC,
+
+  /**
+   * The runtime to use for 'ilo shell'. Can be overwritten with the '--runtime' flag.
+   *
+   * @see wtf.metio.ilo.shell.ShellOptions#runtime
+   */
+  ILO_SHELL_RUNTIME,
+
+  /**
+   * The runtime to use for 'ilo compose'. Can be overwritten with the '--runtime' flag.
+   *
+   * @see wtf.metio.ilo.compose.ComposeOptions#runtime
+   */
+  ILO_COMPOSE_RUNTIME
 
 }
