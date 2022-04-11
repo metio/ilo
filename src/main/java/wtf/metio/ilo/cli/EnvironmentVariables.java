@@ -7,8 +7,17 @@
 
 package wtf.metio.ilo.cli;
 
+/**
+ * Enumeration of all known/supported environment variables. Their name on the host machine must match their
+ * {@code name()} representation, e.g. 'ILO_RC.name()' is just 'ILO_RC'.
+ */
 public enum EnvironmentVariables {
 
-  ILO_RC;
+  /**
+   * Allows to specify the run command files to load during startup.
+   *
+   * @see RunCommands#locate(java.nio.file.Path)
+   */
+  ILO_RC
 
 }

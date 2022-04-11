@@ -20,12 +20,27 @@ import wtf.metio.ilo.shell.ShellRuntimes;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Utility class that automatically selects a runtime based on what is currently installed on the host machine.
+ */
 public final class AutoSelectRuntime {
 
+  /**
+   * Select a runtime for 'ilo shell'. Users can force a certain runtime by specifying the runtime parameter.
+   *
+   * @param runtime The runtime to force, or null for auto-selection.
+   * @return The selected shell runtime.
+   */
   public static ShellCLI selectShellRuntime(final ShellRuntime runtime) {
     return autoSelect(runtime, ShellRuntimes.allRuntimes());
   }
 
+  /**
+   * Select a runtime for 'ilo compose'. Users can force a certain runtime by specifying the runtime parameter.
+   *
+   * @param runtime The runtime to force, or null for auto-selection.
+   * @return The selected compose runtime.
+   */
   public static ComposeCLI selectComposeRuntime(final ComposeRuntime runtime) {
     return autoSelect(runtime, ComposeRuntimes.allRuntimes());
   }

@@ -15,8 +15,27 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
+/**
+ * Utility class that encapsulates the common command lifecycle for 'ilo shell' and 'ilo compose'.
+ */
 public final class CommandLifecycle {
 
+  /**
+   * The common command lifecycle executes:
+   * <ol>
+   *   <li>Pull</li>
+   *   <li>Build</li>
+   *   <li>Run</li>
+   *   <li>Cleanup</li>
+   * </ol>>
+   *
+   * @param tool The container tool to use, e.g. podman.
+   * @param options The options to use for the entire command lifecycle.
+   * @param executor The executor to use.
+   * @param <OPTIONS> The type of the options supplied.
+   * @param <CLI> The type of the container tool supplied.
+   * @return Stream of exit codes, one for each step in the lifecycle.
+   */
   public static <OPTIONS extends Options, CLI extends CliTool<OPTIONS>> int run(
     final CLI tool,
     final OPTIONS options,

@@ -16,9 +16,17 @@ import java.util.stream.Stream;
  * Support for so-called RC files.
  *
  * @see <a href="https://en.wikipedia.org/wiki/Run_commands">Run Commands</a>
+ * @see <a href="https://picocli.info/#AtFiles">Picocli Argument Files</a>
  */
 public final class RunCommands {
 
+  /**
+   * Locate run commands on the host machine and prepares them for loading by picocli by prepending a '@' in front of
+   * the path. This turns them into argument files which are natively supported by picocli.
+   *
+   * @param baseDirectory The base directory to use for relative paths.
+   * @return Stream of run command paths, prepended with '@'.
+   */
   public static Stream<String> locate(final Path baseDirectory) {
     if (System.getenv().containsKey(EnvironmentVariables.ILO_RC.name())) {
       final var rcFiles = System.getenv().get(EnvironmentVariables.ILO_RC.name());
@@ -28,7 +36,7 @@ public final class RunCommands {
     return asArgumentFiles(Stream.of(".ilo/ilo.rc", ".ilo.rc").map(baseDirectory::resolve));
   }
 
-  public static Stream<String> asArgumentFiles(final Stream<? extends Path> locations) {
+  private static Stream<String> asArgumentFiles(final Stream<? extends Path> locations) {
     return locations
       .filter(Files::isReadable)
       .filter(Files::isRegularFile)
@@ -37,6 +45,12 @@ public final class RunCommands {
       .map("@"::concat);
   }
 
+  /**
+   * Poor-mans guard to prohibit adding run command files in some 'special' cases, e.g. users wants to see 'help'.
+   *
+   * @param args The CLI arguments for ilo itself.
+   * @return Whether to add run command files or not.
+   */
   public static boolean shouldAddRunCommands(final String[] args) {
     final var hasArguments = 0 < args.length;
     final var isVersion = (hasArguments && ("-V".equals(args[0]) || "--version".equals(args[0])))
@@ -50,7 +64,7 @@ public final class RunCommands {
   }
 
   private RunCommands() {
-    // factory class
+    // utility class
   }
 
 }

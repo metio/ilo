@@ -21,20 +21,32 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+/**
+ * Utility class that interacts with executables found on the host machine.
+ */
 public final class Executables {
 
+  /**
+   * Resolves a tool by its name from the current $PATH. To match shell behavior, the first match will be returned.
+   * Thus make sure to order your $PATH so that your preferred location will be picked first.
+   *
+   * @param tool The name of the tool to look up.
+   * @return The path to the tool or an empty optional.
+   */
   public static Optional<Path> of(final String tool) {
     return allPaths().map(path -> path.resolve(tool))
       .filter(Executables::canExecute)
       .findFirst();
   }
 
+  // visible for testing
   static Stream<Path> allPaths() {
     return Stream.of(System.getenv("PATH")
       .split(Pattern.quote(File.pathSeparator)))
       .map(Paths::get);
   }
 
+  // visible for testing
   static boolean canExecute(final Path binary) {
     return Files.exists(binary) && Files.isExecutable(binary);
   }
