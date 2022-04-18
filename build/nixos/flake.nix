@@ -12,8 +12,8 @@
       stdenv.mkDerivation {
         name = "ilo";
         src = self;
-        buildPhase = "curl --location https://github.com/metio/ilo/releases/download/2022.3.14/ilo-2022.3.14-linux.zip --output ilo.zip; unzip ilo.zip";
-        installPhase = "mkdir -p $out/bin; install -t $out/bin ilo-2022.3.14/ilo";
+        buildPhase = "curl --location https://github.com/metio/ilo/releases/download/2022.4.18/ilo-2022.4.18-linux.zip --output ilo.zip; unzip ilo.zip";
+        installPhase = "mkdir -p $out/bin; install -t $out/bin ilo-2022.4.18/ilo";
       };
 
   };

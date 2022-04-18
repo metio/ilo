@@ -5,11 +5,11 @@
 
 class Ilo < Formula
   desc "Manage reproducible build environments"
-  version "2022.3.14"
+  version "2022.4.18"
   homepage "https://ilo.projects.metio.wtf/"
   license "CC0"
-  url "https://github.com/metio/ilo/releases/download/2022.3.14/ilo-2022.3.14-mac.zip"
-  sha256 "c0227b701a44adfae1d04368aa5603f9492114ffd8065eee23e930295b6b2255"
+  url "https://github.com/metio/ilo/releases/download/2022.4.18/ilo-2022.4.18-mac.zip"
+  sha256 ""
 
   depends_on "podman" => :optional
   depends_on "docker" => :optional
