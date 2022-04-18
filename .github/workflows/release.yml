@@ -151,7 +151,7 @@ jobs:
             artifacts/windows/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.sha512
   packages:
     name: Update Package Managers
-    needs: [prepare, release]
+    needs: [prepare, build, release]
     runs-on: ubuntu-latest
     steps:
       - id: checkout

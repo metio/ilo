@@ -9,7 +9,7 @@ class Ilo < Formula
   homepage "https://ilo.projects.metio.wtf/"
   license "CC0"
   url "https://github.com/metio/ilo/releases/download/2022.4.18/ilo-2022.4.18-mac.zip"
-  sha256 ""
+  sha256 "5a3f79434cc194de598935af6dab577bd24801b7b4b523b344848acda8d1acd2"
 
   depends_on "podman" => :optional
   depends_on "docker" => :optional
