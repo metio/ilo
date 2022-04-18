@@ -212,14 +212,3 @@ jobs:
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
           message: release ${{ needs.prepare.outputs.release_version }} published - see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
           server: matrix.org
-  webhooks:
-    name: Trigger Webhooks
-    needs: [prepare, packages]
-    runs-on: ubuntu-latest
-    steps:
-      - id: copr
-        name: COPR Webhook
-        if: needs.prepare.outputs.commit_count > 0
-        uses: joelwmale/webhook-action@2.1.0
-        with:
-          url: ${{ secrets.COPR_WEBHOOK }}
