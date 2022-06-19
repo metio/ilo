@@ -249,7 +249,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <licenseHeaderFile>${project.basedir}/src/main/assembly/licenseHeaderFile</licenseHeaderFile>
+                    <licenseHeaderFile>${project.basedir}/src/assembly/licenseHeaderFile</licenseHeaderFile>
                     <repositoryName>lib</repositoryName>
                     <repositoryLayout>flat</repositoryLayout>
                     <programs>
@@ -272,7 +272,7 @@
                         </goals>
                         <configuration>
                             <descriptors>
-                                <descriptor>${project.basedir}/src/main/assembly/jvm.xml</descriptor>
+                                <descriptor>${project.basedir}/src/assembly/jvm.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>
@@ -412,7 +412,7 @@
                                 </goals>
                                 <configuration>
                                     <descriptors>
-                                        <descriptor>src/main/assembly/linux.xml</descriptor>
+                                        <descriptor>src/assembly/linux.xml</descriptor>
                                     </descriptors>
                                 </configuration>
                             </execution>
@@ -446,7 +446,7 @@
                                 </goals>
                                 <configuration>
                                     <descriptors>
-                                        <descriptor>src/main/assembly/mac.xml</descriptor>
+                                        <descriptor>src/assembly/mac.xml</descriptor>
                                     </descriptors>
                                 </configuration>
                             </execution>
@@ -480,7 +480,7 @@
                                 </goals>
                                 <configuration>
                                     <descriptors>
-                                        <descriptor>src/main/assembly/windows.xml</descriptor>
+                                        <descriptor>src/assembly/windows.xml</descriptor>
                                     </descriptors>
                                 </configuration>
                             </execution>
