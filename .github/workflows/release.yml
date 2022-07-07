@@ -10,7 +10,6 @@ jobs:
       commit_count: ${{ steps.commits.outputs.count }}
       release_version: ${{ steps.release.outputs.version }}
       previous_version: ${{ steps.previous.outputs.version }}
-      changelog: ${{ steps.changelog.outputs.content }}
       release_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - id: checkout
