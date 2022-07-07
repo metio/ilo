@@ -1,0 +1,27 @@
+name: Qodana Scan
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - .github/workflows/qodana.yml
+      - src/**
+      - pom.xml
+  pull_request:
+    branches: [ main ]
+    paths:
+      - .github/workflows/qodana.yml
+      - src/**
+      - pom.xml
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # required in order to get all tags
+      - id: qodana
+        name: Qodana Scan
+        uses: JetBrains/qodana-action@v5.1.0
