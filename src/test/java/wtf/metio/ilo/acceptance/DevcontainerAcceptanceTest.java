@@ -128,7 +128,7 @@ class DevcontainerAcceptanceTest extends CLI_TCK {
   @ParameterizedTest
   @MethodSource("composeRuntimes")
   @DisplayName("supports multiple compose runtimes")
-  void composeRuntimes(final String composeRuntime) {
+  void selectComposeRuntime(final String composeRuntime) {
     final var devcontainer = parseDevcontainerCommand("devcontainer", "--compose-runtime=" + composeRuntime);
     assertAll("devcontainer options",
       () -> assertEquals(ComposeRuntime.fromAlias(composeRuntime), devcontainer.options.composeRuntime, "composeRuntime"),
@@ -143,7 +143,7 @@ class DevcontainerAcceptanceTest extends CLI_TCK {
   @ParameterizedTest
   @MethodSource("shellRuntimes")
   @DisplayName("supports multiple shell runtimes")
-  void shellRuntimes(final String shellRuntime) {
+  void selectShellRuntime(final String shellRuntime) {
     final var devcontainer = parseDevcontainerCommand("devcontainer", "--shell-runtime=" + shellRuntime);
     assertAll("devcontainer options",
       () -> assertEquals(ShellRuntime.fromAlias(shellRuntime), devcontainer.options.shellRuntime, "shellRuntime"),
