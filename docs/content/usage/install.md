@@ -50,7 +50,7 @@ $ rpm-ostree install ilo
 [NixOS](https://nixos.org/) users can use the following flake that always references the latest release:
 
 ```console
-$ nix run github:metio/ilo/main?dir=build/nixos
+$ nix run github:metio/ilo/main?dir=build/nixos -- --help
 ```
 
 ## MacOS
