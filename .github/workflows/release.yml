@@ -65,7 +65,7 @@ jobs:
       - id: gpg
         name: GPG Key
         if: needs.prepare.outputs.commit_count > 0
-        uses: timheuer/base64-to-file@v1.1
+        uses: timheuer/base64-to-file@v1.2
         with:
           fileName: signing.key.asc
           fileDir: ${{ github.workspace}}
