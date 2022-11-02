@@ -35,8 +35,7 @@ class CliExecutorTest {
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
-  @DisplayName("Should detect tool in PATH")
-  void shouldExecuteCommandOnLinux() {
+  void shouldExecuteCommandOnUnix() {
     final var executor = new CliExecutor<>() {
 
       @Override
@@ -47,6 +46,21 @@ class CliExecutorTest {
     };
 
     Assertions.assertEquals(0, executor.execute(List.of("ls"), false));
+  }
+
+  @Test
+  @EnabledOnOs({OS.WINDOWS})
+  void shouldExecuteCommandOnWindows() {
+    final var executor = new CliExecutor<>() {
+
+      @Override
+      public CliTool<?> selectRuntime(final Runtime runtime) {
+        return null;
+      }
+
+    };
+
+    Assertions.assertEquals(0, executor.execute(List.of("dir"), false));
   }
 
 }
