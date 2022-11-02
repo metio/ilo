@@ -3,18 +3,20 @@ on:
   schedule:
     - cron:  0 1 2 * *
 jobs:
-  build:
+  parent:
     runs-on: ubuntu-latest
     steps:
       - id: checkout
         name: Clone Git Repository
         uses: actions/checkout@v3
-      - id: jdk
-        name: Setup Java
-        uses: actions/setup-java@v3
+      - id: graal
+        name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
         with:
+          version: latest
           java-version: 17
-          distribution: temurin
+          components: native-image
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: cache
         uses: actions/cache@v3
         with:
@@ -24,12 +26,12 @@ jobs:
             ${{ runner.os }}-maven-
       - id: parent
         name: Update parent
-        run: mvn --batch-mode versions:update-parent --define generateBackupPoms=false
+        run: mvn --batch-mode --define generateBackupPoms=false versions:update-parent
       - id: create-pull-request
         name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
           commit-message: update parent to latest version
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
@@ -39,4 +41,13 @@ jobs:
           labels: dependencies
           assignees: sebhoss
           draft: false
+          base: main
           branch: update-parent
+          delete-branch: true
+      - name: Enable Pull Request Automerge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          token: ${{ secrets.PAT }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: rebase

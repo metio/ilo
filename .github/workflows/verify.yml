@@ -8,9 +8,8 @@ on:
       - .github/workflows/verify.yml
       - src/**
       - pom.xml
-      - maven-version-rules.xml
 jobs:
-  build:
+  verify:
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -24,10 +23,10 @@ jobs:
         name: Clone Git Repository
         uses: actions/checkout@v3
       - id: graal
-        name: Setup GraalVM
+        name: Set up GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
-          version: 22.1.0
+          version: latest
           java-version: 17
           components: native-image
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -41,4 +40,4 @@ jobs:
             ${{ runner.os }}-maven-
       - id: verify
         name: Verify Project
-        run: mvn --batch-mode verify --define skipNativeBuild=false
+        run: mvn --batch-mode --define skipNativeBuild=false verify
