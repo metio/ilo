@@ -7,7 +7,9 @@
 
 package wtf.metio.ilo.compose;
 
-import wtf.metio.ilo.tools.*;
+import wtf.metio.ilo.tools.DockerCompose;
+import wtf.metio.ilo.tools.DockerCompose2;
+import wtf.metio.ilo.tools.PodmanCompose;
 
 import java.util.List;
 

@@ -12,12 +12,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
-import wtf.metio.ilo.cli.Executables;
 import wtf.metio.ilo.errors.RuntimeIOException;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CliExecutorTest {
 

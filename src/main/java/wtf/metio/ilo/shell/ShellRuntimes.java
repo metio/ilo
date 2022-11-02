@@ -7,7 +7,9 @@
 
 package wtf.metio.ilo.shell;
 
-import wtf.metio.ilo.tools.*;
+import wtf.metio.ilo.tools.Docker;
+import wtf.metio.ilo.tools.Nerdctl;
+import wtf.metio.ilo.tools.Podman;
 
 import java.util.List;
 
