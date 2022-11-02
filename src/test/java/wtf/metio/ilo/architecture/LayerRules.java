@@ -18,6 +18,7 @@ public final class LayerRules {
 
   @ArchTest
   public static final ArchRule layerAccessControl = layeredArchitecture()
+    .consideringAllDependencies()
     .withOptionalLayers(true)
     .layer("CLI").definedBy("wtf.metio.ilo.cli..")
     .layer("Commands").definedBy("wtf.metio.ilo.compose..", "wtf.metio.ilo.devcontainer..", "wtf.metio.ilo.shell..")
