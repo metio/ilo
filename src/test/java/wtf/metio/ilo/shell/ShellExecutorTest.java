@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import wtf.metio.ilo.tools.Docker;
-import wtf.metio.ilo.tools.LXD;
 import wtf.metio.ilo.tools.Nerdctl;
 import wtf.metio.ilo.tools.Podman;
 
@@ -31,7 +30,7 @@ class ShellExecutorTest {
   @Test
   @DisplayName("returns non-null values for auto-selection")
   void shouldReturnNonNullValueForAutoSelection() {
-    assumeTrue(new Podman().exists() || new Docker().exists() || new LXD().exists() || new Nerdctl().exists());
+    assumeTrue(new Podman().exists() || new Docker().exists() || new Nerdctl().exists());
     assertNotNull(shellExecutor.selectRuntime(null));
   }
 

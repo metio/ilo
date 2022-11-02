@@ -5,23 +5,21 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.tools;
+package wtf.metio.ilo.version;
 
-/**
- * Support for 'docker compose' aka 'Compose V2'
- *
- * @see <a href="https://docs.docker.com/compose/cli-command/">official documentation</a>
- */
-public final class DockerCompose2 extends DockerComposeLike {
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-  @Override
-  public String name() {
-    return "docker";
+class VersionTest {
+
+  @Test
+  void shouldDefineVersion() {
+    Assertions.assertNotNull(Version.VERSION);
   }
 
-  @Override
-  public String command() {
-    return "compose";
+  @Test
+  void shouldCreateInstance() {
+    Assertions.assertNotNull(new Version());
   }
 
 }
