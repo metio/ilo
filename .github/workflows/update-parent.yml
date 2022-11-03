@@ -27,7 +27,7 @@ jobs:
       - id: parent
         name: Update parent
         run: mvn --batch-mode --define generateBackupPoms=false versions:update-parent
-      - id: create-pull-request
+      - id: cpr
         name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
