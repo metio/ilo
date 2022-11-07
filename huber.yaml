@@ -1,0 +1,18 @@
+---
+- name: ilo
+  description: Manage reproducible build environments
+  source:
+    Github:
+      owner: metio
+      repo: ilo
+  targets:
+    - LinuxAmd64:
+        artifact_templates:
+          - "ilo-{version}-linux.zip"
+    - MacOS:
+        artifact_templates:
+          - "ilo-{version}-mac.zip"
+    - Windows:
+        artifact_templates:
+          - "ilo-{version}-windows.zip"
+  detail: ~

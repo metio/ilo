@@ -12,11 +12,20 @@ tags:
 - install
 ---
 
-Use the following locations in order to download the binary distribution of `ilo`:
+Prebuilt binaries of `ilo` are available for each published release at:
 
 - https://github.com/metio/ilo/releases
 
 Almost none of the widely used package managers have `ilo` in their official repositories yet. In case you want to help package `ilo` for your preferred operating system, take a look at the [open packaging issues](https://github.com/metio/ilo/issues?q=is%3Aopen+label%3A%22package%3A+windows%22%2C%22package%3A+alpine%22%2C%22package%3A+debian%22%2C%22package%3A+ubuntu%22%2C%22package%3A+arch%22%2C%22package%3A+fedora%22%2C%22package%3A+gentoo%22%2C%22package%3A+nix%22%2C%22package%3A+osx%22%2C%22package%3A+suse%22).
+
+## Huber
+
+In case you are using [huber](https://github.com/innobead/huber), execute the following commands to install `ilo` on Linux/Mac/Windows:
+
+```console
+$ huber repo add remote-repo --url https://github.com/metio/ilo
+$ huber install ilo
+```
 
 ## Linux
 
