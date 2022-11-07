@@ -78,16 +78,16 @@ jobs:
       - id: verify
         if: needs.prepare.outputs.commit_count > 0
         name: Verify Project
-        run: |
-          mvn \
-            --batch-mode \
-            --activate-profiles release \
-            --define revision=${{ needs.prepare.outputs.release_version }} \
-            --define skipNativeBuild=false \
-            --define pgp.secretkey=keyfile:signing.key.asc \
-            --define pgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }} \
-            --define project.build.outputTimestamp=${{ needs.prepare.outputs.build_timestamp }} \
-            verify
+        run: >
+          mvn
+          --batch-mode
+          --activate-profiles release
+          --define revision=${{ needs.prepare.outputs.release_version }}
+          --define skipNativeBuild=false
+          --define pgp.secretkey=keyfile:signing.key.asc
+          --define pgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }}
+          --define project.build.outputTimestamp=${{ needs.prepare.outputs.build_timestamp }}
+          verify
       - id: mac-checksum
         name: Capture MacOS SHA256 Checksum
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
