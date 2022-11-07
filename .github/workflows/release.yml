@@ -54,7 +54,7 @@ jobs:
         name: GraalVM Setup
         uses: graalvm/setup-graalvm@v1
         with:
-          version: 22.1.0
+          version: latest
           java-version: 17
           components: native-image
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -78,7 +78,16 @@ jobs:
       - id: verify
         if: needs.prepare.outputs.commit_count > 0
         name: Verify Project
-        run: mvn --batch-mode verify --activate-profiles release --define revision=${{ needs.prepare.outputs.release_version }} --define skipNativeBuild=false --define pgp.secretkey=keyfile:signing.key.asc --define pgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }} --define project.build.outputTimestamp=${{ needs.prepare.outputs.build_timestamp }}
+        run: |
+          mvn \
+            --batch-mode \
+            --activate-profiles release \
+            --define revision=${{ needs.prepare.outputs.release_version }} \
+            --define skipNativeBuild=false \
+            --define pgp.secretkey=keyfile:signing.key.asc \
+            --define pgp.passphrase=literal:${{ secrets.GPG_SECRET_KEY_PASSWORD }} \
+            --define project.build.outputTimestamp=${{ needs.prepare.outputs.build_timestamp }} \
+            verify
       - id: mac-checksum
         name: Capture MacOS SHA256 Checksum
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
@@ -136,6 +145,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ needs.prepare.outputs.release_version }}
+          name: ${{ needs.prepare.outputs.release_version }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
@@ -203,9 +213,9 @@ jobs:
           server_port: ${{ secrets.MAIL_PORT }}
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: release ${{ needs.prepare.outputs.release_version }}
+          subject: ilo ${{ needs.prepare.outputs.release_version }}
           body: See https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details.
-          to: ilo@metio.groups.io
+          to: announcements@metio.groups.io
           from: ${{ secrets.MAIL_SENDER }}
       - id: matrix
         name: Send Matrix Message
@@ -214,5 +224,5 @@ jobs:
         with:
           room_id: ${{ secrets.MATRIX_ROOM_ID }}
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
-          message: release ${{ needs.prepare.outputs.release_version }} published - see https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details
+          message: ilo version [${{ needs.prepare.outputs.release_version }}](https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }}) published
           server: matrix.org
