@@ -89,3 +89,4 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [digga](https://digga.divnix.com/): Digga is a flake utility library that helps you declaratively craft and manage all three layers of your system environment within a single nix flakes repository.
 - [devbox](https://www.jetpack.io/devbox/): Instant, easy, and predictable shells and containers.
 - [devenv](https://devenv.sh/): Fast, Declarative, Reproducible, and Composable Developer Environments.
+- [asaman](https://github.com/kushaldas/asaman): This is a tool to build reproducible wheels for your Python project or for all of your dependencies.
