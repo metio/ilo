@@ -87,3 +87,5 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [docker-sync](http://docker-sync.io/): Run your application at full speed while syncing your code for development, finally empowering you to utilize docker for development under OSX/Windows/Linux.
 - [devshell](https://github.com/numtide/devshell): The goal of this project is to simplify per-project developer environments.
 - [digga](https://digga.divnix.com/): Digga is a flake utility library that helps you declaratively craft and manage all three layers of your system environment within a single nix flakes repository.
+- [devbox](https://www.jetpack.io/devbox/): Instant, easy, and predictable shells and containers.
+- [devenv](https://devenv.sh/): Fast, Declarative, Reproducible, and Composable Developer Environments.
