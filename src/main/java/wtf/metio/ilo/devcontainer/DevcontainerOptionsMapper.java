@@ -12,9 +12,8 @@ import wtf.metio.ilo.shell.ShellOptions;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 final class DevcontainerOptionsMapper {
@@ -28,29 +27,29 @@ final class DevcontainerOptionsMapper {
     opts.mountProjectDir = options.mountProjectDir;
     opts.image = devcontainer.image;
     opts.context = Optional.ofNullable(devcontainer.build)
-      .map(build -> build.context)
-      .or(() -> Optional.ofNullable(devcontainer.context))
-      .orElse(".");
+        .map(build -> build.context)
+        .or(() -> Optional.ofNullable(devcontainer.context))
+        .orElse(".");
     opts.containerfile = Optional.ofNullable(devcontainer.build)
-      .map(build -> build.dockerFile)
-      .or(() -> Optional.ofNullable(devcontainer.dockerFile))
-      .orElse("");
+        .map(build -> build.dockerFile)
+        .or(() -> Optional.ofNullable(devcontainer.dockerFile))
+        .orElse("");
     opts.ports = Stream.ofNullable(devcontainer.forwardPorts)
-      .flatMap(List::stream)
-      .map(port -> port + ":" + port)
-      .collect(Collectors.toList());
+        .flatMap(Collection::stream)
+        .map(port -> port + ":" + port)
+        .toList();
     return opts;
   }
 
   static ComposeOptions composeOptions(final DevcontainerOptions options, final DevcontainerJson devcontainer, final Path devcontainerJson) {
     final var opts = new ComposeOptions();
     opts.file = Stream.ofNullable(devcontainer.dockerComposeFile)
-      .flatMap(List::stream)
-      .map(Paths::get)
-      .map(devcontainerJson::relativize)
-      .map(Path::toAbsolutePath)
-      .map(Path::toString)
-      .collect(Collectors.toList());
+        .flatMap(Collection::stream)
+        .map(Paths::get)
+        .map(devcontainerJson::relativize)
+        .map(Path::toAbsolutePath)
+        .map(Path::toString)
+        .toList();
     opts.service = devcontainer.service;
     opts.debug = options.debug;
     opts.pull = options.pull;

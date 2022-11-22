@@ -9,14 +9,11 @@ package wtf.metio.ilo.compose;
 
 import wtf.metio.ilo.test.TestCliExecutor;
 
-class TestComposeExecutor extends TestCliExecutor<ComposeRuntime, ComposeCLI> {
+class TestComposeExecutor extends TestCliExecutor<ComposeRuntime, ComposeCLI, ComposeOptions> {
 
   @Override
   public ComposeCLI selectRuntime(final ComposeRuntime runtime) {
-    return ComposeRuntimes.allRuntimes().stream()
-      .filter(cli -> runtime.matches(cli.name()))
-      .findFirst()
-      .orElseThrow(IllegalArgumentException::new);
+    return runtime.cli();
   }
 
 }

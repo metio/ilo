@@ -30,7 +30,7 @@ public final class Compose implements Callable<Integer> {
   @CommandLine.Mixin
   public ComposeOptions options;
 
-  private final CliExecutor<? super ComposeRuntime, ? extends ComposeCLI> executor;
+  private final CliExecutor<? super ComposeRuntime, ComposeCLI, ComposeOptions> executor;
 
   // default constructor for picocli
   public Compose() {
@@ -38,7 +38,7 @@ public final class Compose implements Callable<Integer> {
   }
 
   // constructor for testing
-  Compose(final CliExecutor<? super ComposeRuntime, ? extends ComposeCLI> executor) {
+  Compose(final CliExecutor<? super ComposeRuntime, ComposeCLI, ComposeOptions> executor) {
     this.executor = executor;
   }
 

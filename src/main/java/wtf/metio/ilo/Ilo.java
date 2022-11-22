@@ -50,6 +50,7 @@ public final class Ilo implements Runnable {
   CommandLine.Model.CommandSpec spec;
 
   public static void main(final String... userInput) {
+    System.setProperty("picocli.disable.closures", "true");
     System.exit(commandLine().execute(allArguments(userInput)));
   }
 

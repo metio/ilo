@@ -7,14 +7,13 @@
 
 package wtf.metio.ilo.shell;
 
-import wtf.metio.ilo.cli.AutoSelectRuntime;
 import wtf.metio.ilo.model.CliExecutor;
 
-final class ShellExecutor implements CliExecutor<ShellRuntime, ShellCLI> {
+final class ShellExecutor implements CliExecutor<ShellRuntime, ShellCLI, ShellOptions> {
 
   @Override
   public ShellCLI selectRuntime(final ShellRuntime runtime) {
-    return AutoSelectRuntime.selectShellRuntime(runtime);
+    return ShellRuntime.autoSelect(runtime);
   }
 
 }

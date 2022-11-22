@@ -30,7 +30,7 @@ public final class Shell implements Callable<Integer> {
   @CommandLine.Mixin
   public ShellOptions options;
 
-  private final CliExecutor<? super ShellRuntime, ? extends ShellCLI> executor;
+  private final CliExecutor<? super ShellRuntime, ShellCLI, ShellOptions> executor;
 
   // default constructor for picocli
   public Shell() {
@@ -38,7 +38,7 @@ public final class Shell implements Callable<Integer> {
   }
 
   // constructor for testing
-  Shell(final CliExecutor<? super ShellRuntime, ? extends ShellCLI> executor) {
+  Shell(final CliExecutor<? super ShellRuntime, ShellCLI, ShellOptions> executor) {
     this.executor = executor;
   }
 

@@ -15,6 +15,7 @@ import wtf.metio.ilo.test.ClassTests;
 
 import java.lang.reflect.Modifier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("DevcontainerOptions")
@@ -29,17 +30,26 @@ class DevcontainerOptionsTest {
   @ParameterizedTest
   @DisplayName("has public fields")
   @ValueSource(strings = {
-    "shellRuntime",
-    "composeRuntime",
-    "debug",
-    "mountProjectDir",
-    "pull",
-    "removeImage",
-    "locations"
+      "shellRuntime",
+      "composeRuntime",
+      "debug",
+      "mountProjectDir",
+      "pull",
+      "removeImage",
+      "locations"
   })
   void shouldHavePublicProperty(final String field) throws NoSuchFieldException {
     final var runtime = DevcontainerOptions.class.getDeclaredField(field);
     assertTrue(Modifier.isPublic(runtime.getModifiers()));
+  }
+
+  @ParameterizedTest
+  @DisplayName("returns debug value")
+  @ValueSource(booleans = {true, false})
+  void shouldReturnDebugValue(final boolean value) {
+    final var options = new DevcontainerOptions();
+    options.debug = value;
+    assertEquals(value, options.debug());
   }
 
 }

@@ -7,10 +7,12 @@
 
 package wtf.metio.ilo.utils;
 
+import java.util.Objects;
+
 public final class Strings {
 
   public static boolean isBlank(final String value) {
-    return null == value || value.isBlank();
+    return Objects.isNull(value) || value.isBlank();
   }
 
   public static boolean isNotBlank(final String value) {

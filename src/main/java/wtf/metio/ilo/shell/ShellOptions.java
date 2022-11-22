@@ -43,11 +43,17 @@ public final class ShellOptions implements Options {
 
   @CommandLine.Option(
     names = {"--no-mount-project-dir"},
-    description = "Mount the project directory into the running container.",
+    description = "Mount the project directory into the running container. Container path will be the same as --working-dir.",
     defaultValue = "true",
     negatable = true
   )
   public boolean mountProjectDir;
+
+  @CommandLine.Option(
+      names = {"--working-dir"},
+      description = "The directory in the container to use. If not specified, defaults to the current directory."
+  )
+  public String workingDir;
 
   @CommandLine.Option(
     names = {"--containerfile", "--dockerfile"},

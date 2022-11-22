@@ -9,11 +9,13 @@ package wtf.metio.ilo.test;
 
 import wtf.metio.ilo.model.CliExecutor;
 import wtf.metio.ilo.model.CliTool;
+import wtf.metio.ilo.model.Options;
 import wtf.metio.ilo.model.Runtime;
 
 import java.util.*;
 
-public abstract class TestCliExecutor<RUNTIME extends Runtime, CLI extends CliTool<?>> implements CliExecutor<RUNTIME, CLI> {
+public abstract class TestCliExecutor<RUNTIME extends Runtime<CLI>, CLI extends CliTool<OPTIONS>, OPTIONS extends Options>
+    implements CliExecutor<RUNTIME, CLI, OPTIONS> {
 
   private final List<List<String>> collectedArguments = new ArrayList<>(4);
   private final ArrayDeque<Integer> exitCodes = new ArrayDeque<>(4);
