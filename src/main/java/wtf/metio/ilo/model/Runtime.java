@@ -11,9 +11,9 @@ import wtf.metio.ilo.errors.NoMatchingRuntimeException;
 
 import java.util.Arrays;
 
-public interface Runtime {
+public interface Runtime<CLI> {
 
-  static <RUNTIME extends Runtime> RUNTIME firstMatching(final String alias, final RUNTIME[] runtimes) {
+  static <CLI, RUNTIME extends Runtime<CLI>> RUNTIME firstMatching(final String alias, final RUNTIME[] runtimes) {
     return Arrays.stream(runtimes)
       .filter(runtime -> runtime.matches(alias))
       .findFirst()
@@ -25,5 +25,7 @@ public interface Runtime {
   }
 
   String[] aliases();
+
+  CLI cli();
 
 }

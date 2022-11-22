@@ -23,13 +23,7 @@ import java.util.List;
 final class DevcontainerJsonParser {
 
   static Path findJson(final Path baseDirectory, final List<String> locations) {
-    return Streams.fromList(locations)
-      .map(baseDirectory::resolve)
-      .filter(Files::isReadable)
-      .filter(Files::isRegularFile)
-      .map(Path::toAbsolutePath)
-      .findFirst()
-      .orElseThrow(DevcontainerJsonMissingException::new);
+    return Streams.findFirst(baseDirectory, locations).orElseThrow(DevcontainerJsonMissingException::new);
   }
 
   static DevcontainerJson parseJson(final Path devcontainer) {

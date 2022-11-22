@@ -10,12 +10,13 @@ package wtf.metio.ilo.devcontainer;
 import picocli.CommandLine;
 import wtf.metio.ilo.compose.ComposeRuntime;
 import wtf.metio.ilo.compose.ComposeRuntimeConverter;
+import wtf.metio.ilo.model.Options;
 import wtf.metio.ilo.shell.ShellRuntime;
 import wtf.metio.ilo.shell.ShellRuntimeConverter;
 
 import java.util.List;
 
-public final class DevcontainerOptions {
+public final class DevcontainerOptions implements Options {
 
   @CommandLine.Option(
     names = {"--shell-runtime", "-S"},
@@ -59,10 +60,15 @@ public final class DevcontainerOptions {
 
   @CommandLine.Parameters(
     index = "0..*",
-    description = "List of possible locations for a devcontainer.json file. First found will be used. ",
+    description = "List of possible locations for a devcontainer.json file. First found will be used.",
     defaultValue = ".devcontainer/devcontainer.json .devcontainer.json",
     split = " "
   )
   public List<String> locations;
+
+  @Override
+  public boolean debug() {
+    return debug;
+  }
 
 }

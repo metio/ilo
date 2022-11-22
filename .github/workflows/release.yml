@@ -52,6 +52,7 @@ jobs:
         uses: actions/checkout@v3
       - id: graal
         name: GraalVM Setup
+        if: needs.prepare.outputs.commit_count > 0
         uses: graalvm/setup-graalvm@v1
         with:
           version: latest
@@ -94,32 +95,32 @@ jobs:
         run: echo "::set-output name=sha256::$(cat ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha256)"
       - id: upload-java
         name: Upload JVM Artifact
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
         uses: actions/upload-artifact@v3
         with:
           name: jvm
           path: ./target/ilo-*-jvm*
-        if: runner.os == 'Linux'
       - id: upload-linux
         name: Upload Linux Artifact
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
         uses: actions/upload-artifact@v3
         with:
           name: linux
           path: ./target/ilo-*-linux*
-        if: runner.os == 'Linux'
       - id: upload-mac
         name: Upload Mac Artifact
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
         uses: actions/upload-artifact@v3
         with:
           name: mac
           path: ./target/ilo-*-mac*
-        if: runner.os == 'macOS'
       - id: upload-windows
         name: Upload Windows Artifact
+        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
         uses: actions/upload-artifact@v3
         with:
           name: windows
           path: ./target/ilo-*-windows*
-        if: runner.os == 'Windows'
   release:
     name: GitHub Release
     needs: [prepare, build]
@@ -176,10 +177,6 @@ jobs:
         name: Update COPR Version
         if: needs.prepare.outputs.commit_count > 0
         run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' build/copr/ilo.spec
-      - id: update-nixos-version
-        name: Update NixOS Flake Version
-        if: needs.prepare.outputs.commit_count > 0
-        run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' build/nixos/flake.nix
       - id: update-homebrew-version
         name: Update Homebrew Version
         if: needs.prepare.outputs.commit_count > 0
@@ -196,7 +193,7 @@ jobs:
           author_name: ${{ github.actor }}
           author_email: ${{ github.actor }}@users.noreply.github.com
           message: Update package-manager infos for latest release
-          add: "['build/copr/ilo.spec', 'build/nixos/flake.nix', 'HomebrewFormula/ilo.rb']"
+          add: "['build/copr/ilo.spec', 'HomebrewFormula/ilo.rb']"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   announce:
@@ -213,7 +210,7 @@ jobs:
           server_port: ${{ secrets.MAIL_PORT }}
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: ilo ${{ needs.prepare.outputs.release_version }}
+          subject: ${{ github.event.repository.name }} version ${{ needs.prepare.outputs.release_version }} published
           body: See https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }} for details.
           to: announcements@metio.groups.io
           from: ${{ secrets.MAIL_SENDER }}
@@ -224,5 +221,5 @@ jobs:
         with:
           room_id: ${{ secrets.MATRIX_ROOM_ID }}
           access_token: ${{ secrets.MATRIX_ACCESS_TOKEN }}
-          message: ilo version [${{ needs.prepare.outputs.release_version }}](https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }}) published
+          message: ${{ github.event.repository.name }} version [${{ needs.prepare.outputs.release_version }}](https://github.com/metio/ilo/releases/tag/${{ needs.prepare.outputs.release_version }}) published
           server: matrix.org

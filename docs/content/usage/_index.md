@@ -39,3 +39,14 @@ The `ilo devcontainer` command uses a [devcontainer](https://code.visualstudio.c
 ```
 
 Take a look at more detailed information [here](../devcontainer).
+
+## ilo devfile
+
+The `ilo devfile` command uses a [devfile](https://devfile.io/) environment.
+
+```console
+[you@hostname project-dir]$ ilo devfile
+[root@container project-dir]#
+```
+
+Take a look at more detailed information [here](../devfile).

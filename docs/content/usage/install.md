@@ -54,14 +54,6 @@ $ sudo mv ilo.repo /etc/yum.repos.d/ilo.repo
 $ rpm-ostree install ilo
 ```
 
-### NixOS
-
-[NixOS](https://nixos.org/) users can use the following flake that always references the latest release:
-
-```console
-$ nix run github:metio/ilo/main?dir=build/nixos -- --help
-```
-
 ## MacOS
 
 ### Manual

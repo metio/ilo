@@ -1,0 +1,17 @@
+schemaVersion: 2.2.0
+metadata:
+  name: devfile-volume
+  version: 1.2.3
+components:
+  - name: mydevfile
+    container:
+      image: golang
+      memoryLimit: 512Mi
+      mountSources: true
+      command: ['sleep', 'infinity']
+      volumeMounts:
+        - name: cache
+          path: /.cache
+  - name: cache
+    volume:
+      size: 2Gi

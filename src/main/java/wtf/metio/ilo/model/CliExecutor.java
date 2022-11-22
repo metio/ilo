@@ -11,7 +11,7 @@ import wtf.metio.ilo.cli.Executables;
 
 import java.util.List;
 
-public interface CliExecutor<RUNTIME extends Runtime, CLI extends CliTool<?>> {
+public interface CliExecutor<RUNTIME extends Runtime<CLI>, CLI extends CliTool<OPTIONS>, OPTIONS extends Options> {
 
   CLI selectRuntime(RUNTIME runtime);
 

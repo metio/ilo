@@ -9,14 +9,11 @@ package wtf.metio.ilo.shell;
 
 import wtf.metio.ilo.test.TestCliExecutor;
 
-class TestShellExecutor extends TestCliExecutor<ShellRuntime, ShellCLI> {
+class TestShellExecutor extends TestCliExecutor<ShellRuntime, ShellCLI, ShellOptions> {
 
   @Override
   public ShellCLI selectRuntime(final ShellRuntime runtime) {
-    return ShellRuntimes.allRuntimes().stream()
-      .filter(cli -> runtime.matches(cli.name()))
-      .findFirst()
-      .orElseThrow(IllegalArgumentException::new);
+    return runtime.cli();
   }
 
 }

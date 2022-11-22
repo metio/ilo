@@ -34,6 +34,7 @@ class ShellTest extends TestMethodSources {
     executor = new TestShellExecutor();
     options = new ShellOptions();
     options.missingVolumes = ShellVolumeBehavior.CREATE;
+    options.workingDir = "some/dir";
     options.image = "fedora:latest";
     shell = new Shell(executor);
     shell.options = options;
@@ -47,7 +48,7 @@ class ShellTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(),
-      List.of(tool, "run", "--rm", options.image),
+      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
       List.of());
   }
 
@@ -60,7 +61,7 @@ class ShellTest extends TestMethodSources {
     assertCommandLine(
       List.of(tool, "pull", options.image),
       List.of(),
-      List.of(tool, "run", "--rm", options.image),
+      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
       List.of());
   }
 
@@ -73,7 +74,7 @@ class ShellTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(tool, "build", "--file", options.containerfile, "--tag", options.image),
-      List.of(tool, "run", "--rm", options.image),
+      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
       List.of());
   }
 
@@ -86,7 +87,7 @@ class ShellTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(),
-      List.of(tool, "run", "--rm", options.image),
+      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
       List.of(tool, "rmi", options.image));
   }
 
@@ -98,6 +99,7 @@ class ShellTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.interactive = true;
     options.mountProjectDir = true;
+    options.workingDir = "";
     assertCommandLine(
       List.of(),
       List.of(),
@@ -114,7 +116,7 @@ class ShellTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(),
-      List.of(tool, "--remote", "run", "--rm", options.image),
+      List.of(tool, "--remote", "run", "--rm", "--workdir", options.workingDir, options.image),
       List.of());
   }
 
@@ -128,7 +130,7 @@ class ShellTest extends TestMethodSources {
     assertCommandLine(
       List.of(tool, "pull", "--all-tags", options.image),
       List.of(),
-      List.of(tool, "run", "--rm", options.image),
+      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
       List.of());
   }
 
@@ -142,7 +144,7 @@ class ShellTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(tool, "build", "--file", options.containerfile, "--squash-all", "--tag", options.image),
-      List.of(tool, "run", "--rm", options.image),
+      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
       List.of());
   }
 
@@ -155,7 +157,7 @@ class ShellTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(),
-      List.of(tool, "run", "--rm", "--quiet", options.image),
+      List.of(tool, "run", "--rm", "--quiet", "--workdir", options.workingDir, options.image),
       List.of());
   }
 
@@ -169,7 +171,7 @@ class ShellTest extends TestMethodSources {
     assertCommandLine(
       List.of(),
       List.of(),
-      List.of(tool, "run", "--rm", options.image),
+      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
       List.of(tool, "rmi", "--force", options.image));
   }
 
@@ -216,7 +218,7 @@ class ShellTest extends TestMethodSources {
       () -> assertEquals(1, exitCode, "exitCode"),
       () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
       () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-      () -> assertIterableEquals(List.of(tool, "run", "--rm", options.image), executor.runArguments(), "runArguments"),
+      () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image), executor.runArguments(), "runArguments"),
       () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }
 
@@ -231,7 +233,7 @@ class ShellTest extends TestMethodSources {
       () -> assertEquals(1, exitCode, "exitCode"),
       () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
       () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-      () -> assertIterableEquals(List.of(tool, "run", "--rm", options.image), executor.runArguments(), "runArguments"),
+      () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image), executor.runArguments(), "runArguments"),
       () -> assertIterableEquals(List.of(), executor.cleanupArguments(), "cleanupArguments"));
   }
 

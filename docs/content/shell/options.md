@@ -119,7 +119,7 @@ $ ilo shell ----missing-volumes=ERROR
 
 ## `--mount-project-dir`
 
-The `--mount-project-dir` option can be used to toggle whether the current directory should be mounted into the container.
+The `--mount-project-dir` option can be used to toggle whether the current directory should be mounted into the container. The location inside the container is specified with `--working-dir`.
 
 ```console
 # mount current directory into container
@@ -289,3 +289,17 @@ $ ilo shell
 ```
 
 By default, `--volume` does not mount any extra volumes.
+
+## `--working-dir`
+
+The `--working-dir` option can be used to set the working directory inside your container.
+
+```console
+# specify custom working directory
+$ ilo shell --working-dir /project/dir
+
+# use current directory
+$ ilo shell
+```
+
+By default, `--working-dir` uses the current directory on the host machine in order to have the same paths on the host and in the container.

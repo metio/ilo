@@ -1,5 +1,5 @@
 shell
 --no-interactive
 --volume ${XDG_CACHE_HOME}/maven:/root/.m2:z
-ghcr.io/metio/dev-containers/java:latest-graalvm
+docker.io/metio/devcontainers-graalvm:latest
 mvn verify

@@ -91,6 +91,10 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>
@@ -191,6 +195,7 @@
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <version>0.9.17</version>
                 <executions>
                     <execution>
                         <id>build-native</id>
@@ -288,6 +293,7 @@
                         <argument>wtf.metio.ilo.shell.Shell</argument>
                         <argument>wtf.metio.ilo.compose.Compose</argument>
                         <argument>wtf.metio.ilo.devcontainer.Devcontainer</argument>
+                        <argument>wtf.metio.ilo.devfile.Devfile</argument>
                     </arguments>
                 </configuration>
                 <dependencies>
