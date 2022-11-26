@@ -31,6 +31,14 @@ class DevfileOptionsTest {
   @DisplayName("has public fields")
   @ValueSource(strings = {
       "runtime",
+      "runtimeOptions",
+      "runtimePullOptions",
+      "runtimeRunOptions",
+      "runtimeBuildOptions",
+      "runtimeCleanupOptions",
+      "removeImage",
+      "component",
+      "pull",
       "debug",
       "locations"
   })

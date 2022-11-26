@@ -12,6 +12,7 @@ import picocli.CommandLine;
 import wtf.metio.ilo.Ilo;
 import wtf.metio.ilo.compose.Compose;
 import wtf.metio.ilo.devcontainer.Devcontainer;
+import wtf.metio.ilo.devfile.Devfile;
 import wtf.metio.ilo.shell.Shell;
 import wtf.metio.ilo.test.TestMethodSources;
 
@@ -46,6 +47,12 @@ public abstract class CLI_TCK extends TestMethodSources {
     final var parseResult = cmd.parseArgs(args);
     final var subcommand = parseResult.subcommand();
     return (Devcontainer) subcommand.commandSpec().userObject();
+  }
+
+  protected final Devfile parseDevfileCommand(final String... args) {
+    final var parseResult = cmd.parseArgs(args);
+    final var subcommand = parseResult.subcommand();
+    return (Devfile) subcommand.commandSpec().userObject();
   }
 
 }

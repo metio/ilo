@@ -12,6 +12,7 @@ import picocli.CommandLine;
 import wtf.metio.ilo.cli.RunCommands;
 import wtf.metio.ilo.compose.Compose;
 import wtf.metio.ilo.devcontainer.Devcontainer;
+import wtf.metio.ilo.devfile.Devfile;
 import wtf.metio.ilo.errors.ExitCodes;
 import wtf.metio.ilo.errors.PrintingExceptionHandler;
 import wtf.metio.ilo.shell.Shell;
@@ -40,6 +41,7 @@ import java.util.stream.Stream;
     Shell.class,
     Compose.class,
     Devcontainer.class,
+    Devfile.class,
     AutoComplete.GenerateCompletion.class
   },
   showDefaultValues = true
