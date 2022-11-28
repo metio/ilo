@@ -92,7 +92,7 @@ jobs:
       - id: mac-checksum
         name: Capture MacOS SHA256 Checksum
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
-        run: echo "::set-output name=sha256::$(cat ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha256)"
+        run: echo "sha256=$(cat ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha256)" >> $GITHUB_OUTPUT
       - id: upload-java
         name: Upload JVM Artifact
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
