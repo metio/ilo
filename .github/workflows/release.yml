@@ -185,17 +185,31 @@ jobs:
         name: Update Homebrew Checksum
         if: needs.prepare.outputs.commit_count > 0
         run: sed -i -- 's/sha256 \".*\"/sha256 \"${{ needs.build.outputs.mac_sha256 }}\"/g' HomebrewFormula/ilo.rb
-      - id: changes
-        name: Commit Changes
+      - id: cpr
+        name: Create Pull Request
         if: needs.prepare.outputs.commit_count > 0
-        uses: EndBug/add-and-commit@v9
+        uses: peter-evans/create-pull-request@v4
         with:
-          author_name: ${{ github.actor }}
-          author_email: ${{ github.actor }}@users.noreply.github.com
-          message: Update package-manager infos for latest release
-          add: "['build/copr/ilo.spec', 'HomebrewFormula/ilo.rb']"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
+          commit-message: Update package-manager infos for latest release
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          title: Update package-manager infos for latest release
+          body: |
+            - COPR: `build/copr/ilo.spec`
+            - Homebrew: `HomebrewFormula/ilo.rb`
+          assignees: sebhoss
+          draft: false
+          base: main
+          branch: update-package-manager
+          delete-branch: true
+      - name: Enable Pull Request Automerge
+        if: needs.prepare.outputs.commit_count > 0 && steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          token: ${{ secrets.PAT }}
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: rebase
   announce:
     name: Release Announcement
     needs: [prepare, packages]

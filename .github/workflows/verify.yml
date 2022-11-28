@@ -8,6 +8,8 @@ on:
       - .github/workflows/verify.yml
       - src/**
       - pom.xml
+      - build/copr/ilo.spec
+      - HomebrewFormula/ilo.rb
 jobs:
   verify:
     name: Build on ${{ matrix.os }}
