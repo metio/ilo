@@ -39,15 +39,15 @@ final class PosixShell extends ParameterExpansion {
   @Override
   public String substituteCommands(final String value) {
     return replace(value,
-      command -> Executables.runAndReadOutput(shellBinary.toString(), "-c", command),
-      NEW_COMMAND_PATTERN, OLD_COMMAND_PATTERN);
+        command -> Executables.runAndReadOutput(shellBinary.toString(), "-c", command),
+        NEW_COMMAND_PATTERN, OLD_COMMAND_PATTERN);
   }
 
   @Override
   public String expandParameters(final String value) {
     return replace(expandTilde(value),
-      parameter -> Executables.runAndReadOutput("/usr/bin/env", shellBinary.toString(), "-c", "printf " + parameter),
-      PARAMETER_WITH_BRACES_PATTERN, PARAMETER_PATTERN);
+        parameter -> Executables.runAndReadOutput("/usr/bin/env", shellBinary.toString(), "-c", "printf " + parameter),
+        PARAMETER_WITH_BRACES_PATTERN, PARAMETER_PATTERN);
   }
 
   private String expandTilde(final String value) {

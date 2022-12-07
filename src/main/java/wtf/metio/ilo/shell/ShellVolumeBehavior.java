@@ -72,8 +72,8 @@ public enum ShellVolumeBehavior {
 
   public List<String> handleLocalDirectories(final List<String> volumes) {
     return filter(fromList(volumes))
-      .filter(this::handleLocalDirectory)
-      .collect(toList());
+        .filter(this::handleLocalDirectory)
+        .collect(toList());
   }
 
   private boolean handleLocalDirectory(final String volume) {

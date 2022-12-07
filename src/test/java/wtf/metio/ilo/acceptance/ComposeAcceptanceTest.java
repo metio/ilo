@@ -25,19 +25,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void defaultCommandLine(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool);
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertTrue(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("dev", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("dev", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -47,19 +47,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void nonInteractive(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--interactive=false");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertFalse(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("dev", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertFalse(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("dev", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -69,19 +69,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void interactiveNegated(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--no-interactive");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertFalse(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("dev", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertFalse(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("dev", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -91,19 +91,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void debug(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--debug");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertTrue(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertTrue(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("dev", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertTrue(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("dev", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -113,19 +113,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void pull(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--pull");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertTrue(compose.options.interactive, "interactive"),
-      () -> assertTrue(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("dev", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertTrue(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("dev", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -135,19 +135,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void build(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--build");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertTrue(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertTrue(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("dev", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertTrue(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("dev", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -157,19 +157,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void runtimeOptions(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--runtime-option=--no-ansi");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertTrue(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertIterableEquals(List.of("--no-ansi"), compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("dev", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertIterableEquals(List.of("--no-ansi"), compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("dev", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -179,19 +179,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void runtimePullOptions(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--runtime-pull-option=--include-deps");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertTrue(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertIterableEquals(List.of("--include-deps"), compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("dev", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertIterableEquals(List.of("--include-deps"), compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("dev", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -201,19 +201,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void runtimeBuildOptions(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--runtime-build-option=--no-cache");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertTrue(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertIterableEquals(List.of("--no-cache"), compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("dev", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertIterableEquals(List.of("--no-cache"), compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("dev", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -223,19 +223,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void runtimeRunOptions(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--runtime-run-option=--no-deps");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertTrue(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertIterableEquals(List.of("--no-deps"), compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("dev", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertIterableEquals(List.of("--no-deps"), compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("dev", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -245,19 +245,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void runtimeCleanupOptions(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "--runtime-cleanup-option=--remove-orphans");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertTrue(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertIterableEquals(List.of("--remove-orphans"), compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("dev", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertIterableEquals(List.of("--remove-orphans"), compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("dev", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -267,19 +267,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void service(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "your-service");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertTrue(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("your-service", compose.options.service, "service"),
-      () -> assertNull(compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("your-service", compose.options.service, "service"),
+        () -> assertNull(compose.options.arguments, "arguments")
     );
   }
 
@@ -289,19 +289,19 @@ class ComposeAcceptanceTest extends CLI_TCK {
   void arguments(final String tool) {
     final var compose = parseComposeCommand("compose", "--runtime", tool, "your-service", "/bin/bash");
     assertAll("compose options",
-      () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
-      () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
-      () -> assertTrue(compose.options.interactive, "interactive"),
-      () -> assertFalse(compose.options.pull, "pull"),
-      () -> assertFalse(compose.options.build, "build"),
-      () -> assertFalse(compose.options.debug, "debug"),
-      () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
-      () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
-      () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
-      () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
-      () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
-      () -> assertEquals("your-service", compose.options.service, "service"),
-      () -> assertIterableEquals(List.of("/bin/bash"), compose.options.arguments, "arguments")
+        () -> assertEquals(ComposeRuntime.fromAlias(tool), compose.options.runtime, "runtime"),
+        () -> assertIterableEquals(List.of("docker-compose.yml"), compose.options.file, "file"),
+        () -> assertTrue(compose.options.interactive, "interactive"),
+        () -> assertFalse(compose.options.pull, "pull"),
+        () -> assertFalse(compose.options.build, "build"),
+        () -> assertFalse(compose.options.debug, "debug"),
+        () -> assertNull(compose.options.runtimeOptions, "runtimeOptions"),
+        () -> assertNull(compose.options.runtimePullOptions, "runtimePullOptions"),
+        () -> assertNull(compose.options.runtimeBuildOptions, "runtimeBuildOptions"),
+        () -> assertNull(compose.options.runtimeRunOptions, "runtimeRunOptions"),
+        () -> assertNull(compose.options.runtimeCleanupOptions, "runtimeCleanupOptions"),
+        () -> assertEquals("your-service", compose.options.service, "service"),
+        () -> assertIterableEquals(List.of("/bin/bash"), compose.options.arguments, "arguments")
     );
   }
 

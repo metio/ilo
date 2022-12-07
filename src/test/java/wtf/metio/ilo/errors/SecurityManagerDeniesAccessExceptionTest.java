@@ -21,8 +21,8 @@ class SecurityManagerDeniesAccessExceptionTest {
   void exception() {
     final var exception = new SecurityManagerDeniesAccessException(new SecurityException());
     assertAll("exception",
-      () -> assertEquals(105, exception.getExitCode(), "exitCode"),
-      () -> assertEquals("A Java SecurityManager does not allow creating new processes.", exception.getMessage(), "message"));
+        () -> assertEquals(105, exception.getExitCode(), "exitCode"),
+        () -> assertEquals("A Java SecurityManager does not allow creating new processes.", exception.getMessage(), "message"));
   }
 
 }

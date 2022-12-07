@@ -21,8 +21,8 @@ class NoMatchingRuntimeExceptionTest {
   void exception() {
     final var exception = new NoMatchingRuntimeException();
     assertAll("exception",
-      () -> assertEquals(107, exception.getExitCode(), "exitCode"),
-      () -> assertEquals("No matching runtime was found on your system. Select another runtime using '--runtime' or install your preferred runtime on your system.", exception.getMessage(), "message"));
+        () -> assertEquals(107, exception.getExitCode(), "exitCode"),
+        () -> assertEquals("No matching runtime was found on your system. Select another runtime using '--runtime' or install your preferred runtime on your system.", exception.getMessage(), "message"));
   }
 
 }

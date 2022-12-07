@@ -8,7 +8,6 @@
 package wtf.metio.ilo.model;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
@@ -30,7 +29,7 @@ class CliExecutorTest {
     };
 
     Assertions.assertThrows(RuntimeIOException.class,
-      () -> executor.execute(List.of("some", "command"), false));
+        () -> executor.execute(List.of("some", "command"), false));
   }
 
   @Test

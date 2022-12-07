@@ -13,9 +13,9 @@ public final class PrintingExceptionHandler implements CommandLine.IExecutionExc
 
   @Override
   public int handleExecutionException(
-    final Exception exception,
-    final CommandLine commandLine,
-    final CommandLine.ParseResult parseResult) {
+      final Exception exception,
+      final CommandLine commandLine,
+      final CommandLine.ParseResult parseResult) {
     commandLine.getErr().println(commandLine.getColorScheme().errorText(exception.getMessage()));
     final var mapper = commandLine.getExitCodeExceptionMapper();
     return mapper.getExitCode(exception);

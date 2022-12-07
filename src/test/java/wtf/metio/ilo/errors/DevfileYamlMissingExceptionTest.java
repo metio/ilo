@@ -21,8 +21,8 @@ class DevfileYamlMissingExceptionTest {
   void exception() {
     final var exception = new DevfileYamlMissingException();
     assertAll("exception",
-      () -> assertEquals(111, exception.getExitCode(), "exitCode"),
-      () -> assertEquals("No devfile YAML file found. Create one either at 'devfile.yaml' or '.devfile.yaml'.", exception.getMessage(), "message"));
+        () -> assertEquals(111, exception.getExitCode(), "exitCode"),
+        () -> assertEquals("No devfile YAML file found. Create one either at 'devfile.yaml' or '.devfile.yaml'.", exception.getMessage(), "message"));
   }
 
 }

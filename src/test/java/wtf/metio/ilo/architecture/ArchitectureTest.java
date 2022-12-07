@@ -24,15 +24,15 @@ public final class ArchitectureTest {
   @BeforeAll
   static void importPackages() {
     classes = new ClassFileImporter()
-      .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
-      .importPackagesOf(Ilo.class);
+        .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
+        .importPackagesOf(Ilo.class);
   }
 
   @TestFactory
   @DisplayName("Global Rules")
   Stream<DynamicNode> globalRules() {
     return Stream.of(CodingRules.class, StructureRules.class, LayerRules.class)
-      .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
+        .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
   }
 
   @TestFactory

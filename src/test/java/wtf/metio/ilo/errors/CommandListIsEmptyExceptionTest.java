@@ -21,8 +21,8 @@ class CommandListIsEmptyExceptionTest {
   void exception() {
     final var exception = new CommandListIsEmptyException(new IndexOutOfBoundsException());
     assertAll("exception",
-      () -> assertEquals(102, exception.getExitCode(), "exitCode"),
-      () -> assertEquals("The generated command list is empty - this is a bug in ilo!", exception.getMessage(), "message"));
+        () -> assertEquals(102, exception.getExitCode(), "exitCode"),
+        () -> assertEquals("The generated command list is empty - this is a bug in ilo!", exception.getMessage(), "message"));
   }
 
 }

@@ -29,17 +29,17 @@ public final class CommandLifecycle {
    *   <li>Cleanup</li>
    * </ol>>
    *
-   * @param tool The container tool to use, e.g. podman.
-   * @param options The options to use for the entire command lifecycle.
-   * @param executor The executor to use.
+   * @param tool      The container tool to use, e.g. podman.
+   * @param options   The options to use for the entire command lifecycle.
+   * @param executor  The executor to use.
    * @param <OPTIONS> The type of the options supplied.
-   * @param <CLI> The type of the container tool supplied.
+   * @param <CLI>     The type of the container tool supplied.
    * @return Stream of exit codes, one for each step in the lifecycle.
    */
   public static <OPTIONS extends Options, CLI extends CliTool<OPTIONS>> int run(
-    final CLI tool,
-    final OPTIONS options,
-    final BiFunction<? super List<String>, ? super Boolean, Integer> executor) {
+      final CLI tool,
+      final OPTIONS options,
+      final BiFunction<? super List<String>, ? super Boolean, Integer> executor) {
     final var pullArguments = tool.pullArguments(options);
     final var pullExitCode = executor.apply(pullArguments, options.debug());
     if (0 != pullExitCode) {
@@ -58,7 +58,7 @@ public final class CommandLifecycle {
     final var cleanupArguments = tool.cleanupArguments(options);
     final var cleanupExitCode = executor.apply(cleanupArguments, options.debug());
     return IntStream.of(pullExitCode, buildExitCode, runExitCode, cleanupExitCode)
-      .max().orElse(CommandLine.ExitCode.SOFTWARE);
+        .max().orElse(CommandLine.ExitCode.SOFTWARE);
   }
 
   private CommandLifecycle() {

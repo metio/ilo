@@ -15,15 +15,15 @@ import wtf.metio.ilo.version.VersionProvider;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
-  name = "compose",
-  description = "Open an (interactive) shell using podman-/docker-compose",
-  versionProvider = VersionProvider.class,
-  mixinStandardHelpOptions = true,
-  showAtFileInUsageHelp = true,
-  usageHelpAutoWidth = true,
-  showDefaultValues = true,
-  descriptionHeading = "%n",
-  optionListHeading = "%n"
+    name = "compose",
+    description = "Open an (interactive) shell using podman-/docker-compose",
+    versionProvider = VersionProvider.class,
+    mixinStandardHelpOptions = true,
+    showAtFileInUsageHelp = true,
+    usageHelpAutoWidth = true,
+    showDefaultValues = true,
+    descriptionHeading = "%n",
+    optionListHeading = "%n"
 )
 public final class ComposeCommand implements Callable<Integer> {
 

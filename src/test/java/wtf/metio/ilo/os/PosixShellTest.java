@@ -32,8 +32,8 @@ class PosixShellTest {
     void regexMatchesCommandWithNewStyle() {
       final var matcher = PosixShell.NEW_COMMAND_PATTERN.matcher("$(some-command --with-option)");
       assertAll("new style",
-        () -> assertTrue(matcher.find(), "matches"),
-        () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "extraction"));
+          () -> assertTrue(matcher.find(), "matches"),
+          () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "extraction"));
     }
 
     @Test
@@ -41,8 +41,8 @@ class PosixShellTest {
     void regexMatchesCommandWithOldStyle() {
       final var matcher = PosixShell.OLD_COMMAND_PATTERN.matcher("`some-command --with-option`");
       assertAll("old style",
-        () -> assertTrue(matcher.find(), "matches"),
-        () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "extraction"));
+          () -> assertTrue(matcher.find(), "matches"),
+          () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "extraction"));
     }
 
     @Test
@@ -50,10 +50,10 @@ class PosixShellTest {
     void regexMatchesCommandsWithNewStyle() {
       final var matcher = PosixShell.NEW_COMMAND_PATTERN.matcher("$(some-command --with-option):$(other --option)");
       assertAll("new style",
-        () -> assertTrue(matcher.find(), "first match"),
-        () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
-        () -> assertTrue(matcher.find(), "second match"),
-        () -> assertEquals("other --option", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
+          () -> assertTrue(matcher.find(), "first match"),
+          () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
+          () -> assertTrue(matcher.find(), "second match"),
+          () -> assertEquals("other --option", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
     }
 
     @Test
@@ -61,10 +61,10 @@ class PosixShellTest {
     void regexMatchesCommandsWithOldStyle() {
       final var matcher = PosixShell.OLD_COMMAND_PATTERN.matcher("`some-command --with-option`:`other --option`");
       assertAll("old style",
-        () -> assertTrue(matcher.find(), "first match"),
-        () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
-        () -> assertTrue(matcher.find(), "second match"),
-        () -> assertEquals("other --option", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
+          () -> assertTrue(matcher.find(), "first match"),
+          () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
+          () -> assertTrue(matcher.find(), "second match"),
+          () -> assertEquals("other --option", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
     }
 
     @Test
@@ -72,8 +72,8 @@ class PosixShellTest {
     void regexMatchesParameter() {
       final var matcher = PosixShell.PARAMETER_PATTERN.matcher("$HOME");
       assertAll("new style",
-        () -> assertTrue(matcher.find(), "matches"),
-        () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "extraction"));
+          () -> assertTrue(matcher.find(), "matches"),
+          () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "extraction"));
     }
 
     @Test
@@ -81,10 +81,10 @@ class PosixShellTest {
     void regexMatchesParameters() {
       final var matcher = PosixShell.PARAMETER_PATTERN.matcher("$HOME:$OTHER");
       assertAll("new style",
-        () -> assertTrue(matcher.find(), "first matches"),
-        () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
-        () -> assertTrue(matcher.find(), "second matches"),
-        () -> assertEquals("$OTHER", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
+          () -> assertTrue(matcher.find(), "first matches"),
+          () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
+          () -> assertTrue(matcher.find(), "second matches"),
+          () -> assertEquals("$OTHER", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
     }
 
     @Test
@@ -92,8 +92,8 @@ class PosixShellTest {
     void regexMatchesParameterWithBraces() {
       final var matcher = PosixShell.PARAMETER_WITH_BRACES_PATTERN.matcher("${HOME}");
       assertAll("new style",
-        () -> assertTrue(matcher.find(), "matches"),
-        () -> assertEquals("${HOME}", matcher.group(MATCHER_GROUP_NAME), "extraction"));
+          () -> assertTrue(matcher.find(), "matches"),
+          () -> assertEquals("${HOME}", matcher.group(MATCHER_GROUP_NAME), "extraction"));
     }
 
     @Test
@@ -101,10 +101,10 @@ class PosixShellTest {
     void regexMatchesParametersWithBraces() {
       final var matcher = PosixShell.PARAMETER_WITH_BRACES_PATTERN.matcher("${HOME}:${OTHER}");
       assertAll("new style",
-        () -> assertTrue(matcher.find(), "matches"),
-        () -> assertEquals("${HOME}", matcher.group(MATCHER_GROUP_NAME), "extraction"),
-        () -> assertTrue(matcher.find(), "second matches"),
-        () -> assertEquals("${OTHER}", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
+          () -> assertTrue(matcher.find(), "matches"),
+          () -> assertEquals("${HOME}", matcher.group(MATCHER_GROUP_NAME), "extraction"),
+          () -> assertTrue(matcher.find(), "second matches"),
+          () -> assertEquals("${OTHER}", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
     }
 
   }
@@ -188,8 +188,8 @@ class PosixShellTest {
     void expandParameter() {
       final var homeDirectory = System.getProperty("user.home");
       assertAll("parameter expansion",
-        () -> assertEquals(homeDirectory, bourneShell.expandParameters("${HOME}"), "with braces"),
-        () -> assertEquals(homeDirectory, bourneShell.expandParameters("$HOME"), "without braces"));
+          () -> assertEquals(homeDirectory, bourneShell.expandParameters("${HOME}"), "with braces"),
+          () -> assertEquals(homeDirectory, bourneShell.expandParameters("$HOME"), "without braces"));
     }
 
     @Test

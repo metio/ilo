@@ -21,8 +21,8 @@ class DevcontainerJsonMissingExceptionTest {
   void exception() {
     final var exception = new DevcontainerJsonMissingException();
     assertAll("exception",
-      () -> assertEquals(108, exception.getExitCode(), "exitCode"),
-      () -> assertEquals("No devcontainer JSON file found. Create one either at '.devcontainer/devcontainer.json' or '.devcontainer.json'.", exception.getMessage(), "message"));
+        () -> assertEquals(108, exception.getExitCode(), "exitCode"),
+        () -> assertEquals("No devcontainer JSON file found. Create one either at '.devcontainer/devcontainer.json' or '.devcontainer.json'.", exception.getMessage(), "message"));
   }
 
 }

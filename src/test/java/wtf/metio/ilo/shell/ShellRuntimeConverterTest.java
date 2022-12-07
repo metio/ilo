@@ -19,18 +19,18 @@ class ShellRuntimeConverterTest {
   @ParameterizedTest
   @DisplayName("converts String to ShellRuntime")
   @ValueSource(strings = {
-    "podman",
-    "docker",
-    "p",
-    "d",
-    "DOCKER",
-    "PODMAN",
-    "dOCkeR",
-    "podMAN",
-    "NERDCTL",
-    "nerdctl",
-    "nerdCTL",
-    "n"
+      "podman",
+      "docker",
+      "p",
+      "d",
+      "DOCKER",
+      "PODMAN",
+      "dOCkeR",
+      "podMAN",
+      "NERDCTL",
+      "nerdctl",
+      "nerdCTL",
+      "n"
   })
   void shouldConvertStringToComposeRuntime(final String input) {
     // given

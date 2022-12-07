@@ -14,7 +14,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import wtf.metio.ilo.errors.NoMatchingRuntimeException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static wtf.metio.ilo.compose.ComposeRuntime.DOCKER_COMPOSE;
@@ -26,9 +25,9 @@ class ComposeRuntimeTest {
   @ParameterizedTest
   @DisplayName("defines compose runtime constants")
   @ValueSource(strings = {
-    "PODMAN_COMPOSE",
-    "DOCKER_COMPOSE",
-    "DOCKER"
+      "PODMAN_COMPOSE",
+      "DOCKER_COMPOSE",
+      "DOCKER"
   })
   void shouldHaveRuntime(final String runtime) {
     assertNotNull(ComposeRuntime.valueOf(runtime));
@@ -37,17 +36,17 @@ class ComposeRuntimeTest {
   @ParameterizedTest
   @DisplayName("supports aliases")
   @ValueSource(strings = {
-    "podman-compose",
-    "docker-compose",
-    "docker",
-    "pc",
-    "dc",
-    "d",
-    "DOCKER-COMPOSE",
-    "PODMAN-COMPOSE",
-    "dOCkeR",
-    "dOCkeR-cOMpOSe",
-    "podMAN-compOSe"
+      "podman-compose",
+      "docker-compose",
+      "docker",
+      "pc",
+      "dc",
+      "d",
+      "DOCKER-COMPOSE",
+      "PODMAN-COMPOSE",
+      "dOCkeR",
+      "dOCkeR-cOMpOSe",
+      "podMAN-compOSe"
   })
   void shouldSupportAlias(final String alias) {
     assertNotNull(ComposeRuntime.fromAlias(alias));

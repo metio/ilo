@@ -8,8 +8,6 @@
 package wtf.metio.ilo.devfile;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.compose.ComposeRuntime;
-import wtf.metio.ilo.compose.ComposeRuntimeConverter;
 import wtf.metio.ilo.model.Options;
 import wtf.metio.ilo.shell.ShellRuntime;
 import wtf.metio.ilo.shell.ShellRuntimeConverter;
@@ -80,10 +78,10 @@ public final class DevfileOptions implements Options {
   public String component;
 
   @CommandLine.Parameters(
-    index = "0..*",
-    description = "List of possible locations for a devfile.yaml file. First found will be used.",
-    defaultValue = "devfile.yaml .devfile.yaml",
-    split = " "
+      index = "0..*",
+      description = "List of possible locations for a devfile.yaml file. First found will be used.",
+      defaultValue = "devfile.yaml .devfile.yaml",
+      split = " "
   )
   public List<String> locations;
 
