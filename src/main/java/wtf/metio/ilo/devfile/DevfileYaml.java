@@ -197,7 +197,7 @@ final class DevfileYaml {
     public String uri;
 
     /**
-     * Dockerfile's DevfileCommand Registry source.
+     * Dockerfile's Devfile Registry source.
      */
     public DevfileRegistry devfileRegistry;
 
@@ -217,7 +217,7 @@ final class DevfileYaml {
     public String id;
 
     /**
-     * DevfileCommand Registry URL to pull the Dockerfile from when using the DevfileCommand Registry as Dockerfile src.
+     * Devfile Registry URL to pull the Dockerfile from when using the Devfile Registry as Dockerfile src.
      */
     public String registryUrl;
 
@@ -273,7 +273,7 @@ final class DevfileYaml {
   }
 
   /**
-   * DevfileCommand schema version.
+   * Devfile schema version.
    */
   public String schemaVersion;
 
