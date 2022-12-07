@@ -8,7 +8,7 @@
 package wtf.metio.ilo.compose;
 
 /**
- * Support for 'docker compose' aka 'ComposeCommand V2'
+ * Support for 'docker compose' aka 'Compose V2'
  *
  * @see <a href="https://docs.docker.com/compose/cli-command/">official documentation</a>
  */

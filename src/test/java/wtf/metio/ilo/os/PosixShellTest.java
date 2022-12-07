@@ -20,7 +20,7 @@ import uk.org.webcompere.systemstubs.properties.SystemProperties;
 import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.os.ParameterExpansion.MATCHER_GROUP_NAME;
 
-@DisplayName("Bourne ShellCommand")
+@DisplayName("Bourne Shell")
 class PosixShellTest {
 
   @Nested
