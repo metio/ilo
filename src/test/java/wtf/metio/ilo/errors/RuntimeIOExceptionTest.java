@@ -23,8 +23,8 @@ class RuntimeIOExceptionTest {
   void exception() {
     final var exception = new RuntimeIOException(new IOException());
     assertAll("exception",
-      () -> assertEquals(104, exception.getExitCode(), "exitCode"),
-      () -> assertEquals("Random I/O error occurred.", exception.getMessage(), "message"));
+        () -> assertEquals(104, exception.getExitCode(), "exitCode"),
+        () -> assertEquals("Random I/O error occurred.", exception.getMessage(), "message"));
   }
 
 }

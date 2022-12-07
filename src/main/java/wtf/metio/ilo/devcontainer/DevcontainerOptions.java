@@ -19,51 +19,51 @@ import java.util.List;
 public final class DevcontainerOptions implements Options {
 
   @CommandLine.Option(
-    names = {"--shell-runtime", "-S"},
-    description = "Specify the shell runtime to use. If none is specified, use auto-selection.",
-    converter = ShellRuntimeConverter.class
+      names = {"--shell-runtime", "-S"},
+      description = "Specify the shell runtime to use. If none is specified, use auto-selection.",
+      converter = ShellRuntimeConverter.class
   )
   public ShellRuntime shellRuntime;
 
   @CommandLine.Option(
-    names = {"--compose-runtime", "-C"},
-    description = "Specify the compose runtime to use. If none is specified, use auto-selection.",
-    converter = ComposeRuntimeConverter.class
+      names = {"--compose-runtime", "-C"},
+      description = "Specify the compose runtime to use. If none is specified, use auto-selection.",
+      converter = ComposeRuntimeConverter.class
   )
   public ComposeRuntime composeRuntime;
 
   @CommandLine.Option(
-    names = {"--debug"},
-    description = "Show additional debug information."
+      names = {"--debug"},
+      description = "Show additional debug information."
   )
   public boolean debug;
 
   @CommandLine.Option(
-    names = {"--pull"},
-    description = "Pull images before opening shell."
+      names = {"--pull"},
+      description = "Pull images before opening shell."
   )
   public boolean pull;
 
   @CommandLine.Option(
-    names = {"--mount-project-dir"},
-    description = "Mount the project directory into the running container.",
-    defaultValue = "true",
+      names = {"--mount-project-dir"},
+      description = "Mount the project directory into the running container.",
+      defaultValue = "true",
       fallbackValue = "true",
-    negatable = true
+      negatable = true
   )
   public boolean mountProjectDir;
 
   @CommandLine.Option(
-    names = {"--remove-image"},
-    description = "Remove image after closing the shell."
+      names = {"--remove-image"},
+      description = "Remove image after closing the shell."
   )
   public boolean removeImage;
 
   @CommandLine.Parameters(
-    index = "0..*",
-    description = "List of possible locations for a devcontainer.json file. First found will be used.",
-    defaultValue = ".devcontainer/devcontainer.json .devcontainer.json",
-    split = " "
+      index = "0..*",
+      description = "List of possible locations for a devcontainer.json file. First found will be used.",
+      defaultValue = ".devcontainer/devcontainer.json .devcontainer.json",
+      split = " "
   )
   public List<String> locations;
 

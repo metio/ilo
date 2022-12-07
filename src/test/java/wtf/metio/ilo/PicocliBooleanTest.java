@@ -54,7 +54,8 @@ public class PicocliBooleanTest {
     public boolean wanted;
 
     @Override
-    public void run() {}
+    public void run() {
+    }
 
   }
 

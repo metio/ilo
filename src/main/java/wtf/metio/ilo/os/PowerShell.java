@@ -35,15 +35,15 @@ final class PowerShell extends ParameterExpansion {
   @Override
   public String substituteCommands(final String value) {
     return replace(value,
-      command -> Executables.runAndReadOutput(shellBinary.toString(), "-OutputFormat", "Text", "-Command", command),
-      COMMAND_PATTERN);
+        command -> Executables.runAndReadOutput(shellBinary.toString(), "-OutputFormat", "Text", "-Command", command),
+        COMMAND_PATTERN);
   }
 
   @Override
   public String expandParameters(final String value) {
     return replace(expandTilde(value),
-      parameter -> Executables.runAndReadOutput(shellBinary.toString(), "-OutputFormat", "Text", "-Command", "'Write-Output \"" + parameter + "\"'"),
-      PARAMETER_PATTERN);
+        parameter -> Executables.runAndReadOutput(shellBinary.toString(), "-OutputFormat", "Text", "-Command", "'Write-Output \"" + parameter + "\"'"),
+        PARAMETER_PATTERN);
   }
 
   private String expandTilde(final String value) {

@@ -29,8 +29,8 @@ class PowerShellTest {
     void regexMatchesCommand() {
       final var matcher = PowerShell.COMMAND_PATTERN.matcher("$(some-command --with-option)");
       assertAll("new style",
-        () -> assertTrue(matcher.find(), "matches"),
-        () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "extraction"));
+          () -> assertTrue(matcher.find(), "matches"),
+          () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "extraction"));
     }
 
     @Test
@@ -38,10 +38,10 @@ class PowerShellTest {
     void regexMatchesCommands() {
       final var matcher = PowerShell.COMMAND_PATTERN.matcher("$(some-command --with-option):$(other --option)");
       assertAll("new style",
-        () -> assertTrue(matcher.find(), "first match"),
-        () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
-        () -> assertTrue(matcher.find(), "second match"),
-        () -> assertEquals("other --option", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
+          () -> assertTrue(matcher.find(), "first match"),
+          () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
+          () -> assertTrue(matcher.find(), "second match"),
+          () -> assertEquals("other --option", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
     }
 
     @Test
@@ -49,8 +49,8 @@ class PowerShellTest {
     void regexMatchesParameter() {
       final var matcher = PowerShell.PARAMETER_PATTERN.matcher("$HOME");
       assertAll("new style",
-        () -> assertTrue(matcher.find(), "matches"),
-        () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "extraction"));
+          () -> assertTrue(matcher.find(), "matches"),
+          () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "extraction"));
     }
 
     @Test
@@ -58,10 +58,10 @@ class PowerShellTest {
     void regexMatchesParameters() {
       final var matcher = PowerShell.PARAMETER_PATTERN.matcher("$HOME:$OTHER");
       assertAll("new style",
-        () -> assertTrue(matcher.find(), "first matches"),
-        () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
-        () -> assertTrue(matcher.find(), "second matches"),
-        () -> assertEquals("$OTHER", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
+          () -> assertTrue(matcher.find(), "first matches"),
+          () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
+          () -> assertTrue(matcher.find(), "second matches"),
+          () -> assertEquals("$OTHER", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
     }
 
   }

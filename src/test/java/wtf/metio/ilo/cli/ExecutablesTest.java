@@ -56,10 +56,10 @@ class ExecutablesTest {
   void shouldBeAbleToExecuteLs() {
     // given
     final var tool = Executables.allPaths()
-      .map(path -> path.resolve("ls"))
-      .filter(Files::exists)
-      .findFirst()
-      .orElseThrow();
+        .map(path -> path.resolve("ls"))
+        .filter(Files::exists)
+        .findFirst()
+        .orElseThrow();
 
     // when
     final var canExecute = Executables.canExecute(tool);
@@ -118,7 +118,7 @@ class ExecutablesTest {
     final var exitCode = Executables.runAndWaitForExit(arguments, false);
 
     // then
-    assertTrue(exitCode > 0);
+    assertTrue(0 < exitCode);
   }
 
   @Test

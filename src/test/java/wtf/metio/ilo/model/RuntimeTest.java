@@ -40,7 +40,7 @@ class RuntimeTest extends TestMethodSources {
   @DisplayName("throws in case no match was found")
   void throwsForUnmatched() {
     assertThrows(NoMatchingRuntimeException.class,
-      () -> Runtime.firstMatching("not-found", ComposeRuntime.values()));
+        () -> Runtime.firstMatching("not-found", ComposeRuntime.values()));
   }
 
 }

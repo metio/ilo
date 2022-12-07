@@ -12,7 +12,8 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static wtf.metio.ilo.devfile.DevfileYamlParser.findDevfile;
 import static wtf.metio.ilo.test.TestResources.testResources;
 

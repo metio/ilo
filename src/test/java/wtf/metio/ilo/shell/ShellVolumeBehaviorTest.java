@@ -27,9 +27,9 @@ class ShellVolumeBehaviorTest {
   @ParameterizedTest
   @DisplayName("defines behavior")
   @ValueSource(strings = {
-    "CREATE",
-    "WARN",
-    "ERROR"
+      "CREATE",
+      "WARN",
+      "ERROR"
   })
   void shouldHaveBehavior(final String runtime) {
     assertNotNull(ShellVolumeBehavior.valueOf(runtime));
@@ -41,8 +41,8 @@ class ShellVolumeBehaviorTest {
     final var directory = localDirectory("/missing");
     final var ok = ShellVolumeBehavior.CREATE.handleMissingDirectory(directory);
     assertAll(
-      () -> assertTrue(ok, "Missing directory could not be created"),
-      () -> assertTrue(Files.exists(directory), "Directory was not actually created"));
+        () -> assertTrue(ok, "Missing directory could not be created"),
+        () -> assertTrue(Files.exists(directory), "Directory was not actually created"));
   }
 
   @Test
@@ -60,8 +60,8 @@ class ShellVolumeBehaviorTest {
     final var directory = localDirectory("/missing");
     final var ok = ShellVolumeBehavior.WARN.handleMissingDirectory(directory);
     assertAll(
-      () -> assertFalse(ok, "No warning for missing directory"),
-      () -> assertTrue(Files.notExists(directory), "Directory was actually created"));
+        () -> assertFalse(ok, "No warning for missing directory"),
+        () -> assertTrue(Files.notExists(directory), "Directory was actually created"));
   }
 
   @Test
@@ -78,9 +78,9 @@ class ShellVolumeBehaviorTest {
   void shouldThrowOnMissingDirectory() {
     final var directory = localDirectory("/missing");
     assertAll(
-      () -> assertThrows(LocalDirectoryDoesNotExistException.class,
-        () -> ShellVolumeBehavior.ERROR.handleMissingDirectory(directory)),
-      () -> assertTrue(Files.notExists(directory), "Directory was actually created"));
+        () -> assertThrows(LocalDirectoryDoesNotExistException.class,
+            () -> ShellVolumeBehavior.ERROR.handleMissingDirectory(directory)),
+        () -> assertTrue(Files.notExists(directory), "Directory was actually created"));
   }
 
   @Test

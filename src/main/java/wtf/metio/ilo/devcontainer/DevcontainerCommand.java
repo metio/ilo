@@ -25,15 +25,15 @@ import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.composeOption
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.shellOptions;
 
 @CommandLine.Command(
-  name = "devcontainer",
-  description = "Open an (interactive) shell using devcontainer",
-  versionProvider = VersionProvider.class,
-  mixinStandardHelpOptions = true,
-  showAtFileInUsageHelp = true,
-  usageHelpAutoWidth = true,
-  showDefaultValues = true,
-  descriptionHeading = "%n",
-  optionListHeading = "%n"
+    name = "devcontainer",
+    description = "Open an (interactive) shell using devcontainer",
+    versionProvider = VersionProvider.class,
+    mixinStandardHelpOptions = true,
+    showAtFileInUsageHelp = true,
+    usageHelpAutoWidth = true,
+    showDefaultValues = true,
+    descriptionHeading = "%n",
+    optionListHeading = "%n"
 )
 public final class DevcontainerCommand implements Callable<Integer> {
 

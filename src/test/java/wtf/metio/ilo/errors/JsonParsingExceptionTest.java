@@ -21,8 +21,8 @@ class JsonParsingExceptionTest {
   void exception() {
     final var exception = new JsonParsingException(new RuntimeException());
     assertAll("exception",
-      () -> assertEquals(109, exception.getExitCode(), "exitCode"),
-      () -> assertEquals("The devcontainer JSON file could not be parsed. Make sure it contains valid JSON.", exception.getMessage(), "message"));
+        () -> assertEquals(109, exception.getExitCode(), "exitCode"),
+        () -> assertEquals("The devcontainer JSON file could not be parsed. Make sure it contains valid JSON.", exception.getMessage(), "message"));
   }
 
 }

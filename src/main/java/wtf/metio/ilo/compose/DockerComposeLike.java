@@ -7,8 +7,6 @@
 
 package wtf.metio.ilo.compose;
 
-import wtf.metio.ilo.compose.ComposeCLI;
-import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.os.OSSupport;
 
 import java.util.List;
@@ -22,11 +20,11 @@ abstract class DockerComposeLike implements ComposeCLI {
   public final List<String> pullArguments(final ComposeOptions options) {
     if (options.pull) {
       return flatten(
-        of(name(), command()),
-        fromList(OSSupport.expand(options.runtimeOptions)),
-        withPrefix("--file", OSSupport.expand(options.file)),
-        of("pull"),
-        fromList(OSSupport.expand(options.runtimePullOptions)));
+          of(name(), command()),
+          fromList(OSSupport.expand(options.runtimeOptions)),
+          withPrefix("--file", OSSupport.expand(options.file)),
+          of("pull"),
+          fromList(OSSupport.expand(options.runtimePullOptions)));
     }
     return List.of();
   }
@@ -35,11 +33,11 @@ abstract class DockerComposeLike implements ComposeCLI {
   public final List<String> buildArguments(final ComposeOptions options) {
     if (options.build) {
       return flatten(
-        of(name(), command()),
-        fromList(OSSupport.expand(options.runtimeOptions)),
-        withPrefix("--file", OSSupport.expand(options.file)),
-        of("build"),
-        fromList(OSSupport.expand(options.runtimeBuildOptions)));
+          of(name(), command()),
+          fromList(OSSupport.expand(options.runtimeOptions)),
+          withPrefix("--file", OSSupport.expand(options.file)),
+          of("build"),
+          fromList(OSSupport.expand(options.runtimeBuildOptions)));
     }
     return List.of();
   }
@@ -47,14 +45,14 @@ abstract class DockerComposeLike implements ComposeCLI {
   @Override
   public final List<String> runArguments(final ComposeOptions options) {
     return flatten(
-      of(name(), command()),
-      fromList(OSSupport.expand(options.runtimeOptions)),
-      withPrefix("--file", OSSupport.expand(options.file)),
-      of("run"),
-      fromList(OSSupport.expand(options.runtimeRunOptions)),
-      maybe(!options.interactive, "-T"),
-      of(OSSupport.expand(options.service)),
-      fromList(OSSupport.expand(options.arguments)));
+        of(name(), command()),
+        fromList(OSSupport.expand(options.runtimeOptions)),
+        withPrefix("--file", OSSupport.expand(options.file)),
+        of("run"),
+        fromList(OSSupport.expand(options.runtimeRunOptions)),
+        maybe(!options.interactive, "-T"),
+        of(OSSupport.expand(options.service)),
+        fromList(OSSupport.expand(options.arguments)));
   }
 
   @Override
@@ -62,11 +60,11 @@ abstract class DockerComposeLike implements ComposeCLI {
     // docker compose needs an additional cleanup even when using 'run --rm'
     // see https://github.com/docker/compose/issues/2791
     return flatten(
-      of(name(), command()),
-      fromList(OSSupport.expand(options.runtimeOptions)),
-      withPrefix("--file", OSSupport.expand(options.file)),
-      of("down"),
-      fromList(OSSupport.expand(options.runtimeCleanupOptions)));
+        of(name(), command()),
+        fromList(OSSupport.expand(options.runtimeOptions)),
+        withPrefix("--file", OSSupport.expand(options.file)),
+        of("down"),
+        fromList(OSSupport.expand(options.runtimeCleanupOptions)));
   }
 
 }

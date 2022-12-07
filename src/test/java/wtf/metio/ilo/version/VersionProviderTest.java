@@ -26,10 +26,10 @@ class VersionProviderTest {
 
     // then
     assertAll("versions",
-      () -> assertEquals(3, version.length, "length"),
-      () -> assertTrue(version[0].contains("ilo:"), "ilo"),
-      () -> assertTrue(version[1].contains("JVM: ${java.version} (${java.vendor} ${java.vm.name} ${java.vm.version})"), "JVM"),
-      () -> assertTrue(version[2].contains("OS:  ${os.name} ${os.version} ${os.arch}"), "OS"));
+        () -> assertEquals(3, version.length, "length"),
+        () -> assertTrue(version[0].contains("ilo:"), "ilo"),
+        () -> assertTrue(version[1].contains("JVM: ${java.version} (${java.vendor} ${java.vm.name} ${java.vm.version})"), "JVM"),
+        () -> assertTrue(version[2].contains("OS:  ${os.name} ${os.version} ${os.arch}"), "OS"));
   }
 
 }

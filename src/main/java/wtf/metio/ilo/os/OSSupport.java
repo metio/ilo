@@ -25,39 +25,39 @@ public final class OSSupport {
 
   public static List<String> expand(final List<String> values) {
     return filter(fromList(values))
-      .map(OSSupport::expand)
-      .collect(toList());
+        .map(OSSupport::expand)
+        .collect(toList());
   }
 
   public static String expand(final String value) {
     final var expansion = expansion();
     return Optional.ofNullable(value)
-      .map(expansion::expandParameters)
-      .map(expansion::substituteCommands)
-      .orElse(value);
+        .map(expansion::expandParameters)
+        .map(expansion::substituteCommands)
+        .orElse(value);
   }
 
   static ParameterExpansion expansion() {
     return posixShell()
-      .or(OSSupport::powerShell)
-      .orElseGet(NoOpExpansion::new);
+        .or(OSSupport::powerShell)
+        .orElseGet(NoOpExpansion::new);
   }
 
   // visible for testing
   static Optional<ParameterExpansion> posixShell() {
     return Executables.of("bash")
-      .or(() -> Executables.of("zsh"))
-      .or(() -> Executables.of("sh"))
-      .map(Path::toAbsolutePath)
-      .map(PosixShell::new);
+        .or(() -> Executables.of("zsh"))
+        .or(() -> Executables.of("sh"))
+        .map(Path::toAbsolutePath)
+        .map(PosixShell::new);
   }
 
   static Optional<ParameterExpansion> powerShell() {
     return Executables.of("pwsh.exe")
-      .or(() -> Executables.of("powershell.exe"))
-      .or(() -> Executables.of("pwsh"))
-      .map(Path::toAbsolutePath)
-      .map(PowerShell::new);
+        .or(() -> Executables.of("powershell.exe"))
+        .or(() -> Executables.of("pwsh"))
+        .map(Path::toAbsolutePath)
+        .map(PowerShell::new);
   }
 
   public static Path passwdFile(final String runAs) {

@@ -39,11 +39,11 @@ class DevcontainerAcceptanceTest extends CLI_TCK {
   void defaultCommandLine() {
     final var devcontainer = parseDevcontainerCommand("devcontainer");
     assertAll("devcontainer options",
-      () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
-      () -> assertFalse(devcontainer.options.debug, "debug"),
-      () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
-      () -> assertFalse(devcontainer.options.pull, "pull"),
-      () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
+        () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
+        () -> assertFalse(devcontainer.options.debug, "debug"),
+        () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
+        () -> assertFalse(devcontainer.options.pull, "pull"),
+        () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
     );
   }
 
@@ -52,11 +52,11 @@ class DevcontainerAcceptanceTest extends CLI_TCK {
   void customLocation() {
     final var devcontainer = parseDevcontainerCommand("devcontainer", "somewhere.json");
     assertAll("devcontainer options",
-      () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
-      () -> assertFalse(devcontainer.options.debug, "debug"),
-      () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
-      () -> assertFalse(devcontainer.options.pull, "pull"),
-      () -> assertIterableEquals(List.of("somewhere.json"), devcontainer.options.locations, "locations")
+        () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
+        () -> assertFalse(devcontainer.options.debug, "debug"),
+        () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
+        () -> assertFalse(devcontainer.options.pull, "pull"),
+        () -> assertIterableEquals(List.of("somewhere.json"), devcontainer.options.locations, "locations")
     );
   }
 
@@ -65,11 +65,11 @@ class DevcontainerAcceptanceTest extends CLI_TCK {
   void customLocations() {
     final var devcontainer = parseDevcontainerCommand("devcontainer", "somewhere.json", "other.json");
     assertAll("devcontainer options",
-      () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
-      () -> assertFalse(devcontainer.options.debug, "debug"),
-      () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
-      () -> assertFalse(devcontainer.options.pull, "pull"),
-      () -> assertIterableEquals(List.of("somewhere.json", "other.json"), devcontainer.options.locations, "locations")
+        () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
+        () -> assertFalse(devcontainer.options.debug, "debug"),
+        () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
+        () -> assertFalse(devcontainer.options.pull, "pull"),
+        () -> assertIterableEquals(List.of("somewhere.json", "other.json"), devcontainer.options.locations, "locations")
     );
   }
 
@@ -78,11 +78,11 @@ class DevcontainerAcceptanceTest extends CLI_TCK {
   void disableMountProjectDir() {
     final var devcontainer = parseDevcontainerCommand("devcontainer", "--mount-project-dir=false");
     assertAll("devcontainer options",
-      () -> assertFalse(devcontainer.options.mountProjectDir, "mountProjectDir"),
-      () -> assertFalse(devcontainer.options.debug, "debug"),
-      () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
-      () -> assertFalse(devcontainer.options.pull, "pull"),
-      () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
+        () -> assertFalse(devcontainer.options.mountProjectDir, "mountProjectDir"),
+        () -> assertFalse(devcontainer.options.debug, "debug"),
+        () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
+        () -> assertFalse(devcontainer.options.pull, "pull"),
+        () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
     );
   }
 
@@ -91,11 +91,11 @@ class DevcontainerAcceptanceTest extends CLI_TCK {
   void enableDebug() {
     final var devcontainer = parseDevcontainerCommand("devcontainer", "--debug=true");
     assertAll("devcontainer options",
-      () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
-      () -> assertTrue(devcontainer.options.debug, "debug"),
-      () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
-      () -> assertFalse(devcontainer.options.pull, "pull"),
-      () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
+        () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
+        () -> assertTrue(devcontainer.options.debug, "debug"),
+        () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
+        () -> assertFalse(devcontainer.options.pull, "pull"),
+        () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
     );
   }
 
@@ -104,11 +104,11 @@ class DevcontainerAcceptanceTest extends CLI_TCK {
   void removeImage() {
     final var devcontainer = parseDevcontainerCommand("devcontainer", "--remove-image=true");
     assertAll("devcontainer options",
-      () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
-      () -> assertFalse(devcontainer.options.debug, "debug"),
-      () -> assertTrue(devcontainer.options.removeImage, "removeImage"),
-      () -> assertFalse(devcontainer.options.pull, "pull"),
-      () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
+        () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
+        () -> assertFalse(devcontainer.options.debug, "debug"),
+        () -> assertTrue(devcontainer.options.removeImage, "removeImage"),
+        () -> assertFalse(devcontainer.options.pull, "pull"),
+        () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
     );
   }
 
@@ -117,11 +117,11 @@ class DevcontainerAcceptanceTest extends CLI_TCK {
   void pullImage() {
     final var devcontainer = parseDevcontainerCommand("devcontainer", "--pull=true");
     assertAll("devcontainer options",
-      () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
-      () -> assertFalse(devcontainer.options.debug, "debug"),
-      () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
-      () -> assertTrue(devcontainer.options.pull, "pull"),
-      () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
+        () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
+        () -> assertFalse(devcontainer.options.debug, "debug"),
+        () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
+        () -> assertTrue(devcontainer.options.pull, "pull"),
+        () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
     );
   }
 
@@ -131,12 +131,12 @@ class DevcontainerAcceptanceTest extends CLI_TCK {
   void selectComposeRuntime(final String composeRuntime) {
     final var devcontainer = parseDevcontainerCommand("devcontainer", "--compose-runtime=" + composeRuntime);
     assertAll("devcontainer options",
-      () -> assertEquals(ComposeRuntime.fromAlias(composeRuntime), devcontainer.options.composeRuntime, "composeRuntime"),
-      () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
-      () -> assertFalse(devcontainer.options.debug, "debug"),
-      () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
-      () -> assertFalse(devcontainer.options.pull, "pull"),
-      () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
+        () -> assertEquals(ComposeRuntime.fromAlias(composeRuntime), devcontainer.options.composeRuntime, "composeRuntime"),
+        () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
+        () -> assertFalse(devcontainer.options.debug, "debug"),
+        () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
+        () -> assertFalse(devcontainer.options.pull, "pull"),
+        () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
     );
   }
 
@@ -146,12 +146,12 @@ class DevcontainerAcceptanceTest extends CLI_TCK {
   void selectShellRuntime(final String shellRuntime) {
     final var devcontainer = parseDevcontainerCommand("devcontainer", "--shell-runtime=" + shellRuntime);
     assertAll("devcontainer options",
-      () -> assertEquals(ShellRuntime.fromAlias(shellRuntime), devcontainer.options.shellRuntime, "shellRuntime"),
-      () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
-      () -> assertFalse(devcontainer.options.debug, "debug"),
-      () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
-      () -> assertFalse(devcontainer.options.pull, "pull"),
-      () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
+        () -> assertEquals(ShellRuntime.fromAlias(shellRuntime), devcontainer.options.shellRuntime, "shellRuntime"),
+        () -> assertTrue(devcontainer.options.mountProjectDir, "mountProjectDir"),
+        () -> assertFalse(devcontainer.options.debug, "debug"),
+        () -> assertFalse(devcontainer.options.removeImage, "removeImage"),
+        () -> assertFalse(devcontainer.options.pull, "pull"),
+        () -> assertIterableEquals(DEFAULT_LOCATIONS, devcontainer.options.locations, "locations")
     );
   }
 

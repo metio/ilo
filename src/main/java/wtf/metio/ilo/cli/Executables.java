@@ -35,15 +35,15 @@ public final class Executables {
    */
   public static Optional<Path> of(final String tool) {
     return allPaths().map(path -> path.resolve(tool))
-      .filter(Executables::canExecute)
-      .findFirst();
+        .filter(Executables::canExecute)
+        .findFirst();
   }
 
   // visible for testing
   static Stream<Path> allPaths() {
     return Stream.of(System.getenv("PATH")
-      .split(Pattern.quote(File.pathSeparator)))
-      .map(Paths::get);
+            .split(Pattern.quote(File.pathSeparator)))
+        .map(Paths::get);
   }
 
   // visible for testing

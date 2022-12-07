@@ -39,8 +39,8 @@ class HelpAcceptanceTest extends CLI_TCK {
   private void verifyHelp(final String... flags) {
     final var exitCode = cmd.execute(flags);
     assertAll("help",
-      () -> assertEquals(0, exitCode, "exitCode"),
-      () -> assertTrue(output.toString().startsWith("Usage: ilo"), () -> output.toString()));
+        () -> assertEquals(0, exitCode, "exitCode"),
+        () -> assertTrue(output.toString().startsWith("Usage: ilo"), () -> output.toString()));
   }
 
 }

@@ -8,8 +8,6 @@
 package wtf.metio.ilo.shell;
 
 import wtf.metio.ilo.os.OSSupport;
-import wtf.metio.ilo.shell.ShellCLI;
-import wtf.metio.ilo.shell.ShellOptions;
 import wtf.metio.ilo.utils.Strings;
 
 import java.util.List;
@@ -24,11 +22,11 @@ abstract class DockerLike implements ShellCLI {
   public final List<String> pullArguments(final ShellOptions options) {
     if (options.pull && Strings.isBlank(options.containerfile)) {
       return flatten(
-        of(name()),
-        fromList(OSSupport.expand(options.runtimeOptions)),
-        of("pull"),
-        fromList(OSSupport.expand(options.runtimePullOptions)),
-        of(OSSupport.expand(options.image)));
+          of(name()),
+          fromList(OSSupport.expand(options.runtimeOptions)),
+          of("pull"),
+          fromList(OSSupport.expand(options.runtimePullOptions)),
+          of(OSSupport.expand(options.image)));
     }
     return List.of();
   }
@@ -37,13 +35,13 @@ abstract class DockerLike implements ShellCLI {
   public final List<String> buildArguments(final ShellOptions options) {
     if (Strings.isNotBlank(options.containerfile)) {
       return flatten(
-        of(name()),
-        fromList(OSSupport.expand(options.runtimeOptions)),
-        of("build", "--file", options.containerfile),
-        fromList(OSSupport.expand(options.runtimeBuildOptions)),
-        maybe(options.pull, "--pull"),
-        of("--tag", OSSupport.expand(options.image)),
-        of(OSSupport.expand(options.context)));
+          of(name()),
+          fromList(OSSupport.expand(options.runtimeOptions)),
+          of("build", "--file", options.containerfile),
+          fromList(OSSupport.expand(options.runtimeBuildOptions)),
+          maybe(options.pull, "--pull"),
+          of("--tag", OSSupport.expand(options.image)),
+          of(OSSupport.expand(options.context)));
     }
     return List.of();
   }
@@ -55,38 +53,38 @@ abstract class DockerLike implements ShellCLI {
         .filter(Strings::isNotBlank)
         .orElse(currentDir);
     final var projectDir = maybe(options.mountProjectDir,
-      "--volume", currentDir + ":" + workingDir + ":z");
+        "--volume", currentDir + ":" + workingDir + ":z");
     final var user = maybe(Strings.isNotBlank(options.runAs),
-      "--user", OSSupport.expand(options.runAs));
+        "--user", OSSupport.expand(options.runAs));
     final var passwd = maybe(Strings.isNotBlank(options.runAs),
-      "--volume", OSSupport.passwdFile(options.runAs) + ":/etc/passwd");
+        "--volume", OSSupport.passwdFile(options.runAs) + ":/etc/passwd");
     return flatten(
-      of(name()),
-      fromList(OSSupport.expand(options.runtimeOptions)),
-      of("run", "--rm"),
-      fromList(OSSupport.expand(options.runtimeRunOptions)),
-      user,
-      passwd,
-      projectDir,
-      of("--workdir", workingDir),
-      maybe(options.interactive, "--interactive", "--tty"),
-      withPrefix("--env", OSSupport.expand(options.variables)),
-      optional("--hostname", OSSupport.expand(options.hostname)),
-      withPrefix("--publish", OSSupport.expand(options.ports)),
-      withPrefix("--volume", options.missingVolumes.handleLocalDirectories(OSSupport.expand(options.volumes))),
-      of(OSSupport.expand(options.image)),
-      fromList(OSSupport.expand(options.commands)));
+        of(name()),
+        fromList(OSSupport.expand(options.runtimeOptions)),
+        of("run", "--rm"),
+        fromList(OSSupport.expand(options.runtimeRunOptions)),
+        user,
+        passwd,
+        projectDir,
+        of("--workdir", workingDir),
+        maybe(options.interactive, "--interactive", "--tty"),
+        withPrefix("--env", OSSupport.expand(options.variables)),
+        optional("--hostname", OSSupport.expand(options.hostname)),
+        withPrefix("--publish", OSSupport.expand(options.ports)),
+        withPrefix("--volume", options.missingVolumes.handleLocalDirectories(OSSupport.expand(options.volumes))),
+        of(OSSupport.expand(options.image)),
+        fromList(OSSupport.expand(options.commands)));
   }
 
   @Override
   public final List<String> cleanupArguments(final ShellOptions options) {
     if (options.removeImage) {
       return flatten(
-        of(name()),
-        fromList(OSSupport.expand(options.runtimeOptions)),
-        of("rmi"),
-        fromList(OSSupport.expand(options.runtimeCleanupOptions)),
-        of(OSSupport.expand(options.image)));
+          of(name()),
+          fromList(OSSupport.expand(options.runtimeOptions)),
+          of("rmi"),
+          fromList(OSSupport.expand(options.runtimeCleanupOptions)),
+          of(OSSupport.expand(options.image)));
     }
     return List.of();
   }

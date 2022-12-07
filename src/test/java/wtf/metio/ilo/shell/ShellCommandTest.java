@@ -46,10 +46,10 @@ class ShellCommandTest extends TestMethodSources {
   void dockerLikeMinimal(final String runtime) {
     final var tool = useRuntime(runtime);
     assertCommandLine(
-      List.of(),
-      List.of(),
-      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
-      List.of());
+        List.of(),
+        List.of(),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of());
   }
 
   @ParameterizedTest
@@ -59,10 +59,10 @@ class ShellCommandTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.pull = true;
     assertCommandLine(
-      List.of(tool, "pull", options.image),
-      List.of(),
-      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
-      List.of());
+        List.of(tool, "pull", options.image),
+        List.of(),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of());
   }
 
   @ParameterizedTest
@@ -72,10 +72,10 @@ class ShellCommandTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.containerfile = "Dockerfile";
     assertCommandLine(
-      List.of(),
-      List.of(tool, "build", "--file", options.containerfile, "--tag", options.image),
-      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
-      List.of());
+        List.of(),
+        List.of(tool, "build", "--file", options.containerfile, "--tag", options.image),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of());
   }
 
   @ParameterizedTest
@@ -85,10 +85,10 @@ class ShellCommandTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.removeImage = true;
     assertCommandLine(
-      List.of(),
-      List.of(),
-      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
-      List.of(tool, "rmi", options.image));
+        List.of(),
+        List.of(),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of(tool, "rmi", options.image));
   }
 
   @ParameterizedTest
@@ -101,10 +101,10 @@ class ShellCommandTest extends TestMethodSources {
     options.mountProjectDir = true;
     options.workingDir = "";
     assertCommandLine(
-      List.of(),
-      List.of(),
-      List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:z", "--workdir", "/some/folder", "--interactive", "--tty", options.image),
-      List.of());
+        List.of(),
+        List.of(),
+        List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:z", "--workdir", "/some/folder", "--interactive", "--tty", options.image),
+        List.of());
   }
 
   @ParameterizedTest
@@ -114,10 +114,10 @@ class ShellCommandTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.runtimeOptions = List.of("--remote");
     assertCommandLine(
-      List.of(),
-      List.of(),
-      List.of(tool, "--remote", "run", "--rm", "--workdir", options.workingDir, options.image),
-      List.of());
+        List.of(),
+        List.of(),
+        List.of(tool, "--remote", "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of());
   }
 
   @ParameterizedTest
@@ -128,10 +128,10 @@ class ShellCommandTest extends TestMethodSources {
     options.pull = true;
     options.runtimePullOptions = List.of("--all-tags");
     assertCommandLine(
-      List.of(tool, "pull", "--all-tags", options.image),
-      List.of(),
-      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
-      List.of());
+        List.of(tool, "pull", "--all-tags", options.image),
+        List.of(),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of());
   }
 
   @ParameterizedTest
@@ -142,10 +142,10 @@ class ShellCommandTest extends TestMethodSources {
     options.containerfile = "Dockerfile";
     options.runtimeBuildOptions = List.of("--squash-all");
     assertCommandLine(
-      List.of(),
-      List.of(tool, "build", "--file", options.containerfile, "--squash-all", "--tag", options.image),
-      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
-      List.of());
+        List.of(),
+        List.of(tool, "build", "--file", options.containerfile, "--squash-all", "--tag", options.image),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of());
   }
 
   @ParameterizedTest
@@ -155,10 +155,10 @@ class ShellCommandTest extends TestMethodSources {
     final var tool = useRuntime(runtime);
     options.runtimeRunOptions = List.of("--quiet");
     assertCommandLine(
-      List.of(),
-      List.of(),
-      List.of(tool, "run", "--rm", "--quiet", "--workdir", options.workingDir, options.image),
-      List.of());
+        List.of(),
+        List.of(),
+        List.of(tool, "run", "--rm", "--quiet", "--workdir", options.workingDir, options.image),
+        List.of());
   }
 
   @ParameterizedTest
@@ -169,10 +169,10 @@ class ShellCommandTest extends TestMethodSources {
     options.removeImage = true;
     options.runtimeCleanupOptions = List.of("--force");
     assertCommandLine(
-      List.of(),
-      List.of(),
-      List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
-      List.of(tool, "rmi", "--force", options.image));
+        List.of(),
+        List.of(),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of(tool, "rmi", "--force", options.image));
   }
 
   @ParameterizedTest
@@ -184,11 +184,11 @@ class ShellCommandTest extends TestMethodSources {
     options.pull = true;
     final var exitCode = shell.call();
     assertAll("command line",
-      () -> assertEquals(1, exitCode, "exitCode"),
-      () -> assertIterableEquals(List.of(tool, "pull", options.image), executor.pullArguments(), "pullArguments"),
-      () -> noExecution(executor::buildArguments, "buildArguments"),
-      () -> noExecution(executor::runArguments, "runArguments"),
-      () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+        () -> assertEquals(1, exitCode, "exitCode"),
+        () -> assertIterableEquals(List.of(tool, "pull", options.image), executor.pullArguments(), "pullArguments"),
+        () -> noExecution(executor::buildArguments, "buildArguments"),
+        () -> noExecution(executor::runArguments, "runArguments"),
+        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }
 
   @ParameterizedTest
@@ -200,11 +200,11 @@ class ShellCommandTest extends TestMethodSources {
     options.containerfile = "Dockerfile";
     final var exitCode = shell.call();
     assertAll("command line",
-      () -> assertEquals(1, exitCode, "exitCode"),
-      () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-      () -> assertIterableEquals(List.of(tool, "build", "--file", options.containerfile, "--tag", options.image), executor.buildArguments(), "buildArguments"),
-      () -> noExecution(executor::runArguments, "runArguments"),
-      () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+        () -> assertEquals(1, exitCode, "exitCode"),
+        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
+        () -> assertIterableEquals(List.of(tool, "build", "--file", options.containerfile, "--tag", options.image), executor.buildArguments(), "buildArguments"),
+        () -> noExecution(executor::runArguments, "runArguments"),
+        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }
 
   @ParameterizedTest
@@ -215,11 +215,11 @@ class ShellCommandTest extends TestMethodSources {
     executor.exitCodes(0, 0, 1);
     final var exitCode = shell.call();
     assertAll("command line",
-      () -> assertEquals(1, exitCode, "exitCode"),
-      () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-      () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-      () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image), executor.runArguments(), "runArguments"),
-      () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+        () -> assertEquals(1, exitCode, "exitCode"),
+        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
+        () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
+        () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image), executor.runArguments(), "runArguments"),
+        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }
 
   @ParameterizedTest
@@ -230,11 +230,11 @@ class ShellCommandTest extends TestMethodSources {
     executor.exitCodes(0, 0, 0, 1);
     final var exitCode = shell.call();
     assertAll("command line",
-      () -> assertEquals(1, exitCode, "exitCode"),
-      () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-      () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-      () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image), executor.runArguments(), "runArguments"),
-      () -> assertIterableEquals(List.of(), executor.cleanupArguments(), "cleanupArguments"));
+        () -> assertEquals(1, exitCode, "exitCode"),
+        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
+        () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
+        () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image), executor.runArguments(), "runArguments"),
+        () -> assertIterableEquals(List.of(), executor.cleanupArguments(), "cleanupArguments"));
   }
 
   private String useRuntime(final String runtime) {
@@ -243,17 +243,17 @@ class ShellCommandTest extends TestMethodSources {
   }
 
   private void assertCommandLine(
-    final List<String> pullArguments,
-    final List<String> buildArguments,
-    final List<String> runArguments,
-    final List<String> cleanupArguments) {
+      final List<String> pullArguments,
+      final List<String> buildArguments,
+      final List<String> runArguments,
+      final List<String> cleanupArguments) {
     final var exitCode = shell.call();
     assertAll("command line",
-      () -> assertEquals(0, exitCode, "exitCode"),
-      () -> assertIterableEquals(pullArguments, executor.pullArguments(), "pullArguments"),
-      () -> assertIterableEquals(buildArguments, executor.buildArguments(), "buildArguments"),
-      () -> assertIterableEquals(runArguments, executor.runArguments(), "runArguments"),
-      () -> assertIterableEquals(cleanupArguments, executor.cleanupArguments(), "cleanupArguments"));
+        () -> assertEquals(0, exitCode, "exitCode"),
+        () -> assertIterableEquals(pullArguments, executor.pullArguments(), "pullArguments"),
+        () -> assertIterableEquals(buildArguments, executor.buildArguments(), "buildArguments"),
+        () -> assertIterableEquals(runArguments, executor.runArguments(), "runArguments"),
+        () -> assertIterableEquals(cleanupArguments, executor.cleanupArguments(), "cleanupArguments"));
   }
 
   private void noExecution(final Supplier<List<String>> arguments, final String name) {

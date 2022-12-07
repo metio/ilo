@@ -26,8 +26,8 @@ class CommandListContainsNullExceptionTest {
     values.add(null);
     final var exception = new CommandListContainsNullException(new NullPointerException(), values);
     assertAll("exception",
-      () -> assertEquals(101, exception.getExitCode(), "exitCode"),
-      () -> assertEquals("[test, null]", exception.getMessage(), "message"));
+        () -> assertEquals(101, exception.getExitCode(), "exitCode"),
+        () -> assertEquals("[test, null]", exception.getMessage(), "message"));
   }
 
 }
