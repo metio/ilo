@@ -22,9 +22,10 @@ public final class ComposeOptions implements Options {
   public ComposeRuntime runtime;
 
   @CommandLine.Option(
-    names = {"--no-interactive"},
+    names = {"--interactive"},
     description = "Allocate a pseudo TTY or not.",
     defaultValue = "true",
+      fallbackValue = "true",
     negatable = true
   )
   public boolean interactive;

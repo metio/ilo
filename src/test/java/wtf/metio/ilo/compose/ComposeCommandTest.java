@@ -20,12 +20,12 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Compose")
-class ComposeTest extends TestMethodSources {
+@DisplayName("ComposeCommand")
+class ComposeCommandTest extends TestMethodSources {
 
   private static final String DOCKER_COMPOSE_YML = "docker-compose.yml";
 
-  private Compose compose;
+  private ComposeCommand compose;
   private TestComposeExecutor executor;
   private ComposeOptions options;
 
@@ -34,7 +34,7 @@ class ComposeTest extends TestMethodSources {
     executor = new TestComposeExecutor();
     options = new ComposeOptions();
     options.file = List.of(DOCKER_COMPOSE_YML);
-    compose = new Compose(executor);
+    compose = new ComposeCommand(executor);
     compose.options = options;
   }
 

@@ -10,10 +10,10 @@ package wtf.metio.ilo.acceptance;
 import org.junit.jupiter.api.BeforeEach;
 import picocli.CommandLine;
 import wtf.metio.ilo.Ilo;
-import wtf.metio.ilo.compose.Compose;
-import wtf.metio.ilo.devcontainer.Devcontainer;
-import wtf.metio.ilo.devfile.Devfile;
-import wtf.metio.ilo.shell.Shell;
+import wtf.metio.ilo.compose.ComposeCommand;
+import wtf.metio.ilo.devcontainer.DevcontainerCommand;
+import wtf.metio.ilo.devfile.DevfileCommand;
+import wtf.metio.ilo.shell.ShellCommand;
 import wtf.metio.ilo.test.TestMethodSources;
 
 import java.io.PrintWriter;
@@ -31,28 +31,28 @@ public abstract class CLI_TCK extends TestMethodSources {
     cmd.setOut(new PrintWriter(output));
   }
 
-  protected final Shell parseShellCommand(final String... args) {
+  protected final ShellCommand parseShellCommand(final String... args) {
     final var parseResult = cmd.parseArgs(args);
     final var subcommand = parseResult.subcommand();
-    return (Shell) subcommand.commandSpec().userObject();
+    return (ShellCommand) subcommand.commandSpec().userObject();
   }
 
-  protected final Compose parseComposeCommand(final String... args) {
+  protected final ComposeCommand parseComposeCommand(final String... args) {
     final var parseResult = cmd.parseArgs(args);
     final var subcommand = parseResult.subcommand();
-    return (Compose) subcommand.commandSpec().userObject();
+    return (ComposeCommand) subcommand.commandSpec().userObject();
   }
 
-  protected final Devcontainer parseDevcontainerCommand(final String... args) {
+  protected final DevcontainerCommand parseDevcontainerCommand(final String... args) {
     final var parseResult = cmd.parseArgs(args);
     final var subcommand = parseResult.subcommand();
-    return (Devcontainer) subcommand.commandSpec().userObject();
+    return (DevcontainerCommand) subcommand.commandSpec().userObject();
   }
 
-  protected final Devfile parseDevfileCommand(final String... args) {
+  protected final DevfileCommand parseDevfileCommand(final String... args) {
     final var parseResult = cmd.parseArgs(args);
     final var subcommand = parseResult.subcommand();
-    return (Devfile) subcommand.commandSpec().userObject();
+    return (DevfileCommand) subcommand.commandSpec().userObject();
   }
 
 }

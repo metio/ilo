@@ -48,6 +48,7 @@ public final class DevcontainerOptions implements Options {
     names = {"--mount-project-dir"},
     description = "Mount the project directory into the running container.",
     defaultValue = "true",
+      fallbackValue = "true",
     negatable = true
   )
   public boolean mountProjectDir;

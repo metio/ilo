@@ -8,7 +8,7 @@
 package wtf.metio.ilo.devfile;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.shell.Shell;
+import wtf.metio.ilo.shell.ShellCommand;
 import wtf.metio.ilo.shell.ShellOptions;
 import wtf.metio.ilo.utils.Streams;
 import wtf.metio.ilo.utils.Strings;
@@ -34,7 +34,7 @@ import static wtf.metio.ilo.devfile.DevfileYamlParser.parseDevfile;
     descriptionHeading = "%n",
     optionListHeading = "%n"
 )
-public final class Devfile implements Callable<Integer> {
+public final class DevfileCommand implements Callable<Integer> {
 
   @CommandLine.Mixin
   public DevfileOptions options;
@@ -46,7 +46,7 @@ public final class Devfile implements Callable<Integer> {
     final var devfile = parseDevfile(yaml);
 
     if (hasSupportedDevfileConfiguration(devfile, options.component)) {
-      final var command = new Shell();
+      final var command = new ShellCommand();
       command.options = mapOptions(options, devfile);
       return command.call();
     }
@@ -74,16 +74,16 @@ public final class Devfile implements Callable<Integer> {
   static ShellOptions mapOptions(final DevfileOptions options, final DevfileYaml devfile) {
     final var opts = Stream.ofNullable(devfile.components)
         .flatMap(Collection::stream)
-        .filter(Devfile::usesPredefinedImage)
+        .filter(DevfileCommand::usesPredefinedImage)
         .map(component -> component.container)
         .findFirst()
-        .map(Devfile::optionsForPredefinedImage)
+        .map(DevfileCommand::optionsForPredefinedImage)
         .or(() -> Stream.ofNullable(devfile.components)
             .flatMap(Collection::stream)
-            .filter(Devfile::usesLocalDockerfile)
+            .filter(DevfileCommand::usesLocalDockerfile)
             .map(component -> component.image)
             .findFirst()
-            .map(Devfile::optionsForLocalDockerfile))
+            .map(DevfileCommand::optionsForLocalDockerfile))
         .orElseThrow();
 
     opts.debug = options.debug;

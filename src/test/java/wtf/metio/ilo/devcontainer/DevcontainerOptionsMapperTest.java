@@ -10,6 +10,8 @@ package wtf.metio.ilo.devcontainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import wtf.metio.devcontainer.BuildBuilder;
+import wtf.metio.devcontainer.DevcontainerBuilder;
 
 import java.nio.file.Paths;
 import java.util.List;
@@ -28,7 +30,7 @@ class DevcontainerOptionsMapperTest {
     @Test
     @DisplayName("returns non-null values")
     void shouldReturnNonNullValues() {
-      assertNotNull(shellOptions(new DevcontainerOptions(), new DevcontainerJson()));
+      assertNotNull(shellOptions(new DevcontainerOptions(), DevcontainerBuilder.builder().create()));
     }
 
     @Test
@@ -36,14 +38,13 @@ class DevcontainerOptionsMapperTest {
     void shouldMapImage() {
       // given
       final var options = new DevcontainerOptions();
-      final var json = new DevcontainerJson();
-      json.image = "example:123";
+      final var json = DevcontainerBuilder.builder().image("example:123").create();
 
       // when
       final var shellOptions = shellOptions(options, json);
 
       // then
-      assertEquals(json.image, shellOptions.image);
+      assertEquals(json.image(), shellOptions.image);
     }
 
     @Test
@@ -51,14 +52,13 @@ class DevcontainerOptionsMapperTest {
     void shouldMapDockerfile() {
       // given
       final var options = new DevcontainerOptions();
-      final var json = new DevcontainerJson();
-      json.dockerFile = "some.dockerfile";
+      final var json = DevcontainerBuilder.builder().build(BuildBuilder.builder().dockerfile("some.dockerfile").create()).create();
 
       // when
       final var shellOptions = shellOptions(options, json);
 
       // then
-      assertEquals(json.dockerFile, shellOptions.containerfile);
+      assertEquals(json.build().dockerfile(), shellOptions.containerfile);
     }
 
     @Test
@@ -66,61 +66,13 @@ class DevcontainerOptionsMapperTest {
     void shouldMapContext() {
       // given
       final var options = new DevcontainerOptions();
-      final var json = new DevcontainerJson();
-      json.context = "example";
+      final var json = DevcontainerBuilder.builder().build(BuildBuilder.builder().context("example").create()).create();
 
       // when
       final var shellOptions = shellOptions(options, json);
 
       // then
-      assertEquals(json.context, shellOptions.context);
-    }
-
-    @Test
-    @DisplayName("maps the build.dockerFile field")
-    void shouldMapBuildDockerfile() {
-      // given
-      final var options = new DevcontainerOptions();
-      final var json = new DevcontainerJson();
-      json.build = new DevcontainerJson.Build();
-      json.build.dockerFile = "some.dockerfile";
-
-      // when
-      final var shellOptions = shellOptions(options, json);
-
-      // then
-      assertEquals(json.build.dockerFile, shellOptions.containerfile);
-    }
-
-    @Test
-    @DisplayName("maps the build.context field")
-    void shouldMapBuildContext() {
-      // given
-      final var options = new DevcontainerOptions();
-      final var json = new DevcontainerJson();
-      json.build = new DevcontainerJson.Build();
-      json.build.context = "example";
-
-      // when
-      final var shellOptions = shellOptions(options, json);
-
-      // then
-      assertEquals(json.build.context, shellOptions.context);
-    }
-
-    @Test
-    @DisplayName("uses the context field in case build.context is empty")
-    void shouldFallbackToContext() {
-      // given
-      final var options = new DevcontainerOptions();
-      final var json = new DevcontainerJson();
-      json.context = "example";
-
-      // when
-      final var shellOptions = shellOptions(options, json);
-
-      // then
-      assertEquals(json.context, shellOptions.context);
+      assertEquals(json.build().context(), shellOptions.context);
     }
 
     @Test
@@ -128,8 +80,7 @@ class DevcontainerOptionsMapperTest {
     void shouldMapForwardPorts() {
       // given
       final var options = new DevcontainerOptions();
-      final var json = new DevcontainerJson();
-      json.forwardPorts = List.of(123, 456);
+      final var json = DevcontainerBuilder.builder().forwardPorts(List.of("123", "456")).create();
 
       // when
       final var shellOptions = shellOptions(options, json);
@@ -143,7 +94,7 @@ class DevcontainerOptionsMapperTest {
     void shouldUseDefaultForMissingContext() {
       // given
       final var options = new DevcontainerOptions();
-      final var json = new DevcontainerJson();
+      final var json = DevcontainerBuilder.builder().create();
 
       // when
       final var shellOptions = shellOptions(options, json);
@@ -157,7 +108,7 @@ class DevcontainerOptionsMapperTest {
     void shouldUseDefaultForMissingDockerfile() {
       // given
       final var options = new DevcontainerOptions();
-      final var json = new DevcontainerJson();
+      final var json = DevcontainerBuilder.builder().create();
 
       // when
       final var shellOptions = shellOptions(options, json);
@@ -175,7 +126,7 @@ class DevcontainerOptionsMapperTest {
     @Test
     @DisplayName("returns non-null values")
     void shouldReturnNonNullValues() {
-      assertNotNull(composeOptions(new DevcontainerOptions(), new DevcontainerJson(), Paths.get(".")));
+      assertNotNull(composeOptions(new DevcontainerOptions(), DevcontainerBuilder.builder().create(), Paths.get(".")));
     }
 
     @Test
@@ -183,8 +134,7 @@ class DevcontainerOptionsMapperTest {
     void shouldMapDockerComposeFile() {
       // given
       final var options = new DevcontainerOptions();
-      final var json = new DevcontainerJson();
-      json.dockerComposeFile = List.of("your-compose.yml");
+      final var json = DevcontainerBuilder.builder().dockerComposeFile(List.of("your-compose.yml")).create();
 
       // when
       final var composeOptions = composeOptions(options, json, Paths.get("."));
@@ -198,14 +148,13 @@ class DevcontainerOptionsMapperTest {
     void shouldMapService() {
       // given
       final var options = new DevcontainerOptions();
-      final var json = new DevcontainerJson();
-      json.service = "some-service";
+      final var json = DevcontainerBuilder.builder().service("some-service").create();
 
       // when
       final var composeOptions = composeOptions(options, json, Paths.get("."));
 
       // then
-      assertEquals(json.service, composeOptions.service);
+      assertEquals(json.service(), composeOptions.service);
     }
 
   }

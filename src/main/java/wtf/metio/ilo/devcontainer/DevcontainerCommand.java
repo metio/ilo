@@ -8,16 +8,19 @@
 package wtf.metio.ilo.devcontainer;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.compose.Compose;
-import wtf.metio.ilo.shell.Shell;
+import wtf.metio.devcontainer.Devcontainer;
+import wtf.metio.ilo.compose.ComposeCommand;
+import wtf.metio.ilo.errors.DevcontainerJsonMissingException;
+import wtf.metio.ilo.shell.ShellCommand;
+import wtf.metio.ilo.utils.Streams;
 import wtf.metio.ilo.utils.Strings;
 import wtf.metio.ilo.version.VersionProvider;
 
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
-import static wtf.metio.ilo.devcontainer.DevcontainerJsonParser.findJson;
-import static wtf.metio.ilo.devcontainer.DevcontainerJsonParser.parseJson;
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.composeOptions;
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.shellOptions;
 
@@ -32,23 +35,24 @@ import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.shellOptions;
   descriptionHeading = "%n",
   optionListHeading = "%n"
 )
-public final class Devcontainer implements Callable<Integer> {
+public final class DevcontainerCommand implements Callable<Integer> {
 
   @CommandLine.Mixin
   public DevcontainerOptions options;
 
   @Override
-  public Integer call() {
+  public Integer call() throws IOException {
     final var currentDir = Paths.get(System.getProperty("user.dir"));
-    final var json = findJson(currentDir, options.locations);
-    final var devcontainer = parseJson(json);
+    final var json = Streams.findFirst(currentDir, options.locations)
+        .orElseThrow(DevcontainerJsonMissingException::new);
+    final var devcontainer = Devcontainer.parse(json);
 
-    if (null != devcontainer.dockerComposeFile && !devcontainer.dockerComposeFile.isEmpty()) {
-      final var command = new Compose();
+    if (Objects.nonNull(devcontainer.dockerComposeFile()) && !devcontainer.dockerComposeFile().isEmpty()) {
+      final var command = new ComposeCommand();
       command.options = composeOptions(options, devcontainer, json);
       return command.call();
-    } else if (Strings.isNotBlank(devcontainer.image)) {
-      final var command = new Shell();
+    } else if (Strings.isNotBlank(devcontainer.image())) {
+      final var command = new ShellCommand();
       command.options = shellOptions(options, devcontainer);
       return command.call();
     }
