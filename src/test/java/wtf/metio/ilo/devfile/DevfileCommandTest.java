@@ -14,8 +14,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Devfile")
-class DevfileTest {
+@DisplayName("DevfileCommand")
+class DevfileCommandTest {
 
   @Test
   void shouldSupportPredefinedImages() {
@@ -27,7 +27,7 @@ class DevfileTest {
     component.container = container;
     devfile.components = List.of(component);
 
-    assertTrue(Devfile.hasSupportedDevfileConfiguration(devfile, "container"));
+    assertTrue(DevfileCommand.hasSupportedDevfileConfiguration(devfile, "container"));
   }
 
   @Test
@@ -42,7 +42,7 @@ class DevfileTest {
     component.image = image;
     devfile.components = List.of(component);
 
-    assertTrue(Devfile.hasSupportedDevfileConfiguration(devfile, "image"));
+    assertTrue(DevfileCommand.hasSupportedDevfileConfiguration(devfile, "image"));
   }
 
   @Test
@@ -60,7 +60,7 @@ class DevfileTest {
     component.image = image;
     devfile.components = List.of(component);
 
-    assertFalse(Devfile.hasSupportedDevfileConfiguration(devfile, "image"));
+    assertFalse(DevfileCommand.hasSupportedDevfileConfiguration(devfile, "image"));
   }
 
   @Test
@@ -73,7 +73,7 @@ class DevfileTest {
     component.container = container;
     devfile.components = List.of(component);
     final var options = new DevfileOptions();
-    final var shellOptions = Devfile.mapOptions(options, devfile);
+    final var shellOptions = DevfileCommand.mapOptions(options, devfile);
 
     assertEquals("docker.io/library/maven:latest", shellOptions.image);
   }

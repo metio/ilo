@@ -5,7 +5,7 @@
  * in the LICENSE file.
  */
 
-package wtf.metio.ilo.compose;
+package wtf.metio.ilo.shell;
 
 import picocli.CommandLine;
 import wtf.metio.ilo.cli.CommandLifecycle;
@@ -15,30 +15,30 @@ import wtf.metio.ilo.version.VersionProvider;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
-  name = "compose",
-  description = "Open an (interactive) shell using podman-/docker-compose",
-  versionProvider = VersionProvider.class,
-  mixinStandardHelpOptions = true,
-  showAtFileInUsageHelp = true,
-  usageHelpAutoWidth = true,
-  showDefaultValues = true,
-  descriptionHeading = "%n",
-  optionListHeading = "%n"
+    name = "shell",
+    description = "Opens an (interactive) shell for your build environment",
+    versionProvider = VersionProvider.class,
+    mixinStandardHelpOptions = true,
+    showAtFileInUsageHelp = true,
+    usageHelpAutoWidth = true,
+    showDefaultValues = true,
+    descriptionHeading = "%n",
+    parameterListHeading = "%n"
 )
-public final class Compose implements Callable<Integer> {
+public final class ShellCommand implements Callable<Integer> {
 
   @CommandLine.Mixin
-  public ComposeOptions options;
+  public ShellOptions options;
 
-  private final CliExecutor<? super ComposeRuntime, ComposeCLI, ComposeOptions> executor;
+  private final CliExecutor<? super ShellRuntime, ShellCLI, ShellOptions> executor;
 
   // default constructor for picocli
-  public Compose() {
-    this(new ComposeExecutor());
+  public ShellCommand() {
+    this(new ShellExecutor());
   }
 
   // constructor for testing
-  Compose(final CliExecutor<? super ComposeRuntime, ComposeCLI, ComposeOptions> executor) {
+  ShellCommand(final CliExecutor<? super ShellRuntime, ShellCLI, ShellOptions> executor) {
     this.executor = executor;
   }
 

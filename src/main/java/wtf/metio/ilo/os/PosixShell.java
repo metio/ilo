@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * Support for POSIX compatible shells.
  *
- * @see <a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html">Shell Command Language</a>
+ * @see <a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html">ShellCommand Command Language</a>
  */
 final class PosixShell extends ParameterExpansion {
 

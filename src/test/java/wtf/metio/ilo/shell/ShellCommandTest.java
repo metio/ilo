@@ -21,11 +21,11 @@ import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Shell")
+@DisplayName("ShellCommand")
 @ExtendWith(SystemStubsExtension.class)
-class ShellTest extends TestMethodSources {
+class ShellCommandTest extends TestMethodSources {
 
-  private Shell shell;
+  private ShellCommand shell;
   private TestShellExecutor executor;
   private ShellOptions options;
 
@@ -36,7 +36,7 @@ class ShellTest extends TestMethodSources {
     options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.workingDir = "some/dir";
     options.image = "fedora:latest";
-    shell = new Shell(executor);
+    shell = new ShellCommand(executor);
     shell.options = options;
   }
 

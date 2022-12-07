@@ -1,9 +1,0 @@
-{
-  "dockerComposeFile": "some-file.yml",
-  "service": "dev",
-  "name": "my-name",
-  "runServices": [
-    "first",
-    "second"
-  ]
-}
