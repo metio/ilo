@@ -373,6 +373,12 @@ class DevcontainerOptionsParserTest extends TestMethodSources {
     assertTrue(command.options.executePostAttachCommand, "executePostAttachCommand");
   }
 
+  @Test
+  public void locations() {
+    final var command = parseCommandOptions("test.json", "another.txt");
+    assertIterableEquals(List.of("test.json", "another.txt"), command.options.locations, "locations");
+  }
+
   private static TestCommand parseCommandOptions(final String... args) {
     final var command = new TestCommand();
     new CommandLine(command).parseArgs(args);
