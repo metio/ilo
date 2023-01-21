@@ -36,6 +36,12 @@ class DevcontainerOptionsTest {
       "mountProjectDir",
       "pull",
       "removeImage",
+      "executeInitializeCommand",
+      "executeOnCreateCommand",
+      "executeUpdateContentCommand",
+      "executePostCreateCommand",
+      "executePostStartCommand",
+      "executePostAttachCommand",
       "locations"
   })
   void shouldHavePublicProperty(final String field) throws NoSuchFieldException {
