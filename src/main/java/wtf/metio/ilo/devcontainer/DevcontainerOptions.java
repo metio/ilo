@@ -59,6 +59,60 @@ public final class DevcontainerOptions implements Options {
   )
   public boolean removeImage;
 
+  @CommandLine.Option(
+      names = {"--execute-initialize-command"},
+      description = "Execute the 'initializeCommand' before creating containers.",
+      defaultValue = "true",
+      fallbackValue = "true",
+      negatable = true
+  )
+  public boolean executeInitializeCommand;
+
+  @CommandLine.Option(
+      names = {"--execute-on-create-command"},
+      description = "Execute the 'onCreateCommand' after a container was started.",
+      defaultValue = "true",
+      fallbackValue = "true",
+      negatable = true
+  )
+  public boolean executeOnCreateCommand;
+
+  @CommandLine.Option(
+      names = {"--execute-update-content-command"},
+      description = "Execute the 'updateContentCommand' after new content is available during the creation process.",
+      defaultValue = "true",
+      fallbackValue = "true",
+      negatable = true
+  )
+  public boolean executeUpdateContentCommand;
+
+  @CommandLine.Option(
+      names = {"--execute-post-create-command"},
+      description = "Execute the 'postCreateCommand' after a container was created.",
+      defaultValue = "true",
+      fallbackValue = "true",
+      negatable = true
+  )
+  public boolean executePostCreateCommand;
+
+  @CommandLine.Option(
+      names = {"--execute-post-start-command"},
+      description = "Execute the 'postStartCommand' after a container was started.",
+      defaultValue = "true",
+      fallbackValue = "true",
+      negatable = true
+  )
+  public boolean executePostStartCommand;
+
+  @CommandLine.Option(
+      names = {"--execute-post-attach-command"},
+      description = "Execute the 'postAttachCommand' after attaching to a container.",
+      defaultValue = "true",
+      fallbackValue = "true",
+      negatable = true
+  )
+  public boolean executePostAttachCommand;
+
   @CommandLine.Parameters(
       index = "0..*",
       description = "List of possible locations for a devcontainer.json file. First found will be used.",
