@@ -92,3 +92,4 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [asaman](https://github.com/kushaldas/asaman): This is a tool to build reproducible wheels for your Python project or for all of your dependencies.
 - [odo](https://odo.dev/): Fast iterative application development deployed immediately to your kubernetes cluster.
 - [rde](https://sr.ht/~abcdw/rde/): Tools for managing reproducible development environments w/ guix
+- [envd](https://github.com/tensorchord/envd): Reproducible development environment for AI/ML
