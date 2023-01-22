@@ -8,9 +8,13 @@
 package wtf.metio.ilo.devcontainer;
 
 import picocli.CommandLine;
+import wtf.metio.devcontainer.Command;
 import wtf.metio.devcontainer.Devcontainer;
+import wtf.metio.ilo.cli.Executables;
 import wtf.metio.ilo.compose.ComposeCommand;
 import wtf.metio.ilo.errors.DevcontainerJsonMissingException;
+import wtf.metio.ilo.errors.RuntimeIOException;
+import wtf.metio.ilo.os.ShellTokenizer;
 import wtf.metio.ilo.shell.ShellCommand;
 import wtf.metio.ilo.utils.Streams;
 import wtf.metio.ilo.utils.Strings;
@@ -20,6 +24,10 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
 
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.composeOptions;
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.shellOptions;
@@ -47,6 +55,13 @@ public final class DevcontainerCommand implements Callable<Integer> {
         .orElseThrow(DevcontainerJsonMissingException::new);
     final var devcontainer = Devcontainer.parse(json);
 
+    if (options.executeInitializeCommand) {
+      final var exitCode = runCommand(devcontainer.initializeCommand(), options.debug);
+      if (CommandLine.ExitCode.OK != exitCode) {
+        return exitCode;
+      }
+    }
+
     if (Objects.nonNull(devcontainer.dockerComposeFile()) && !devcontainer.dockerComposeFile().isEmpty()) {
       final var command = new ComposeCommand();
       command.options = composeOptions(options, devcontainer, json);
@@ -58,6 +73,41 @@ public final class DevcontainerCommand implements Callable<Integer> {
     }
 
     return CommandLine.ExitCode.USAGE;
+  }
+
+  // visible for testing
+  int runCommand(final Command command, final boolean debug) {
+    try {
+      if (Strings.isNotBlank(command.string())) {
+        return Executables.runAndWaitForExit(ShellTokenizer.tokenize(command.string()), debug);
+      }
+      if (Objects.nonNull(command.array()) && !command.array().isEmpty()) {
+        return Executables.runAndWaitForExit(command.array(), debug);
+      }
+      if (Objects.nonNull(command.object()) && !command.object().isEmpty()) {
+        final var futures = command.object().values().stream()
+            .map(cmd -> (Supplier<Integer>) () -> runCommand(cmd, debug))
+            .map(CompletableFuture::supplyAsync)
+            .toList();
+
+        return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
+            .thenApply(ignore -> {
+              for (final var future : futures) {
+                final var exitCode = future.join();
+                if (CommandLine.ExitCode.OK != exitCode) {
+                  return exitCode;
+                }
+              }
+              return CommandLine.ExitCode.OK;
+            })
+            .join();
+      }
+
+      return CommandLine.ExitCode.OK;
+    } catch (final RuntimeIOException | CompletionException exception) {
+      System.err.println(exception.getCause().getMessage());
+      return CommandLine.ExitCode.USAGE;
+    }
   }
 
 }
