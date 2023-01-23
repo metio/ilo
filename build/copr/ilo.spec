@@ -1,5 +1,5 @@
 Name:           ilo
-Version:        2022.12.12
+Version:        2023.1.23
 Release:        1%{?dist}
 Summary:        Manage Reproducible Build Environments
 License:        CC0
