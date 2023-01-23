@@ -20,7 +20,7 @@ Take a look at more detailed information [here](../shell).
 
 ## ilo compose
 
-The `ilo compose` command can be used for more complex build environments based on `docker-compose.yml` files. Use this command in case your project requires e.g. a database in order to be build.
+The `ilo compose` command can be used for more complex build environments using [compose](https://compose-spec.io/) files. Use this command in case your project requires e.g. a database in order to be build.
 
 ```console
 [you@hostname project-dir]$ ilo compose
@@ -31,7 +31,7 @@ Take a look at more detailed information [here](../compose).
 
 ## ilo devcontainer
 
-The `ilo devcontainer` command uses a [devcontainer](https://code.visualstudio.com/docs/remote/containers) environment.
+The `ilo devcontainer` command uses a [devcontainer](https://containers.dev/) environment.
 
 ```console
 [you@hostname project-dir]$ ilo devcontainer
