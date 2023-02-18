@@ -55,7 +55,7 @@ public final class DevcontainerCommand implements Callable<Integer> {
         .orElseThrow(DevcontainerJsonMissingException::new);
     final var devcontainer = Devcontainer.parse(json);
 
-    if (options.executeInitializeCommand) {
+    if (options.executeInitializeCommand && Objects.nonNull(devcontainer.initializeCommand())) {
       final var exitCode = runCommand(devcontainer.initializeCommand(), options.debug);
       if (CommandLine.ExitCode.OK != exitCode) {
         return exitCode;
