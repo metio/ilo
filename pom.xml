@@ -217,23 +217,6 @@
                             <skipNativeBuild>${skipNativeBuild}</skipNativeBuild>
                         </configuration>
                     </execution>
-<!--                    <execution>-->
-<!--                        <id>test-native</id>-->
-<!--                        <goals>-->
-<!--                            <goal>test</goal>-->
-<!--                        </goals>-->
-<!--                        <phase>test</phase>-->
-<!--                        <configuration>-->
-<!--                            <buildArgs>-->
-<!--                                <buildArg>&#45;&#45;initialize-at-build-time=com.google.common.jimfs.SystemJimfsFileSystemProvider</buildArg>-->
-<!--                                <buildArg>&#45;&#45;initialize-at-build-time=com.tngtech.archunit.thirdparty.com.google.common.cache.LocalCache</buildArg>-->
-<!--                                <buildArg>&#45;&#45;initialize-at-build-time=com.tngtech.archunit.thirdparty.com.google.common.cache.CacheBuilder</buildArg>-->
-<!--                                <buildArg>&#45;&#45;trace-class-initialization='com.tngtech.archunit.junit.internal.ArchUnitTestEngine$SharedCache'</buildArg>-->
-<!--                                <buildArg>-H:+ReportExceptionStackTraces</buildArg>-->
-<!--                            </buildArgs>-->
-<!--                            <skipNativeBuild>${skipNativeBuild}</skipNativeBuild>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
                 </executions>
             </plugin>
             <plugin>
