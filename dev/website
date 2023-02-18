@@ -1,4 +1,5 @@
 shell
+--pull
 --no-interactive
 docker.io/klakegg/hugo:latest
 --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs

@@ -1,4 +1,5 @@
 shell
+--pull
 --no-interactive
 --volume ${XDG_CACHE_HOME}/maven:/root/.m2:z
 docker.io/metio/devcontainers-graalvm:latest
