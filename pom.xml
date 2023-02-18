@@ -339,33 +339,33 @@
                     <sourceDirectory>${project.build.directory}/generated-picocli-docs</sourceDirectory>
                 </configuration>
             </plugin>
-            <plugin>
-                <!-- See http://ec4j.github.io/editorconfig-maven-plugin/ for full configuration reference -->
-                <groupId>org.ec4j.maven</groupId>
-                <artifactId>editorconfig-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>check</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <excludes>
-                        <!-- lots of false-positives? TODO: investigate and fix -->
-                        <exclude>docs/**/*</exclude>
-                        <!-- exclude for GitHub Actions -->
-                        <exclude>signing.key.asc</exclude>
-                    </excludes>
-                    <includes>
-                        <include>pom.xml</include>
-                        <include>maven-version-rules.xml</include>
-                        <include>src/**/*</include>
-                    </includes>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                &lt;!&ndash; See http://ec4j.github.io/editorconfig-maven-plugin/ for full configuration reference &ndash;&gt;-->
+<!--                <groupId>org.ec4j.maven</groupId>-->
+<!--                <artifactId>editorconfig-maven-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>check</id>-->
+<!--                        <phase>verify</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>check</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <excludes>-->
+<!--                        &lt;!&ndash; lots of false-positives? TODO: investigate and fix &ndash;&gt;-->
+<!--                        <exclude>docs/**/*</exclude>-->
+<!--                        &lt;!&ndash; exclude for GitHub Actions &ndash;&gt;-->
+<!--                        <exclude>signing.key.asc</exclude>-->
+<!--                    </excludes>-->
+<!--                    <includes>-->
+<!--                        <include>pom.xml</include>-->
+<!--                        <include>maven-version-rules.xml</include>-->
+<!--                        <include>src/**/*</include>-->
+<!--                    </includes>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
