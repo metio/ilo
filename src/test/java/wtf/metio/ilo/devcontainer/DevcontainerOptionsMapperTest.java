@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import wtf.metio.devcontainer.BuildBuilder;
 import wtf.metio.devcontainer.DevcontainerBuilder;
+import wtf.metio.ilo.shell.ShellVolumeBehavior;
 
 import java.nio.file.Paths;
 import java.util.List;
@@ -90,6 +91,48 @@ class DevcontainerOptionsMapperTest {
     }
 
     @Test
+    @DisplayName("maps the runArgs field")
+    void shouldMapRunArgs() {
+      // given
+      final var options = new DevcontainerOptions();
+      final var json = DevcontainerBuilder.builder().runArgs(List.of("--cap-add=SYS_PTRACE", "--security-opt")).create();
+
+      // when
+      final var shellOptions = shellOptions(options, json);
+
+      // then
+      assertIterableEquals(List.of("--cap-add=SYS_PTRACE", "--security-opt"), shellOptions.runtimeRunOptions);
+    }
+
+    @Test
+    @DisplayName("--interactive is set to true")
+    void shouldEnableInteractiveMode() {
+      // given
+      final var options = new DevcontainerOptions();
+      final var json = DevcontainerBuilder.builder().create();
+
+      // when
+      final var shellOptions = shellOptions(options, json);
+
+      // then
+      assertTrue(shellOptions.interactive);
+    }
+
+    @Test
+    @DisplayName("--missing-volumes is set to CREATE")
+    void shouldCreateMissingVolumes() {
+      // given
+      final var options = new DevcontainerOptions();
+      final var json = DevcontainerBuilder.builder().create();
+
+      // when
+      final var shellOptions = shellOptions(options, json);
+
+      // then
+      assertEquals(ShellVolumeBehavior.CREATE, shellOptions.missingVolumes);
+    }
+
+    @Test
     @DisplayName("sets the default context in case none is specified")
     void shouldUseDefaultForMissingContext() {
       // given
@@ -155,6 +198,20 @@ class DevcontainerOptionsMapperTest {
 
       // then
       assertEquals(json.service(), composeOptions.service);
+    }
+
+    @Test
+    @DisplayName("--interactive is set to true")
+    void shouldEnableInteractiveMode() {
+      // given
+      final var options = new DevcontainerOptions();
+      final var json = DevcontainerBuilder.builder().create();
+
+      // when
+      final var composeOptions = composeOptions(options, json, Paths.get("."));
+
+      // then
+      assertTrue(composeOptions.interactive);
     }
 
   }

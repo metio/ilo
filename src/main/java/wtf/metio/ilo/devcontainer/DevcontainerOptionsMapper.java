@@ -11,6 +11,7 @@ import wtf.metio.devcontainer.Build;
 import wtf.metio.devcontainer.Devcontainer;
 import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.shell.ShellOptions;
+import wtf.metio.ilo.shell.ShellVolumeBehavior;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,6 +23,8 @@ final class DevcontainerOptionsMapper {
 
   static ShellOptions shellOptions(final DevcontainerOptions options, final Devcontainer devcontainer) {
     final var opts = new ShellOptions();
+    opts.interactive = true;
+    opts.missingVolumes = ShellVolumeBehavior.CREATE;
     opts.debug = options.debug;
     opts.pull = options.pull;
     opts.removeImage = options.removeImage;
@@ -38,11 +41,13 @@ final class DevcontainerOptionsMapper {
         .flatMap(Collection::stream)
         .map(port -> port + ":" + port)
         .toList();
+    opts.runtimeRunOptions = devcontainer.runArgs();
     return opts;
   }
 
   static ComposeOptions composeOptions(final DevcontainerOptions options, final Devcontainer devcontainer, final Path devcontainerJson) {
     final var opts = new ComposeOptions();
+    opts.interactive = true;
     opts.file = Stream.ofNullable(devcontainer.dockerComposeFile())
         .flatMap(Collection::stream)
         .map(Paths::get)
