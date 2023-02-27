@@ -5,9 +5,9 @@ menu: main
 weight: 130
 ---
 
-The `devcontainer` command allows interacting with [devcontainers](https://code.visualstudio.com/docs/remote/containers) as used by [Visual Studio Code](https://code.visualstudio.com/) and [GitHub Codespaces](https://docs.github.com/en/codespaces/overview).
+The `devcontainer` command allows interacting with [devcontainers](https://containers.dev/) as used by [Visual Studio Code](https://code.visualstudio.com/), [GitHub Codespaces](https://docs.github.com/en/codespaces/overview), and a growing list of [other tools](https://containers.dev/supporting).
 
-Make sure to specify `your.image.here:some-tag` as the image in your `devcontainer.json` file. Take a look at the [reference documentation](https://code.visualstudio.com/docs/remote/devcontainerjson-reference) for all available options for that JSON file.
+Make sure to specify `your.image.here:some-tag` as the image in your `devcontainer.json` file. Take a look at the [reference documentation](https://containers.dev/implementors/json_reference/) for all available options for that JSON file.
 
 ```console
 # open shell in devcontainer
