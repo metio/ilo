@@ -19,7 +19,6 @@ jobs:
       with:
         version: latest
         java-version: 21
-        components: native-image
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - id: cache
       name: Cache Maven Repository
