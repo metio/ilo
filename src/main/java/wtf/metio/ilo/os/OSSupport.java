@@ -8,11 +8,7 @@
 package wtf.metio.ilo.os;
 
 import wtf.metio.ilo.cli.Executables;
-import wtf.metio.ilo.errors.RuntimeIOException;
-import wtf.metio.ilo.utils.Strings;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -58,22 +54,6 @@ public final class OSSupport {
         .or(() -> Executables.of("pwsh"))
         .map(Path::toAbsolutePath)
         .map(PowerShell::new);
-  }
-
-  public static Path passwdFile(final String runAs) {
-    if (Strings.isNotBlank(runAs)) {
-      try {
-        final var username = System.getProperty("user.name");
-        final var tempFile = Files.createTempFile("ilo", ".passwd");
-        tempFile.toFile().deleteOnExit();
-        final var content = String.format("%s:x:%s::/home/%s:/bin/bash", username, expand(runAs), username);
-        Files.writeString(tempFile, content);
-        return tempFile.toAbsolutePath();
-      } catch (final IOException exception) {
-        throw new RuntimeIOException(exception);
-      }
-    }
-    return null;
   }
 
   private OSSupport() {
