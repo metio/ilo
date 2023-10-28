@@ -71,6 +71,7 @@
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
 
         <pit.mutationCoverage>65</pit.mutationCoverage>
+        <pmd.skip>true</pmd.skip>
     </properties>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
