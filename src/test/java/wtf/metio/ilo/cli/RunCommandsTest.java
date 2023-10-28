@@ -175,8 +175,6 @@ class RunCommandsTest {
   @DisplayName("allow to call 'ilo <command>' with run commands")
   void runCommandsForSubCommand() {
     assertTrue(RunCommands.shouldAddRunCommands(new String[]{"shell"}));
-    assertTrue(RunCommands.shouldAddRunCommands(new String[]{"compose"}));
-    assertTrue(RunCommands.shouldAddRunCommands(new String[]{"devcontainer"}));
   }
 
 }

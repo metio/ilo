@@ -10,9 +10,6 @@ package wtf.metio.ilo;
 import picocli.AutoComplete;
 import picocli.CommandLine;
 import wtf.metio.ilo.cli.RunCommands;
-import wtf.metio.ilo.compose.ComposeCommand;
-import wtf.metio.ilo.devcontainer.DevcontainerCommand;
-import wtf.metio.ilo.devfile.DevfileCommand;
 import wtf.metio.ilo.errors.ExitCodes;
 import wtf.metio.ilo.errors.PrintingExceptionHandler;
 import wtf.metio.ilo.shell.ShellCommand;
@@ -39,9 +36,6 @@ import java.util.stream.Stream;
     commandListHeading = "%nCommands:%n",
     subcommands = {
         ShellCommand.class,
-        ComposeCommand.class,
-        DevcontainerCommand.class,
-        DevfileCommand.class,
         AutoComplete.GenerateCompletion.class
     },
     showDefaultValues = true

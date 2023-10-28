@@ -8,16 +8,12 @@
 package wtf.metio.ilo.model;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import wtf.metio.ilo.compose.ComposeRuntime;
-import wtf.metio.ilo.errors.NoMatchingRuntimeException;
 import wtf.metio.ilo.shell.ShellRuntime;
 import wtf.metio.ilo.test.TestMethodSources;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Runtime")
 class RuntimeTest extends TestMethodSources {
@@ -27,20 +23,6 @@ class RuntimeTest extends TestMethodSources {
   @DisplayName("finds first matching shell runtime")
   void findMatchingShellRuntime(final String runtime) {
     assertNotNull(Runtime.firstMatching(runtime, ShellRuntime.values()));
-  }
-
-  @ParameterizedTest
-  @MethodSource("composeRuntimes")
-  @DisplayName("finds first matching compose runtime")
-  void findMatchingComposeRuntime(final String runtime) {
-    assertNotNull(Runtime.firstMatching(runtime, ComposeRuntime.values()));
-  }
-
-  @Test
-  @DisplayName("throws in case no match was found")
-  void throwsForUnmatched() {
-    assertThrows(NoMatchingRuntimeException.class,
-        () -> Runtime.firstMatching("not-found", ComposeRuntime.values()));
   }
 
 }

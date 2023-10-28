@@ -10,9 +10,6 @@ package wtf.metio.ilo.acceptance;
 import org.junit.jupiter.api.BeforeEach;
 import picocli.CommandLine;
 import wtf.metio.ilo.Ilo;
-import wtf.metio.ilo.compose.ComposeCommand;
-import wtf.metio.ilo.devcontainer.DevcontainerCommand;
-import wtf.metio.ilo.devfile.DevfileCommand;
 import wtf.metio.ilo.shell.ShellCommand;
 import wtf.metio.ilo.test.TestMethodSources;
 
@@ -35,24 +32,6 @@ public abstract class CLI_TCK extends TestMethodSources {
     final var parseResult = cmd.parseArgs(args);
     final var subcommand = parseResult.subcommand();
     return (ShellCommand) subcommand.commandSpec().userObject();
-  }
-
-  protected final ComposeCommand parseComposeCommand(final String... args) {
-    final var parseResult = cmd.parseArgs(args);
-    final var subcommand = parseResult.subcommand();
-    return (ComposeCommand) subcommand.commandSpec().userObject();
-  }
-
-  protected final DevcontainerCommand parseDevcontainerCommand(final String... args) {
-    final var parseResult = cmd.parseArgs(args);
-    final var subcommand = parseResult.subcommand();
-    return (DevcontainerCommand) subcommand.commandSpec().userObject();
-  }
-
-  protected final DevfileCommand parseDevfileCommand(final String... args) {
-    final var parseResult = cmd.parseArgs(args);
-    final var subcommand = parseResult.subcommand();
-    return (DevfileCommand) subcommand.commandSpec().userObject();
   }
 
 }

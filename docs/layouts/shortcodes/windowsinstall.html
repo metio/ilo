@@ -13,6 +13,6 @@
 <span class="gp">$</span> Invoke-RestMethod -Uri https://github.com/metio/ilo/releases/download/{{ getenv "ILO_RELEASE" }}/ilo-{{ getenv "ILO_RELEASE" }}-windows.zip -OutFile "ilo.zip"
 <span class="gp">$</span> Expand-Archive -Path "ilo.zip" -DestinationPath "."
 <span class="gp">$</span> Copy-Item -Path "ilo-{{ getenv "ILO_RELEASE" }}\ilo.exe" -Destination "$env:USERPROFILE\bin\ilo.exe"
-<span class="gp">$</span> Remote-Item -Path "ilo.zip"
+<span class="gp">$</span> Remove-Item -Path "ilo.zip"
 </code></pre>
 </div>
