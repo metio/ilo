@@ -54,17 +54,11 @@ abstract class DockerLike implements ShellCLI {
         .orElse(currentDir);
     final var projectDir = maybe(options.mountProjectDir,
         "--volume", currentDir + ":" + workingDir + ":z");
-    final var user = maybe(Strings.isNotBlank(options.runAs),
-        "--user", OSSupport.expand(options.runAs));
-    final var passwd = maybe(Strings.isNotBlank(options.runAs),
-        "--volume", OSSupport.passwdFile(options.runAs) + ":/etc/passwd");
     return flatten(
         of(name()),
         fromList(OSSupport.expand(options.runtimeOptions)),
         of("run", "--rm"),
         fromList(OSSupport.expand(options.runtimeRunOptions)),
-        user,
-        passwd,
         projectDir,
         of("--workdir", workingDir),
         maybe(options.interactive, "--interactive", "--tty"),

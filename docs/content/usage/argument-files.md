@@ -45,13 +45,13 @@ $ ilo @some/more/of/your-arguments
 
 ```console
 # quote the entire option
-"--run-as=$(id -u):$(id -g)"
+"--runtime-option=some option here"
 
 # quote the value
---run-as "$(id -u):$(id -g)"
+--runtime-option "some option here"
 
 # THIS WON'T WORK
---run-as="$(id -u):$(id -g)"
+--runtime-option="some option here"
 ```
 
 You can use multiple arguments files which are evaluated in-order, e.g like this:

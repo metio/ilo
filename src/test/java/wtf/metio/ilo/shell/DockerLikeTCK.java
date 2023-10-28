@@ -146,20 +146,4 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     assertEquals(String.format("%s run --rm --workdir %s --env KEY=value --env OTHER=value example:test", name(), options.workingDir), String.join(" ", arguments));
   }
 
-  @Test
-  @DisplayName("runs as specific user")
-  void runAs() {
-    final var options = new ShellOptions();
-    options.missingVolumes = ShellVolumeBehavior.CREATE;
-    options.image = "example:test";
-    options.runAs = "1234:5678";
-    final var arguments = tool().runArguments(options);
-    final var commandLine = String.join(" ", arguments);
-    assertAll("command line",
-        () -> assertTrue(commandLine.startsWith(String.format("%s run --rm --user 1234:5678", name())), "parameters"),
-        () -> assertTrue(commandLine.contains("example:test"), "image missing"),
-        () -> assertTrue(commandLine.contains("ilo"), "ilo"),
-        () -> assertTrue(commandLine.contains(".passwd"), "passwd"));
-  }
-
 }
