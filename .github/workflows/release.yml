@@ -204,11 +204,9 @@ jobs:
           delete-branch: true
       - name: Enable Pull Request Automerge
         if: needs.prepare.outputs.commit_count > 0 && steps.cpr.outputs.pull-request-operation == 'created'
-        uses: peter-evans/enable-pull-request-automerge@v2
-        with:
-          token: ${{ secrets.PAT }}
-          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-          merge-method: rebase
+        run: gh pr merge --auto --rebase "${{ steps.cpr.outputs.pull-request-number }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
   announce:
     name: Release Announcement
     needs: [prepare, packages]
