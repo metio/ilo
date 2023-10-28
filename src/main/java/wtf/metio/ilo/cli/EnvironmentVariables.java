@@ -27,11 +27,4 @@ public enum EnvironmentVariables {
    */
   ILO_SHELL_RUNTIME,
 
-  /**
-   * The runtime to use for 'ilo compose'. Can be overwritten with the '--runtime' flag.
-   *
-   * @see wtf.metio.ilo.compose.ComposeOptions#runtime
-   */
-  ILO_COMPOSE_RUNTIME
-
 }

@@ -29,13 +29,6 @@ class HelpAcceptanceTest extends CLI_TCK {
     verifyHelp("shell", flag);
   }
 
-  @DisplayName("compose help")
-  @ParameterizedTest
-  @ValueSource(strings = {"-h", "--help"})
-  void shouldHaveHelpForCompose(final String flag) {
-    verifyHelp("compose", flag);
-  }
-
   private void verifyHelp(final String... flags) {
     final var exitCode = cmd.execute(flags);
     assertAll("help",

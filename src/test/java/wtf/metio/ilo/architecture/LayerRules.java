@@ -21,7 +21,7 @@ public final class LayerRules {
       .consideringAllDependencies()
       .withOptionalLayers(true)
       .layer("CLI").definedBy("wtf.metio.ilo.cli..")
-      .layer("Commands").definedBy("wtf.metio.ilo.compose..", "wtf.metio.ilo.devcontainer..", "wtf.metio.ilo.devfile..", "wtf.metio.ilo.shell..")
+      .layer("Commands").definedBy("wtf.metio.ilo.shell..")
       .layer("Errors").definedBy("wtf.metio.ilo.errors..")
       .layer("Models").definedBy("wtf.metio.ilo.model..")
       .layer("Tools").definedBy("wtf.metio.ilo.tools..")

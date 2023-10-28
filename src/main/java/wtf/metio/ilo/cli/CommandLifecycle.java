@@ -16,7 +16,7 @@ import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 /**
- * Utility class that encapsulates the common command lifecycle for 'ilo shell' and 'ilo compose'.
+ * Utility class that encapsulates the common command lifecycle for 'ilo shell'.
  */
 public final class CommandLifecycle {
 

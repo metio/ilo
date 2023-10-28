@@ -7,7 +7,6 @@
 
 package wtf.metio.ilo.test;
 
-import wtf.metio.ilo.compose.ComposeRuntime;
 import wtf.metio.ilo.shell.ShellRuntime;
 
 import java.util.Arrays;
@@ -25,16 +24,6 @@ public abstract class TestMethodSources {
 
   private static Stream<String> dockerLikeRuntimes() {
     return Stream.of(ShellRuntime.DOCKER, ShellRuntime.PODMAN, ShellRuntime.NERDCTL)
-        .flatMap(runtime -> Arrays.stream(runtime.aliases()));
-  }
-
-  private static Stream<String> composeRuntimes() {
-    return Arrays.stream(ComposeRuntime.values())
-        .flatMap(runtime -> Arrays.stream(runtime.aliases()));
-  }
-
-  private static Stream<String> dockerComposeLikeRuntimes() {
-    return Stream.of(ComposeRuntime.DOCKER_COMPOSE, ComposeRuntime.PODMAN_COMPOSE, ComposeRuntime.DOCKER)
         .flatMap(runtime -> Arrays.stream(runtime.aliases()));
   }
 

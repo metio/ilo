@@ -32,7 +32,7 @@ class ShellRuntimeConverterTest {
       "nerdCTL",
       "n"
   })
-  void shouldConvertStringToComposeRuntime(final String input) {
+  void shouldConvertStringToShellRuntime(final String input) {
     // given
     final var converter = new ShellRuntimeConverter();
 
@@ -40,7 +40,7 @@ class ShellRuntimeConverterTest {
     final var runtime = converter.convert(input);
 
     // then
-    assertNotNull(runtime, () -> input);
+    assertNotNull(runtime, input);
   }
 
 }
