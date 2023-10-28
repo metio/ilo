@@ -66,7 +66,7 @@
     <!-- https://maven.apache.org/pom.html#Properties -->
     <properties>
         <revision>0.0.0-SNAPSHOT</revision>
-        <version.jdk>17</version.jdk>
+        <version.jdk>21</version.jdk>
         <skipNativeBuild>true</skipNativeBuild>
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
 
