@@ -8,7 +8,7 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - id: graal
         name: Set up GraalVM
         uses: graalvm/setup-graalvm@v1
