@@ -16,7 +16,7 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - id: commits
@@ -49,7 +49,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - id: graal
         name: GraalVM Setup
         if: needs.prepare.outputs.commit_count > 0
@@ -130,7 +130,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - id: download
@@ -171,7 +171,7 @@ jobs:
       - id: checkout
         name: Clone Git Repository
         if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - id: update-copr-version
         name: Update COPR Version
         if: needs.prepare.outputs.commit_count > 0
