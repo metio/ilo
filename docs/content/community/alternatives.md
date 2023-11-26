@@ -44,7 +44,7 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [buckaroo](https://github.com/LoopPerfect/buckaroo): The decentralized package manager for C++ and friends.
 - [repeatr](https://github.com/polydawn/repeatr): Repeatr is a tool for running processes repeatedly. Repeatr is designed to make task definition precise, environment setup portable, and results reproducible.
 - [lando](https://github.com/lando/lando): The local development and DevOps tool trusted by professional developers across the galaxy.
-- [ddev](https://github.com/drud/ddev): ddev is an open source tool that makes it simple to get local PHP development environments up and running in minutes.
+- [ddev](https://github.com/drud/ddev): DDEV is an open source tool for running local web development environments for PHP, Python and Node.js, ready in minutes.
 - [tlbx](https://gitlab.com/uppercat/tlbx): tlbx is a tool that facilitates creating and using mutable, persistent Linux container environments.
 - [mach-nix](https://github.com/DavHau/mach-nix): Mach-nix makes it easy to create and share reproducible python environments.
 - [renv](https://rstudio.github.io/renv/): The renv package helps you create reproducible environments for your R projects.
@@ -91,5 +91,10 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [devenv](https://devenv.sh/): Fast, Declarative, Reproducible, and Composable Developer Environments.
 - [asaman](https://github.com/kushaldas/asaman): This is a tool to build reproducible wheels for your Python project or for all of your dependencies.
 - [odo](https://odo.dev/): Fast iterative application development deployed immediately to your kubernetes cluster.
-- [rde](https://sr.ht/~abcdw/rde/): Tools for managing reproducible development environments w/ guix
-- [envd](https://github.com/tensorchord/envd): Reproducible development environment for AI/ML
+- [rde](https://sr.ht/~abcdw/rde/): Tools for managing reproducible development environments w/ guix.
+- [envd](https://github.com/tensorchord/envd): Reproducible development environment for AI/ML.
+- [pipx](https://github.com/pypa/pipx): Install and Run Python Applications in Isolated Environments.
+- [devpod](https://devpod.sh/): DevPod is a client-only tool to create reproducible developer environments based on a devcontainer.json on any backend.
+- [floki](https://metaswitch.github.io/floki/): floki aims to provide reproducible and shareable build tooling.
+- [hermit](https://github.com/cashapp/hermit): Hermit manages isolated, self-bootstrapping sets of tools in software projects.
+- [devcontainers/cli](https://github.com/devcontainers/cli): A reference implementation for the specification that can create and configure a dev container from a devcontainer.json.
