@@ -2,8 +2,6 @@ name: Verify Commits
 on:
   pull_request:
     branches: [ main ]
-  push:
-    branches: [ main ]
 jobs:
   verify:
     name: Build on ${{ matrix.os }}
