@@ -19,7 +19,7 @@
     <parent>
         <groupId>wtf.metio.maven.parents</groupId>
         <artifactId>maven-parents-java-stable</artifactId>
-        <version>2023.10.27</version>
+        <version>2023.11.24</version>
     </parent>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -72,6 +72,7 @@
 
         <pit.mutationCoverage>65</pit.mutationCoverage>
         <pmd.skip>true</pmd.skip>
+        <pgp.skip>true</pgp.skip>
     </properties>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -368,6 +369,25 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.simplify4u.plugins</groupId>
+                        <artifactId>sign-maven-plugin</artifactId>
+                        <version>1.0.1</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>native-linux</id>
             <activation>
