@@ -15,14 +15,14 @@ The following examples show how `ilo shell` can be used.
 
 ## Cargo Projects
 
-[Cargo](https://doc.rust-lang.org/cargo/) caches all downloaded dependencies in your local `~/.cargo` directory.
+[Cargo](https://doc.rust-lang.org/cargo/) caches all downloaded dependencies in your local `~/.cargo/registry` directory.
 
 In order to re-use already downloaded dependencies inside the container, specify a `--volumne` like this:
 
 ```console
 # Cargo project that mounts local .cargo folder
 $ ilo shell \
-    --volume ${HOME}/.cargo:/usr/local/cargo:z \
+    --volume ${HOME}/.cargo/registry:/usr/local/cargo/registry:z \
     rust:latest
 ```
 
