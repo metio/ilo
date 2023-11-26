@@ -98,3 +98,4 @@ It's highly likely that `ilo` does not provide the functionality you are looking
 - [floki](https://metaswitch.github.io/floki/): floki aims to provide reproducible and shareable build tooling.
 - [hermit](https://github.com/cashapp/hermit): Hermit manages isolated, self-bootstrapping sets of tools in software projects.
 - [devcontainers/cli](https://github.com/devcontainers/cli): A reference implementation for the specification that can create and configure a dev container from a devcontainer.json.
+- [toolship](https://github.com/yapret/toolship): toolship is a small framework to containerize dev tools.
