@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: The ilo Authors
+# SPDX-License-Identifier: 0BSD
+
 name: Verify Commits
 on:
   pull_request:

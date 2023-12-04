@@ -1,0 +1,24 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ilo
+Upstream-Contact: Sebastian Hoß <seb@hoß.de>
+Source: https://github.com/metio/ilo
+
+Files: dev/*
+Copyright: The ilo Authors
+License: 0BSD
+
+Files: docs/*
+Copyright: The ilo Authors
+License: 0BSD
+
+Files: .github/*
+Copyright: The ilo Authors
+License: 0BSD
+
+Files: .idea/*
+Copyright: The ilo Authors
+License: 0BSD
+
+Files: src/test/resources/*
+Copyright: The ilo Authors
+License: 0BSD
