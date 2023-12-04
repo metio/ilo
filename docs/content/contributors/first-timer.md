@@ -10,7 +10,7 @@ tags:
 - help
 ---
 
-`ilo` is an open source product released under the [CC0 1.0 Universal license](https://creativecommons.org/publicdomain/zero/1.0/). In order to make sure that each contribution is correctly attributed and licensed, the Developer Certificate of Origin (DCO) **MUST** be signed by each contributor with their first commit. In order to do so, simply add a `Signed-off-by` statement at the end of your commit yourself or use `git commit -s` to do that automatically. The DCO can be seen below or at https://developercertificate.org/
+`ilo` is an open source product released under the [0BSD license](https://spdx.org/licenses/0BSD.html). In order to make sure that each contribution is correctly attributed and licensed, the Developer Certificate of Origin (DCO) **MUST** be signed by each contributor with their first commit. In order to do so, simply add a `Signed-off-by` statement at the end of your commit yourself or use `git commit -s` to do that automatically. The DCO can be seen below or at https://developercertificate.org/
 
 ```
 Developer's Certificate of Origin 1.1
