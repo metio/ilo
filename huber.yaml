@@ -8,11 +8,11 @@
   targets:
     - LinuxAmd64:
         artifact_templates:
-          - "ilo-{version}-linux.zip"
+          - "ilo-{version}-linux.tar.gz"
     - MacOS:
         artifact_templates:
-          - "ilo-{version}-mac.zip"
+          - "ilo-{version}-mac.tar.gz"
     - Windows:
         artifact_templates:
-          - "ilo-{version}-windows.zip"
+          - "ilo-{version}-windows.tar.gz"
   detail: ~

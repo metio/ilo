@@ -37,8 +37,6 @@ jobs:
   build:
     name: Build on ${{ matrix.os }}
     needs: prepare
-    outputs:
-      mac_sha256: ${{ steps.mac-checksum.outputs.sha256 }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -89,10 +87,6 @@ jobs:
           --define sign.keyPass=${{ secrets.GPG_SECRET_KEY_PASSWORD }}
           --define project.build.outputTimestamp=${{ needs.prepare.outputs.build_timestamp }}
           verify
-      - id: mac-checksum
-        name: Capture MacOS SHA256 Checksum
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
-        run: echo "sha256=$(cat ./target/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha256)" >> $GITHUB_OUTPUT
       - id: upload-java
         name: Upload JVM Artifact
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
@@ -152,67 +146,18 @@ jobs:
           prerelease: false
           generate_release_notes: true
           files: |
-            artifacts/jvm/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip
-            artifacts/jvm/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.asc
-            artifacts/jvm/ilo-${{ needs.prepare.outputs.release_version }}-jvm.zip.sha512
-            artifacts/linux/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip
-            artifacts/linux/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.asc
-            artifacts/linux/ilo-${{ needs.prepare.outputs.release_version }}-linux.zip.sha512
-            artifacts/mac/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip
-            artifacts/mac/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.asc
-            artifacts/mac/ilo-${{ needs.prepare.outputs.release_version }}-mac.zip.sha512
-            artifacts/windows/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip
-            artifacts/windows/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.asc
-            artifacts/windows/ilo-${{ needs.prepare.outputs.release_version }}-windows.zip.sha512
-  packages:
-    name: Update Package Managers
-    needs: [prepare, build, release]
-    runs-on: ubuntu-latest
-    steps:
-      - id: checkout
-        name: Clone Git Repository
-        if: needs.prepare.outputs.commit_count > 0
-        uses: actions/checkout@v4
-      - id: update-copr-version
-        name: Update COPR Version
-        if: needs.prepare.outputs.commit_count > 0
-        run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' build/copr/ilo.spec
-      - id: update-homebrew-version
-        name: Update Homebrew Version
-        if: needs.prepare.outputs.commit_count > 0
-        run: sed -i -- 's/${{ needs.prepare.outputs.previous_version }}/${{ needs.prepare.outputs.release_version }}/g' HomebrewFormula/ilo.rb
-      - id: update-homebrew-checksum
-        name: Update Homebrew Checksum
-        if: needs.prepare.outputs.commit_count > 0
-        run: sed -i -- 's/sha256 \".*\"/sha256 \"${{ needs.build.outputs.mac_sha256 }}\"/g' HomebrewFormula/ilo.rb
-      - id: cpr
-        name: Create Pull Request
-        if: needs.prepare.outputs.commit_count > 0
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.PAT }}
-          commit-message: Update package-manager infos for latest release
-          committer: GitHub <noreply@github.com>
-          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
-          title: Update package-manager infos for latest release
-          body: |
-            - COPR: `build/copr/ilo.spec`
-            - Homebrew: `HomebrewFormula/ilo.rb`
-          assignees: sebhoss
-          draft: false
-          base: main
-          branch: update-package-manager
-          delete-branch: true
-      - name: Enable Pull Request Automerge
-        if: needs.prepare.outputs.commit_count > 0 && steps.cpr.outputs.pull-request-operation == 'created'
-        run: gh pr merge --auto --rebase "${{ steps.cpr.outputs.pull-request-number }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-  announce:
-    name: Release Announcement
-    needs: [prepare, packages]
-    runs-on: ubuntu-latest
-    steps:
+            artifacts/jvm/ilo-${{ needs.prepare.outputs.release_version }}-jvm.tar.gz
+            artifacts/jvm/ilo-${{ needs.prepare.outputs.release_version }}-jvm.tar.gz.asc
+            artifacts/jvm/ilo-${{ needs.prepare.outputs.release_version }}-jvm.tar.gz.sha512
+            artifacts/linux/ilo-${{ needs.prepare.outputs.release_version }}-linux.tar.gz
+            artifacts/linux/ilo-${{ needs.prepare.outputs.release_version }}-linux.tar.gz.asc
+            artifacts/linux/ilo-${{ needs.prepare.outputs.release_version }}-linux.tar.gz.sha512
+            artifacts/mac/ilo-${{ needs.prepare.outputs.release_version }}-mac.tar.gz
+            artifacts/mac/ilo-${{ needs.prepare.outputs.release_version }}-mac.tar.gz.asc
+            artifacts/mac/ilo-${{ needs.prepare.outputs.release_version }}-mac.tar.gz.sha512
+            artifacts/windows/ilo-${{ needs.prepare.outputs.release_version }}-windows.tar.gz
+            artifacts/windows/ilo-${{ needs.prepare.outputs.release_version }}-windows.tar.gz.asc
+            artifacts/windows/ilo-${{ needs.prepare.outputs.release_version }}-windows.tar.gz.sha512
       - id: email
         name: Send Mail
         if: needs.prepare.outputs.commit_count > 0

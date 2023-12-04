@@ -12,7 +12,7 @@
     <includeBaseDirectory>true</includeBaseDirectory>
 
     <formats>
-        <format>zip</format>
+        <format>tar.gz</format>
     </formats>
 
     <fileSets>
@@ -24,7 +24,6 @@
             <directory>${project.basedir}</directory>
             <outputDirectory/>
             <includes>
-                <include>README.md</include>
                 <include>LICENSE</include>
             </includes>
         </fileSet>
