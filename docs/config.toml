@@ -15,7 +15,7 @@ enableInlineShortcodes = true
   term = ["HTML", "RSS", "ATOM"]
 
 [params]
-  mainSections = ["community", "compose", "contributors", "devcontainer", "integration", "metrics", "shell", "usage"]
+  mainSections = ["community", "contributors", "integration", "metrics", "shell", "usage"]
   author = "metio.wtf"
   email = "https://metio.groups.io/g/main/topics"
   matrix = "#talk.metio:matrix.org"

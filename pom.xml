@@ -280,9 +280,6 @@
                     <arguments>
                         <argument>--outdir=${project.build.directory}/generated-picocli-docs</argument>
                         <argument>wtf.metio.ilo.shell.ShellCommand</argument>
-                        <argument>wtf.metio.ilo.compose.ComposeCommand</argument>
-                        <argument>wtf.metio.ilo.devcontainer.DevcontainerCommand</argument>
-                        <argument>wtf.metio.ilo.devfile.DevfileCommand</argument>
                     </arguments>
                 </configuration>
                 <dependencies>

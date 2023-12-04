@@ -45,7 +45,7 @@ public enum ShellRuntime implements Runtime<ShellCLI> {
    * Select a runtime for 'ilo shell'.
    *
    * @param preferred The runtime to force, or null for auto-selection.
-   * @return The selected compose runtime.
+   * @return The selected shell runtime.
    */
   public static ShellCLI autoSelect(final ShellRuntime preferred) {
     return Optional.ofNullable(preferred)

@@ -60,7 +60,7 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.image = "example:test";
     options.workingDir = "some/dir";
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --workdir %s example:test", name(), options.workingDir), String.join(" ", arguments));
+    assertEquals(String.format("%s run --rm --workdir %s --env ILO_CONTAINER=true example:test", name(), options.workingDir), String.join(" ", arguments));
   }
 
   @Test
@@ -83,7 +83,7 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.interactive = true;
     options.workingDir = "some/dir";
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --workdir %s --interactive --tty example:test", name(), options.workingDir), String.join(" ", arguments));
+    assertEquals(String.format("%s run --rm --workdir %s --interactive --tty --env ILO_CONTAINER=true example:test", name(), options.workingDir), String.join(" ", arguments));
   }
 
   @Test
@@ -95,7 +95,7 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.hostname = "some-test";
     options.workingDir = "some/dir";
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --workdir %s --hostname some-test example:test", name(), options.workingDir), String.join(" ", arguments));
+    assertEquals(String.format("%s run --rm --workdir %s --env ILO_CONTAINER=true --hostname some-test example:test", name(), options.workingDir), String.join(" ", arguments));
   }
 
   @Test
@@ -106,7 +106,7 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.commands = List.of("example:test", "/bin/bash", "-c", "whoami");
     options.workingDir = "some/dir";
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --workdir %s example:test /bin/bash -c whoami", name(), options.workingDir), String.join(" ", arguments));
+    assertEquals(String.format("%s run --rm --workdir %s --env ILO_CONTAINER=true example:test /bin/bash -c whoami", name(), options.workingDir), String.join(" ", arguments));
   }
 
   @Test
@@ -129,7 +129,7 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.workingDir = "some/dir";
     options.commands = List.of("--volume=/abc/123:/abc:z", "example:test", "/bin/bash", "-c", "whoami");
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --workdir %s --volume=/abc/123:/abc:z example:test /bin/bash -c whoami", name(), options.workingDir), String.join(" ", arguments));
+    assertEquals(String.format("%s run --rm --workdir %s --env ILO_CONTAINER=true --volume=/abc/123:/abc:z example:test /bin/bash -c whoami", name(), options.workingDir), String.join(" ", arguments));
   }
 
   @Test
@@ -141,7 +141,7 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.variables = List.of("KEY=value", "OTHER=value");
     options.workingDir = "some/dir";
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --workdir %s --env KEY=value --env OTHER=value example:test", name(), options.workingDir), String.join(" ", arguments));
+    assertEquals(String.format("%s run --rm --workdir %s --env ILO_CONTAINER=true --env KEY=value --env OTHER=value example:test", name(), options.workingDir), String.join(" ", arguments));
   }
 
 }
