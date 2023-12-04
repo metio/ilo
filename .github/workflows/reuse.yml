@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: The ilo Authors
+# SPDX-License-Identifier: 0BSD
+
+name: REUSE compliance
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  reuse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v2

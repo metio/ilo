@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: The ilo Authors
+# SPDX-License-Identifier: 0BSD
+
 MAKEFLAGS += --warn-undefined-variables
 SHELL = /bin/bash
 .SHELLFLAGS := -eu -o pipefail -c

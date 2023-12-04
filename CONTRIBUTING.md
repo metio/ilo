@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: The ilo Authors
+SPDX-License-Identifier: 0BSD
+ -->
+
 # Contributor Guide
 
 Thank you so much for improving `ilo`!

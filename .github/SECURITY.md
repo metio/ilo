@@ -1,3 +1,8 @@
+<!--
+SPDX-FileCopyrightText: The ilo Authors
+SPDX-License-Identifier: 0BSD
+ -->
+
 # Security Policy
 
 `ilo` is using a continuous delivery mode and therefore only supports the latest released version.

@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: The ilo Authors
+ * SPDX-License-Identifier: 0BSD
+ */
+
 module wtf.metio.ilo {
 
   requires info.picocli;
