@@ -60,6 +60,7 @@ abstract class DockerLike implements ShellCLI {
         projectDir,
         of("--workdir", workingDir),
         maybe(options.interactive, "--interactive", "--tty"),
+        of("--env", "ILO_CONTAINER=true"),
         withPrefix("--env", OSSupport.expand(options.variables)),
         optional("--hostname", OSSupport.expand(options.hostname)),
         withPrefix("--publish", OSSupport.expand(options.ports)),

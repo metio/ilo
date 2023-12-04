@@ -46,7 +46,7 @@ class ShellCommandTest extends TestMethodSources {
     assertCommandLine(
         List.of(),
         List.of(),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
         List.of());
   }
 
@@ -59,7 +59,7 @@ class ShellCommandTest extends TestMethodSources {
     assertCommandLine(
         List.of(tool, "pull", options.image),
         List.of(),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
         List.of());
   }
 
@@ -72,7 +72,7 @@ class ShellCommandTest extends TestMethodSources {
     assertCommandLine(
         List.of(),
         List.of(tool, "build", "--file", options.containerfile, "--tag", options.image),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
         List.of());
   }
 
@@ -85,7 +85,7 @@ class ShellCommandTest extends TestMethodSources {
     assertCommandLine(
         List.of(),
         List.of(),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
         List.of(tool, "rmi", options.image));
   }
 
@@ -101,7 +101,7 @@ class ShellCommandTest extends TestMethodSources {
     assertCommandLine(
         List.of(),
         List.of(),
-        List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:z", "--workdir", "/some/folder", "--interactive", "--tty", options.image),
+        List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:z", "--workdir", "/some/folder", "--interactive", "--tty", "--env", "ILO_CONTAINER=true", options.image),
         List.of());
   }
 
@@ -114,7 +114,7 @@ class ShellCommandTest extends TestMethodSources {
     assertCommandLine(
         List.of(),
         List.of(),
-        List.of(tool, "--remote", "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of(tool, "--remote", "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
         List.of());
   }
 
@@ -128,7 +128,7 @@ class ShellCommandTest extends TestMethodSources {
     assertCommandLine(
         List.of(tool, "pull", "--all-tags", options.image),
         List.of(),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
         List.of());
   }
 
@@ -142,7 +142,7 @@ class ShellCommandTest extends TestMethodSources {
     assertCommandLine(
         List.of(),
         List.of(tool, "build", "--file", options.containerfile, "--squash-all", "--tag", options.image),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
         List.of());
   }
 
@@ -155,7 +155,7 @@ class ShellCommandTest extends TestMethodSources {
     assertCommandLine(
         List.of(),
         List.of(),
-        List.of(tool, "run", "--rm", "--quiet", "--workdir", options.workingDir, options.image),
+        List.of(tool, "run", "--rm", "--quiet", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
         List.of());
   }
 
@@ -169,7 +169,7 @@ class ShellCommandTest extends TestMethodSources {
     assertCommandLine(
         List.of(),
         List.of(),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image),
+        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
         List.of(tool, "rmi", "--force", options.image));
   }
 
@@ -216,7 +216,7 @@ class ShellCommandTest extends TestMethodSources {
         () -> assertEquals(1, exitCode, "exitCode"),
         () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
         () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-        () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image), executor.runArguments(), "runArguments"),
+        () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image), executor.runArguments(), "runArguments"),
         () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
   }
 
@@ -231,7 +231,7 @@ class ShellCommandTest extends TestMethodSources {
         () -> assertEquals(1, exitCode, "exitCode"),
         () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
         () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-        () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, options.image), executor.runArguments(), "runArguments"),
+        () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image), executor.runArguments(), "runArguments"),
         () -> assertIterableEquals(List.of(), executor.cleanupArguments(), "cleanupArguments"));
   }
 
