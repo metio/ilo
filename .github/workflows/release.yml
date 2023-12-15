@@ -93,28 +93,28 @@ jobs:
       - id: upload-java
         name: Upload JVM Artifact
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: jvm
           path: ./target/ilo-*-jvm*
       - id: upload-linux
         name: Upload Linux Artifact
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux
           path: ./target/ilo-*-linux*
       - id: upload-mac
         name: Upload Mac Artifact
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mac
           path: ./target/ilo-*-mac*
       - id: upload-windows
         name: Upload Windows Artifact
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows
           path: ./target/ilo-*-windows*
