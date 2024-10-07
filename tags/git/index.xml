@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Git on ilo</title><link>https://ilo.projects.metio.wtf/tags/git/</link><description>Recent content in Git on ilo</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 13 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://ilo.projects.metio.wtf/tags/git/index.xml" rel="self" type="application/rss+xml"/><item><title>Git Mirrors</title><link>https://ilo.projects.metio.wtf/contributors/git-mirrors/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/contributors/git-mirrors/</guid><description>&lt;p>&lt;code>ilo&lt;/code> is using &lt;a href="https://github.com/metio/ilo">GitHub&lt;/a> as its primary source/issue/build environment, however its code is available in other git repositories as well in order to deal with &lt;a href="https://www.githubstatus.com/">GitHub outages&lt;/a>.&lt;/p>
+&lt;h2 id="available-mirrors">Available Mirrors&lt;/h2>
+&lt;p>Mirrors are updated automatically as explained in this &lt;a href="https://seb.people.metio.wtf/topic/gitlab-the-git-distributor/">blog post&lt;/a>.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/metio/ilo">https://github.com/metio/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://gitlab.com/metio.wtf/ilo">https://gitlab.com/metio.wtf/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://codeberg.org/metio.wtf/ilo">https://codeberg.org/metio.wtf/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://bitbucket.org/metio-wtf/ilo">https://bitbucket.org/metio-wtf/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://repo.or.cz/ilo.git">https://repo.or.cz/ilo.git&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Shell on ilo</title><link>https://ilo.projects.metio.wtf/categories/shell/</link><description>Recent content in Shell on ilo</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 13 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://ilo.projects.metio.wtf/categories/shell/index.xml" rel="self" type="application/rss+xml"/><item><title>Examples</title><link>https://ilo.projects.metio.wtf/shell/examples/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/shell/examples/</guid><description>&lt;p>The following examples show how &lt;code>ilo shell&lt;/code> can be used.&lt;/p>
+&lt;h2 id="cargo-projects">Cargo Projects&lt;/h2>
+&lt;p>&lt;a href="https://doc.rust-lang.org/cargo/">Cargo&lt;/a> caches all downloaded dependencies in your local &lt;code>~/.cargo/registry&lt;/code> directory.&lt;/p>
+&lt;p>In order to re-use already downloaded dependencies inside the container, specify a &lt;code>--volumne&lt;/code> like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">#&lt;/span> Cargo project that mounts &lt;span class="nb">local&lt;/span> .cargo folder
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span>&lt;span class="go"> --volume ${HOME}/.cargo/registry:/usr/local/cargo/registry:z \
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go"> rust:latest
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>Note&lt;/strong>: The container path &lt;code>/usr/local/cargo&lt;/code> is specified in the image used in this example (&lt;code>rust:latest&lt;/code>). Adjust this value according to the image you are actually using in your project.&lt;/p></description></item><item><title>Options</title><link>https://ilo.projects.metio.wtf/shell/options/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/shell/options/</guid><description>&lt;p>The &lt;code>ilo shell&lt;/code> command can be configured with the following command line options. From your terminal, use &lt;code>ilo shell --help&lt;/code> to get a list of all options, and their default values.&lt;/p>
+&lt;h2 id="--context">&lt;code>--context&lt;/code>&lt;/h2>
+&lt;p>The &lt;code>--context&lt;/code> option allows to specify the context when building an image with &lt;code>--containerfile&lt;/code>/&lt;code>--dockerfile&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">#&lt;/span> specify custom context
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell --context ./local/folder
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="gp">#&lt;/span> &lt;span class="k">do&lt;/span> not specify context
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>By default, &lt;code>--context&lt;/code> is set to &lt;code>.&lt;/code> (the current directory).&lt;/p></description></item><item><title>Runtimes</title><link>https://ilo.projects.metio.wtf/shell/runtimes/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/shell/runtimes/</guid><description>&lt;p>&lt;code>ilo shell&lt;/code> by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the &lt;code>--runtime&lt;/code> flag or set the &lt;code>ILO_SHELL_RUNTIME&lt;/code> environment variable in your system. The &lt;code>--runtime&lt;/code> flag overwrites the environment variable.&lt;/p>
+&lt;h2 id="docker">Docker&lt;/h2>
+&lt;p>Force &lt;code>ilo&lt;/code> to use &lt;a href="https://www.docker.com/">docker&lt;/a> like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell --runtime docker
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="gp">#&lt;/span> use &lt;span class="nb">alias&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell --runtime d
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="gp">#&lt;/span> use env variable
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> &lt;span class="nv">ILO_SHELL_RUNTIME&lt;/span>&lt;span class="o">=&lt;/span>docker ilo shell
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="nerdctl">nerdctl&lt;/h2>
+&lt;p>Force &lt;code>ilo&lt;/code> to use &lt;a href="https://github.com/containerd/nerdctl">nerdctl&lt;/a> like this:&lt;/p></description></item></channel></rss>

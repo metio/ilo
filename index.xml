@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>reproducible build environments on ilo</title><link>https://ilo.projects.metio.wtf/</link><description>Recent content in reproducible build environments on ilo</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 13 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://ilo.projects.metio.wtf/index.xml" rel="self" type="application/rss+xml"/><item><title>Alternatives</title><link>https://ilo.projects.metio.wtf/community/alternatives/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/community/alternatives/</guid><description>&lt;p>It&amp;rsquo;s highly likely that &lt;code>ilo&lt;/code> does not provide the functionality you are looking for. Here is a list of alternatives that might cover your needs:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://containertoolbx.org/">toolbx&lt;/a>: Toolbx is a tool for Linux operating systems, which allows the use of containerized command line environments.&lt;/li>
+&lt;li>&lt;a href="https://gitian.org/">gitian&lt;/a>: Gitian is a secure source-control oriented software distribution method.&lt;/li>
+&lt;li>&lt;a href="https://rbm.torproject.org/">rbm&lt;/a>: Reproducible Build Manager (rbm) is a tool that helps you create and build packages for multiple linux distributions, and automate the parts that can be automated.&lt;/li>
+&lt;li>&lt;a href="https://github.com/nerdvegas/rez">rez&lt;/a>: Rez is a cross-platform package manager with a difference.&lt;/li>
+&lt;li>&lt;a href="https://github.com/mottosso/bleeding-rez">bleeding-rez&lt;/a>: Rez is a command-line utility for Windows, Linux and MacOS, solving the problem of creating a reproducible environment for your software projects on any machine in any pre-existing environment.&lt;/li>
+&lt;li>&lt;a href="http://rbld.io/">rebuild&lt;/a>: A strategic approach to managing build and test environments for IoT and embedded development.&lt;/li>
+&lt;li>&lt;a href="https://github.com/jasonwhite/ducible">ducible&lt;/a>: This is a tool to make builds of Portable Executables (PEs) and PDBs reproducible.&lt;/li>
+&lt;li>&lt;a href="https://buildpacks.io/">buildpacks&lt;/a>: Buildpacks are pluggable, modular tools that translate source code into OCI images.&lt;/li>
+&lt;li>&lt;a href="https://nixos.org/nix/">nix&lt;/a>: Nix makes it trivial to set up and share build environments for your projects, regardless of what programming languages and tools you’re using.&lt;/li>
+&lt;li>&lt;a href="https://github.com/rosineygp/mkdkr">mkdkr&lt;/a>: Super small and powerful framework for build CI pipeline, scripted with Makefile and isolated with docker.&lt;/li>
+&lt;li>&lt;a href="https://virtualenv.pypa.io/en/stable/">virtualenv&lt;/a>: virtualenv is a tool to create isolated Python environments.&lt;/li>
+&lt;li>&lt;a href="https://github.com/Zlika/moot">moot&lt;/a>: A shell script to easily select, download and run the versions of Maven and JDK you want for your build.&lt;/li>
+&lt;li>&lt;a href="https://paketo.io/">paketo&lt;/a>: Modular Buildpacks, written in Go. Paketo Buildpacks provide language runtime support for applications. They leverage the Cloud Native Buildpacks framework to make image builds easy, performant, and secure.&lt;/li>
+&lt;li>&lt;a href="https://github.com/earthly/earthly">earthly&lt;/a>: run all your builds containerized&lt;/li>
+&lt;li>&lt;a href="https://www.gitpod.io/">gitpod&lt;/a>: Describe your dev environment as code and get fully prebuilt, ready-to-code development environments for any GitLab, GitHub, and Bitbucket project.&lt;/li>
+&lt;li>&lt;a href="https://www.vagrantup.com/">vagrant&lt;/a>: Vagrant is a tool for building and managing virtual machine environments in a single workflow.&lt;/li>
+&lt;li>&lt;a href="https://subuser.org/">subuser&lt;/a>: Subuser turns Docker containers into normal linux programs&lt;/li>
+&lt;li>&lt;a href="https://bobbuildtool.dev/">bob&lt;/a>: Bob is a functional build automation tool with an emphasis on cross compilation. It is intended for complex embedded projects and thus focuses on reproducible builds while still being nice to developers in agile environments.&lt;/li>
+&lt;li>&lt;a href="https://github.com/kudulab/dojo">dojo&lt;/a>: Containerize your development and operations environment&lt;/li>
+&lt;li>&lt;a href="https://github.com/kamilchm/go2nix">go2nix&lt;/a>: Reproducible builds and development environment for Go&lt;/li>
+&lt;li>&lt;a href="https://github.com/nixcloud/dep2nix">dep2nix&lt;/a>: dep2nix converts a Gopkgs.lock file into a deps.nix file which is understood by nixpkgs&amp;rsquo;s go abstraction thanks to go2nix effort.&lt;/li>
+&lt;li>&lt;a href="https://github.com/nix-community/vgo2nix">vgo2nix&lt;/a>: Convert go.mod files to nixpkgs buildGoPackage compatible deps.nix files&lt;/li>
+&lt;li>&lt;a href="https://mhewedy.github.io/vermin/">vermin&lt;/a>: Vermin is a smart, simple and powerful command line tool for Linux, Windows and macOS. It&amp;rsquo;s designed for developers who want a fresh VM environment with a single command.&lt;/li>
+&lt;li>&lt;a href="https://sdkman.io/">sdkman&lt;/a>: SDKMAN! is a tool for managing parallel versions of multiple Software Development Kits on most Unix based systems.&lt;/li>
+&lt;li>&lt;a href="https://github.com/shyiko/jabba">jabba&lt;/a>: Java Version Manager inspired by nvm (Node.js). Written in Go.&lt;/li>
+&lt;li>&lt;a href="https://github.com/nvm-sh/nvm">nvm&lt;/a>: nvm is a version manager for node.js, designed to be installed per-user, and invoked per-shell. nvm works on any POSIX-compliant shell (sh, dash, ksh, zsh, bash), in particular on these platforms: unix, macOS, and windows WSL.&lt;/li>
+&lt;li>&lt;a href="https://devspace.sh/">devspace&lt;/a>: DevSpace is an open-source developer tool for Kubernetes that lets you develop and deploy cloud-native software faster.&lt;/li>
+&lt;li>&lt;a href="https://github.com/rbenv/rbenv">rbenv&lt;/a>: Use rbenv to pick a Ruby version for your application and guarantee that your development environment matches production.&lt;/li>
+&lt;li>&lt;a href="https://rvm.io/">rvm&lt;/a>: RVM is a command-line tool which allows you to easily install, manage, and work with multiple ruby environments from interpreters to sets of gems.&lt;/li>
+&lt;li>&lt;a href="https://github.com/LoopPerfect/buckaroo">buckaroo&lt;/a>: The decentralized package manager for C++ and friends.&lt;/li>
+&lt;li>&lt;a href="https://github.com/polydawn/repeatr">repeatr&lt;/a>: Repeatr is a tool for running processes repeatedly. Repeatr is designed to make task definition precise, environment setup portable, and results reproducible.&lt;/li>
+&lt;li>&lt;a href="https://github.com/lando/lando">lando&lt;/a>: The local development and DevOps tool trusted by professional developers across the galaxy.&lt;/li>
+&lt;li>&lt;a href="https://github.com/drud/ddev">ddev&lt;/a>: DDEV is an open source tool for running local web development environments for PHP, Python and Node.js, ready in minutes.&lt;/li>
+&lt;li>&lt;a href="https://gitlab.com/uppercat/tlbx">tlbx&lt;/a>: tlbx is a tool that facilitates creating and using mutable, persistent Linux container environments.&lt;/li>
+&lt;li>&lt;a href="https://github.com/DavHau/mach-nix">mach-nix&lt;/a>: Mach-nix makes it easy to create and share reproducible python environments.&lt;/li>
+&lt;li>&lt;a href="https://rstudio.github.io/renv/">renv&lt;/a>: The renv package helps you create reproducible environments for your R projects.&lt;/li>
+&lt;li>&lt;a href="https://github.com/getpopper/popper">popper&lt;/a>: Popper is a tool for defining and executing container-native workflows in Docker, as well as other container engines.&lt;/li>
+&lt;li>&lt;a href="https://github.com/dbhi/qus">qus&lt;/a>: qemu-user-static (qus) is a compilation of utilities, examples and references to build and execute OCI images (aka docker images) for foreign architectures using QEMU&amp;rsquo;s user-mode emulation.&lt;/li>
+&lt;li>&lt;a href="https://github.com/cgwalters/coretoolbox">coretoolbox&lt;/a>: This is a new implementation of &lt;a href="https://github.com/debarshiray/toolbox/">https://github.com/debarshiray/toolbox/&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/garmin/pyrex">pyrex&lt;/a>: Containerize your bitbake.&lt;/li>
+&lt;li>&lt;a href="https://github.com/lxdock/lxdock">lxdock&lt;/a>: LXDock is a wrapper around LXD that allows developers to orchestrate their development environments using a workflow similar to Vagrant.&lt;/li>
+&lt;li>&lt;a href="https://github.com/bketelsen/devlx">devlx&lt;/a>: devlx is a development tool that provisions temporary development environments. It uses lxd and zfs to make efficient, copy-on-write, workspaces from a user-provided template.&lt;/li>
+&lt;li>&lt;a href="https://github.com/lueschem/edi">edi&lt;/a>: Driven by the DevOps mindset edi helps you to streamline your embedded development infrastructure.&lt;/li>
+&lt;li>&lt;a href="https://github.com/YunoHost/ynh-dev">ynh-dev&lt;/a>: ynh-dev is a CLI tool to manage your local development environment for YunoHost.&lt;/li>
+&lt;li>&lt;a href="https://github.com/Varying-Vagrant-Vagrants/VVV">VVV&lt;/a>: VVV is a local developer environment, mainly aimed at WordPress developers. It uses Vagrant and VirtualBox, and can be used to build sites, and contribute to WordPress.&lt;/li>
+&lt;li>&lt;a href="https://github.com/ianmiell/shutit">shutit&lt;/a>: Automation framework for programmers.&lt;/li>
+&lt;li>&lt;a href="https://github.com/vccw-team/vccw">vccw&lt;/a>: A Vagrant based development environment.&lt;/li>
+&lt;li>&lt;a href="https://github.com/mechboxes/mech">mech&lt;/a>: Easy command line virtual machines for VMWare.&lt;/li>
+&lt;li>&lt;a href="https://github.com/teracyhq/dev">dev&lt;/a>: The only truly universal productive software development platform for all!&lt;/li>
+&lt;li>&lt;a href="https://github.com/Chassis/Desktop">Desktop&lt;/a>: Local WordPress development made easy.&lt;/li>
+&lt;li>&lt;a href="https://github.com/stakkr-org/stakkr">stakkr&lt;/a>: Stakkr is a docker recompose tool that uses docker compose to easily create / maintain a stack of services, for example for web development.&lt;/li>
+&lt;li>&lt;a href="https://github.com/ulikoehler/buildock">buildock&lt;/a>: Reproducible build environments for local builds using Docker.&lt;/li>
+&lt;li>&lt;a href="https://github.com/tightenco/takeout">takeout&lt;/a>: Takeout is a Mac-based CLI tool for spinning up tiny Docker containers, one for each of your development environment dependencies.&lt;/li>
+&lt;li>&lt;a href="https://laravel.com/docs/7.x/valet">valet&lt;/a>: Valet is a Laravel development environment for Mac minimalists.&lt;/li>
+&lt;li>&lt;a href="https://python-poetry.org/">poetry&lt;/a>: Poetry comes with all the tools you might need to manage your projects in a deterministic way.&lt;/li>
+&lt;li>&lt;a href="https://github.com/nix-community/poetry2nix">poetry2nix&lt;/a>: poetry2nix turns Poetry projects into Nix derivations without the need to actually write Nix expressions.&lt;/li>
+&lt;li>&lt;a href="https://www.buildstream.build/">buildstream&lt;/a>: BuildStream is a powerful and flexible software integration toolset.&lt;/li>
+&lt;li>&lt;a href="https://www.sciviews.org/software/svbox/">svbox&lt;/a>: A Reproducible Software Environment for Data Science&lt;/li>
+&lt;li>&lt;a href="https://github.com/ctuning/ck">ck&lt;/a>: Collective Knowledge framework (CK) helps to organize any software project as a database of reusable components with common automation actions and extensible meta descriptions based on FAIR principles.&lt;/li>
+&lt;li>&lt;a href="https://github.com/BrainTwister/docker-devel-env">docker-devel-env&lt;/a>: Fast, reproducible, and portable software development environments&lt;/li>
+&lt;li>&lt;a href="https://github.com/luispedro/nixml">nixml&lt;/a>: Simple, perfectly reproducible, environments with nix specified using an YAML file.&lt;/li>
+&lt;li>&lt;a href="https://docs.haskellstack.org/en/stable/README/">Stack&lt;/a>: Stack is a cross-platform program for developing Haskell projects. It is aimed at Haskellers both new and experienced.&lt;/li>
+&lt;li>&lt;a href="https://conda.io/">Conda&lt;/a>: Package, dependency and environment management for any language—Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN, and more.&lt;/li>
+&lt;li>&lt;a href="https://github.com/smarr/rebench">rebench&lt;/a>: Execute and document benchmarks reproducibly.&lt;/li>
+&lt;li>&lt;a href="https://github.com/GreenCape/build">build&lt;/a>: A docker based test and build environment, especially for Joomla!&lt;/li>
+&lt;li>&lt;a href="https://github.com/target/lorri">lorri&lt;/a>: lorri is a nix-shell replacement for project development. lorri is based around fast direnv integration for robust CLI and editor integration.&lt;/li>
+&lt;li>&lt;a href="https://gitlab.com/njam/toolbox-njam">toolbox-njam&lt;/a>: Experimental Rust-clone of Fedora&amp;rsquo;s toolbox for managing Linux containers for software development.&lt;/li>
+&lt;li>&lt;a href="https://github.com/nhoffman/bioscons">bioscons&lt;/a>: Extends the scons build tool for reproducible workflows in bioinformatics.&lt;/li>
+&lt;li>&lt;a href="https://github.com/rpm-software-management/mock">mock&lt;/a>: Mock is a tool for a reproducible build of RPM packages.&lt;/li>
+&lt;li>&lt;a href="https://github.com/jenv/jenv">jenv&lt;/a>: jEnv is a command line tool to help you forget how to set the JAVA_HOME environment variable&lt;/li>
+&lt;li>&lt;a href="https://asdf-vm.com/">asdf&lt;/a>: Manage multiple runtime versions with a single CLI tool&lt;/li>
+&lt;li>&lt;a href="https://github.com/podenv/podenv">podenv&lt;/a>: Podenv provides a declarative interface to manage containerized application. Using rootless containers, podenv let you run applications seamlessly.&lt;/li>
+&lt;li>&lt;a href="http://docker-sync.io/">docker-sync&lt;/a>: Run your application at full speed while syncing your code for development, finally empowering you to utilize docker for development under OSX/Windows/Linux.&lt;/li>
+&lt;li>&lt;a href="https://github.com/numtide/devshell">devshell&lt;/a>: The goal of this project is to simplify per-project developer environments.&lt;/li>
+&lt;li>&lt;a href="https://digga.divnix.com/">digga&lt;/a>: Digga is a flake utility library that helps you declaratively craft and manage all three layers of your system environment within a single nix flakes repository.&lt;/li>
+&lt;li>&lt;a href="https://www.jetpack.io/devbox/">devbox&lt;/a>: Instant, easy, and predictable shells and containers.&lt;/li>
+&lt;li>&lt;a href="https://devenv.sh/">devenv&lt;/a>: Fast, Declarative, Reproducible, and Composable Developer Environments.&lt;/li>
+&lt;li>&lt;a href="https://github.com/kushaldas/asaman">asaman&lt;/a>: This is a tool to build reproducible wheels for your Python project or for all of your dependencies.&lt;/li>
+&lt;li>&lt;a href="https://odo.dev/">odo&lt;/a>: Fast iterative application development deployed immediately to your kubernetes cluster.&lt;/li>
+&lt;li>&lt;a href="https://sr.ht/~abcdw/rde/">rde&lt;/a>: Tools for managing reproducible development environments w/ guix.&lt;/li>
+&lt;li>&lt;a href="https://github.com/tensorchord/envd">envd&lt;/a>: Reproducible development environment for AI/ML.&lt;/li>
+&lt;li>&lt;a href="https://github.com/pypa/pipx">pipx&lt;/a>: Install and Run Python Applications in Isolated Environments.&lt;/li>
+&lt;li>&lt;a href="https://devpod.sh/">devpod&lt;/a>: DevPod is a client-only tool to create reproducible developer environments based on a devcontainer.json on any backend.&lt;/li>
+&lt;li>&lt;a href="https://metaswitch.github.io/floki/">floki&lt;/a>: floki aims to provide reproducible and shareable build tooling.&lt;/li>
+&lt;li>&lt;a href="https://github.com/cashapp/hermit">hermit&lt;/a>: Hermit manages isolated, self-bootstrapping sets of tools in software projects.&lt;/li>
+&lt;li>&lt;a href="https://github.com/devcontainers/cli">devcontainers/cli&lt;/a>: A reference implementation for the specification that can create and configure a dev container from a devcontainer.json.&lt;/li>
+&lt;li>&lt;a href="https://github.com/yapret/toolship">toolship&lt;/a>: toolship is a small framework to containerize dev tools.&lt;/li>
+&lt;/ul></description></item><item><title>Argument Files</title><link>https://ilo.projects.metio.wtf/usage/argument-files/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/argument-files/</guid><description>&lt;p>In order to share the same options/commands across your team, &lt;code>ilo&lt;/code> supports argument files which contain the options for your project, e.g. which image you are using. Argument files are just plain text files and both name and location can be chosen at will. In order to use an argument file, you have to add &lt;strong>@&lt;/strong> in front of the file name: &lt;code>ilo @file-name&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">#&lt;/span> write argument file
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> cat some/folder/your-arguments
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">shell
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">node:latest
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">/bin/bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="gp">#&lt;/span> use argument file
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo @some/folder/your-arguments
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:&lt;/p></description></item><item><title>Autocomplete</title><link>https://ilo.projects.metio.wtf/usage/autocomplete/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/autocomplete/</guid><description>&lt;p>The &lt;code>ilo generate-completion&lt;/code> command generates autocompletion configuration for shells such as &lt;a href="https://www.gnu.org/software/bash/">bash&lt;/a> and &lt;a href="https://www.zsh.org/">zsh&lt;/a>.&lt;/p>
+&lt;p>Once enabled you can use the &lt;code>&amp;lt;TAB&amp;gt;&lt;/code> key to autocomplete ilo commands and their options:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">#&lt;/span> autocomplete commands
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo s&amp;lt;TAB&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="gp">#&lt;/span> autocomplete options
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell --re&amp;lt;TAB&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell --remove-image
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="bash">bash&lt;/h2>
+&lt;p>In order to integrate autocompletion into &lt;a href="https://www.gnu.org/software/bash/">bash&lt;/a>, follow these steps:&lt;/p>
+&lt;ol>
+&lt;li>Create or edit &lt;code>~/.bashrc&lt;/code>.&lt;/li>
+&lt;li>Add the following line
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">source&lt;/span> &amp;lt;&lt;span class="o">(&lt;/span>ilo generate-completion&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>Reload your shell (or create a new one)&lt;/li>
+&lt;/ol>
+&lt;h2 id="zsh">zsh&lt;/h2>
+&lt;p>In order to integrate autocompletion into &lt;a href="https://www.zsh.org/">zsh&lt;/a>, follow these steps:&lt;/p></description></item><item><title>Automate</title><link>https://ilo.projects.metio.wtf/usage/autoenv/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/autoenv/</guid><description>&lt;p>In order to simplify the usage of &lt;code>ilo&lt;/code>, consider using &lt;code>autoenv&lt;/code>-like tooling. These tools all allow you to just enter a directory and will automatically call &lt;code>ilo&lt;/code> for you like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">[you@hostname ~]$&lt;/span> &lt;span class="nb">cd&lt;/span> path/to/your/project
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">[root@container project-dir]#&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>As soon as you enter the directory of your project, these tools will call &lt;code>ilo&lt;/code> which in turn will open your build environment for you.&lt;/p>
+&lt;h2 id="autoenv">autoenv&lt;/h2>
+&lt;p>In order to use &lt;a href="https://github.com/inishchith/autoenv">autoenv&lt;/a>, first &lt;a href="https://github.com/inishchith/autoenv#install">install it&lt;/a> and then place a &lt;code>.env&lt;/code> file in the root of your project which contains &lt;code>ilo&lt;/code> and its arguments as its contents.&lt;/p></description></item><item><title>Build Environments</title><link>https://ilo.projects.metio.wtf/usage/build-envs/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/build-envs/</guid><description>&lt;p>&lt;code>ilo&lt;/code> allows you to define your build environment either in a &lt;a href="https://docs.docker.com/engine/reference/builder/">Containerfile/Dockerfile&lt;/a> or any other &lt;a href="https://github.com/opencontainers/image-spec/blob/master/spec.md">OCI Image&lt;/a> compliant way. In contrast to &lt;a href="https://containertoolbx.org/">toolbx&lt;/a>, &lt;code>ilo&lt;/code> relies on immutable containers which makes it easier to share those images across your team. &lt;code>ilo&lt;/code> uses the same mechanism to define build environments that developers are already using to define their application run environments. Therefore, onboarding and adapting container based build environments should be easy for most teams.&lt;/p></description></item><item><title>Building</title><link>https://ilo.projects.metio.wtf/contributors/building/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/contributors/building/</guid><description>&lt;p>&lt;code>ilo&lt;/code> requires a certain set of software installed on your system in order to be built.&lt;/p>
+&lt;h2 id="prerequisites">Prerequisites&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a href="https://git-scm.com/">git&lt;/a> to fetch the &lt;a href="../git-mirrors">source code&lt;/a> of &lt;code>ilo&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="ilo-setup">ilo Setup&lt;/h2>
+&lt;p>You can use &lt;code>ilo&lt;/code> to build &lt;code>ilo&lt;/code>! Make sure your system has the following:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="../../usage/install">ilo&lt;/a> to open the reproducible build environment for &lt;code>ilo&lt;/code> itself&lt;/li>
+&lt;li>One of the &lt;a href="../../shell/runtimes">runtimes&lt;/a> that &lt;code>ilo shell&lt;/code> supports.&lt;/li>
+&lt;/ul>
+&lt;h2 id="manual-setup">Manual Setup&lt;/h2>
+&lt;p>In case you do not have &lt;code>ilo&lt;/code> installed on your system, install the following manually:&lt;/p></description></item><item><title>Examples</title><link>https://ilo.projects.metio.wtf/shell/examples/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/shell/examples/</guid><description>&lt;p>The following examples show how &lt;code>ilo shell&lt;/code> can be used.&lt;/p>
+&lt;h2 id="cargo-projects">Cargo Projects&lt;/h2>
+&lt;p>&lt;a href="https://doc.rust-lang.org/cargo/">Cargo&lt;/a> caches all downloaded dependencies in your local &lt;code>~/.cargo/registry&lt;/code> directory.&lt;/p>
+&lt;p>In order to re-use already downloaded dependencies inside the container, specify a &lt;code>--volumne&lt;/code> like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">#&lt;/span> Cargo project that mounts &lt;span class="nb">local&lt;/span> .cargo folder
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span>&lt;span class="go"> --volume ${HOME}/.cargo/registry:/usr/local/cargo/registry:z \
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go"> rust:latest
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>Note&lt;/strong>: The container path &lt;code>/usr/local/cargo&lt;/code> is specified in the image used in this example (&lt;code>rust:latest&lt;/code>). Adjust this value according to the image you are actually using in your project.&lt;/p></description></item><item><title>First Timer</title><link>https://ilo.projects.metio.wtf/contributors/first-timer/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/contributors/first-timer/</guid><description>&lt;p>&lt;code>ilo&lt;/code> is an open source product released under the &lt;a href="https://spdx.org/licenses/0BSD.html">0BSD license&lt;/a>. In order to make sure that each contribution is correctly attributed and licensed, the Developer Certificate of Origin (DCO) &lt;strong>MUST&lt;/strong> be signed by each contributor with their first commit. In order to do so, simply add a &lt;code>Signed-off-by&lt;/code> statement at the end of your commit yourself or use &lt;code>git commit -s&lt;/code> to do that automatically. The DCO can be seen below or at &lt;a href="https://developercertificate.org/">https://developercertificate.org/&lt;/a>&lt;/p></description></item><item><title>Git Mirrors</title><link>https://ilo.projects.metio.wtf/contributors/git-mirrors/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/contributors/git-mirrors/</guid><description>&lt;p>&lt;code>ilo&lt;/code> is using &lt;a href="https://github.com/metio/ilo">GitHub&lt;/a> as its primary source/issue/build environment, however its code is available in other git repositories as well in order to deal with &lt;a href="https://www.githubstatus.com/">GitHub outages&lt;/a>.&lt;/p>
+&lt;h2 id="available-mirrors">Available Mirrors&lt;/h2>
+&lt;p>Mirrors are updated automatically as explained in this &lt;a href="https://seb.people.metio.wtf/topic/gitlab-the-git-distributor/">blog post&lt;/a>.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/metio/ilo">https://github.com/metio/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://gitlab.com/metio.wtf/ilo">https://gitlab.com/metio.wtf/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://codeberg.org/metio.wtf/ilo">https://codeberg.org/metio.wtf/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://bitbucket.org/metio-wtf/ilo">https://bitbucket.org/metio-wtf/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://repo.or.cz/ilo.git">https://repo.or.cz/ilo.git&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Help</title><link>https://ilo.projects.metio.wtf/community/help/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/community/help/</guid><description>&lt;p>In case you need help, don’t panic - we’ve all been there! Try the following resources in order to get help:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/metio/ilo/issues/new?assignees=sebhoss&amp;amp;labels=bug&amp;amp;template=bug_report.md&amp;amp;title=">open a new bug report&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/metio/ilo/issues/new?assignees=&amp;amp;labels=enhancement&amp;amp;template=feature_request.md&amp;amp;title=">create a new feature request&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://github.com/metio/ilo/discussions">open a new discussion&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://matrix.to/#/#ilo:matrix.org">join the chat room&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://metio.groups.io/g/ilo/topics">send an email to the mailing list&lt;/a>&lt;/li>
+&lt;li>Take a walk outside &amp;amp; come back to your issue with a fresh mind&lt;/li>
+&lt;/ul></description></item><item><title>Install</title><link>https://ilo.projects.metio.wtf/usage/install/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/install/</guid><description>&lt;p>Prebuilt binaries of &lt;code>ilo&lt;/code> are available for each published release at:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/metio/ilo/releases">https://github.com/metio/ilo/releases&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>Download the package for your operating system and put the &lt;code>ilo&lt;/code> binary in your &lt;code>$PATH&lt;/code>. Use the JVM variant in case your operating system is not directly supported.&lt;/p>
+&lt;h2 id="huber">Huber&lt;/h2>
+&lt;p>In case you are using &lt;a href="https://github.com/innobead/huber">huber&lt;/a>, execute the following commands to install &lt;code>ilo&lt;/code> on Linux/Mac/Windows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> huber repo add remote-repo --url https://github.com/metio/ilo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> huber install ilo
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Options</title><link>https://ilo.projects.metio.wtf/shell/options/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/shell/options/</guid><description>&lt;p>The &lt;code>ilo shell&lt;/code> command can be configured with the following command line options. From your terminal, use &lt;code>ilo shell --help&lt;/code> to get a list of all options, and their default values.&lt;/p>
+&lt;h2 id="--context">&lt;code>--context&lt;/code>&lt;/h2>
+&lt;p>The &lt;code>--context&lt;/code> option allows to specify the context when building an image with &lt;code>--containerfile&lt;/code>/&lt;code>--dockerfile&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">#&lt;/span> specify custom context
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell --context ./local/folder
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="gp">#&lt;/span> &lt;span class="k">do&lt;/span> not specify context
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>By default, &lt;code>--context&lt;/code> is set to &lt;code>.&lt;/code> (the current directory).&lt;/p></description></item><item><title>Release</title><link>https://ilo.projects.metio.wtf/contributors/release/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/contributors/release/</guid><description>&lt;p>The release process of &lt;code>ilo&lt;/code> is highly automated, therefore you only have to:&lt;/p>
+&lt;ol>
+&lt;li>Push changes into the &lt;code>main&lt;/code> branch.&lt;/li>
+&lt;li>Wait until an &lt;a href="https://github.com/metio/ilo/blob/main/.github/workflows/release.yml">GitHub action&lt;/a> will perform a release automatically. Take a look at the &lt;a href="https://metio.groups.io/g/ilo/calendar">calendar&lt;/a> for the next scheduled release. Note that a release will only be performed if any changes to the source code were detected since the last release.&lt;/li>
+&lt;/ol>
+&lt;p>Each new release will:&lt;/p>
+&lt;ul>
+&lt;li>Publish a new GitHub &lt;a href="https://github.com/metio/ilo/releases">release&lt;/a>&lt;/li>
+&lt;li>Publish an &lt;a href="https://metio.groups.io/g/ilo/topics">email&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Runtimes</title><link>https://ilo.projects.metio.wtf/shell/runtimes/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/shell/runtimes/</guid><description>&lt;p>&lt;code>ilo shell&lt;/code> by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the &lt;code>--runtime&lt;/code> flag or set the &lt;code>ILO_SHELL_RUNTIME&lt;/code> environment variable in your system. The &lt;code>--runtime&lt;/code> flag overwrites the environment variable.&lt;/p>
+&lt;h2 id="docker">Docker&lt;/h2>
+&lt;p>Force &lt;code>ilo&lt;/code> to use &lt;a href="https://www.docker.com/">docker&lt;/a> like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell --runtime docker
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="gp">#&lt;/span> use &lt;span class="nb">alias&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell --runtime d
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="gp">#&lt;/span> use env variable
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> &lt;span class="nv">ILO_SHELL_RUNTIME&lt;/span>&lt;span class="o">=&lt;/span>docker ilo shell
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="nerdctl">nerdctl&lt;/h2>
+&lt;p>Force &lt;code>ilo&lt;/code> to use &lt;a href="https://github.com/containerd/nerdctl">nerdctl&lt;/a> like this:&lt;/p></description></item></channel></rss>

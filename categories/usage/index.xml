@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Usage on ilo</title><link>https://ilo.projects.metio.wtf/categories/usage/</link><description>Recent content in Usage on ilo</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 13 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://ilo.projects.metio.wtf/categories/usage/index.xml" rel="self" type="application/rss+xml"/><item><title>Argument Files</title><link>https://ilo.projects.metio.wtf/usage/argument-files/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/argument-files/</guid><description>&lt;p>In order to share the same options/commands across your team, &lt;code>ilo&lt;/code> supports argument files which contain the options for your project, e.g. which image you are using. Argument files are just plain text files and both name and location can be chosen at will. In order to use an argument file, you have to add &lt;strong>@&lt;/strong> in front of the file name: &lt;code>ilo @file-name&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">#&lt;/span> write argument file
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> cat some/folder/your-arguments
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">shell
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">node:latest
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">/bin/bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="go">&lt;/span>&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="gp">#&lt;/span> use argument file
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo @some/folder/your-arguments
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:&lt;/p></description></item><item><title>Autocomplete</title><link>https://ilo.projects.metio.wtf/usage/autocomplete/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/autocomplete/</guid><description>&lt;p>The &lt;code>ilo generate-completion&lt;/code> command generates autocompletion configuration for shells such as &lt;a href="https://www.gnu.org/software/bash/">bash&lt;/a> and &lt;a href="https://www.zsh.org/">zsh&lt;/a>.&lt;/p>
+&lt;p>Once enabled you can use the &lt;code>&amp;lt;TAB&amp;gt;&lt;/code> key to autocomplete ilo commands and their options:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">#&lt;/span> autocomplete commands
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo s&amp;lt;TAB&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="err">&lt;/span>&lt;span class="gp">#&lt;/span> autocomplete options
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell --re&amp;lt;TAB&amp;gt;
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> ilo shell --remove-image
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="bash">bash&lt;/h2>
+&lt;p>In order to integrate autocompletion into &lt;a href="https://www.gnu.org/software/bash/">bash&lt;/a>, follow these steps:&lt;/p>
+&lt;ol>
+&lt;li>Create or edit &lt;code>~/.bashrc&lt;/code>.&lt;/li>
+&lt;li>Add the following line
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">source&lt;/span> &amp;lt;&lt;span class="o">(&lt;/span>ilo generate-completion&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;li>Reload your shell (or create a new one)&lt;/li>
+&lt;/ol>
+&lt;h2 id="zsh">zsh&lt;/h2>
+&lt;p>In order to integrate autocompletion into &lt;a href="https://www.zsh.org/">zsh&lt;/a>, follow these steps:&lt;/p></description></item><item><title>Automate</title><link>https://ilo.projects.metio.wtf/usage/autoenv/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/autoenv/</guid><description>&lt;p>In order to simplify the usage of &lt;code>ilo&lt;/code>, consider using &lt;code>autoenv&lt;/code>-like tooling. These tools all allow you to just enter a directory and will automatically call &lt;code>ilo&lt;/code> for you like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">[you@hostname ~]$&lt;/span> &lt;span class="nb">cd&lt;/span> path/to/your/project
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">[root@container project-dir]#&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>As soon as you enter the directory of your project, these tools will call &lt;code>ilo&lt;/code> which in turn will open your build environment for you.&lt;/p>
+&lt;h2 id="autoenv">autoenv&lt;/h2>
+&lt;p>In order to use &lt;a href="https://github.com/inishchith/autoenv">autoenv&lt;/a>, first &lt;a href="https://github.com/inishchith/autoenv#install">install it&lt;/a> and then place a &lt;code>.env&lt;/code> file in the root of your project which contains &lt;code>ilo&lt;/code> and its arguments as its contents.&lt;/p></description></item><item><title>Build Environments</title><link>https://ilo.projects.metio.wtf/usage/build-envs/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/build-envs/</guid><description>&lt;p>&lt;code>ilo&lt;/code> allows you to define your build environment either in a &lt;a href="https://docs.docker.com/engine/reference/builder/">Containerfile/Dockerfile&lt;/a> or any other &lt;a href="https://github.com/opencontainers/image-spec/blob/master/spec.md">OCI Image&lt;/a> compliant way. In contrast to &lt;a href="https://containertoolbx.org/">toolbx&lt;/a>, &lt;code>ilo&lt;/code> relies on immutable containers which makes it easier to share those images across your team. &lt;code>ilo&lt;/code> uses the same mechanism to define build environments that developers are already using to define their application run environments. Therefore, onboarding and adapting container based build environments should be easy for most teams.&lt;/p></description></item><item><title>Install</title><link>https://ilo.projects.metio.wtf/usage/install/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/install/</guid><description>&lt;p>Prebuilt binaries of &lt;code>ilo&lt;/code> are available for each published release at:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/metio/ilo/releases">https://github.com/metio/ilo/releases&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>Download the package for your operating system and put the &lt;code>ilo&lt;/code> binary in your &lt;code>$PATH&lt;/code>. Use the JVM variant in case your operating system is not directly supported.&lt;/p>
+&lt;h2 id="huber">Huber&lt;/h2>
+&lt;p>In case you are using &lt;a href="https://github.com/innobead/huber">huber&lt;/a>, execute the following commands to install &lt;code>ilo&lt;/code> on Linux/Mac/Windows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> huber repo add remote-repo --url https://github.com/metio/ilo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> huber install ilo
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>
