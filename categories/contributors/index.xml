@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Contributors on ilo</title><link>https://ilo.projects.metio.wtf/categories/contributors/</link><description>Recent content in Contributors on ilo</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 13 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://ilo.projects.metio.wtf/categories/contributors/index.xml" rel="self" type="application/rss+xml"/><item><title>Building</title><link>https://ilo.projects.metio.wtf/contributors/building/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/contributors/building/</guid><description>&lt;p>&lt;code>ilo&lt;/code> requires a certain set of software installed on your system in order to be built.&lt;/p>
+&lt;h2 id="prerequisites">Prerequisites&lt;/h2>
+&lt;ul>
+&lt;li>&lt;a href="https://git-scm.com/">git&lt;/a> to fetch the &lt;a href="../git-mirrors">source code&lt;/a> of &lt;code>ilo&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;h2 id="ilo-setup">ilo Setup&lt;/h2>
+&lt;p>You can use &lt;code>ilo&lt;/code> to build &lt;code>ilo&lt;/code>! Make sure your system has the following:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="../../usage/install">ilo&lt;/a> to open the reproducible build environment for &lt;code>ilo&lt;/code> itself&lt;/li>
+&lt;li>One of the &lt;a href="../../shell/runtimes">runtimes&lt;/a> that &lt;code>ilo shell&lt;/code> supports.&lt;/li>
+&lt;/ul>
+&lt;h2 id="manual-setup">Manual Setup&lt;/h2>
+&lt;p>In case you do not have &lt;code>ilo&lt;/code> installed on your system, install the following manually:&lt;/p></description></item><item><title>First Timer</title><link>https://ilo.projects.metio.wtf/contributors/first-timer/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/contributors/first-timer/</guid><description>&lt;p>&lt;code>ilo&lt;/code> is an open source product released under the &lt;a href="https://spdx.org/licenses/0BSD.html">0BSD license&lt;/a>. In order to make sure that each contribution is correctly attributed and licensed, the Developer Certificate of Origin (DCO) &lt;strong>MUST&lt;/strong> be signed by each contributor with their first commit. In order to do so, simply add a &lt;code>Signed-off-by&lt;/code> statement at the end of your commit yourself or use &lt;code>git commit -s&lt;/code> to do that automatically. The DCO can be seen below or at &lt;a href="https://developercertificate.org/">https://developercertificate.org/&lt;/a>&lt;/p></description></item><item><title>Git Mirrors</title><link>https://ilo.projects.metio.wtf/contributors/git-mirrors/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/contributors/git-mirrors/</guid><description>&lt;p>&lt;code>ilo&lt;/code> is using &lt;a href="https://github.com/metio/ilo">GitHub&lt;/a> as its primary source/issue/build environment, however its code is available in other git repositories as well in order to deal with &lt;a href="https://www.githubstatus.com/">GitHub outages&lt;/a>.&lt;/p>
+&lt;h2 id="available-mirrors">Available Mirrors&lt;/h2>
+&lt;p>Mirrors are updated automatically as explained in this &lt;a href="https://seb.people.metio.wtf/topic/gitlab-the-git-distributor/">blog post&lt;/a>.&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/metio/ilo">https://github.com/metio/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://gitlab.com/metio.wtf/ilo">https://gitlab.com/metio.wtf/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://codeberg.org/metio.wtf/ilo">https://codeberg.org/metio.wtf/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://bitbucket.org/metio-wtf/ilo">https://bitbucket.org/metio-wtf/ilo&lt;/a>&lt;/li>
+&lt;li>&lt;a href="https://repo.or.cz/ilo.git">https://repo.or.cz/ilo.git&lt;/a>&lt;/li>
+&lt;/ul></description></item></channel></rss>
