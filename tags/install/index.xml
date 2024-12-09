@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Install on ilo</title><link>https://ilo.projects.metio.wtf/tags/install/</link><description>Recent content in Install on ilo</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 13 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://ilo.projects.metio.wtf/tags/install/index.xml" rel="self" type="application/rss+xml"/><item><title>Install</title><link>https://ilo.projects.metio.wtf/usage/install/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/install/</guid><description>&lt;p>Prebuilt binaries of &lt;code>ilo&lt;/code> are available for each published release at:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/metio/ilo/releases">https://github.com/metio/ilo/releases&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>Download the package for your operating system and put the &lt;code>ilo&lt;/code> binary in your &lt;code>$PATH&lt;/code>. Use the JVM variant in case your operating system is not directly supported.&lt;/p>
+&lt;h2 id="huber">Huber&lt;/h2>
+&lt;p>In case you are using &lt;a href="https://github.com/innobead/huber">huber&lt;/a>, execute the following commands to install &lt;code>ilo&lt;/code> on Linux/Mac/Windows:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-console" data-lang="console">&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> huber repo add remote-repo --url https://github.com/metio/ilo
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="gp">$&lt;/span> huber install ilo
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>
