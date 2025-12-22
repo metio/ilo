@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Options on ilo</title><link href="https://ilo.projects.metio.wtf/tags/options/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/tags/options/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/tags/options/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/tags/options/</id><entry><title type="html">Options</title><link href="https://ilo.projects.metio.wtf/shell/options/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/shell/options/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The <code>ilo shell</code> command can be configured with the following command line options. From your terminal, use <code>ilo shell --help</code> to get a list of all options, and their default values.</p>
+<h2 id="--context"><code>--context</code></h2>
+<p>The <code>--context</code> option allows to specify the context when building an image with <code>--containerfile</code>/<code>--dockerfile</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom context
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --context ./local/folder
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify context
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--context</code> is set to <code>.</code> (the current directory).</p>
+<h2 id="--containerfile--dockerfile"><code>--containerfile</code>/<code>--dockerfile</code></h2>
+<p>The <code>--containerfile</code>/<code>--dockerfile</code> option can be used to specify a local <code>Containerfile</code>/<code>Dockerfile</code>. Specifying such a file will cause <code>ilo</code> to build your image first, and then open a shell into a container based on that image.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom Containerfile
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --containerfile some/where/your.containerfile
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify Containerfile
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--containerfile</code>/<code>--dockerfile</code> is not set to any value.</p>
+<h2 id="--debug"><code>--debug</code></h2>
+<p>The <code>--debug</code> option toggles whether <code>ilo</code> should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from <code>ilo</code> and just use your preferred runtime instead.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> print runtime commands
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --debug
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not print runtime commands
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --debug<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--debug</code> is not enabled.</p>
+<h2 id="--env"><code>--env</code></h2>
+<p>The <code>--env</code> option can be used to specify environment variables for your container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --env <span class="nv">key</span><span class="o">=</span>value
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--env</code> does not set any environment variables.</p>
+<h2 id="--hostname"><code>--hostname</code></h2>
+<p>The <code>--hostname</code> option can be used to set the hostname of your container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> <span class="nb">set</span> hostname
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --hostname you.home.arpa
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not <span class="nb">set</span> hostname
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--hostname</code> is not set to any value.</p>
+<h2 id="--interactive"><code>--interactive</code></h2>
+<p>The <code>--interactive</code> option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> run interactively
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --interactive
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> run non-interactive
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-interactive
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --interactive<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> run interactively
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--interactive</code> is enabled.</p>
+<h2 id="--missing-volumes"><code>--missing-volumes</code></h2>
+<p>The <code>--missing-volumes</code> option controls how <code>ilo</code> should deal with non-existing local directories that you want to mount into the container. The default behavior is <code>CREATE</code> which creates the directory on the host machine before creating the container and mounting the new empty directory into it. Changing this option to <code>WARN</code> causes will result in a warning that a local directory cannot be mounted. <code>ilo</code> will still create the container, just not with that missing directory mounted. The <code>ERROR</code> option causes <code>ilo</code> to fail in case you specify a local directory to mount that does not exist. All three options are case-insensitive, e.g. use <code>create</code>, <code>CREATE</code>, or <code>CreATE</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> create missing <span class="nb">local</span> directories
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell ----missing-volumes<span class="o">=</span>CREATE
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> warn on missing <span class="nb">local</span> directories
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell ----missing-volumes<span class="o">=</span>WARN
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> error on missing <span class="nb">local</span> directories
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell ----missing-volumes<span class="o">=</span>ERROR
+</span></span></code></pre></div><h2 id="--mount-project-dir"><code>--mount-project-dir</code></h2>
+<p>The <code>--mount-project-dir</code> option can be used to toggle whether the current directory should be mounted into the container. The location inside the container is specified with <code>--working-dir</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> mount current directory into container
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --mount-project-dir
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not mount directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-mount-project-dir
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --mount-project-dir<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> mount directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--mount-project-dir</code> is enabled.</p>
+<h2 id="--publish"><code>--publish</code></h2>
+<p>The <code>--publish</code> option can be used to publish ports of your container to your local system.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> binds your <span class="nb">local</span> <span class="m">8080</span> port to port <span class="m">80</span> of the container
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --publish 8080:80
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not expose any ports
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--publish</code> does not exposes any ports.</p>
+<h2 id="--pull"><code>--pull</code></h2>
+<p>The <code>--pull</code> option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a <code>latest</code> tag for their image. The image will only be pulled in case the registry contains a newer image than locally available.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> pull image before opening shell
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --pull
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not pull image before opening shell
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-pull
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --pull<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not pull image before opening shell
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--pull</code> is not enabled.</p>
+<h2 id="--remove-image"><code>--remove-image</code></h2>
+<p>The <code>--remove-image</code> option causes <code>ilo</code> to remove the specified image from your local system after you close your shell, or the non-interactive commands finishes. This is especially useful in combination with <code>--containerfile</code>/<code>--dockerfile</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> remove image after shell was closed
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --remove-image
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not remove image
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-remove-image
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --remove-image<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--remove-image</code> is not enabled.</p>
+<h2 id="--runtime"><code>--runtime</code></h2>
+<p>The <code>--runtime</code> option can be used to force the usage of a specific runtime. See <a href="../runtimes">runtimes</a> for details.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> force to use podman
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime podman
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> force to use docker
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime docker
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> force to use lxd
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime lxd
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> auto <span class="k">select</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><h2 id="--runtime-option"><code>--runtime-option</code></h2>
+<p>The <code>--runtime-option</code> option can be specified multiple times and contains options for the underlying runtime.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-option<span class="o">=</span>--remote
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-option<span class="o">=</span>--remote --runtime-option<span class="o">=</span>--syslog
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-option</code> is set to an empty array.</p>
+<h2 id="--runtime-pull-option"><code>--runtime-pull-option</code></h2>
+<p>The <code>--runtime-pull-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>pull</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-pull-option<span class="o">=</span>--all-tags
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-pull-option<span class="o">=</span>--all-tags --runtime-pull-option<span class="o">=</span>--quiet
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-pull-option</code> is set to an empty array.</p>
+<h2 id="--runtime-build-option"><code>--runtime-build-option</code></h2>
+<p>The <code>--runtime-build-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>build</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-build-option<span class="o">=</span>--squash
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-build-option<span class="o">=</span>--squash --runtime-build-option<span class="o">=</span>--no-cache
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-build-option</code> is set to an empty array.</p>
+<h2 id="--runtime-run-option"><code>--runtime-run-option</code></h2>
+<p>The <code>--runtime-run-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>run</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-run-option<span class="o">=</span>--privileged
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-run-option<span class="o">=</span>--privileged --runtime-run-option<span class="o">=</span>--replace
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-run-option</code> is set to an empty array.</p>
+<h2 id="--runtime-cleanup-option"><code>--runtime-cleanup-option</code></h2>
+<p>The <code>--runtime-cleanup-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>rmi</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-cleanup-option<span class="o">=</span>--force
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-cleanup-option<span class="o">=</span>--force --runtime-cleanup-option<span class="o">=</span>--all
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-cleanup-option</code> is set to an empty array.</p>
+<h2 id="--volume"><code>--volume</code></h2>
+<p>The <code>--volume</code> option can be used to mount additional volumes into your container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> mount extra volume
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --volume <span class="nv">$HOME</span>/.m2/repository:/root/.m2/repository:z
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not mount extra volume
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--volume</code> does not mount any extra volumes.</p>
+<h2 id="--working-dir"><code>--working-dir</code></h2>
+<p>The <code>--working-dir</code> option can be used to set the working directory inside your container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom working directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --working-dir /project/dir
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use current directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--working-dir</code> uses the current directory on the host machine in order to have the same paths on the host and in the container.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/shell" term="shell" label="shell"/><category scheme="https://ilo.projects.metio.wtf/tags/options" term="options" label="options"/></entry></feed>

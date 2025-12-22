@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Direnv on ilo</title><link href="https://ilo.projects.metio.wtf/tags/direnv/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/tags/direnv/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/tags/direnv/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/tags/direnv/</id><entry><title type="html">Automate</title><link href="https://ilo.projects.metio.wtf/usage/autoenv/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/autoenv/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to simplify the usage of <code>ilo</code>, consider using <code>autoenv</code>-like tooling. These tools all allow you to just enter a directory and will automatically call <code>ilo</code> for you like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname ~]$</span> <span class="nb">cd</span> path/to/your/project
+</span></span><span class="line"><span class="cl"><span class="gp">[root@container project-dir]#</span>
+</span></span></code></pre></div><p>As soon as you enter the directory of your project, these tools will call <code>ilo</code> which in turn will open your build environment for you.</p>
+<h2 id="autoenv">autoenv</h2>
+<p>In order to use <a href="https://github.com/inishchith/autoenv">autoenv</a>, first <a href="https://github.com/inishchith/autoenv#install">install it</a> and then place a <code>.env</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .env
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="direnv">direnv</h2>
+<p>In order to use <a href="https://direnv.net/">direnv</a>, first <a href="https://direnv.net/#basic-installation">install it</a> and then place a <code>.envrc</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .envrc
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="envrc-rs">envrc-rs</h2>
+<p>In order to use <a href="https://github.com/roxma/envrc-rs">envrc-rs</a>, first <a href="https://github.com/roxma/envrc-rs#install">install it</a> and then place a <code>.envrc</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .envrc
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="smartcd">smartcd</h2>
+<p>In order to use <a href="https://github.com/cxreg/smartcd">smartcd</a>, first <a href="https://github.com/cxreg/smartcd#ok-how-do-i-use-it">install it</a>, enter the root directory of your project and then call <code>smartcd edit enter</code> which will open an editor to write a script to execute whenever you enter your project directory. Use something like <code>ilo @build-env</code> as the script.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat ~/.smartcd/scripts/path/to/project-dir/bash_enter
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="zsh-autoenv">zsh-autoenv</h2>
+<p>In order to use <a href="https://github.com/Tarrasch/zsh-autoenv">zsh-autoenv</a>, first <a href="https://github.com/Tarrasch/zsh-autoenv#installation">install it</a> and then place a <code>.autoenv.zsh</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .autoenv.zsh
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="tmuxp">tmuxp</h2>
+<p>In order to use <a href="https://github.com/tmux-python/tmuxp">tmuxp</a>, first <a href="https://github.com/tmux-python/tmuxp#installation">install it</a> and then create a new configuration in <code>${XDG_CONFIG_HOME}/tmuxp</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/tmuxp/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">session_name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">- window_name: dev window
+</span></span></span><span class="line"><span class="cl"><span class="go">  shell_command_before:
+</span></span></span><span class="line"><span class="cl"><span class="go">    - cd ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">  panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">    - shell_command:
+</span></span></span><span class="line"><span class="cl"><span class="go">        - ilo @build-env
+</span></span></span></code></pre></div><h2 id="teamocil">teamocil</h2>
+<p>In order to use <a href="https://github.com/remi/teamocil">teamocil</a>, first <a href="https://github.com/remi/teamocil#installation">install it</a> and then create a new configuration in <code>~/.teamocil</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat ~/.teamocil/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">    root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">    panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">      - ilo @build-env
+</span></span></span></code></pre></div><h2 id="tmuxifier">tmuxifier</h2>
+<p>In order to use <a href="https://github.com/jimeh/tmuxifier">tmuxifier</a>, first <a href="https://github.com/jimeh/tmuxifier#installation">install it</a> and then create a new configuration in <code>$TMUXIFIER_LAYOUT_PATH</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="nv">$TMUXIFIER_LAYOUT_PATH</span>/your-project.sh
+</span></span><span class="line"><span class="cl"><span class="go">window_root &#34;~/path/to/your/project&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">new_window &#34;Your Project&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">split_v 20
+</span></span></span><span class="line"><span class="cl"><span class="go">run_cmd &#34;ilo @build-env&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">split_h 60
+</span></span></span><span class="line"><span class="cl"><span class="go">select_pane 0
+</span></span></span></code></pre></div><h2 id="tmuxinator">tmuxinator</h2>
+<p>In order to use <a href="https://github.com/tmuxinator/tmuxinator">tmuxinator</a>, first <a href="https://github.com/tmuxinator/tmuxinator#installation">install it</a> and then create a new configuration in <code>~/.config/tmuxinator</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat ~/.config/tmuxinator/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - your_project:
+</span></span></span><span class="line"><span class="cl"><span class="go">      panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">        - ilo @build-env
+</span></span></span></code></pre></div><h2 id="dmux">dmux</h2>
+<p>In order to use <a href="https://github.com/zdcthomas/dmux">dmux</a>, first <a href="https://github.com/zdcthomas/dmux#installation">install it</a> and then create your configuration in <code>${XDG_CONFIG_HOME}/dmux/dmux.conf.{file_type}</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/dmux/dmux.conf.toml
+</span></span><span class="line"><span class="cl"><span class="go">[your-project]
+</span></span></span><span class="line"><span class="cl"><span class="go">number_of_panes = 2
+</span></span></span><span class="line"><span class="cl"><span class="go">session_name = &#34;Your Project&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">commands = [&#34;ilo @build-env&#34;]
+</span></span></span></code></pre></div><h2 id="airmux">airmux</h2>
+<p>In order to use <a href="https://github.com/dermoumi/airmux">airmux</a>, first <a href="https://github.com/dermoumi/airmux#installation">install it</a> and then create a new configuration in <code>${XDG_CONFIG_HOME}/airmux</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/airmux/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - your_project:
+</span></span></span><span class="line"><span class="cl"><span class="go">      panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">        - command: ilo @build-env
+</span></span></span></code></pre></div><h2 id="smug">smug</h2>
+<p>In order to use <a href="https://github.com/ivaaaan/smug">smug</a>, first <a href="https://github.com/ivaaaan/smug#installation">install it</a> and then create a new configuration in <code>${XDG_CONFIG_HOME}/smug</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/smug/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">session: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - name: your_project
+</span></span></span><span class="line"><span class="cl"><span class="go">    commands:
+</span></span></span><span class="line"><span class="cl"><span class="go">      - ilo @build-env
+</span></span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/autoenv" term="autoenv" label="autoenv"/><category scheme="https://ilo.projects.metio.wtf/tags/direnv" term="direnv" label="direnv"/><category scheme="https://ilo.projects.metio.wtf/tags/smartcd" term="smartcd" label="smartcd"/><category scheme="https://ilo.projects.metio.wtf/tags/zsh-autoenv" term="zsh-autoenv" label="zsh-autoenv"/></entry></feed>

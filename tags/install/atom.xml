@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Install on ilo</title><link href="https://ilo.projects.metio.wtf/tags/install/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/tags/install/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/tags/install/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/tags/install/</id><entry><title type="html">Install</title><link href="https://ilo.projects.metio.wtf/usage/install/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/install/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>Prebuilt binaries of <code>ilo</code> are available for each published release at:</p>
+<ul>
+<li><a href="https://github.com/metio/ilo/releases">https://github.com/metio/ilo/releases</a></li>
+</ul>
+<p>Download the package for your operating system and put the <code>ilo</code> binary in your <code>$PATH</code>. Use the JVM variant in case your operating system is not directly supported.</p>
+<h2 id="huber">Huber</h2>
+<p>In case you are using <a href="https://github.com/innobead/huber">huber</a>, execute the following commands to install <code>ilo</code> on Linux/Mac/Windows:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> huber repo add remote-repo --url https://github.com/metio/ilo
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> huber install ilo
+</span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/install" term="install" label="install"/></entry></feed>

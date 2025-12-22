@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Argument Files on ilo</title><link href="https://ilo.projects.metio.wtf/tags/argument-files/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/tags/argument-files/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/tags/argument-files/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/tags/argument-files/</id><entry><title type="html">Argument Files</title><link href="https://ilo.projects.metio.wtf/usage/argument-files/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/argument-files/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to share the same options/commands across your team, <code>ilo</code> supports argument files which contain the options for your project, e.g. which image you are using. Argument files are just plain text files and both name and location can be chosen at will. In order to use an argument file, you have to add <strong>@</strong> in front of the file name: <code>ilo @file-name</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> write argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat some/folder/your-arguments
+</span></span><span class="line"><span class="cl"><span class="go">shell
+</span></span></span><span class="line"><span class="cl"><span class="go">node:latest
+</span></span></span><span class="line"><span class="cl"><span class="go">/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @some/folder/your-arguments
+</span></span></code></pre></div><p>The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> write argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat some/other/your-arguments
+</span></span><span class="line"><span class="cl"><span class="go">shell node:latest /bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> write argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat some/more/of/your-arguments
+</span></span><span class="line"><span class="cl"><span class="go">shell
+</span></span></span><span class="line"><span class="cl"><span class="go">node:latest /bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @some/other/your-arguments
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @some/more/of/your-arguments
+</span></span></code></pre></div><p><strong>Important</strong>: In case your option contains a whitespace, you have to either put the entire option with its value in single/double quotes or use a whitespace between option and value like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> quote the entire option
+</span></span><span class="line"><span class="cl"><span class="go">&#34;--runtime-option=some option here&#34;
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> quote the value
+</span></span><span class="line"><span class="cl"><span class="go">--runtime-option &#34;some option here&#34;
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> THIS WON<span class="err">&#39;</span>T WORK
+</span></span><span class="line"><span class="cl"><span class="go">--runtime-option=&#34;some option here&#34;
+</span></span></span></code></pre></div><p>You can use multiple arguments files which are evaluated in-order, e.g like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo @first @second
+</span></span></code></pre></div><p>You can mix argument files with regular CLI options as well:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell @default-shell openjdk:11
+</span></span></code></pre></div><p>The argument file used by <code>ilo</code> developers can be seen <a href="https://github.com/metio/ilo/blob/main/dev/env">here</a> and is used by calling <code>ilo @dev/env</code>.</p>
+<h2 id="rc-files">RC Files</h2>
+<p>In order to simplify/automate its usage, <code>ilo</code> will look for <a href="https://en.wikipedia.org/wiki/Run_commands">run command</a> files in the following locations:</p>
+<ol>
+<li><code>.ilo/ilo.rc</code></li>
+<li><code>.ilo.rc</code></li>
+</ol>
+<p><strong>Each</strong> file found will be added in-order as an argument file to your invocation of <code>ilo</code> <strong>before</strong> any other options you specify in your terminal. You can change the locations to check by specifying the <code>ILO_RC</code> environment variable. Multiple locations can be given by separating them with a comma like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> <span class="nb">export</span> <span class="nv">ILO_RC</span><span class="o">=</span>some-file.rc,another-one.rc
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo ...
+</span></span></code></pre></div><p>In order to disable loading <code>.rc</code> files entirely, specify <code>--no-rc</code> in the command line before the actual <code>ilo</code> subcommand, like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not load .rc files
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo --no-rc shell ...
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo --no-rc @some-argument-file ...
+</span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/argument-files" term="argument-files" label="argument files"/></entry></feed>

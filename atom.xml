@@ -1,0 +1,631 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">reproducible build environments on ilo</title><link href="https://ilo.projects.metio.wtf/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/atom.xml" rel="self" type="application/atom+xml" title="atom"/><link href="https://ilo.projects.metio.wtf/humans.txt" rel="alternate" type="text/plain" title="humans"/><link href="https://ilo.projects.metio.wtf/foaf.rdf" rel="alternate" type="application/rdf+xml" title="foaf"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/</id><entry><title type="html">Alternatives</title><link href="https://ilo.projects.metio.wtf/community/alternatives/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/community/alternatives/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>It&rsquo;s highly likely that <code>ilo</code> does not provide the functionality you are looking for. Here is a list of alternatives that might cover your needs:</p>
+<ul>
+<li><a href="https://containertoolbx.org/">toolbx</a>: Toolbx is a tool for Linux operating systems, which allows the use of containerized command line environments.</li>
+<li><a href="https://gitian.org/">gitian</a>: Gitian is a secure source-control oriented software distribution method.</li>
+<li><a href="https://rbm.torproject.org/">rbm</a>: Reproducible Build Manager (rbm) is a tool that helps you create and build packages for multiple linux distributions, and automate the parts that can be automated.</li>
+<li><a href="https://github.com/nerdvegas/rez">rez</a>: Rez is a cross-platform package manager with a difference.</li>
+<li><a href="https://github.com/mottosso/bleeding-rez">bleeding-rez</a>: Rez is a command-line utility for Windows, Linux and MacOS, solving the problem of creating a reproducible environment for your software projects on any machine in any pre-existing environment.</li>
+<li><a href="http://rbld.io/">rebuild</a>: A strategic approach to managing build and test environments for IoT and embedded development.</li>
+<li><a href="https://github.com/jasonwhite/ducible">ducible</a>: This is a tool to make builds of Portable Executables (PEs) and PDBs reproducible.</li>
+<li><a href="https://buildpacks.io/">buildpacks</a>: Buildpacks are pluggable, modular tools that translate source code into OCI images.</li>
+<li><a href="https://nixos.org/nix/">nix</a>: Nix makes it trivial to set up and share build environments for your projects, regardless of what programming languages and tools you’re using.</li>
+<li><a href="https://github.com/rosineygp/mkdkr">mkdkr</a>: Super small and powerful framework for build CI pipeline, scripted with Makefile and isolated with docker.</li>
+<li><a href="https://virtualenv.pypa.io/en/stable/">virtualenv</a>: virtualenv is a tool to create isolated Python environments.</li>
+<li><a href="https://github.com/Zlika/moot">moot</a>: A shell script to easily select, download and run the versions of Maven and JDK you want for your build.</li>
+<li><a href="https://paketo.io/">paketo</a>: Modular Buildpacks, written in Go. Paketo Buildpacks provide language runtime support for applications. They leverage the Cloud Native Buildpacks framework to make image builds easy, performant, and secure.</li>
+<li><a href="https://github.com/earthly/earthly">earthly</a>: run all your builds containerized</li>
+<li><a href="https://www.gitpod.io/">gitpod</a>: Describe your dev environment as code and get fully prebuilt, ready-to-code development environments for any GitLab, GitHub, and Bitbucket project.</li>
+<li><a href="https://www.vagrantup.com/">vagrant</a>: Vagrant is a tool for building and managing virtual machine environments in a single workflow.</li>
+<li><a href="https://subuser.org/">subuser</a>: Subuser turns Docker containers into normal linux programs</li>
+<li><a href="https://bobbuildtool.dev/">bob</a>: Bob is a functional build automation tool with an emphasis on cross compilation. It is intended for complex embedded projects and thus focuses on reproducible builds while still being nice to developers in agile environments.</li>
+<li><a href="https://github.com/kudulab/dojo">dojo</a>: Containerize your development and operations environment</li>
+<li><a href="https://github.com/kamilchm/go2nix">go2nix</a>: Reproducible builds and development environment for Go</li>
+<li><a href="https://github.com/nixcloud/dep2nix">dep2nix</a>: dep2nix converts a Gopkgs.lock file into a deps.nix file which is understood by nixpkgs&rsquo;s go abstraction thanks to go2nix effort.</li>
+<li><a href="https://github.com/nix-community/vgo2nix">vgo2nix</a>: Convert go.mod files to nixpkgs buildGoPackage compatible deps.nix files</li>
+<li><a href="https://mhewedy.github.io/vermin/">vermin</a>: Vermin is a smart, simple and powerful command line tool for Linux, Windows and macOS. It&rsquo;s designed for developers who want a fresh VM environment with a single command.</li>
+<li><a href="https://sdkman.io/">sdkman</a>: SDKMAN! is a tool for managing parallel versions of multiple Software Development Kits on most Unix based systems.</li>
+<li><a href="https://github.com/shyiko/jabba">jabba</a>: Java Version Manager inspired by nvm (Node.js). Written in Go.</li>
+<li><a href="https://github.com/nvm-sh/nvm">nvm</a>: nvm is a version manager for node.js, designed to be installed per-user, and invoked per-shell. nvm works on any POSIX-compliant shell (sh, dash, ksh, zsh, bash), in particular on these platforms: unix, macOS, and windows WSL.</li>
+<li><a href="https://devspace.sh/">devspace</a>: DevSpace is an open-source developer tool for Kubernetes that lets you develop and deploy cloud-native software faster.</li>
+<li><a href="https://github.com/rbenv/rbenv">rbenv</a>: Use rbenv to pick a Ruby version for your application and guarantee that your development environment matches production.</li>
+<li><a href="https://rvm.io/">rvm</a>: RVM is a command-line tool which allows you to easily install, manage, and work with multiple ruby environments from interpreters to sets of gems.</li>
+<li><a href="https://github.com/LoopPerfect/buckaroo">buckaroo</a>: The decentralized package manager for C++ and friends.</li>
+<li><a href="https://github.com/polydawn/repeatr">repeatr</a>: Repeatr is a tool for running processes repeatedly. Repeatr is designed to make task definition precise, environment setup portable, and results reproducible.</li>
+<li><a href="https://github.com/lando/lando">lando</a>: The local development and DevOps tool trusted by professional developers across the galaxy.</li>
+<li><a href="https://github.com/drud/ddev">ddev</a>: DDEV is an open source tool for running local web development environments for PHP, Python and Node.js, ready in minutes.</li>
+<li><a href="https://gitlab.com/uppercat/tlbx">tlbx</a>: tlbx is a tool that facilitates creating and using mutable, persistent Linux container environments.</li>
+<li><a href="https://github.com/DavHau/mach-nix">mach-nix</a>: Mach-nix makes it easy to create and share reproducible python environments.</li>
+<li><a href="https://rstudio.github.io/renv/">renv</a>: The renv package helps you create reproducible environments for your R projects.</li>
+<li><a href="https://github.com/getpopper/popper">popper</a>: Popper is a tool for defining and executing container-native workflows in Docker, as well as other container engines.</li>
+<li><a href="https://github.com/dbhi/qus">qus</a>: qemu-user-static (qus) is a compilation of utilities, examples and references to build and execute OCI images (aka docker images) for foreign architectures using QEMU&rsquo;s user-mode emulation.</li>
+<li><a href="https://github.com/cgwalters/coretoolbox">coretoolbox</a>: This is a new implementation of <a href="https://github.com/debarshiray/toolbox/">https://github.com/debarshiray/toolbox/</a></li>
+<li><a href="https://github.com/garmin/pyrex">pyrex</a>: Containerize your bitbake.</li>
+<li><a href="https://github.com/lxdock/lxdock">lxdock</a>: LXDock is a wrapper around LXD that allows developers to orchestrate their development environments using a workflow similar to Vagrant.</li>
+<li><a href="https://github.com/bketelsen/devlx">devlx</a>: devlx is a development tool that provisions temporary development environments. It uses lxd and zfs to make efficient, copy-on-write, workspaces from a user-provided template.</li>
+<li><a href="https://github.com/lueschem/edi">edi</a>: Driven by the DevOps mindset edi helps you to streamline your embedded development infrastructure.</li>
+<li><a href="https://github.com/YunoHost/ynh-dev">ynh-dev</a>: ynh-dev is a CLI tool to manage your local development environment for YunoHost.</li>
+<li><a href="https://github.com/Varying-Vagrant-Vagrants/VVV">VVV</a>: VVV is a local developer environment, mainly aimed at WordPress developers. It uses Vagrant and VirtualBox, and can be used to build sites, and contribute to WordPress.</li>
+<li><a href="https://github.com/ianmiell/shutit">shutit</a>: Automation framework for programmers.</li>
+<li><a href="https://github.com/vccw-team/vccw">vccw</a>: A Vagrant based development environment.</li>
+<li><a href="https://github.com/mechboxes/mech">mech</a>: Easy command line virtual machines for VMWare.</li>
+<li><a href="https://github.com/teracyhq/dev">dev</a>: The only truly universal productive software development platform for all!</li>
+<li><a href="https://github.com/Chassis/Desktop">Desktop</a>: Local WordPress development made easy.</li>
+<li><a href="https://github.com/stakkr-org/stakkr">stakkr</a>: Stakkr is a docker recompose tool that uses docker compose to easily create / maintain a stack of services, for example for web development.</li>
+<li><a href="https://github.com/ulikoehler/buildock">buildock</a>: Reproducible build environments for local builds using Docker.</li>
+<li><a href="https://github.com/tightenco/takeout">takeout</a>: Takeout is a Mac-based CLI tool for spinning up tiny Docker containers, one for each of your development environment dependencies.</li>
+<li><a href="https://laravel.com/docs/7.x/valet">valet</a>: Valet is a Laravel development environment for Mac minimalists.</li>
+<li><a href="https://python-poetry.org/">poetry</a>: Poetry comes with all the tools you might need to manage your projects in a deterministic way.</li>
+<li><a href="https://github.com/nix-community/poetry2nix">poetry2nix</a>: poetry2nix turns Poetry projects into Nix derivations without the need to actually write Nix expressions.</li>
+<li><a href="https://www.buildstream.build/">buildstream</a>: BuildStream is a powerful and flexible software integration toolset.</li>
+<li><a href="https://www.sciviews.org/software/svbox/">svbox</a>: A Reproducible Software Environment for Data Science</li>
+<li><a href="https://github.com/ctuning/ck">ck</a>: Collective Knowledge framework (CK) helps to organize any software project as a database of reusable components with common automation actions and extensible meta descriptions based on FAIR principles.</li>
+<li><a href="https://github.com/BrainTwister/docker-devel-env">docker-devel-env</a>: Fast, reproducible, and portable software development environments</li>
+<li><a href="https://github.com/luispedro/nixml">nixml</a>: Simple, perfectly reproducible, environments with nix specified using an YAML file.</li>
+<li><a href="https://docs.haskellstack.org/en/stable/README/">Stack</a>: Stack is a cross-platform program for developing Haskell projects. It is aimed at Haskellers both new and experienced.</li>
+<li><a href="https://conda.io/">Conda</a>: Package, dependency and environment management for any language—Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN, and more.</li>
+<li><a href="https://github.com/smarr/rebench">rebench</a>: Execute and document benchmarks reproducibly.</li>
+<li><a href="https://github.com/GreenCape/build">build</a>: A docker based test and build environment, especially for Joomla!</li>
+<li><a href="https://github.com/target/lorri">lorri</a>: lorri is a nix-shell replacement for project development. lorri is based around fast direnv integration for robust CLI and editor integration.</li>
+<li><a href="https://gitlab.com/njam/toolbox-njam">toolbox-njam</a>: Experimental Rust-clone of Fedora&rsquo;s toolbox for managing Linux containers for software development.</li>
+<li><a href="https://github.com/nhoffman/bioscons">bioscons</a>: Extends the scons build tool for reproducible workflows in bioinformatics.</li>
+<li><a href="https://github.com/rpm-software-management/mock">mock</a>: Mock is a tool for a reproducible build of RPM packages.</li>
+<li><a href="https://github.com/jenv/jenv">jenv</a>: jEnv is a command line tool to help you forget how to set the JAVA_HOME environment variable</li>
+<li><a href="https://asdf-vm.com/">asdf</a>: Manage multiple runtime versions with a single CLI tool</li>
+<li><a href="https://github.com/podenv/podenv">podenv</a>: Podenv provides a declarative interface to manage containerized application. Using rootless containers, podenv let you run applications seamlessly.</li>
+<li><a href="http://docker-sync.io/">docker-sync</a>: Run your application at full speed while syncing your code for development, finally empowering you to utilize docker for development under OSX/Windows/Linux.</li>
+<li><a href="https://github.com/numtide/devshell">devshell</a>: The goal of this project is to simplify per-project developer environments.</li>
+<li><a href="https://digga.divnix.com/">digga</a>: Digga is a flake utility library that helps you declaratively craft and manage all three layers of your system environment within a single nix flakes repository.</li>
+<li><a href="https://www.jetpack.io/devbox/">devbox</a>: Instant, easy, and predictable shells and containers.</li>
+<li><a href="https://devenv.sh/">devenv</a>: Fast, Declarative, Reproducible, and Composable Developer Environments.</li>
+<li><a href="https://github.com/kushaldas/asaman">asaman</a>: This is a tool to build reproducible wheels for your Python project or for all of your dependencies.</li>
+<li><a href="https://odo.dev/">odo</a>: Fast iterative application development deployed immediately to your kubernetes cluster.</li>
+<li><a href="https://sr.ht/~abcdw/rde/">rde</a>: Tools for managing reproducible development environments w/ guix.</li>
+<li><a href="https://github.com/tensorchord/envd">envd</a>: Reproducible development environment for AI/ML.</li>
+<li><a href="https://github.com/pypa/pipx">pipx</a>: Install and Run Python Applications in Isolated Environments.</li>
+<li><a href="https://devpod.sh/">devpod</a>: DevPod is a client-only tool to create reproducible developer environments based on a devcontainer.json on any backend.</li>
+<li><a href="https://metaswitch.github.io/floki/">floki</a>: floki aims to provide reproducible and shareable build tooling.</li>
+<li><a href="https://github.com/cashapp/hermit">hermit</a>: Hermit manages isolated, self-bootstrapping sets of tools in software projects.</li>
+<li><a href="https://github.com/devcontainers/cli">devcontainers/cli</a>: A reference implementation for the specification that can create and configure a dev container from a devcontainer.json.</li>
+<li><a href="https://github.com/yapret/toolship">toolship</a>: toolship is a small framework to containerize dev tools.</li>
+</ul>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/community" term="community" label="Community"/><category scheme="https://ilo.projects.metio.wtf/tags/alternatives" term="alternatives" label="alternatives"/></entry><entry><title type="html">Argument Files</title><link href="https://ilo.projects.metio.wtf/usage/argument-files/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/argument-files/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to share the same options/commands across your team, <code>ilo</code> supports argument files which contain the options for your project, e.g. which image you are using. Argument files are just plain text files and both name and location can be chosen at will. In order to use an argument file, you have to add <strong>@</strong> in front of the file name: <code>ilo @file-name</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> write argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat some/folder/your-arguments
+</span></span><span class="line"><span class="cl"><span class="go">shell
+</span></span></span><span class="line"><span class="cl"><span class="go">node:latest
+</span></span></span><span class="line"><span class="cl"><span class="go">/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @some/folder/your-arguments
+</span></span></code></pre></div><p>The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> write argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat some/other/your-arguments
+</span></span><span class="line"><span class="cl"><span class="go">shell node:latest /bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> write argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat some/more/of/your-arguments
+</span></span><span class="line"><span class="cl"><span class="go">shell
+</span></span></span><span class="line"><span class="cl"><span class="go">node:latest /bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @some/other/your-arguments
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @some/more/of/your-arguments
+</span></span></code></pre></div><p><strong>Important</strong>: In case your option contains a whitespace, you have to either put the entire option with its value in single/double quotes or use a whitespace between option and value like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> quote the entire option
+</span></span><span class="line"><span class="cl"><span class="go">&#34;--runtime-option=some option here&#34;
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> quote the value
+</span></span><span class="line"><span class="cl"><span class="go">--runtime-option &#34;some option here&#34;
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> THIS WON<span class="err">&#39;</span>T WORK
+</span></span><span class="line"><span class="cl"><span class="go">--runtime-option=&#34;some option here&#34;
+</span></span></span></code></pre></div><p>You can use multiple arguments files which are evaluated in-order, e.g like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo @first @second
+</span></span></code></pre></div><p>You can mix argument files with regular CLI options as well:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell @default-shell openjdk:11
+</span></span></code></pre></div><p>The argument file used by <code>ilo</code> developers can be seen <a href="https://github.com/metio/ilo/blob/main/dev/env">here</a> and is used by calling <code>ilo @dev/env</code>.</p>
+<h2 id="rc-files">RC Files</h2>
+<p>In order to simplify/automate its usage, <code>ilo</code> will look for <a href="https://en.wikipedia.org/wiki/Run_commands">run command</a> files in the following locations:</p>
+<ol>
+<li><code>.ilo/ilo.rc</code></li>
+<li><code>.ilo.rc</code></li>
+</ol>
+<p><strong>Each</strong> file found will be added in-order as an argument file to your invocation of <code>ilo</code> <strong>before</strong> any other options you specify in your terminal. You can change the locations to check by specifying the <code>ILO_RC</code> environment variable. Multiple locations can be given by separating them with a comma like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> <span class="nb">export</span> <span class="nv">ILO_RC</span><span class="o">=</span>some-file.rc,another-one.rc
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo ...
+</span></span></code></pre></div><p>In order to disable loading <code>.rc</code> files entirely, specify <code>--no-rc</code> in the command line before the actual <code>ilo</code> subcommand, like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not load .rc files
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo --no-rc shell ...
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo --no-rc @some-argument-file ...
+</span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/argument-files" term="argument-files" label="argument files"/></entry><entry><title type="html">Autocomplete</title><link href="https://ilo.projects.metio.wtf/usage/autocomplete/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/autocomplete/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The <code>ilo generate-completion</code> command generates autocompletion configuration for shells such as <a href="https://www.gnu.org/software/bash/">bash</a> and <a href="https://www.zsh.org/">zsh</a>.</p>
+<p>Once enabled you can use the <code>&lt;TAB&gt;</code> key to autocomplete ilo commands and their options:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> autocomplete commands
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo s&lt;TAB&gt;
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> autocomplete options
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --re&lt;TAB&gt;
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --remove-image
+</span></span></code></pre></div><h2 id="bash">bash</h2>
+<p>In order to integrate autocompletion into <a href="https://www.gnu.org/software/bash/">bash</a>, follow these steps:</p>
+<ol>
+<li>Create or edit <code>~/.bashrc</code>.</li>
+<li>Add the following line
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</span></span></code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+<h2 id="zsh">zsh</h2>
+<p>In order to integrate autocompletion into <a href="https://www.zsh.org/">zsh</a>, follow these steps:</p>
+<ol>
+<li>Create or edit <code>$ZDOTDIR/.zshrc</code>.</li>
+<li>Add the following line
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</span></span></code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/autocomplete" term="autocomplete" label="autocomplete"/></entry><entry><title type="html">Automate</title><link href="https://ilo.projects.metio.wtf/usage/autoenv/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/autoenv/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to simplify the usage of <code>ilo</code>, consider using <code>autoenv</code>-like tooling. These tools all allow you to just enter a directory and will automatically call <code>ilo</code> for you like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname ~]$</span> <span class="nb">cd</span> path/to/your/project
+</span></span><span class="line"><span class="cl"><span class="gp">[root@container project-dir]#</span>
+</span></span></code></pre></div><p>As soon as you enter the directory of your project, these tools will call <code>ilo</code> which in turn will open your build environment for you.</p>
+<h2 id="autoenv">autoenv</h2>
+<p>In order to use <a href="https://github.com/inishchith/autoenv">autoenv</a>, first <a href="https://github.com/inishchith/autoenv#install">install it</a> and then place a <code>.env</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .env
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="direnv">direnv</h2>
+<p>In order to use <a href="https://direnv.net/">direnv</a>, first <a href="https://direnv.net/#basic-installation">install it</a> and then place a <code>.envrc</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .envrc
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="envrc-rs">envrc-rs</h2>
+<p>In order to use <a href="https://github.com/roxma/envrc-rs">envrc-rs</a>, first <a href="https://github.com/roxma/envrc-rs#install">install it</a> and then place a <code>.envrc</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .envrc
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="smartcd">smartcd</h2>
+<p>In order to use <a href="https://github.com/cxreg/smartcd">smartcd</a>, first <a href="https://github.com/cxreg/smartcd#ok-how-do-i-use-it">install it</a>, enter the root directory of your project and then call <code>smartcd edit enter</code> which will open an editor to write a script to execute whenever you enter your project directory. Use something like <code>ilo @build-env</code> as the script.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat ~/.smartcd/scripts/path/to/project-dir/bash_enter
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="zsh-autoenv">zsh-autoenv</h2>
+<p>In order to use <a href="https://github.com/Tarrasch/zsh-autoenv">zsh-autoenv</a>, first <a href="https://github.com/Tarrasch/zsh-autoenv#installation">install it</a> and then place a <code>.autoenv.zsh</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .autoenv.zsh
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="tmuxp">tmuxp</h2>
+<p>In order to use <a href="https://github.com/tmux-python/tmuxp">tmuxp</a>, first <a href="https://github.com/tmux-python/tmuxp#installation">install it</a> and then create a new configuration in <code>${XDG_CONFIG_HOME}/tmuxp</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/tmuxp/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">session_name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">- window_name: dev window
+</span></span></span><span class="line"><span class="cl"><span class="go">  shell_command_before:
+</span></span></span><span class="line"><span class="cl"><span class="go">    - cd ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">  panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">    - shell_command:
+</span></span></span><span class="line"><span class="cl"><span class="go">        - ilo @build-env
+</span></span></span></code></pre></div><h2 id="teamocil">teamocil</h2>
+<p>In order to use <a href="https://github.com/remi/teamocil">teamocil</a>, first <a href="https://github.com/remi/teamocil#installation">install it</a> and then create a new configuration in <code>~/.teamocil</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat ~/.teamocil/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">    root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">    panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">      - ilo @build-env
+</span></span></span></code></pre></div><h2 id="tmuxifier">tmuxifier</h2>
+<p>In order to use <a href="https://github.com/jimeh/tmuxifier">tmuxifier</a>, first <a href="https://github.com/jimeh/tmuxifier#installation">install it</a> and then create a new configuration in <code>$TMUXIFIER_LAYOUT_PATH</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="nv">$TMUXIFIER_LAYOUT_PATH</span>/your-project.sh
+</span></span><span class="line"><span class="cl"><span class="go">window_root &#34;~/path/to/your/project&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">new_window &#34;Your Project&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">split_v 20
+</span></span></span><span class="line"><span class="cl"><span class="go">run_cmd &#34;ilo @build-env&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">split_h 60
+</span></span></span><span class="line"><span class="cl"><span class="go">select_pane 0
+</span></span></span></code></pre></div><h2 id="tmuxinator">tmuxinator</h2>
+<p>In order to use <a href="https://github.com/tmuxinator/tmuxinator">tmuxinator</a>, first <a href="https://github.com/tmuxinator/tmuxinator#installation">install it</a> and then create a new configuration in <code>~/.config/tmuxinator</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat ~/.config/tmuxinator/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - your_project:
+</span></span></span><span class="line"><span class="cl"><span class="go">      panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">        - ilo @build-env
+</span></span></span></code></pre></div><h2 id="dmux">dmux</h2>
+<p>In order to use <a href="https://github.com/zdcthomas/dmux">dmux</a>, first <a href="https://github.com/zdcthomas/dmux#installation">install it</a> and then create your configuration in <code>${XDG_CONFIG_HOME}/dmux/dmux.conf.{file_type}</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/dmux/dmux.conf.toml
+</span></span><span class="line"><span class="cl"><span class="go">[your-project]
+</span></span></span><span class="line"><span class="cl"><span class="go">number_of_panes = 2
+</span></span></span><span class="line"><span class="cl"><span class="go">session_name = &#34;Your Project&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">commands = [&#34;ilo @build-env&#34;]
+</span></span></span></code></pre></div><h2 id="airmux">airmux</h2>
+<p>In order to use <a href="https://github.com/dermoumi/airmux">airmux</a>, first <a href="https://github.com/dermoumi/airmux#installation">install it</a> and then create a new configuration in <code>${XDG_CONFIG_HOME}/airmux</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/airmux/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - your_project:
+</span></span></span><span class="line"><span class="cl"><span class="go">      panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">        - command: ilo @build-env
+</span></span></span></code></pre></div><h2 id="smug">smug</h2>
+<p>In order to use <a href="https://github.com/ivaaaan/smug">smug</a>, first <a href="https://github.com/ivaaaan/smug#installation">install it</a> and then create a new configuration in <code>${XDG_CONFIG_HOME}/smug</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/smug/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">session: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - name: your_project
+</span></span></span><span class="line"><span class="cl"><span class="go">    commands:
+</span></span></span><span class="line"><span class="cl"><span class="go">      - ilo @build-env
+</span></span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/autoenv" term="autoenv" label="autoenv"/><category scheme="https://ilo.projects.metio.wtf/tags/direnv" term="direnv" label="direnv"/><category scheme="https://ilo.projects.metio.wtf/tags/smartcd" term="smartcd" label="smartcd"/><category scheme="https://ilo.projects.metio.wtf/tags/zsh-autoenv" term="zsh-autoenv" label="zsh-autoenv"/></entry><entry><title type="html">Build Environments</title><link href="https://ilo.projects.metio.wtf/usage/build-envs/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/contributors/building/?utm_source=atom_feed" rel="related" type="text/html" title="Building"/><id>https://ilo.projects.metio.wtf/usage/build-envs/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> allows you to define your build environment either in a <a href="https://docs.docker.com/engine/reference/builder/">Containerfile/Dockerfile</a> or any other <a href="https://github.com/opencontainers/image-spec/blob/master/spec.md">OCI Image</a> compliant way. In contrast to <a href="https://containertoolbx.org/">toolbx</a>, <code>ilo</code> relies on immutable containers which makes it easier to share those images across your team. <code>ilo</code> uses the same mechanism to define build environments that developers are already using to define their application run environments. Therefore, onboarding and adapting container based build environments should be easy for most teams.</p>
+<p>As an example, consider the following Containerfile that is based on the official <a href="https://hub.docker.com/_/maven">Maven image</a> and extends that with another binary (<a href="https://gohugo.io/">hugo</a> in this case).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> write some Containerfile
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat your.containerfile
+</span></span><span class="line"><span class="cl"><span class="go">FROM maven:3-openjdk-11-slim
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">RUN apt-get update &amp;&amp; apt-get install hugo -y
+</span></span></span></code></pre></div><p>This image can be build just like any other image with your typical tooling, e.g. using <a href="https://podman.io/">podman</a>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> podman build --tag your.image:your.tag --file your.containerfile path/to/build/context
+</span></span></code></pre></div><p>The idea behind <code>ilo</code> is that you use this image to start a container that mounts your project directory and is able to execute any command that you are using to build/test/package your project.</p>
+<p>Take a look at the detailed instructions for <a href="../../shell">ilo shell</a> on how to use your created image.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/build" term="build" label="build"/><category scheme="https://ilo.projects.metio.wtf/tags/env" term="env" label="env"/></entry><entry><title type="html">Building</title><link href="https://ilo.projects.metio.wtf/contributors/building/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/usage/build-envs/?utm_source=atom_feed" rel="related" type="text/html" title="Build Environments"/><id>https://ilo.projects.metio.wtf/contributors/building/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> requires a certain set of software installed on your system in order to be built.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><a href="https://git-scm.com/">git</a> to fetch the <a href="../git-mirrors">source code</a> of <code>ilo</code></li>
+</ul>
+<h2 id="ilo-setup">ilo Setup</h2>
+<p>You can use <code>ilo</code> to build <code>ilo</code>! Make sure your system has the following:</p>
+<ul>
+<li><a href="../../usage/install">ilo</a> to open the reproducible build environment for <code>ilo</code> itself</li>
+<li>One of the <a href="../../shell/runtimes">runtimes</a> that <code>ilo shell</code> supports.</li>
+</ul>
+<h2 id="manual-setup">Manual Setup</h2>
+<p>In case you do not have <code>ilo</code> installed on your system, install the following manually:</p>
+<ul>
+<li><a href="https://jdk.java.net/">Java JDK</a> to compile the code</li>
+<li><a href="https://maven.apache.org/">Maven</a> to build the project</li>
+<li><a href="https://gohugo.io/">hugo</a> in order to create the website</li>
+<li><a href="https://www.graalvm.org/">GraalVM</a> to build a native executable</li>
+</ul>
+<h2 id="building">Building</h2>
+<h3 id="using-ilo">Using ilo</h3>
+<p>In case you have <code>ilo</code> installed, call this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> open a shell with a pre-defined build environment
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/env
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build the project
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/build
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build native executable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/native
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/website
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> serve website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/serve
+</span></span></code></pre></div><h3 id="without-ilo">Without ilo</h3>
+<p>In order to build <code>ilo</code> without having <code>ilo</code> installed call:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> build the project
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> mvn verify
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build native executable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> mvn verify --define <span class="nv">skipNativeBuild</span><span class="o">=</span><span class="nb">false</span>
+</span></span></code></pre></div><p>In case you want to build or work on the website do this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> build website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> serve website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> hugo server --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs --watch
+</span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/contributors" term="contributors" label="Contributors"/><category scheme="https://ilo.projects.metio.wtf/tags/build" term="build" label="build"/><category scheme="https://ilo.projects.metio.wtf/tags/environment" term="environment" label="environment"/></entry><entry><title type="html">Examples</title><link href="https://ilo.projects.metio.wtf/shell/examples/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/shell/examples/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The following examples show how <code>ilo shell</code> can be used.</p>
+<h2 id="cargo-projects">Cargo Projects</h2>
+<p><a href="https://doc.rust-lang.org/cargo/">Cargo</a> caches all downloaded dependencies in your local <code>~/.cargo/registry</code> directory.</p>
+<p>In order to re-use already downloaded dependencies inside the container, specify a <code>--volumne</code> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> Cargo project that mounts <span class="nb">local</span> .cargo folder
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="go">    --volume ${HOME}/.cargo/registry:/usr/local/cargo/registry:z \
+</span></span></span><span class="line"><span class="cl"><span class="go">    rust:latest
+</span></span></span></code></pre></div><p><strong>Note</strong>: The container path <code>/usr/local/cargo</code> is specified in the image used in this example (<code>rust:latest</code>). Adjust this value according to the image you are actually using in your project.</p>
+<h2 id="gradle-projects">Gradle Projects</h2>
+<p><a href="https://gradle.org/">Gradle</a> caches all downloaded dependencies in your local <code>~/.gradle</code> directory.</p>
+<p>In order to re-use already downloaded dependencies inside the container, specify a <code>--volumne</code> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> Gradle project that mounts <span class="nb">local</span> .gradle folder
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="go">    --volume ${HOME}/.gradle:/home/gradle/.gradle:z \
+</span></span></span><span class="line"><span class="cl"><span class="go">    gradle:latest
+</span></span></span></code></pre></div><p><strong>Note</strong>: The container path <code>/home/gradle/.gradle</code> is specified in the image used in this example (<code>gradle:latest</code>). Adjust this value according to the image you are actually using in your project.</p>
+<h2 id="maven-projects">Maven Projects</h2>
+<p><a href="https://maven.apache.org/">Maven</a> caches all downloaded dependencies in your local <code>~/.m2</code> directory.</p>
+<p>In order to re-use already downloaded dependencies inside the container, specify a <code>--volumne</code> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> Maven project that mounts <span class="nb">local</span> m2 repo
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="go">    --volume ${HOME}/.m2:/root/.m2:z \
+</span></span></span><span class="line"><span class="cl"><span class="go">    maven:latest
+</span></span></span></code></pre></div><p><strong>Note</strong>: The container path <code>/root/.m2</code> is specified in the image used in this example (<code>maven:latest</code>). Adjust this value according to the image you are actually using in your project.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/shell" term="shell" label="shell"/><category scheme="https://ilo.projects.metio.wtf/tags/examples" term="examples" label="examples"/></entry><entry><title type="html">First Timer</title><link href="https://ilo.projects.metio.wtf/contributors/first-timer/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/community/help/?utm_source=atom_feed" rel="related" type="text/html" title="Help"/><id>https://ilo.projects.metio.wtf/contributors/first-timer/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> is an open source product released under the <a href="https://spdx.org/licenses/0BSD.html">0BSD license</a>. In order to make sure that each contribution is correctly attributed and licensed, the Developer Certificate of Origin (DCO) <strong>MUST</strong> be signed by each contributor with their first commit. In order to do so, simply add a <code>Signed-off-by</code> statement at the end of your commit yourself or use <code>git commit -s</code> to do that automatically. The DCO can be seen below or at <a href="https://developercertificate.org/">https://developercertificate.org/</a></p>
+<pre tabindex="0"><code>Developer&#39;s Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the
+    best of my knowledge, is covered under an appropriate open
+    source license and I have the right under that license to
+    submit that work with modifications, whether created in whole
+    or in part by me, under the same open source license (unless
+    I am permitted to submit under a different license), as
+    Indicated in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including
+    all personal information I submit with it, including my
+    sign-off) is maintained indefinitely and may be redistributed
+    consistent with this project or the open source license(s)
+    involved.
+</code></pre><h2 id="metadata">Metadata</h2>
+<p>Every contributor <strong>MAY</strong> add/remove their metadata to the list of contributors at any time. Simply add a file called <code>&lt;YOUR_NAME&gt;.yaml</code> in the <a href="https://github.com/metio/ilo/tree/main/docs/data/contributors">contributors directory</a> with the following properties:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_NAME&gt;&#39;</span><span class="w">                   </span><span class="c"># should match file name (required)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_TITLE&gt;&#39;</span><span class="w">               </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">first_name</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_FIRST_NAME&gt;&#39;</span><span class="w">     </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">last_name</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_LAST_NAME&gt;&#39;</span><span class="w">       </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_EMAIL&gt;&#39;</span><span class="w">               </span><span class="c"># used by FOAF (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">website</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_URL&gt;&#39;</span><span class="w">               </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span></code></pre></div><p>Metadata is currently used in three places:</p>
+<ol>
+<li>To generate a <a href="https://humanstxt.org/">humans.txt</a> file of <a href="https://ilo.projects.metio.wtf/humans.txt">all contributors</a>.</li>
+<li>To generate a <a href="http://xmlns.com/foaf/spec/">FOAF</a> for the <a href="https://ilo.projects.metio.wtf/foaf.rdf">entire project</a>.</li>
+</ol>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/contributors" term="contributors" label="Contributors"/><category scheme="https://ilo.projects.metio.wtf/tags/help" term="help" label="help"/></entry><entry><title type="html">Git Mirrors</title><link href="https://ilo.projects.metio.wtf/contributors/git-mirrors/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/contributors/git-mirrors/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> is using <a href="https://github.com/metio/ilo">GitHub</a> as its primary source/issue/build environment, however its code is available in other git repositories as well in order to deal with <a href="https://www.githubstatus.com/">GitHub outages</a>.</p>
+<h2 id="available-mirrors">Available Mirrors</h2>
+<p>Mirrors are updated automatically as explained in this <a href="https://seb.people.metio.wtf/topic/gitlab-the-git-distributor/">blog post</a>.</p>
+<ul>
+<li><a href="https://github.com/metio/ilo">https://github.com/metio/ilo</a></li>
+<li><a href="https://gitlab.com/metio.wtf/ilo">https://gitlab.com/metio.wtf/ilo</a></li>
+<li><a href="https://codeberg.org/metio.wtf/ilo">https://codeberg.org/metio.wtf/ilo</a></li>
+<li><a href="https://bitbucket.org/metio-wtf/ilo">https://bitbucket.org/metio-wtf/ilo</a></li>
+<li><a href="https://repo.or.cz/ilo.git">https://repo.or.cz/ilo.git</a></li>
+</ul>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/contributors" term="contributors" label="Contributors"/><category scheme="https://ilo.projects.metio.wtf/tags/git" term="git" label="git"/><category scheme="https://ilo.projects.metio.wtf/tags/mirror" term="mirror" label="mirror"/></entry><entry><title type="html">Help</title><link href="https://ilo.projects.metio.wtf/community/help/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/contributors/first-timer/?utm_source=atom_feed" rel="related" type="text/html" title="First Timer"/><id>https://ilo.projects.metio.wtf/community/help/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In case you need help, don’t panic - we’ve all been there! Try the following resources in order to get help:</p>
+<ul>
+<li><a href="https://github.com/metio/ilo/issues/new?assignees=sebhoss&amp;labels=bug&amp;template=bug_report.md&amp;title=">open a new bug report</a></li>
+<li><a href="https://github.com/metio/ilo/issues/new?assignees=&amp;labels=enhancement&amp;template=feature_request.md&amp;title=">create a new feature request</a></li>
+<li><a href="https://github.com/metio/ilo/discussions">open a new discussion</a></li>
+<li><a href="https://matrix.to/#/#ilo:matrix.org">join the chat room</a></li>
+<li><a href="https://metio.groups.io/g/ilo/topics">send an email to the mailing list</a></li>
+<li>Take a walk outside &amp; come back to your issue with a fresh mind</li>
+</ul>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/community" term="community" label="Community"/><category scheme="https://ilo.projects.metio.wtf/tags/help" term="help" label="help"/></entry><entry><title type="html">Install</title><link href="https://ilo.projects.metio.wtf/usage/install/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/install/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>Prebuilt binaries of <code>ilo</code> are available for each published release at:</p>
+<ul>
+<li><a href="https://github.com/metio/ilo/releases">https://github.com/metio/ilo/releases</a></li>
+</ul>
+<p>Download the package for your operating system and put the <code>ilo</code> binary in your <code>$PATH</code>. Use the JVM variant in case your operating system is not directly supported.</p>
+<h2 id="huber">Huber</h2>
+<p>In case you are using <a href="https://github.com/innobead/huber">huber</a>, execute the following commands to install <code>ilo</code> on Linux/Mac/Windows:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> huber repo add remote-repo --url https://github.com/metio/ilo
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> huber install ilo
+</span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/install" term="install" label="install"/></entry><entry><title type="html">Options</title><link href="https://ilo.projects.metio.wtf/shell/options/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/shell/options/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The <code>ilo shell</code> command can be configured with the following command line options. From your terminal, use <code>ilo shell --help</code> to get a list of all options, and their default values.</p>
+<h2 id="--context"><code>--context</code></h2>
+<p>The <code>--context</code> option allows to specify the context when building an image with <code>--containerfile</code>/<code>--dockerfile</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom context
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --context ./local/folder
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify context
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--context</code> is set to <code>.</code> (the current directory).</p>
+<h2 id="--containerfile--dockerfile"><code>--containerfile</code>/<code>--dockerfile</code></h2>
+<p>The <code>--containerfile</code>/<code>--dockerfile</code> option can be used to specify a local <code>Containerfile</code>/<code>Dockerfile</code>. Specifying such a file will cause <code>ilo</code> to build your image first, and then open a shell into a container based on that image.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom Containerfile
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --containerfile some/where/your.containerfile
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify Containerfile
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--containerfile</code>/<code>--dockerfile</code> is not set to any value.</p>
+<h2 id="--debug"><code>--debug</code></h2>
+<p>The <code>--debug</code> option toggles whether <code>ilo</code> should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from <code>ilo</code> and just use your preferred runtime instead.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> print runtime commands
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --debug
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not print runtime commands
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --debug<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--debug</code> is not enabled.</p>
+<h2 id="--env"><code>--env</code></h2>
+<p>The <code>--env</code> option can be used to specify environment variables for your container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --env <span class="nv">key</span><span class="o">=</span>value
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--env</code> does not set any environment variables.</p>
+<h2 id="--hostname"><code>--hostname</code></h2>
+<p>The <code>--hostname</code> option can be used to set the hostname of your container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> <span class="nb">set</span> hostname
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --hostname you.home.arpa
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not <span class="nb">set</span> hostname
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--hostname</code> is not set to any value.</p>
+<h2 id="--interactive"><code>--interactive</code></h2>
+<p>The <code>--interactive</code> option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> run interactively
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --interactive
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> run non-interactive
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-interactive
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --interactive<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> run interactively
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--interactive</code> is enabled.</p>
+<h2 id="--missing-volumes"><code>--missing-volumes</code></h2>
+<p>The <code>--missing-volumes</code> option controls how <code>ilo</code> should deal with non-existing local directories that you want to mount into the container. The default behavior is <code>CREATE</code> which creates the directory on the host machine before creating the container and mounting the new empty directory into it. Changing this option to <code>WARN</code> causes will result in a warning that a local directory cannot be mounted. <code>ilo</code> will still create the container, just not with that missing directory mounted. The <code>ERROR</code> option causes <code>ilo</code> to fail in case you specify a local directory to mount that does not exist. All three options are case-insensitive, e.g. use <code>create</code>, <code>CREATE</code>, or <code>CreATE</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> create missing <span class="nb">local</span> directories
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell ----missing-volumes<span class="o">=</span>CREATE
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> warn on missing <span class="nb">local</span> directories
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell ----missing-volumes<span class="o">=</span>WARN
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> error on missing <span class="nb">local</span> directories
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell ----missing-volumes<span class="o">=</span>ERROR
+</span></span></code></pre></div><h2 id="--mount-project-dir"><code>--mount-project-dir</code></h2>
+<p>The <code>--mount-project-dir</code> option can be used to toggle whether the current directory should be mounted into the container. The location inside the container is specified with <code>--working-dir</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> mount current directory into container
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --mount-project-dir
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not mount directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-mount-project-dir
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --mount-project-dir<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> mount directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--mount-project-dir</code> is enabled.</p>
+<h2 id="--publish"><code>--publish</code></h2>
+<p>The <code>--publish</code> option can be used to publish ports of your container to your local system.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> binds your <span class="nb">local</span> <span class="m">8080</span> port to port <span class="m">80</span> of the container
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --publish 8080:80
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not expose any ports
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--publish</code> does not exposes any ports.</p>
+<h2 id="--pull"><code>--pull</code></h2>
+<p>The <code>--pull</code> option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a <code>latest</code> tag for their image. The image will only be pulled in case the registry contains a newer image than locally available.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> pull image before opening shell
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --pull
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not pull image before opening shell
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-pull
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --pull<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not pull image before opening shell
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--pull</code> is not enabled.</p>
+<h2 id="--remove-image"><code>--remove-image</code></h2>
+<p>The <code>--remove-image</code> option causes <code>ilo</code> to remove the specified image from your local system after you close your shell, or the non-interactive commands finishes. This is especially useful in combination with <code>--containerfile</code>/<code>--dockerfile</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> remove image after shell was closed
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --remove-image
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not remove image
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-remove-image
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --remove-image<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--remove-image</code> is not enabled.</p>
+<h2 id="--runtime"><code>--runtime</code></h2>
+<p>The <code>--runtime</code> option can be used to force the usage of a specific runtime. See <a href="../runtimes">runtimes</a> for details.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> force to use podman
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime podman
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> force to use docker
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime docker
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> force to use lxd
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime lxd
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> auto <span class="k">select</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><h2 id="--runtime-option"><code>--runtime-option</code></h2>
+<p>The <code>--runtime-option</code> option can be specified multiple times and contains options for the underlying runtime.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-option<span class="o">=</span>--remote
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-option<span class="o">=</span>--remote --runtime-option<span class="o">=</span>--syslog
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-option</code> is set to an empty array.</p>
+<h2 id="--runtime-pull-option"><code>--runtime-pull-option</code></h2>
+<p>The <code>--runtime-pull-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>pull</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-pull-option<span class="o">=</span>--all-tags
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-pull-option<span class="o">=</span>--all-tags --runtime-pull-option<span class="o">=</span>--quiet
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-pull-option</code> is set to an empty array.</p>
+<h2 id="--runtime-build-option"><code>--runtime-build-option</code></h2>
+<p>The <code>--runtime-build-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>build</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-build-option<span class="o">=</span>--squash
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-build-option<span class="o">=</span>--squash --runtime-build-option<span class="o">=</span>--no-cache
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-build-option</code> is set to an empty array.</p>
+<h2 id="--runtime-run-option"><code>--runtime-run-option</code></h2>
+<p>The <code>--runtime-run-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>run</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-run-option<span class="o">=</span>--privileged
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-run-option<span class="o">=</span>--privileged --runtime-run-option<span class="o">=</span>--replace
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-run-option</code> is set to an empty array.</p>
+<h2 id="--runtime-cleanup-option"><code>--runtime-cleanup-option</code></h2>
+<p>The <code>--runtime-cleanup-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>rmi</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-cleanup-option<span class="o">=</span>--force
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-cleanup-option<span class="o">=</span>--force --runtime-cleanup-option<span class="o">=</span>--all
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-cleanup-option</code> is set to an empty array.</p>
+<h2 id="--volume"><code>--volume</code></h2>
+<p>The <code>--volume</code> option can be used to mount additional volumes into your container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> mount extra volume
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --volume <span class="nv">$HOME</span>/.m2/repository:/root/.m2/repository:z
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not mount extra volume
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--volume</code> does not mount any extra volumes.</p>
+<h2 id="--working-dir"><code>--working-dir</code></h2>
+<p>The <code>--working-dir</code> option can be used to set the working directory inside your container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom working directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --working-dir /project/dir
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use current directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--working-dir</code> uses the current directory on the host machine in order to have the same paths on the host and in the container.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/shell" term="shell" label="shell"/><category scheme="https://ilo.projects.metio.wtf/tags/options" term="options" label="options"/></entry><entry><title type="html">Release</title><link href="https://ilo.projects.metio.wtf/contributors/release/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/contributors/release/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The release process of <code>ilo</code> is highly automated, therefore you only have to:</p>
+<ol>
+<li>Push changes into the <code>main</code> branch.</li>
+<li>Wait until an <a href="https://github.com/metio/ilo/blob/main/.github/workflows/release.yml">GitHub action</a> will perform a release automatically. Take a look at the <a href="https://metio.groups.io/g/ilo/calendar">calendar</a> for the next scheduled release. Note that a release will only be performed if any changes to the source code were detected since the last release.</li>
+</ol>
+<p>Each new release will:</p>
+<ul>
+<li>Publish a new GitHub <a href="https://github.com/metio/ilo/releases">release</a></li>
+<li>Publish an <a href="https://metio.groups.io/g/ilo/topics">email</a></li>
+</ul>
+]]></content></entry><entry><title type="html">Runtimes</title><link href="https://ilo.projects.metio.wtf/shell/runtimes/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/shell/runtimes/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo shell</code> by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the <code>--runtime</code> flag or set the <code>ILO_SHELL_RUNTIME</code> environment variable in your system. The <code>--runtime</code> flag overwrites the environment variable.</p>
+<h2 id="docker">Docker</h2>
+<p>Force <code>ilo</code> to use <a href="https://www.docker.com/">docker</a> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime docker
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use <span class="nb">alias</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime d
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> <span class="nv">ILO_SHELL_RUNTIME</span><span class="o">=</span>docker ilo shell
+</span></span></code></pre></div><h2 id="nerdctl">nerdctl</h2>
+<p>Force <code>ilo</code> to use <a href="https://github.com/containerd/nerdctl">nerdctl</a> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime nerdctl
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use <span class="nb">alias</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime n
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> <span class="nv">ILO_SHELL_RUNTIME</span><span class="o">=</span>nerdctl ilo shell
+</span></span></code></pre></div><h2 id="podman">Podman</h2>
+<p>Force <code>ilo</code> to use <a href="https://podman.io/">podman</a> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime podman
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use <span class="nb">alias</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime p
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> <span class="nv">ILO_SHELL_RUNTIME</span><span class="o">=</span>podman ilo shell
+</span></span></code></pre></div><h2 id="auto-selection">Auto Selection</h2>
+<p>If not otherwise specified, <code>ilo</code> always picks runtimes in this order, depending on which are available on your system:</p>
+<ol>
+<li>podman</li>
+<li>nerdctl</li>
+<li>docker</li>
+</ol>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/shell" term="shell" label="shell"/><category scheme="https://ilo.projects.metio.wtf/tags/runtime" term="runtime" label="runtime"/><category scheme="https://ilo.projects.metio.wtf/tags/docker" term="docker" label="docker"/><category scheme="https://ilo.projects.metio.wtf/tags/podman" term="podman" label="podman"/><category scheme="https://ilo.projects.metio.wtf/tags/nerdctl" term="nerdctl" label="nerdctl"/></entry></feed>

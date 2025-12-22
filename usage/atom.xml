@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Usage on ilo</title><link href="https://ilo.projects.metio.wtf/usage/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/usage/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/usage/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/usage/</id><entry><title type="html">Argument Files</title><link href="https://ilo.projects.metio.wtf/usage/argument-files/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/argument-files/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to share the same options/commands across your team, <code>ilo</code> supports argument files which contain the options for your project, e.g. which image you are using. Argument files are just plain text files and both name and location can be chosen at will. In order to use an argument file, you have to add <strong>@</strong> in front of the file name: <code>ilo @file-name</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> write argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat some/folder/your-arguments
+</span></span><span class="line"><span class="cl"><span class="go">shell
+</span></span></span><span class="line"><span class="cl"><span class="go">node:latest
+</span></span></span><span class="line"><span class="cl"><span class="go">/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @some/folder/your-arguments
+</span></span></code></pre></div><p>The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> write argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat some/other/your-arguments
+</span></span><span class="line"><span class="cl"><span class="go">shell node:latest /bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> write argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat some/more/of/your-arguments
+</span></span><span class="line"><span class="cl"><span class="go">shell
+</span></span></span><span class="line"><span class="cl"><span class="go">node:latest /bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use argument file
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @some/other/your-arguments
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @some/more/of/your-arguments
+</span></span></code></pre></div><p><strong>Important</strong>: In case your option contains a whitespace, you have to either put the entire option with its value in single/double quotes or use a whitespace between option and value like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> quote the entire option
+</span></span><span class="line"><span class="cl"><span class="go">&#34;--runtime-option=some option here&#34;
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> quote the value
+</span></span><span class="line"><span class="cl"><span class="go">--runtime-option &#34;some option here&#34;
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> THIS WON<span class="err">&#39;</span>T WORK
+</span></span><span class="line"><span class="cl"><span class="go">--runtime-option=&#34;some option here&#34;
+</span></span></span></code></pre></div><p>You can use multiple arguments files which are evaluated in-order, e.g like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo @first @second
+</span></span></code></pre></div><p>You can mix argument files with regular CLI options as well:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell @default-shell openjdk:11
+</span></span></code></pre></div><p>The argument file used by <code>ilo</code> developers can be seen <a href="https://github.com/metio/ilo/blob/main/dev/env">here</a> and is used by calling <code>ilo @dev/env</code>.</p>
+<h2 id="rc-files">RC Files</h2>
+<p>In order to simplify/automate its usage, <code>ilo</code> will look for <a href="https://en.wikipedia.org/wiki/Run_commands">run command</a> files in the following locations:</p>
+<ol>
+<li><code>.ilo/ilo.rc</code></li>
+<li><code>.ilo.rc</code></li>
+</ol>
+<p><strong>Each</strong> file found will be added in-order as an argument file to your invocation of <code>ilo</code> <strong>before</strong> any other options you specify in your terminal. You can change the locations to check by specifying the <code>ILO_RC</code> environment variable. Multiple locations can be given by separating them with a comma like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> <span class="nb">export</span> <span class="nv">ILO_RC</span><span class="o">=</span>some-file.rc,another-one.rc
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo ...
+</span></span></code></pre></div><p>In order to disable loading <code>.rc</code> files entirely, specify <code>--no-rc</code> in the command line before the actual <code>ilo</code> subcommand, like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not load .rc files
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo --no-rc shell ...
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo --no-rc @some-argument-file ...
+</span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/argument-files" term="argument-files" label="argument files"/></entry><entry><title type="html">Autocomplete</title><link href="https://ilo.projects.metio.wtf/usage/autocomplete/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/autocomplete/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The <code>ilo generate-completion</code> command generates autocompletion configuration for shells such as <a href="https://www.gnu.org/software/bash/">bash</a> and <a href="https://www.zsh.org/">zsh</a>.</p>
+<p>Once enabled you can use the <code>&lt;TAB&gt;</code> key to autocomplete ilo commands and their options:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> autocomplete commands
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo s&lt;TAB&gt;
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> autocomplete options
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --re&lt;TAB&gt;
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --remove-image
+</span></span></code></pre></div><h2 id="bash">bash</h2>
+<p>In order to integrate autocompletion into <a href="https://www.gnu.org/software/bash/">bash</a>, follow these steps:</p>
+<ol>
+<li>Create or edit <code>~/.bashrc</code>.</li>
+<li>Add the following line
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</span></span></code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+<h2 id="zsh">zsh</h2>
+<p>In order to integrate autocompletion into <a href="https://www.zsh.org/">zsh</a>, follow these steps:</p>
+<ol>
+<li>Create or edit <code>$ZDOTDIR/.zshrc</code>.</li>
+<li>Add the following line
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</span></span></code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/autocomplete" term="autocomplete" label="autocomplete"/></entry><entry><title type="html">Automate</title><link href="https://ilo.projects.metio.wtf/usage/autoenv/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/autoenv/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In order to simplify the usage of <code>ilo</code>, consider using <code>autoenv</code>-like tooling. These tools all allow you to just enter a directory and will automatically call <code>ilo</code> for you like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname ~]$</span> <span class="nb">cd</span> path/to/your/project
+</span></span><span class="line"><span class="cl"><span class="gp">[root@container project-dir]#</span>
+</span></span></code></pre></div><p>As soon as you enter the directory of your project, these tools will call <code>ilo</code> which in turn will open your build environment for you.</p>
+<h2 id="autoenv">autoenv</h2>
+<p>In order to use <a href="https://github.com/inishchith/autoenv">autoenv</a>, first <a href="https://github.com/inishchith/autoenv#install">install it</a> and then place a <code>.env</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .env
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="direnv">direnv</h2>
+<p>In order to use <a href="https://direnv.net/">direnv</a>, first <a href="https://direnv.net/#basic-installation">install it</a> and then place a <code>.envrc</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .envrc
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="envrc-rs">envrc-rs</h2>
+<p>In order to use <a href="https://github.com/roxma/envrc-rs">envrc-rs</a>, first <a href="https://github.com/roxma/envrc-rs#install">install it</a> and then place a <code>.envrc</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .envrc
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="smartcd">smartcd</h2>
+<p>In order to use <a href="https://github.com/cxreg/smartcd">smartcd</a>, first <a href="https://github.com/cxreg/smartcd#ok-how-do-i-use-it">install it</a>, enter the root directory of your project and then call <code>smartcd edit enter</code> which will open an editor to write a script to execute whenever you enter your project directory. Use something like <code>ilo @build-env</code> as the script.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat ~/.smartcd/scripts/path/to/project-dir/bash_enter
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="zsh-autoenv">zsh-autoenv</h2>
+<p>In order to use <a href="https://github.com/Tarrasch/zsh-autoenv">zsh-autoenv</a>, first <a href="https://github.com/Tarrasch/zsh-autoenv#installation">install it</a> and then place a <code>.autoenv.zsh</code> file in the root of your project which contains <code>ilo</code> and its arguments as its contents.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat .autoenv.zsh
+</span></span><span class="line"><span class="cl"><span class="go">ilo @build-env
+</span></span></span></code></pre></div><h2 id="tmuxp">tmuxp</h2>
+<p>In order to use <a href="https://github.com/tmux-python/tmuxp">tmuxp</a>, first <a href="https://github.com/tmux-python/tmuxp#installation">install it</a> and then create a new configuration in <code>${XDG_CONFIG_HOME}/tmuxp</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/tmuxp/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">session_name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">- window_name: dev window
+</span></span></span><span class="line"><span class="cl"><span class="go">  shell_command_before:
+</span></span></span><span class="line"><span class="cl"><span class="go">    - cd ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">  panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">    - shell_command:
+</span></span></span><span class="line"><span class="cl"><span class="go">        - ilo @build-env
+</span></span></span></code></pre></div><h2 id="teamocil">teamocil</h2>
+<p>In order to use <a href="https://github.com/remi/teamocil">teamocil</a>, first <a href="https://github.com/remi/teamocil#installation">install it</a> and then create a new configuration in <code>~/.teamocil</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat ~/.teamocil/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">    root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">    panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">      - ilo @build-env
+</span></span></span></code></pre></div><h2 id="tmuxifier">tmuxifier</h2>
+<p>In order to use <a href="https://github.com/jimeh/tmuxifier">tmuxifier</a>, first <a href="https://github.com/jimeh/tmuxifier#installation">install it</a> and then create a new configuration in <code>$TMUXIFIER_LAYOUT_PATH</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="nv">$TMUXIFIER_LAYOUT_PATH</span>/your-project.sh
+</span></span><span class="line"><span class="cl"><span class="go">window_root &#34;~/path/to/your/project&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">new_window &#34;Your Project&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">split_v 20
+</span></span></span><span class="line"><span class="cl"><span class="go">run_cmd &#34;ilo @build-env&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">split_h 60
+</span></span></span><span class="line"><span class="cl"><span class="go">select_pane 0
+</span></span></span></code></pre></div><h2 id="tmuxinator">tmuxinator</h2>
+<p>In order to use <a href="https://github.com/tmuxinator/tmuxinator">tmuxinator</a>, first <a href="https://github.com/tmuxinator/tmuxinator#installation">install it</a> and then create a new configuration in <code>~/.config/tmuxinator</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat ~/.config/tmuxinator/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - your_project:
+</span></span></span><span class="line"><span class="cl"><span class="go">      panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">        - ilo @build-env
+</span></span></span></code></pre></div><h2 id="dmux">dmux</h2>
+<p>In order to use <a href="https://github.com/zdcthomas/dmux">dmux</a>, first <a href="https://github.com/zdcthomas/dmux#installation">install it</a> and then create your configuration in <code>${XDG_CONFIG_HOME}/dmux/dmux.conf.{file_type}</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/dmux/dmux.conf.toml
+</span></span><span class="line"><span class="cl"><span class="go">[your-project]
+</span></span></span><span class="line"><span class="cl"><span class="go">number_of_panes = 2
+</span></span></span><span class="line"><span class="cl"><span class="go">session_name = &#34;Your Project&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">commands = [&#34;ilo @build-env&#34;]
+</span></span></span></code></pre></div><h2 id="airmux">airmux</h2>
+<p>In order to use <a href="https://github.com/dermoumi/airmux">airmux</a>, first <a href="https://github.com/dermoumi/airmux#installation">install it</a> and then create a new configuration in <code>${XDG_CONFIG_HOME}/airmux</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/airmux/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">name: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - your_project:
+</span></span></span><span class="line"><span class="cl"><span class="go">      panes:
+</span></span></span><span class="line"><span class="cl"><span class="go">        - command: ilo @build-env
+</span></span></span></code></pre></div><h2 id="smug">smug</h2>
+<p>In order to use <a href="https://github.com/ivaaaan/smug">smug</a>, first <a href="https://github.com/ivaaaan/smug#installation">install it</a> and then create a new configuration in <code>${XDG_CONFIG_HOME}/smug</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">[you@hostname project-dir]$</span> cat <span class="si">${</span><span class="nv">XDG_CONFIG_HOME</span><span class="si">}</span>/smug/your-project.yml
+</span></span><span class="line"><span class="cl"><span class="go">session: your-project
+</span></span></span><span class="line"><span class="cl"><span class="go">root: ~/path/to/your/project
+</span></span></span><span class="line"><span class="cl"><span class="go">windows:
+</span></span></span><span class="line"><span class="cl"><span class="go">  - name: your_project
+</span></span></span><span class="line"><span class="cl"><span class="go">    commands:
+</span></span></span><span class="line"><span class="cl"><span class="go">      - ilo @build-env
+</span></span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/autoenv" term="autoenv" label="autoenv"/><category scheme="https://ilo.projects.metio.wtf/tags/direnv" term="direnv" label="direnv"/><category scheme="https://ilo.projects.metio.wtf/tags/smartcd" term="smartcd" label="smartcd"/><category scheme="https://ilo.projects.metio.wtf/tags/zsh-autoenv" term="zsh-autoenv" label="zsh-autoenv"/></entry><entry><title type="html">Build Environments</title><link href="https://ilo.projects.metio.wtf/usage/build-envs/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/contributors/building/?utm_source=atom_feed" rel="related" type="text/html" title="Building"/><id>https://ilo.projects.metio.wtf/usage/build-envs/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> allows you to define your build environment either in a <a href="https://docs.docker.com/engine/reference/builder/">Containerfile/Dockerfile</a> or any other <a href="https://github.com/opencontainers/image-spec/blob/master/spec.md">OCI Image</a> compliant way. In contrast to <a href="https://containertoolbx.org/">toolbx</a>, <code>ilo</code> relies on immutable containers which makes it easier to share those images across your team. <code>ilo</code> uses the same mechanism to define build environments that developers are already using to define their application run environments. Therefore, onboarding and adapting container based build environments should be easy for most teams.</p>
+<p>As an example, consider the following Containerfile that is based on the official <a href="https://hub.docker.com/_/maven">Maven image</a> and extends that with another binary (<a href="https://gohugo.io/">hugo</a> in this case).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> write some Containerfile
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat your.containerfile
+</span></span><span class="line"><span class="cl"><span class="go">FROM maven:3-openjdk-11-slim
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">RUN apt-get update &amp;&amp; apt-get install hugo -y
+</span></span></span></code></pre></div><p>This image can be build just like any other image with your typical tooling, e.g. using <a href="https://podman.io/">podman</a>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> podman build --tag your.image:your.tag --file your.containerfile path/to/build/context
+</span></span></code></pre></div><p>The idea behind <code>ilo</code> is that you use this image to start a container that mounts your project directory and is able to execute any command that you are using to build/test/package your project.</p>
+<p>Take a look at the detailed instructions for <a href="../../shell">ilo shell</a> on how to use your created image.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/build" term="build" label="build"/><category scheme="https://ilo.projects.metio.wtf/tags/env" term="env" label="env"/></entry><entry><title type="html">Install</title><link href="https://ilo.projects.metio.wtf/usage/install/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/install/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>Prebuilt binaries of <code>ilo</code> are available for each published release at:</p>
+<ul>
+<li><a href="https://github.com/metio/ilo/releases">https://github.com/metio/ilo/releases</a></li>
+</ul>
+<p>Download the package for your operating system and put the <code>ilo</code> binary in your <code>$PATH</code>. Use the JVM variant in case your operating system is not directly supported.</p>
+<h2 id="huber">Huber</h2>
+<p>In case you are using <a href="https://github.com/innobead/huber">huber</a>, execute the following commands to install <code>ilo</code> on Linux/Mac/Windows:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> huber repo add remote-repo --url https://github.com/metio/ilo
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> huber install ilo
+</span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/install" term="install" label="install"/></entry></feed>

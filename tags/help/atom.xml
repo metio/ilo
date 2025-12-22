@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Help on ilo</title><link href="https://ilo.projects.metio.wtf/tags/help/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/tags/help/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/tags/help/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/tags/help/</id><entry><title type="html">First Timer</title><link href="https://ilo.projects.metio.wtf/contributors/first-timer/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/community/help/?utm_source=atom_feed" rel="related" type="text/html" title="Help"/><id>https://ilo.projects.metio.wtf/contributors/first-timer/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> is an open source product released under the <a href="https://spdx.org/licenses/0BSD.html">0BSD license</a>. In order to make sure that each contribution is correctly attributed and licensed, the Developer Certificate of Origin (DCO) <strong>MUST</strong> be signed by each contributor with their first commit. In order to do so, simply add a <code>Signed-off-by</code> statement at the end of your commit yourself or use <code>git commit -s</code> to do that automatically. The DCO can be seen below or at <a href="https://developercertificate.org/">https://developercertificate.org/</a></p>
+<pre tabindex="0"><code>Developer&#39;s Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the
+    best of my knowledge, is covered under an appropriate open
+    source license and I have the right under that license to
+    submit that work with modifications, whether created in whole
+    or in part by me, under the same open source license (unless
+    I am permitted to submit under a different license), as
+    Indicated in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including
+    all personal information I submit with it, including my
+    sign-off) is maintained indefinitely and may be redistributed
+    consistent with this project or the open source license(s)
+    involved.
+</code></pre><h2 id="metadata">Metadata</h2>
+<p>Every contributor <strong>MAY</strong> add/remove their metadata to the list of contributors at any time. Simply add a file called <code>&lt;YOUR_NAME&gt;.yaml</code> in the <a href="https://github.com/metio/ilo/tree/main/docs/data/contributors">contributors directory</a> with the following properties:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_NAME&gt;&#39;</span><span class="w">                   </span><span class="c"># should match file name (required)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_TITLE&gt;&#39;</span><span class="w">               </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">first_name</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_FIRST_NAME&gt;&#39;</span><span class="w">     </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">last_name</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_LAST_NAME&gt;&#39;</span><span class="w">       </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_EMAIL&gt;&#39;</span><span class="w">               </span><span class="c"># used by FOAF (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">website</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_URL&gt;&#39;</span><span class="w">               </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span></code></pre></div><p>Metadata is currently used in three places:</p>
+<ol>
+<li>To generate a <a href="https://humanstxt.org/">humans.txt</a> file of <a href="https://ilo.projects.metio.wtf/humans.txt">all contributors</a>.</li>
+<li>To generate a <a href="http://xmlns.com/foaf/spec/">FOAF</a> for the <a href="https://ilo.projects.metio.wtf/foaf.rdf">entire project</a>.</li>
+</ol>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/contributors" term="contributors" label="Contributors"/><category scheme="https://ilo.projects.metio.wtf/tags/help" term="help" label="help"/></entry><entry><title type="html">Help</title><link href="https://ilo.projects.metio.wtf/community/help/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/contributors/first-timer/?utm_source=atom_feed" rel="related" type="text/html" title="First Timer"/><id>https://ilo.projects.metio.wtf/community/help/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>In case you need help, don’t panic - we’ve all been there! Try the following resources in order to get help:</p>
+<ul>
+<li><a href="https://github.com/metio/ilo/issues/new?assignees=sebhoss&amp;labels=bug&amp;template=bug_report.md&amp;title=">open a new bug report</a></li>
+<li><a href="https://github.com/metio/ilo/issues/new?assignees=&amp;labels=enhancement&amp;template=feature_request.md&amp;title=">create a new feature request</a></li>
+<li><a href="https://github.com/metio/ilo/discussions">open a new discussion</a></li>
+<li><a href="https://matrix.to/#/#ilo:matrix.org">join the chat room</a></li>
+<li><a href="https://metio.groups.io/g/ilo/topics">send an email to the mailing list</a></li>
+<li>Take a walk outside &amp; come back to your issue with a fresh mind</li>
+</ul>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/community" term="community" label="Community"/><category scheme="https://ilo.projects.metio.wtf/tags/help" term="help" label="help"/></entry></feed>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Git on ilo</title><link href="https://ilo.projects.metio.wtf/tags/git/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/tags/git/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/tags/git/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/tags/git/</id><entry><title type="html">Git Mirrors</title><link href="https://ilo.projects.metio.wtf/contributors/git-mirrors/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/contributors/git-mirrors/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> is using <a href="https://github.com/metio/ilo">GitHub</a> as its primary source/issue/build environment, however its code is available in other git repositories as well in order to deal with <a href="https://www.githubstatus.com/">GitHub outages</a>.</p>
+<h2 id="available-mirrors">Available Mirrors</h2>
+<p>Mirrors are updated automatically as explained in this <a href="https://seb.people.metio.wtf/topic/gitlab-the-git-distributor/">blog post</a>.</p>
+<ul>
+<li><a href="https://github.com/metio/ilo">https://github.com/metio/ilo</a></li>
+<li><a href="https://gitlab.com/metio.wtf/ilo">https://gitlab.com/metio.wtf/ilo</a></li>
+<li><a href="https://codeberg.org/metio.wtf/ilo">https://codeberg.org/metio.wtf/ilo</a></li>
+<li><a href="https://bitbucket.org/metio-wtf/ilo">https://bitbucket.org/metio-wtf/ilo</a></li>
+<li><a href="https://repo.or.cz/ilo.git">https://repo.or.cz/ilo.git</a></li>
+</ul>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/contributors" term="contributors" label="Contributors"/><category scheme="https://ilo.projects.metio.wtf/tags/git" term="git" label="git"/><category scheme="https://ilo.projects.metio.wtf/tags/mirror" term="mirror" label="mirror"/></entry></feed>

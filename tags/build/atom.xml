@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Build on ilo</title><link href="https://ilo.projects.metio.wtf/tags/build/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/tags/build/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/tags/build/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/tags/build/</id><entry><title type="html">Build Environments</title><link href="https://ilo.projects.metio.wtf/usage/build-envs/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/contributors/building/?utm_source=atom_feed" rel="related" type="text/html" title="Building"/><id>https://ilo.projects.metio.wtf/usage/build-envs/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> allows you to define your build environment either in a <a href="https://docs.docker.com/engine/reference/builder/">Containerfile/Dockerfile</a> or any other <a href="https://github.com/opencontainers/image-spec/blob/master/spec.md">OCI Image</a> compliant way. In contrast to <a href="https://containertoolbx.org/">toolbx</a>, <code>ilo</code> relies on immutable containers which makes it easier to share those images across your team. <code>ilo</code> uses the same mechanism to define build environments that developers are already using to define their application run environments. Therefore, onboarding and adapting container based build environments should be easy for most teams.</p>
+<p>As an example, consider the following Containerfile that is based on the official <a href="https://hub.docker.com/_/maven">Maven image</a> and extends that with another binary (<a href="https://gohugo.io/">hugo</a> in this case).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> write some Containerfile
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> cat your.containerfile
+</span></span><span class="line"><span class="cl"><span class="go">FROM maven:3-openjdk-11-slim
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">RUN apt-get update &amp;&amp; apt-get install hugo -y
+</span></span></span></code></pre></div><p>This image can be build just like any other image with your typical tooling, e.g. using <a href="https://podman.io/">podman</a>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> podman build --tag your.image:your.tag --file your.containerfile path/to/build/context
+</span></span></code></pre></div><p>The idea behind <code>ilo</code> is that you use this image to start a container that mounts your project directory and is able to execute any command that you are using to build/test/package your project.</p>
+<p>Take a look at the detailed instructions for <a href="../../shell">ilo shell</a> on how to use your created image.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/build" term="build" label="build"/><category scheme="https://ilo.projects.metio.wtf/tags/env" term="env" label="env"/></entry><entry><title type="html">Building</title><link href="https://ilo.projects.metio.wtf/contributors/building/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/usage/build-envs/?utm_source=atom_feed" rel="related" type="text/html" title="Build Environments"/><id>https://ilo.projects.metio.wtf/contributors/building/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> requires a certain set of software installed on your system in order to be built.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><a href="https://git-scm.com/">git</a> to fetch the <a href="../git-mirrors">source code</a> of <code>ilo</code></li>
+</ul>
+<h2 id="ilo-setup">ilo Setup</h2>
+<p>You can use <code>ilo</code> to build <code>ilo</code>! Make sure your system has the following:</p>
+<ul>
+<li><a href="../../usage/install">ilo</a> to open the reproducible build environment for <code>ilo</code> itself</li>
+<li>One of the <a href="../../shell/runtimes">runtimes</a> that <code>ilo shell</code> supports.</li>
+</ul>
+<h2 id="manual-setup">Manual Setup</h2>
+<p>In case you do not have <code>ilo</code> installed on your system, install the following manually:</p>
+<ul>
+<li><a href="https://jdk.java.net/">Java JDK</a> to compile the code</li>
+<li><a href="https://maven.apache.org/">Maven</a> to build the project</li>
+<li><a href="https://gohugo.io/">hugo</a> in order to create the website</li>
+<li><a href="https://www.graalvm.org/">GraalVM</a> to build a native executable</li>
+</ul>
+<h2 id="building">Building</h2>
+<h3 id="using-ilo">Using ilo</h3>
+<p>In case you have <code>ilo</code> installed, call this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> open a shell with a pre-defined build environment
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/env
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build the project
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/build
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build native executable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/native
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/website
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> serve website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/serve
+</span></span></code></pre></div><h3 id="without-ilo">Without ilo</h3>
+<p>In order to build <code>ilo</code> without having <code>ilo</code> installed call:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> build the project
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> mvn verify
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build native executable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> mvn verify --define <span class="nv">skipNativeBuild</span><span class="o">=</span><span class="nb">false</span>
+</span></span></code></pre></div><p>In case you want to build or work on the website do this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> build website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> serve website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> hugo server --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs --watch
+</span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/contributors" term="contributors" label="Contributors"/><category scheme="https://ilo.projects.metio.wtf/tags/build" term="build" label="build"/><category scheme="https://ilo.projects.metio.wtf/tags/environment" term="environment" label="environment"/></entry></feed>

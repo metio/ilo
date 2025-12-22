@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Runtime on ilo</title><link href="https://ilo.projects.metio.wtf/tags/runtime/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/tags/runtime/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/tags/runtime/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/tags/runtime/</id><entry><title type="html">Runtimes</title><link href="https://ilo.projects.metio.wtf/shell/runtimes/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/shell/runtimes/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo shell</code> by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the <code>--runtime</code> flag or set the <code>ILO_SHELL_RUNTIME</code> environment variable in your system. The <code>--runtime</code> flag overwrites the environment variable.</p>
+<h2 id="docker">Docker</h2>
+<p>Force <code>ilo</code> to use <a href="https://www.docker.com/">docker</a> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime docker
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use <span class="nb">alias</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime d
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> <span class="nv">ILO_SHELL_RUNTIME</span><span class="o">=</span>docker ilo shell
+</span></span></code></pre></div><h2 id="nerdctl">nerdctl</h2>
+<p>Force <code>ilo</code> to use <a href="https://github.com/containerd/nerdctl">nerdctl</a> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime nerdctl
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use <span class="nb">alias</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime n
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> <span class="nv">ILO_SHELL_RUNTIME</span><span class="o">=</span>nerdctl ilo shell
+</span></span></code></pre></div><h2 id="podman">Podman</h2>
+<p>Force <code>ilo</code> to use <a href="https://podman.io/">podman</a> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime podman
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use <span class="nb">alias</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime p
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> <span class="nv">ILO_SHELL_RUNTIME</span><span class="o">=</span>podman ilo shell
+</span></span></code></pre></div><h2 id="auto-selection">Auto Selection</h2>
+<p>If not otherwise specified, <code>ilo</code> always picks runtimes in this order, depending on which are available on your system:</p>
+<ol>
+<li>podman</li>
+<li>nerdctl</li>
+<li>docker</li>
+</ol>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/shell" term="shell" label="shell"/><category scheme="https://ilo.projects.metio.wtf/tags/runtime" term="runtime" label="runtime"/><category scheme="https://ilo.projects.metio.wtf/tags/docker" term="docker" label="docker"/><category scheme="https://ilo.projects.metio.wtf/tags/podman" term="podman" label="podman"/><category scheme="https://ilo.projects.metio.wtf/tags/nerdctl" term="nerdctl" label="nerdctl"/></entry></feed>

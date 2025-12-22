@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Contributors on ilo</title><link href="https://ilo.projects.metio.wtf/categories/contributors/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/categories/contributors/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/categories/contributors/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/categories/contributors/</id><entry><title type="html">Building</title><link href="https://ilo.projects.metio.wtf/contributors/building/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/usage/build-envs/?utm_source=atom_feed" rel="related" type="text/html" title="Build Environments"/><id>https://ilo.projects.metio.wtf/contributors/building/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> requires a certain set of software installed on your system in order to be built.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><a href="https://git-scm.com/">git</a> to fetch the <a href="../git-mirrors">source code</a> of <code>ilo</code></li>
+</ul>
+<h2 id="ilo-setup">ilo Setup</h2>
+<p>You can use <code>ilo</code> to build <code>ilo</code>! Make sure your system has the following:</p>
+<ul>
+<li><a href="../../usage/install">ilo</a> to open the reproducible build environment for <code>ilo</code> itself</li>
+<li>One of the <a href="../../shell/runtimes">runtimes</a> that <code>ilo shell</code> supports.</li>
+</ul>
+<h2 id="manual-setup">Manual Setup</h2>
+<p>In case you do not have <code>ilo</code> installed on your system, install the following manually:</p>
+<ul>
+<li><a href="https://jdk.java.net/">Java JDK</a> to compile the code</li>
+<li><a href="https://maven.apache.org/">Maven</a> to build the project</li>
+<li><a href="https://gohugo.io/">hugo</a> in order to create the website</li>
+<li><a href="https://www.graalvm.org/">GraalVM</a> to build a native executable</li>
+</ul>
+<h2 id="building">Building</h2>
+<h3 id="using-ilo">Using ilo</h3>
+<p>In case you have <code>ilo</code> installed, call this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> open a shell with a pre-defined build environment
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/env
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build the project
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/build
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build native executable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/native
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/website
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> serve website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo @dev/serve
+</span></span></code></pre></div><h3 id="without-ilo">Without ilo</h3>
+<p>In order to build <code>ilo</code> without having <code>ilo</code> installed call:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> build the project
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> mvn verify
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> build native executable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> mvn verify --define <span class="nv">skipNativeBuild</span><span class="o">=</span><span class="nb">false</span>
+</span></span></code></pre></div><p>In case you want to build or work on the website do this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> build website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> serve website
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> hugo server --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs --watch
+</span></span></code></pre></div>]]></content><category scheme="https://ilo.projects.metio.wtf/categories/contributors" term="contributors" label="Contributors"/><category scheme="https://ilo.projects.metio.wtf/tags/build" term="build" label="build"/><category scheme="https://ilo.projects.metio.wtf/tags/environment" term="environment" label="environment"/></entry><entry><title type="html">First Timer</title><link href="https://ilo.projects.metio.wtf/contributors/first-timer/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/community/help/?utm_source=atom_feed" rel="related" type="text/html" title="Help"/><id>https://ilo.projects.metio.wtf/contributors/first-timer/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> is an open source product released under the <a href="https://spdx.org/licenses/0BSD.html">0BSD license</a>. In order to make sure that each contribution is correctly attributed and licensed, the Developer Certificate of Origin (DCO) <strong>MUST</strong> be signed by each contributor with their first commit. In order to do so, simply add a <code>Signed-off-by</code> statement at the end of your commit yourself or use <code>git commit -s</code> to do that automatically. The DCO can be seen below or at <a href="https://developercertificate.org/">https://developercertificate.org/</a></p>
+<pre tabindex="0"><code>Developer&#39;s Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the
+    best of my knowledge, is covered under an appropriate open
+    source license and I have the right under that license to
+    submit that work with modifications, whether created in whole
+    or in part by me, under the same open source license (unless
+    I am permitted to submit under a different license), as
+    Indicated in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including
+    all personal information I submit with it, including my
+    sign-off) is maintained indefinitely and may be redistributed
+    consistent with this project or the open source license(s)
+    involved.
+</code></pre><h2 id="metadata">Metadata</h2>
+<p>Every contributor <strong>MAY</strong> add/remove their metadata to the list of contributors at any time. Simply add a file called <code>&lt;YOUR_NAME&gt;.yaml</code> in the <a href="https://github.com/metio/ilo/tree/main/docs/data/contributors">contributors directory</a> with the following properties:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_NAME&gt;&#39;</span><span class="w">                   </span><span class="c"># should match file name (required)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_TITLE&gt;&#39;</span><span class="w">               </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">first_name</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_FIRST_NAME&gt;&#39;</span><span class="w">     </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">last_name</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_LAST_NAME&gt;&#39;</span><span class="w">       </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">email</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_EMAIL&gt;&#39;</span><span class="w">               </span><span class="c"># used by FOAF (optional)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">website</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&lt;YOUR_URL&gt;&#39;</span><span class="w">               </span><span class="c"># used by FOAF/humans.txt (optional)</span><span class="w">
+</span></span></span></code></pre></div><p>Metadata is currently used in three places:</p>
+<ol>
+<li>To generate a <a href="https://humanstxt.org/">humans.txt</a> file of <a href="https://ilo.projects.metio.wtf/humans.txt">all contributors</a>.</li>
+<li>To generate a <a href="http://xmlns.com/foaf/spec/">FOAF</a> for the <a href="https://ilo.projects.metio.wtf/foaf.rdf">entire project</a>.</li>
+</ol>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/contributors" term="contributors" label="Contributors"/><category scheme="https://ilo.projects.metio.wtf/tags/help" term="help" label="help"/></entry><entry><title type="html">Git Mirrors</title><link href="https://ilo.projects.metio.wtf/contributors/git-mirrors/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/contributors/git-mirrors/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> is using <a href="https://github.com/metio/ilo">GitHub</a> as its primary source/issue/build environment, however its code is available in other git repositories as well in order to deal with <a href="https://www.githubstatus.com/">GitHub outages</a>.</p>
+<h2 id="available-mirrors">Available Mirrors</h2>
+<p>Mirrors are updated automatically as explained in this <a href="https://seb.people.metio.wtf/topic/gitlab-the-git-distributor/">blog post</a>.</p>
+<ul>
+<li><a href="https://github.com/metio/ilo">https://github.com/metio/ilo</a></li>
+<li><a href="https://gitlab.com/metio.wtf/ilo">https://gitlab.com/metio.wtf/ilo</a></li>
+<li><a href="https://codeberg.org/metio.wtf/ilo">https://codeberg.org/metio.wtf/ilo</a></li>
+<li><a href="https://bitbucket.org/metio-wtf/ilo">https://bitbucket.org/metio-wtf/ilo</a></li>
+<li><a href="https://repo.or.cz/ilo.git">https://repo.or.cz/ilo.git</a></li>
+</ul>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/contributors" term="contributors" label="Contributors"/><category scheme="https://ilo.projects.metio.wtf/tags/git" term="git" label="git"/><category scheme="https://ilo.projects.metio.wtf/tags/mirror" term="mirror" label="mirror"/></entry></feed>

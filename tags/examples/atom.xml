@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Examples on ilo</title><link href="https://ilo.projects.metio.wtf/tags/examples/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/tags/examples/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/tags/examples/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/tags/examples/</id><entry><title type="html">Examples</title><link href="https://ilo.projects.metio.wtf/shell/examples/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/shell/examples/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The following examples show how <code>ilo shell</code> can be used.</p>
+<h2 id="cargo-projects">Cargo Projects</h2>
+<p><a href="https://doc.rust-lang.org/cargo/">Cargo</a> caches all downloaded dependencies in your local <code>~/.cargo/registry</code> directory.</p>
+<p>In order to re-use already downloaded dependencies inside the container, specify a <code>--volumne</code> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> Cargo project that mounts <span class="nb">local</span> .cargo folder
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="go">    --volume ${HOME}/.cargo/registry:/usr/local/cargo/registry:z \
+</span></span></span><span class="line"><span class="cl"><span class="go">    rust:latest
+</span></span></span></code></pre></div><p><strong>Note</strong>: The container path <code>/usr/local/cargo</code> is specified in the image used in this example (<code>rust:latest</code>). Adjust this value according to the image you are actually using in your project.</p>
+<h2 id="gradle-projects">Gradle Projects</h2>
+<p><a href="https://gradle.org/">Gradle</a> caches all downloaded dependencies in your local <code>~/.gradle</code> directory.</p>
+<p>In order to re-use already downloaded dependencies inside the container, specify a <code>--volumne</code> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> Gradle project that mounts <span class="nb">local</span> .gradle folder
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="go">    --volume ${HOME}/.gradle:/home/gradle/.gradle:z \
+</span></span></span><span class="line"><span class="cl"><span class="go">    gradle:latest
+</span></span></span></code></pre></div><p><strong>Note</strong>: The container path <code>/home/gradle/.gradle</code> is specified in the image used in this example (<code>gradle:latest</code>). Adjust this value according to the image you are actually using in your project.</p>
+<h2 id="maven-projects">Maven Projects</h2>
+<p><a href="https://maven.apache.org/">Maven</a> caches all downloaded dependencies in your local <code>~/.m2</code> directory.</p>
+<p>In order to re-use already downloaded dependencies inside the container, specify a <code>--volumne</code> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> Maven project that mounts <span class="nb">local</span> m2 repo
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="go">    --volume ${HOME}/.m2:/root/.m2:z \
+</span></span></span><span class="line"><span class="cl"><span class="go">    maven:latest
+</span></span></span></code></pre></div><p><strong>Note</strong>: The container path <code>/root/.m2</code> is specified in the image used in this example (<code>maven:latest</code>). Adjust this value according to the image you are actually using in your project.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/shell" term="shell" label="shell"/><category scheme="https://ilo.projects.metio.wtf/tags/examples" term="examples" label="examples"/></entry></feed>

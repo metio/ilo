@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.153.1">Hugo</generator><title type="html">Autocomplete on ilo</title><link href="https://ilo.projects.metio.wtf/tags/autocomplete/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/tags/autocomplete/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/tags/autocomplete/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2025-12-22T05:01:14+00:00</updated><id>https://ilo.projects.metio.wtf/tags/autocomplete/</id><entry><title type="html">Autocomplete</title><link href="https://ilo.projects.metio.wtf/usage/autocomplete/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/autocomplete/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The <code>ilo generate-completion</code> command generates autocompletion configuration for shells such as <a href="https://www.gnu.org/software/bash/">bash</a> and <a href="https://www.zsh.org/">zsh</a>.</p>
+<p>Once enabled you can use the <code>&lt;TAB&gt;</code> key to autocomplete ilo commands and their options:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> autocomplete commands
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo s&lt;TAB&gt;
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> autocomplete options
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --re&lt;TAB&gt;
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --remove-image
+</span></span></code></pre></div><h2 id="bash">bash</h2>
+<p>In order to integrate autocompletion into <a href="https://www.gnu.org/software/bash/">bash</a>, follow these steps:</p>
+<ol>
+<li>Create or edit <code>~/.bashrc</code>.</li>
+<li>Add the following line
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</span></span></code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+<h2 id="zsh">zsh</h2>
+<p>In order to integrate autocompletion into <a href="https://www.zsh.org/">zsh</a>, follow these steps:</p>
+<ol>
+<li>Create or edit <code>$ZDOTDIR/.zshrc</code>.</li>
+<li>Add the following line
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">source</span> &lt;<span class="o">(</span>ilo generate-completion<span class="o">)</span>
+</span></span></code></pre></div></li>
+<li>Reload your shell (or create a new one)</li>
+</ol>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/autocomplete" term="autocomplete" label="autocomplete"/></entry></feed>
