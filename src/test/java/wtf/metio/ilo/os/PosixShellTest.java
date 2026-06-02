@@ -21,6 +21,12 @@ import static wtf.metio.ilo.os.ParameterExpansion.MATCHER_GROUP_NAME;
 @DisplayName("Bourne Shell")
 class PosixShellTest {
 
+  @Test
+  @DisplayName("builds a quoted printf command so the parameter value is not word-split")
+  void buildsQuotedParameterCommand() {
+    assertEquals("printf '%s' \"$HOME\"", PosixShell.parameterCommand("$HOME"));
+  }
+
   @Nested
   @DisplayName("regex")
   class RegexTest {
@@ -212,6 +218,13 @@ class PosixShellTest {
     @DisplayName("substitutes command output that contains a backslash")
     void substituteCommandOutputWithBackslash() {
       assertEquals("a\\b", bourneShell.substituteCommands("$(printf 'a\\\\b')"));
+    }
+
+    @Test
+    @DisplayName("does not expand a tilde inside a path component")
+    void doesNotExpandTildeInsidePath(final SystemProperties properties) {
+      properties.set("user.home", "/home/user");
+      assertEquals("/data/backup~2:/mnt", bourneShell.expandParameters("/data/backup~2:/mnt"));
     }
 
   }

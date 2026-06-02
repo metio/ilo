@@ -44,9 +44,4 @@ final class PowerShell extends ParameterExpansion {
         PARAMETER_PATTERN);
   }
 
-  private String expandTilde(final String value) {
-    final var userHome = System.getProperty("user.home");
-    return value.replace("~", userHome);
-  }
-
 }
