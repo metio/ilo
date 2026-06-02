@@ -9,7 +9,7 @@
     <foaf:homepage rdf:resource="{{ .Site.BaseURL }}" />
   </foaf:Project>
 
-  {{ range $.Site.Data.contributors }}
+  {{ range hugo.Data.contributors }}
   <foaf:Person rdf:ID="{{ .id }}">
     <foaf:name>{{ .first_name }} {{ .last_name }}</foaf:name>
     <foaf:title>{{ .title }}</foaf:title>

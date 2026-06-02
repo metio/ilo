@@ -1,5 +1,5 @@
 {{ printf `<?xml version="1.0" encoding="utf-8"?>` | safeHTML }}
-<feed xmlns="http://www.w3.org/2005/Atom"{{ with site.LanguageCode }} xml:lang="{{ . }}"{{ end }}>
+<feed xmlns="http://www.w3.org/2005/Atom"{{ with site.Language.Locale }} xml:lang="{{ . }}"{{ end }}>
     <generator uri="https://gohugo.io/" version="{{ hugo.Version }}">Hugo</generator>
     {{- $title := site.Title -}}
     {{- with .Title -}}
@@ -8,7 +8,7 @@
         {{- end -}}
     {{- end -}}
     {{- if .IsTranslated -}}
-        {{ $title = printf "%s (%s)" $title (index site.Data.i18n.languages .Lang) }}
+        {{ $title = printf "%s (%s)" $title (index hugo.Data.i18n.languages .Lang) }}
     {{- end -}}
     {{ printf `<title type="html"><![CDATA[%s]]></title>` $title | safeHTML }}
     {{ with (or (.Param "subtitle") (.Param "tagline")) }}
@@ -24,7 +24,7 @@
     {{- range .Translations }}
         {{ $output_formats := .OutputFormats }}
         {{- $lang := .Lang }}
-        {{- $langstr := index site.Data.i18n.languages .Lang }}
+        {{- $langstr := index hugo.Data.i18n.languages .Lang }}
         {{ range $output_formats -}}
             {{ with $output_formats.Get .Name }}
                 {{ printf `<link href=%q rel="alternate" type=%q hreflang=%q title="[%s] %s" />` .Permalink .MediaType.Type $lang $langstr .Name | safeHTML }}
@@ -50,10 +50,10 @@
             <logo>{{ (. | fingerprint).Permalink }}</logo>
         {{- end }}
     {{ end }}
-    {{ with site.Author.name -}}
+    {{ with site.Params.author -}}
         <author>
             <name>{{ . }}</name>
-            {{ with site.Author.email }}
+            {{ with site.Params.email }}
                 <email>{{ . }}</email>
             {{ end -}}
         </author>

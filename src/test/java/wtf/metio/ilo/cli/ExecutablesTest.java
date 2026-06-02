@@ -259,6 +259,60 @@ class ExecutablesTest {
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("captures the standard output of a command")
+  void readsStandardOutput() {
+    assertEquals("hello", Executables.runAndReadOutput(java.time.Duration.ofSeconds(10), "sh", "-c", "echo hello"));
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("does not deadlock when a command floods stderr before writing stdout")
+  void doesNotDeadlockOnStderrFlood() {
+    // ~100 KB to stderr exceeds the OS pipe buffer; only because stderr is not captured into a pipe
+    // ilo must drain does this finish. The 15s bound turns a regression into a failure, never a hang.
+    final var output = Executables.runAndReadOutput(java.time.Duration.ofSeconds(15), "sh", "-c",
+        "i=0; while [ $i -lt 2000 ]; do echo eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee 1>&2; i=$((i+1)); done; echo DONE");
+    assertEquals("DONE", output);
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("reports an interruption while waiting for a command")
+  void reportsInterruptionWhileWaiting() throws InterruptedException {
+    final var thrown = new java.util.concurrent.atomic.AtomicReference<Throwable>();
+    final var interruptPreserved = new java.util.concurrent.atomic.AtomicBoolean();
+    final var worker = new Thread(() -> {
+      try {
+        Executables.runAndReadOutput(java.time.Duration.ofSeconds(30), "sh", "-c", "sleep 30");
+      } catch (final Throwable throwable) {
+        thrown.set(throwable);
+        // waitFor clears the interrupt flag, so its being set again proves it was restored.
+        interruptPreserved.set(Thread.currentThread().isInterrupted());
+      }
+    });
+    worker.start();
+    Thread.sleep(500); // let the worker reach Process.waitFor
+    worker.interrupt();
+    worker.join(10_000);
+
+    assertTrue(thrown.get() instanceof wtf.metio.ilo.errors.UnexpectedInterruptionException,
+        "expected UnexpectedInterruptionException but was " + thrown.get());
+    assertTrue(interruptPreserved.get(), "the interrupt flag should be restored");
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("terminates a command that exceeds the timeout")
+  void terminatesOnTimeout() {
+    final var start = System.nanoTime();
+    assertThrows(wtf.metio.ilo.errors.CommandTimedOutException.class,
+        () -> Executables.runAndReadOutput(java.time.Duration.ofMillis(300), "sh", "-c", "sleep 30"));
+    final var elapsedSeconds = (System.nanoTime() - start) / 1_000_000_000.0;
+    assertTrue(elapsedSeconds < 10, "should return promptly, took " + elapsedSeconds + "s");
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("does not resolve a Windows executable without its extension on non-Windows hosts")
   void doesNotResolveWindowsExecutableOnNonWindows(
       @TempDir final Path directory,

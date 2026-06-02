@@ -23,7 +23,7 @@ jobs:
         name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: latest
+          hugo-version: 0.162.1
       - id: previous
         name: Get Last Release
         run: echo "::set-output name=version::$(git describe --abbrev=0 --tags)"

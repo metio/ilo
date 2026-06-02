@@ -2,5 +2,5 @@ shell
 --pull
 --no-interactive
 --publish=1313:1313
-docker.io/klakegg/hugo:latest
+ghcr.io/gohugoio/hugo:v0.162.1
 server --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
