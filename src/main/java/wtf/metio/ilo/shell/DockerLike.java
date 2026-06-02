@@ -82,6 +82,8 @@ abstract class DockerLike implements ShellCLI {
         .orElse(currentDir);
     final var projectDir = maybe(options.mountProjectDir,
         "--volume", currentDir + ":" + workingDir + ":z");
+    // picocli supplies a default, but a directly-constructed ShellOptions may leave this null.
+    final var missingVolumes = Optional.ofNullable(options.missingVolumes).orElse(ShellVolumeBehavior.CREATE);
     return flatten(
         of(name()),
         fromList(expand.expand(options.runtimeOptions)),
@@ -96,7 +98,7 @@ abstract class DockerLike implements ShellCLI {
         withPrefix("--env", expand.expand(options.variables)),
         optional("--hostname", expand.expand(options.hostname)),
         withPrefix("--publish", expand.expand(options.ports)),
-        withPrefix("--volume", options.missingVolumes.handleLocalDirectories(expand.expand(options.volumes))),
+        withPrefix("--volume", missingVolumes.handleLocalDirectories(expand.expand(options.volumes))),
         of(expand.expand(options.image)),
         fromList(KEEPALIVE));
   }

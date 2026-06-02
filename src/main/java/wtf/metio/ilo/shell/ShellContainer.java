@@ -77,7 +77,7 @@ final class ShellContainer {
     }
     try {
       return Files.readString(Paths.get(containerfile));
-    } catch (final IOException | RuntimeException unreadable) {
+    } catch (final IOException | RuntimeException _) {
       return "";
     }
   }
