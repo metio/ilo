@@ -5,13 +5,43 @@ SPDX-License-Identifier: 0BSD
 
 # 2026.6.8
 
+`ilo shell`, `ilo compose` and `ilo devcontainer` now keep their container between
+runs instead of discarding it. The first run in a project builds and creates the
+container; later runs reuse it — starting the existing container and attaching to it
+— so start-up is faster and whatever you install inside the container is still there
+next time. A devcontainer's `onCreateCommand`/`postCreateCommand` therefore run only
+once, when the container is created, while `postStartCommand` runs on every start and
+`postAttachCommand` on every attach, as the [devcontainer specification](https://containers.dev/implementors/spec/#lifecycle)
+intends.
+
+Previously every run started from a fresh, throwaway container (`run --rm`). To get
+that clean slate again, pass `--fresh`: it removes the reused container and recreates
+it (re-running the creation lifecycle). `--remove-image` now removes the container and
+its image when you exit, opting out of reuse entirely.
+
+The container's identity covers its whole definition — the project path, image, build inputs
+(including the `Containerfile`'s contents) and run options — so editing any of them makes `ilo`
+build a fresh container automatically rather than reuse a stale one. Only the current container
+is kept: `ilo` removes a project's earlier, stopped containers so they do not accumulate.
+
+What you may need to do: nothing for a normal upgrade. Be aware that `ilo` now leaves one
+stopped container behind per project (named `ilo-<project>-<hash>` and labelled `ilo.managed=true`;
+compose manages its own containers per the compose file). Find them with
+`docker ps --all --filter label=ilo.managed` and reclaim one with `--fresh` on the next run, with
+`--remove-image`, or with your container runtime's `rm`. If a reused container has drifted into a
+bad state, `--fresh` is the reset button; `--pull` likewise recreates it so a freshly pulled
+`latest` image takes effect. If you attach from several terminals at once, pass `--keep-running`
+so exiting one does not stop the container under the others.
+
+---
+
 The `compose`, `devcontainer` and `devfile` commands are available again. `ilo
 compose` runs build environments described by a [compose](https://compose-spec.io/)
 file, `ilo devcontainer` runs a [devcontainer](https://containers.dev/) (image- or
 dockerfile-based, or compose-based via its `dockerComposeFile`), and `ilo devfile`
-runs a [devfile](https://devfile.io/) environment. This is additive — existing
-`ilo shell` usage is unchanged and no action is required. The native binaries grow
-slightly because these commands pull in JSON and YAML parsers.
+runs a [devfile](https://devfile.io/) environment. These commands simply become
+available again, so no action is required; the native binaries grow slightly because
+they pull in JSON and YAML parsers.
 
 ---
 

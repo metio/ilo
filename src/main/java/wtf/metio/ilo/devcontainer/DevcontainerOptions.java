@@ -53,9 +53,28 @@ public final class DevcontainerOptions implements Options {
 
   @CommandLine.Option(
       names = {"--remove-image"},
-      description = "Remove image after closing the shell."
+      description = "Remove the container and its image after closing the shell, instead of keeping them for reuse."
   )
   public boolean removeImage;
+
+  @CommandLine.Option(
+      names = {"--fresh"},
+      description = "Discard any reused container and start from a clean slate, re-running the creation lifecycle."
+  )
+  public boolean fresh;
+
+  @CommandLine.Option(
+      names = {"--keep-running"},
+      description = "Leave the container running after you exit instead of stopping it."
+  )
+  public boolean keepRunning;
+
+  @CommandLine.Option(
+      names = {"--shell"},
+      description = "The shell to run when attaching interactively to the container.",
+      defaultValue = "/bin/bash"
+  )
+  public String shell;
 
   @CommandLine.Option(
       names = {"--execute-initialize-command"},

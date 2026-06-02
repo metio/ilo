@@ -13,6 +13,12 @@ tags:
 
 The `ilo compose` command can be configured with the following command line options. From your terminal, use `ilo compose --help` to get a list of all options, and their default values.
 
+## How a session is reused
+
+`ilo compose` keeps your services running between runs. It brings the services up in the background (`up --detach`) and then enters the selected service with `exec`. When you exit, the services are **stopped but kept**, so the next run starts them again instead of recreating them — and anything written inside them persists.
+
+When you want a clean slate, use [`--fresh`](#--fresh) to tear the services down (`down`) and recreate them on the next run.
+
 ## `--build`
 
 The `--build` option can be used to build images before opening a new shell. Use this option in case you rely on local Dockerfiles.
@@ -29,6 +35,48 @@ $ ilo compose
 ```
 
 By default, `--build` is not enabled.
+
+## `--fresh`
+
+The `--fresh` option discards the reused services and starts from a clean slate. `ilo` tears the services down (the equivalent of `compose down`) before bringing them back up, so the containers are recreated instead of restarted.
+
+```console
+# recreate the services from scratch
+$ ilo compose --fresh
+
+# reuse the running services (default)
+$ ilo compose
+```
+
+By default, `--fresh` is not enabled.
+
+## `--keep-running`
+
+The `--keep-running` option leaves the services running after you exit, instead of stopping them.
+
+```console
+# leave the services running after exit
+$ ilo compose --keep-running
+
+# stop the services on exit (default)
+$ ilo compose
+```
+
+By default, `--keep-running` is not enabled.
+
+## `--shell`
+
+The `--shell` option sets the shell that `ilo` runs when it attaches to the selected service without an explicit command. Because the service is entered with `exec`, `ilo` has to name a shell to start; pick one the service image actually ships.
+
+```console
+# attach with bash
+$ ilo compose --shell /bin/bash
+
+# attach with the default POSIX shell
+$ ilo compose
+```
+
+By default, `--shell` is `/bin/sh`. When you pass a command to run instead (for example `ilo compose dev ls -la`), that command is used and `--shell` is ignored.
 
 ## `--debug`
 

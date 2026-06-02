@@ -50,15 +50,45 @@ public abstract class CliToolTCK<OPTIONS extends Options, SHELL extends CliTool<
   }
 
   @Test
-  @DisplayName("non-null run arguments")
-  void runArguments() {
-    assertNotNull(tool().runArguments(options()));
-  }
-
-  @Test
   @DisplayName("non-null cleanup arguments")
   void cleanupArguments() {
     assertNotNull(tool().cleanupArguments(options()));
+  }
+
+  @Test
+  @DisplayName("non-null probe arguments")
+  void probeArguments() {
+    assertNotNull(tool().probeArguments(options(), "ilo-test"));
+  }
+
+  @Test
+  @DisplayName("non-null remove arguments")
+  void removeArguments() {
+    assertNotNull(tool().removeArguments(options(), "ilo-test"));
+  }
+
+  @Test
+  @DisplayName("non-null create arguments")
+  void createArguments() {
+    assertNotNull(tool().createArguments(options(), "ilo-test"));
+  }
+
+  @Test
+  @DisplayName("non-null start arguments")
+  void startArguments() {
+    assertNotNull(tool().startArguments(options(), "ilo-test"));
+  }
+
+  @Test
+  @DisplayName("non-null attach arguments")
+  void attachArguments() {
+    assertNotNull(tool().attachArguments(options(), "ilo-test"));
+  }
+
+  @Test
+  @DisplayName("non-null stop arguments")
+  void stopArguments() {
+    assertNotNull(tool().stopArguments(options(), "ilo-test"));
   }
 
 }

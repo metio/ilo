@@ -47,6 +47,25 @@ public final class ComposeOptions implements Options {
   public boolean build;
 
   @CommandLine.Option(
+      names = {"--fresh"},
+      description = "Discard the reused services and start from a clean slate (recreate the containers)."
+  )
+  public boolean fresh;
+
+  @CommandLine.Option(
+      names = {"--keep-running"},
+      description = "Leave the services running after you exit instead of stopping them."
+  )
+  public boolean keepRunning;
+
+  @CommandLine.Option(
+      names = {"--shell"},
+      description = "The shell to run when attaching interactively without a command.",
+      defaultValue = "/bin/sh"
+  )
+  public String shell;
+
+  @CommandLine.Option(
       names = {"--file"},
       description = "Specify the docker-compose.yml/footloose.yaml file to use.",
       defaultValue = "docker-compose.yml"
