@@ -8,16 +8,6 @@
     </h1>
     {{ partial "i18n/translations.html" . }}
     <span id="actions">
-        {{ with .Site.Params.matrix }}
-            <a href="https://matrix.to/#/{{ . }}" id="matrix" title="lets talk">
-                <img class="svgimg" src="{{ "/images/matrix.svg" | absURL }}" alt="matrix" width="32" height="32">
-            </a>
-        {{ end }}
-        {{ with .Site.Params.email }}
-            <a href="{{ . }}" id="email" title="i want to write you an email">
-                <img class="svgimg" src="{{ "/images/email.svg" | absURL }}" alt="email" width="32" height="32">
-            </a>
-        {{ end }}
         {{ with .Site.Params.github }}
             <a href="https://github.com/{{ . }}" id="github" title="want some code?">
                 <img class="svgimg" src="{{ "/images/github.svg" | absURL }}" alt="github" width="32" height="32">
