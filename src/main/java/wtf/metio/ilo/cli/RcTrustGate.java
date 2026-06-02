@@ -5,7 +5,6 @@
 
 package wtf.metio.ilo.cli;
 
-import java.io.Console;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.function.Predicate;
@@ -92,42 +91,13 @@ public final class RcTrustGate implements Predicate<Path> {
 
   // visible for testing
   static boolean askOnConsole(final Path runCommandFile, final boolean contentChanged) {
-    if (!hasTerminal()) {
+    if (!Terminal.isInteractive()) {
       System.err.println("ilo: refusing to load untrusted run command file " + runCommandFile.toAbsolutePath()
           + " in a non-interactive session. Run ilo from a terminal once to trust it, or remove the file.");
       return false;
     }
     System.err.println(notice(runCommandFile, contentChanged));
     return grants(System.console().readLine("Trust and load this file from now on? [y/N] "));
-  }
-
-  /**
-   * Reports whether ilo is attached to an interactive terminal that can answer a prompt.
-   *
-   * <p>{@link System#console()} alone is not enough: since JDK 22 it returns a non-null console even
-   * for redirected or piped streams, so prompting on it would block forever in a non-interactive
-   * session. {@code Console.isTerminal()} distinguishes a real terminal, and is called reflectively
-   * because ilo is compiled against the Java 21 API. When the answer is uncertain we report
-   * non-interactive so the caller refuses rather than blocks.</p>
-   *
-   * @return Whether a prompt can be answered interactively.
-   */
-  static boolean hasTerminal() {
-    return hasTerminal(System.console());
-  }
-
-  // visible for testing
-  static boolean hasTerminal(final Console console) {
-    if (null == console) {
-      return false;
-    }
-    try {
-      return (boolean) Console.class.getMethod("isTerminal").invoke(console);
-    } catch (final NoSuchMethodException unavailableBeforeJava22) {
-      return true;
-    } catch (final ReflectiveOperationException unexpected) {
-      return false;
-    }
   }
 
 }

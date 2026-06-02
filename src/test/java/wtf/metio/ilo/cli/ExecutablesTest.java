@@ -14,6 +14,7 @@ import org.junit.jupiter.api.io.TempDir;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.properties.SystemProperties;
+import uk.org.webcompere.systemstubs.stream.SystemErr;
 import uk.org.webcompere.systemstubs.stream.SystemOut;
 
 import java.io.IOException;
@@ -126,8 +127,8 @@ class ExecutablesTest {
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
-  @DisplayName("writes debug message to system.out")
-  void shouldWriteDebugMessageToSystemOut(final SystemOut systemOut) {
+  @DisplayName("writes the debug trace to stderr, not stdout")
+  void shouldWriteDebugMessageToStandardError(final SystemErr systemErr, final SystemOut systemOut) {
     // given
     final var tool = "ls";
 
@@ -135,7 +136,8 @@ class ExecutablesTest {
     Executables.runAndWaitForExit(List.of(tool), true);
 
     // then
-    assertEquals("ilo executes: ls\n", systemOut.getText());
+    assertEquals("ilo executes: ls\n", systemErr.getText());
+    assertEquals("", systemOut.getText());
   }
 
   @Test
@@ -162,6 +164,19 @@ class ExecutablesTest {
 
     // then
     assertEquals(0, exitCode);
+  }
+
+  @Test
+  @DisplayName("yields no paths when PATH is unset")
+  void allPathsWithoutPathVariable() {
+    assertEquals(0, Executables.allPaths(null).count());
+  }
+
+  @Test
+  @DisplayName("splits PATH into individual directories")
+  void allPathsSplitsEntries() {
+    final var path = "/usr/bin" + java.io.File.pathSeparator + "/usr/local/bin";
+    assertEquals(2, Executables.allPaths(path).count());
   }
 
   @Test
@@ -307,6 +322,19 @@ class ExecutablesTest {
     final var start = System.nanoTime();
     assertThrows(wtf.metio.ilo.errors.CommandTimedOutException.class,
         () -> Executables.runAndReadOutput(java.time.Duration.ofMillis(300), "sh", "-c", "sleep 30"));
+    final var elapsedSeconds = (System.nanoTime() - start) / 1_000_000_000.0;
+    assertTrue(elapsedSeconds < 10, "should return promptly, took " + elapsedSeconds + "s");
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("times out instead of reading output held open past the timeout")
+  void timesOutWhenOutputHeldOpen() {
+    // sh exits right after echo, but the backgrounded child keeps stdout open, so the reader never
+    // reaches EOF within the timeout. ilo must time out rather than read the output concurrently.
+    final var start = System.nanoTime();
+    assertThrows(wtf.metio.ilo.errors.CommandTimedOutException.class,
+        () -> Executables.runAndReadOutput(java.time.Duration.ofMillis(300), "sh", "-c", "sleep 2 & echo started"));
     final var elapsedSeconds = (System.nanoTime() - start) / 1_000_000_000.0;
     assertTrue(elapsedSeconds < 10, "should return promptly, took " + elapsedSeconds + "s");
   }
