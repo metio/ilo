@@ -37,10 +37,25 @@ final class ShellContainer {
   static String slug(final String projectDir) {
     final var fileName = Paths.get(projectDir).getFileName();
     final var raw = Objects.isNull(fileName) ? projectDir : fileName.toString();
-    final var cleaned = raw.toLowerCase(Locale.ROOT)
-        .replaceAll("[^a-z0-9_.-]+", "-")
-        .replaceAll("^-+|-+$", "");
+    // Lower-case, collapse every run of disallowed characters to a single '-', then strip leading
+    // and trailing dashes. The strip is a plain linear scan rather than a regex, so it cannot
+    // backtrack — a directory name can be arbitrarily long, and an anchored '-+' alternation is
+    // exactly the shape static analysers flag as a potential denial-of-service.
+    final var collapsed = raw.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9_.-]+", "-");
+    final var cleaned = trimDashes(collapsed);
     return cleaned.isBlank() ? "project" : cleaned;
+  }
+
+  private static String trimDashes(final String value) {
+    var start = 0;
+    var end = value.length();
+    while (start < end && '-' == value.charAt(start)) {
+      start++;
+    }
+    while (end > start && '-' == value.charAt(end - 1)) {
+      end--;
+    }
+    return value.substring(start, end);
   }
 
   // visible for testing
