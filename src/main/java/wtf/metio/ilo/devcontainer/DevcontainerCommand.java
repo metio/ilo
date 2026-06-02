@@ -2,7 +2,6 @@
  * SPDX-FileCopyrightText: The ilo Authors
  * SPDX-License-Identifier: 0BSD
  */
-
 package wtf.metio.ilo.devcontainer;
 
 import picocli.CommandLine;
@@ -31,7 +30,6 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
-import java.util.concurrent.ExecutionException;
 import java.util.function.Supplier;
 
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.composeOptions;

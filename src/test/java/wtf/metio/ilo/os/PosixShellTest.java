@@ -2,7 +2,6 @@
  * SPDX-FileCopyrightText: The ilo Authors
  * SPDX-License-Identifier: 0BSD
  */
-
 package wtf.metio.ilo.os;
 
 import org.junit.jupiter.api.BeforeEach;
