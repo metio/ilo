@@ -52,7 +52,31 @@ class RunCommandsTest {
   }
 
   private Stream<String> findRunCommandFiles(final String testDirectory) {
-    return RunCommands.locate(testResources(RunCommands.class).resolve(testDirectory));
+    // Tests for discovery use a trust-all gate so they exercise location independently of the trust prompt.
+    return RunCommands.locate(testResources(RunCommands.class).resolve(testDirectory), path -> true);
+  }
+
+  @Test
+  @DisplayName("skips an untrusted run command file")
+  void skipsUntrustedRunCommandFile() {
+    final var found = RunCommands.locate(testResources(RunCommands.class).resolve("root"), path -> false);
+    assertEquals(0, found.count());
+  }
+
+  @Test
+  @DisplayName("loads a trusted run command file")
+  void loadsTrustedRunCommandFile() {
+    final var found = RunCommands.locate(testResources(RunCommands.class).resolve("root"), path -> true);
+    assertEquals(1, found.count());
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("does not gate files specified explicitly via ILO_RC")
+  void doesNotGateExplicitFiles(final uk.org.webcompere.systemstubs.environment.EnvironmentVariables environmentVariables) {
+    environmentVariables.set(EnvironmentVariables.ILO_RC.name(), "some-name.rc");
+    final var found = RunCommands.locate(testResources(RunCommands.class).resolve("different"), path -> false);
+    assertEquals(1, found.count());
   }
 
   @Test

@@ -25,4 +25,12 @@ public enum EnvironmentVariables {
    */
   ILO_SHELL_RUNTIME,
 
+  /**
+   * Location of the trust store that records which auto-discovered run command files the user has
+   * trusted. Defaults to {@code $XDG_CONFIG_HOME/ilo/trusted-rc} (or {@code ~/.config/ilo/trusted-rc}).
+   *
+   * @see wtf.metio.ilo.cli.RcTrust#trustStore()
+   */
+  ILO_TRUST_FILE,
+
 }
