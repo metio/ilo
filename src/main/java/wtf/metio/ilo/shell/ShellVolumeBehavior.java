@@ -50,7 +50,7 @@ public enum ShellVolumeBehavior {
       if (Files.exists(directory)) {
         return true;
       }
-      System.out.println("The local directory " + directory.toAbsolutePath() + " does not exist.");
+      System.err.println("The local directory " + directory.toAbsolutePath() + " does not exist.");
       return false;
     }
   },
@@ -75,9 +75,31 @@ public enum ShellVolumeBehavior {
   }
 
   private boolean handleLocalDirectory(final String volume) {
-    final var localDirectory = extractLocalPart(volume);
-    final var localPath = Paths.get(localDirectory);
+    if (!isBindMount(volume)) {
+      // Named volumes (e.g. 'cache:/data') and anonymous volumes (e.g. '/data') have no host
+      // directory, so they are passed through untouched rather than created or checked.
+      return true;
+    }
+    final var localPath = Paths.get(extractLocalPart(volume));
     return handleMissingDirectory(localPath);
+  }
+
+  /**
+   * Decides whether a {@code --volume} value bind-mounts a host directory, as opposed to referencing
+   * a named or anonymous volume. A bind mount has a {@code source:target} form whose source is a
+   * path; a named volume source is a bare name (no path separator) and an anonymous volume has no
+   * source at all. This mirrors how the container runtime interprets the value.
+   *
+   * @param volume The {@code --volume} value.
+   * @return Whether the value bind-mounts a host directory ilo should manage.
+   */
+  // visible for testing
+  static boolean isBindMount(final String volume) {
+    final var separator = volume.indexOf(':');
+    if (separator < 0) {
+      return false;
+    }
+    return volume.substring(0, separator).contains("/");
   }
 
   // visible for testing

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import wtf.metio.ilo.cli.RunCommands;
 import wtf.metio.ilo.shell.ShellRuntime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +30,13 @@ class IloAcceptanceTest extends CLI_TCK {
   void shouldAcceptNoRunCommandsFlag() {
     final var shell = parseShellCommand("--no-rc", "shell");
     assertNotNull(shell);
+  }
+
+  @Test
+  @DisplayName("declares the --no-rc option under the shared RunCommands constant")
+  void declaresNoRunCommandsOptionFromConstant() {
+    // Ties the option declaration to the flag RunCommands acts upon, so the two cannot drift.
+    assertNotNull(cmd.getCommandSpec().findOption(RunCommands.NO_RC_FLAG));
   }
 
   @Test

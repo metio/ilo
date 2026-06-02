@@ -101,7 +101,7 @@ class ShellCommandTest extends TestMethodSources {
     assertCommandLine(
         List.of(),
         List.of(),
-        List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:z", "--workdir", "/some/folder", "--interactive", "--tty", "--env", "ILO_CONTAINER=true", options.image),
+        List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:z", "--workdir", "/some/folder", "--interactive", "--env", "ILO_CONTAINER=true", options.image),
         List.of());
   }
 

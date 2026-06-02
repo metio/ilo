@@ -9,18 +9,35 @@ import com.google.common.jimfs.Configuration;
 import com.google.common.jimfs.Jimfs;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.stream.SystemErr;
+import uk.org.webcompere.systemstubs.stream.SystemOut;
 import wtf.metio.ilo.errors.LocalDirectoryDoesNotExistException;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("ShellVolumeBehavior")
+@ExtendWith(SystemStubsExtension.class)
 class ShellVolumeBehaviorTest {
+
+  @Test
+  @DisplayName("WARN: writes the warning to stderr, not stdout")
+  void warnsOnStandardError(final SystemErr systemErr, final SystemOut systemOut) {
+    final var directory = localDirectory("/missing");
+    ShellVolumeBehavior.WARN.handleMissingDirectory(directory);
+    assertAll(
+        () -> assertTrue(systemErr.getText().contains("does not exist"), "warning should be on stderr"),
+        () -> assertEquals("", systemOut.getText(), "nothing should be written to stdout"));
+  }
 
   @ParameterizedTest
   @DisplayName("defines behavior")
@@ -112,6 +129,66 @@ class ShellVolumeBehaviorTest {
     final var mount = "/local/directory";
     final var localPart = ShellVolumeBehavior.extractLocalPart(mount);
     assertEquals("/local/directory", localPart);
+  }
+
+  @ParameterizedTest
+  @DisplayName("recognizes bind mounts by their host path source")
+  @ValueSource(strings = {
+      "/host:/container",
+      "/host:/container:ro",
+      "./relative:/container",
+      "nested/path:/container",
+      "~/cache:/container"
+  })
+  void recognizesBindMounts(final String volume) {
+    assertTrue(ShellVolumeBehavior.isBindMount(volume));
+  }
+
+  @ParameterizedTest
+  @DisplayName("does not treat named or anonymous volumes as bind mounts")
+  @ValueSource(strings = {
+      "cache:/container",
+      "my-volume:/container:ro",
+      "/anonymous",
+      "name"
+  })
+  void rejectsNonBindMounts(final String volume) {
+    assertFalse(ShellVolumeBehavior.isBindMount(volume));
+  }
+
+  @Test
+  @DisplayName("does not manage a named volume as a local directory")
+  void doesNotManageNamedVolume() {
+    // A named volume has no host directory, so even ERROR must pass it through untouched.
+    assertEquals(List.of("cache:/root/.cache"),
+        ShellVolumeBehavior.ERROR.handleLocalDirectories(List.of("cache:/root/.cache")));
+  }
+
+  @Test
+  @DisplayName("does not manage an anonymous volume as a local directory")
+  void doesNotManageAnonymousVolume() {
+    assertEquals(List.of("/data"),
+        ShellVolumeBehavior.ERROR.handleLocalDirectories(List.of("/data")));
+  }
+
+  @Test
+  @DisplayName("still manages a bind mount source")
+  void stillManagesBindMount() {
+    assertThrows(LocalDirectoryDoesNotExistException.class,
+        () -> ShellVolumeBehavior.ERROR.handleLocalDirectories(List.of("/no/such/host/path:/work")));
+  }
+
+  @Test
+  @DisplayName("keeps a bind mount whose source already exists")
+  void keepsExistingBindMount(@TempDir final Path directory) {
+    final var volume = directory + ":/work";
+    assertEquals(List.of(volume), ShellVolumeBehavior.CREATE.handleLocalDirectories(List.of(volume)));
+  }
+
+  @Test
+  @DisplayName("drops a bind mount whose source is missing under WARN")
+  void dropsMissingBindMountUnderWarn() {
+    assertEquals(List.of(), ShellVolumeBehavior.WARN.handleLocalDirectories(List.of("/no/such/host/path:/work")));
   }
 
   private Path localDirectory(final String directory) {

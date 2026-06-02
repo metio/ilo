@@ -109,17 +109,11 @@ class RcTrustGateTest {
   }
 
   @Test
-  @DisplayName("treats a missing console as non-interactive")
-  void missingConsoleIsNotInteractive() {
-    assertFalse(RcTrustGate.hasTerminal((java.io.Console) null));
-  }
-
-  @Test
   @DisplayName("refuses an untrusted file in a non-interactive session")
   void refusesWithoutTerminal(@TempDir final Path directory, final SystemErr systemErr) throws IOException {
     // Surefire forks with redirected streams, so no real terminal is attached. Asserting this first
     // guarantees askOnConsole takes the non-interactive branch and never blocks on a prompt.
-    assertFalse(RcTrustGate.hasTerminal(), "test JVM must not be treated as interactive");
+    assertFalse(Terminal.isInteractive(), "test JVM must not be treated as interactive");
     final var rc = Files.writeString(directory.resolve(".ilo.rc"), "shell\n");
 
     assertFalse(RcTrustGate.askOnConsole(rc, false));

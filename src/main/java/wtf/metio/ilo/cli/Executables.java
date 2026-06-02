@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -92,8 +93,15 @@ public final class Executables {
 
   // visible for testing
   static Stream<Path> allPaths() {
-    return Stream.of(System.getenv("PATH")
-            .split(Pattern.quote(File.pathSeparator)))
+    return allPaths(System.getenv("PATH"));
+  }
+
+  // visible for testing
+  static Stream<Path> allPaths(final String path) {
+    if (null == path) {
+      return Stream.empty();
+    }
+    return Stream.of(path.split(Pattern.quote(File.pathSeparator)))
         .map(Paths::get);
   }
 
@@ -107,7 +115,7 @@ public final class Executables {
       return 0;
     }
     if (debug) {
-      System.out.println("ilo executes: " + String.join(" ", arguments));
+      System.err.println("ilo executes: " + String.join(" ", arguments));
     }
     try {
       return new ProcessBuilder(arguments).inheritIO().start().waitFor();
@@ -148,13 +156,15 @@ public final class Executables {
     }
 
     // Drain stdout on a separate thread so a stuck producer can be timed out instead of blocking a
-    // read forever, and so a full stdout pipe never blocks the command either.
-    final var output = new StringBuilder();
+    // read forever, and so a full stdout pipe never blocks the command either. The result is only
+    // published once readAllBytes returns, so it is read on the main thread only after the reader
+    // has finished — never concurrently.
+    final var captured = new AtomicReference<>("");
     final var reader = new Thread(() -> {
       try (final var stream = process.getInputStream()) {
-        output.append(new String(stream.readAllBytes(), StandardCharsets.UTF_8));
+        captured.set(new String(stream.readAllBytes(), StandardCharsets.UTF_8));
       } catch (final IOException closedOnDestroy) {
-        // the stream is closed when the process is destroyed; whatever was read is kept
+        // the stream is closed when the process is destroyed; nothing to capture
       }
     }, "ilo-output-reader");
     reader.setDaemon(true);
@@ -171,7 +181,13 @@ public final class Executables {
       Thread.currentThread().interrupt();
       throw new UnexpectedInterruptionException(exception);
     }
-    return output.toString().strip();
+    if (reader.isAlive()) {
+      // The process exited but its stdout is still held open (e.g. by a backgrounded child) past the
+      // timeout. Give up rather than read the output while the reader thread may still be writing it.
+      process.destroyForcibly();
+      throw new CommandTimedOutException(timeout.toSeconds(), String.join(" ", arguments));
+    }
+    return captured.get().strip();
   }
 
   private Executables() {

@@ -7,8 +7,11 @@ package wtf.metio.ilo.shell;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
 import wtf.metio.ilo.test.CliToolTCK;
 
 import java.util.List;
@@ -38,6 +41,20 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.containerfile = "Dockerfile";
     final var arguments = tool().buildArguments(options);
     assertEquals(String.format("%s build --file Dockerfile --tag example:test", name()), String.join(" ", arguments));
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("expands the containerfile path like the image and context")
+  void expandsContainerfile(final SystemProperties properties) {
+    properties.set("user.home", "/home/user");
+    final var options = new ShellOptions();
+    options.missingVolumes = ShellVolumeBehavior.CREATE;
+    options.image = "example:test";
+    options.containerfile = "~/project/Containerfile";
+    final var arguments = tool().buildArguments(options);
+    assertTrue(String.join(" ", arguments).contains("--file /home/user/project/Containerfile"),
+        () -> String.join(" ", arguments));
   }
 
   @Test
@@ -83,7 +100,8 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.interactive = true;
     options.workingDir = "some/dir";
     final var arguments = tool().runArguments(options);
-    assertEquals(String.format("%s run --rm --workdir %s --interactive --tty --env ILO_CONTAINER=true example:test", name(), options.workingDir), String.join(" ", arguments));
+    // --tty is only added when attached to a real terminal, which the test JVM is not.
+    assertEquals(String.format("%s run --rm --workdir %s --interactive --env ILO_CONTAINER=true example:test", name(), options.workingDir), String.join(" ", arguments));
   }
 
   @Test
