@@ -202,6 +202,18 @@ class PosixShellTest {
       assertEquals("1234:world", bourneShell.substituteCommands("1234:$(echo world)"));
     }
 
+    @Test
+    @DisplayName("substitutes command output that contains a dollar sign")
+    void substituteCommandOutputWithDollar() {
+      assertEquals("a$b", bourneShell.substituteCommands("$(printf 'a$b')"));
+    }
+
+    @Test
+    @DisplayName("substitutes command output that contains a backslash")
+    void substituteCommandOutputWithBackslash() {
+      assertEquals("a\\b", bourneShell.substituteCommands("$(printf 'a\\\\b')"));
+    }
+
   }
 
 }

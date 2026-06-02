@@ -24,6 +24,20 @@ class IloAcceptanceTest extends CLI_TCK {
     assertNull(shell.options.runtime);
   }
 
+  @Test
+  @DisplayName("accept --no-rc before the subcommand")
+  void shouldAcceptNoRunCommandsFlag() {
+    final var shell = parseShellCommand("--no-rc", "shell");
+    assertNotNull(shell);
+  }
+
+  @Test
+  @DisplayName("accept --no-rc together with other options")
+  void shouldAcceptNoRunCommandsFlagWithOptions() {
+    final var shell = parseShellCommand("--no-rc", "shell", "--debug");
+    assertTrue(shell.options.debug);
+  }
+
   @DisplayName("allow to specify runtime")
   @ParameterizedTest
   @ValueSource(strings = {"podman", "docker", "p", "d"})

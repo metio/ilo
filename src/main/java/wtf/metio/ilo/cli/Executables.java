@@ -14,10 +14,15 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import static java.util.function.Predicate.not;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Utility class that interacts with executables found on the host machine.
@@ -32,9 +37,56 @@ public final class Executables {
    * @return The path to the tool or an empty optional.
    */
   public static Optional<Path> of(final String tool) {
-    return allPaths().map(path -> path.resolve(tool))
+    final var names = candidateNames(tool, isWindows(), executableExtensions());
+    return allPaths()
+        .flatMap(directory -> names.stream().map(directory::resolve))
         .filter(Executables::canExecute)
         .findFirst();
+  }
+
+  // visible for testing
+  static boolean isWindows() {
+    return System.getProperty("os.name", "").toLowerCase(Locale.ROOT).startsWith("windows");
+  }
+
+  /**
+   * Computes the file names to probe for a tool. On Windows an executable is found under its base
+   * name plus an extension from {@code PATHEXT} (e.g. {@code docker.exe}), so a bare name like
+   * {@code docker} would never match. A name that already carries an extension is used verbatim.
+   *
+   * @param tool       The tool name as requested, e.g. 'docker'.
+   * @param windows    Whether the host is running Windows.
+   * @param extensions The executable extensions to append on Windows, e.g. '.EXE'.
+   * @return The candidate file names to look up on $PATH, in preference order.
+   */
+  // visible for testing
+  static List<String> candidateNames(final String tool, final boolean windows, final List<String> extensions) {
+    if (windows && !hasExtension(tool)) {
+      return extensions.stream()
+          .map(extension -> tool + extension)
+          .collect(toList());
+    }
+    return List.of(tool);
+  }
+
+  // visible for testing
+  static boolean hasExtension(final String tool) {
+    final var fileName = Paths.get(tool).getFileName().toString();
+    return 0 < fileName.lastIndexOf('.');
+  }
+
+  // visible for testing
+  static List<String> executableExtensions() {
+    return parseExtensions(System.getenv("PATHEXT"));
+  }
+
+  // visible for testing
+  static List<String> parseExtensions(final String pathext) {
+    final var raw = null == pathext || pathext.isBlank() ? ".COM;.EXE;.BAT;.CMD" : pathext;
+    return Arrays.stream(raw.split(";"))
+        .map(String::trim)
+        .filter(not(String::isBlank))
+        .collect(toList());
   }
 
   // visible for testing

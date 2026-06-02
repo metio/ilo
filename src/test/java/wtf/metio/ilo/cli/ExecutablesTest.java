@@ -10,10 +10,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
 import uk.org.webcompere.systemstubs.stream.SystemOut;
 
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -157,6 +162,114 @@ class ExecutablesTest {
 
     // then
     assertEquals(0, exitCode);
+  }
+
+  @Test
+  @DisplayName("uses the tool name verbatim on non-Windows hosts")
+  void candidateNamesOnNonWindows() {
+    assertEquals(List.of("docker"), Executables.candidateNames("docker", false, List.of(".EXE")));
+  }
+
+  @Test
+  @DisplayName("appends every executable extension on Windows hosts")
+  void candidateNamesOnWindows() {
+    assertEquals(
+        List.of("docker.EXE", "docker.CMD"),
+        Executables.candidateNames("docker", true, List.of(".EXE", ".CMD")));
+  }
+
+  @Test
+  @DisplayName("keeps a tool name that already has an extension on Windows hosts")
+  void candidateNamesOnWindowsWithExtension() {
+    assertEquals(List.of("pwsh.exe"), Executables.candidateNames("pwsh.exe", true, List.of(".EXE")));
+  }
+
+  @Test
+  @DisplayName("detects a file extension")
+  void detectsExtension() {
+    assertTrue(Executables.hasExtension("pwsh.exe"));
+  }
+
+  @Test
+  @DisplayName("detects a missing file extension")
+  void detectsMissingExtension() {
+    assertFalse(Executables.hasExtension("docker"));
+  }
+
+  @Test
+  @DisplayName("does not treat a leading dot as an extension")
+  void detectsLeadingDotIsNoExtension() {
+    assertFalse(Executables.hasExtension(".bashrc"));
+  }
+
+  @Test
+  @DisplayName("ignores dots in parent directories when detecting an extension")
+  void detectsExtensionFromFileNameOnly() {
+    assertFalse(Executables.hasExtension("some.dir/docker"));
+  }
+
+  @Test
+  @DisplayName("falls back to default extensions when PATHEXT is empty")
+  void parsesDefaultExtensions() {
+    assertEquals(List.of(".COM", ".EXE", ".BAT", ".CMD"), Executables.parseExtensions(null));
+    assertEquals(List.of(".COM", ".EXE", ".BAT", ".CMD"), Executables.parseExtensions("  "));
+  }
+
+  @Test
+  @DisplayName("parses PATHEXT into individual extensions")
+  void parsesConfiguredExtensions() {
+    assertEquals(List.of(".EXE", ".CMD"), Executables.parseExtensions(".EXE; .CMD ;"));
+  }
+
+  @Test
+  @DisplayName("reads executable extensions from the environment")
+  void readsExecutableExtensions() {
+    assertFalse(Executables.executableExtensions().isEmpty());
+  }
+
+  @Test
+  @DisplayName("recognizes a Windows host")
+  void recognizesWindows(final SystemProperties properties) throws Exception {
+    properties.set("os.name", "Windows 11");
+    assertTrue(Executables.isWindows());
+  }
+
+  @Test
+  @DisplayName("recognizes a non-Windows host")
+  void recognizesNonWindows(final SystemProperties properties) throws Exception {
+    properties.set("os.name", "Linux");
+    assertFalse(Executables.isWindows());
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("resolves a Windows executable by its extension")
+  void resolvesWindowsExecutableByExtension(
+      @TempDir final Path directory,
+      final EnvironmentVariables environment,
+      final SystemProperties properties) throws Exception {
+    final var executable = Files.createFile(directory.resolve("faketool.exe"));
+    assertTrue(executable.toFile().setExecutable(true));
+    environment.set("PATH", directory.toString());
+    environment.set("PATHEXT", ".exe");
+    properties.set("os.name", "Windows 10");
+
+    assertTrue(Executables.of("faketool").isPresent());
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("does not resolve a Windows executable without its extension on non-Windows hosts")
+  void doesNotResolveWindowsExecutableOnNonWindows(
+      @TempDir final Path directory,
+      final EnvironmentVariables environment,
+      final SystemProperties properties) throws IOException {
+    final var executable = Files.createFile(directory.resolve("faketool.exe"));
+    assertTrue(executable.toFile().setExecutable(true));
+    environment.set("PATH", directory.toString());
+    properties.set("os.name", "Linux");
+
+    assertTrue(Executables.of("faketool").isEmpty());
   }
 
 }
