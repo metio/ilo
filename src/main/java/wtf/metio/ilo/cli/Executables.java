@@ -163,7 +163,7 @@ public final class Executables {
     final var reader = new Thread(() -> {
       try (final var stream = process.getInputStream()) {
         captured.set(new String(stream.readAllBytes(), StandardCharsets.UTF_8));
-      } catch (final IOException closedOnDestroy) {
+      } catch (final IOException _) {
         // the stream is closed when the process is destroyed; nothing to capture
       }
     }, "ilo-output-reader");

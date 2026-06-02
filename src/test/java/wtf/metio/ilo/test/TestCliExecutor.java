@@ -30,7 +30,7 @@ public abstract class TestCliExecutor<RUNTIME extends Runtime<CLI>, CLI extends 
 
   @Override
   public final SessionLifecycle.Probe probe() {
-    return arguments -> probeState;
+    return _ -> probeState;
   }
 
   @Override

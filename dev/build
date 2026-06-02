@@ -1,6 +1,7 @@
 shell
 --pull
 --no-interactive
+--containerfile dev/Containerfile
 --volume ${XDG_CACHE_HOME}/maven:/root/.m2:z
-docker.io/metio/devcontainers-graalvm:latest
+dev/ilo:latest
 mvn verify

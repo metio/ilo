@@ -60,7 +60,7 @@ public final class ComposeCommand implements Callable<Integer> {
         // '--keep-running' leaves the services up after exit instead of stopping them.
         options.keepRunning ? List.of() : List.of(tool.stopArguments(options, COMPOSE_PROJECT)));
     return SessionLifecycle.run(steps, SessionLifecycle.Lifecycle.none(),
-        options.fresh, options.debug, executor::execute, arguments -> ContainerState.ABSENT);
+        options.fresh, options.debug, executor::execute, _ -> ContainerState.ABSENT);
   }
 
 }

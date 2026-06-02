@@ -91,7 +91,7 @@ public final class DevcontainerCommand implements Callable<Integer> {
   static String definition(final Path json) {
     try {
       return Files.readString(json);
-    } catch (final IOException unreadable) {
+    } catch (final IOException _) {
       return "";
     }
   }

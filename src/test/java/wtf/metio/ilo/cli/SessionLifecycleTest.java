@@ -49,7 +49,7 @@ class SessionLifecycleTest {
   }
 
   private static SessionLifecycle.Probe probeReturning(final ContainerState state) {
-    return arguments -> state;
+    return _ -> state;
   }
 
   @Test
