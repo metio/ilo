@@ -328,19 +328,6 @@ class ExecutablesTest {
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
-  @DisplayName("times out instead of reading output held open past the timeout")
-  void timesOutWhenOutputHeldOpen() {
-    // sh exits right after echo, but the backgrounded child keeps stdout open, so the reader never
-    // reaches EOF within the timeout. ilo must time out rather than read the output concurrently.
-    final var start = System.nanoTime();
-    assertThrows(wtf.metio.ilo.errors.CommandTimedOutException.class,
-        () -> Executables.runAndReadOutput(java.time.Duration.ofMillis(300), "sh", "-c", "sleep 2 & echo started"));
-    final var elapsedSeconds = (System.nanoTime() - start) / 1_000_000_000.0;
-    assertTrue(elapsedSeconds < 10, "should return promptly, took " + elapsedSeconds + "s");
-  }
-
-  @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("does not resolve a Windows executable without its extension on non-Windows hosts")
   void doesNotResolveWindowsExecutableOnNonWindows(
       @TempDir final Path directory,

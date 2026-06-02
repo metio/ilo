@@ -5,6 +5,16 @@ SPDX-License-Identifier: 0BSD
 
 # 2026.6.8
 
+The `compose`, `devcontainer` and `devfile` commands are available again. `ilo
+compose` runs build environments described by a [compose](https://compose-spec.io/)
+file, `ilo devcontainer` runs a [devcontainer](https://containers.dev/) (image- or
+dockerfile-based, or compose-based via its `dockerComposeFile`), and `ilo devfile`
+runs a [devfile](https://devfile.io/) environment. This is additive — existing
+`ilo shell` usage is unchanged and no action is required. The native binaries grow
+slightly because these commands pull in JSON and YAML parsers.
+
+---
+
 Run command files discovered automatically in your working directory
 (`.ilo/ilo.rc` and `.ilo.rc`) are no longer loaded without your confirmation. A
 run command file can set any option, and `ilo` expands option values through a
