@@ -14,6 +14,7 @@ import wtf.metio.ilo.shell.ShellVolumeBehavior;
 
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.composeOptions;
@@ -156,6 +157,135 @@ class DevcontainerOptionsMapperTest {
 
       // then
       assertEquals("", shellOptions.containerfile);
+    }
+
+    @Test
+    @DisplayName("maps the shell option")
+    void shouldMapShell() {
+      final var options = new DevcontainerOptions();
+      options.shell = "/bin/zsh";
+      assertEquals("/bin/zsh", shellOptions(options, DevcontainerBuilder.builder().create()).shell);
+    }
+
+    @Test
+    @DisplayName("maps the fresh flag")
+    void shouldMapFresh() {
+      final var options = new DevcontainerOptions();
+      options.fresh = true;
+      assertTrue(shellOptions(options, DevcontainerBuilder.builder().create()).fresh);
+    }
+
+    @Test
+    @DisplayName("maps the keep-running flag")
+    void shouldMapKeepRunning() {
+      final var options = new DevcontainerOptions();
+      options.keepRunning = true;
+      assertTrue(shellOptions(options, DevcontainerBuilder.builder().create()).keepRunning);
+    }
+
+    @Test
+    @DisplayName("maps workspaceFolder to the working directory")
+    void shouldMapWorkspaceFolder() {
+      final var json = DevcontainerBuilder.builder().workspaceFolder("/workspaces/project").create();
+      assertEquals("/workspaces/project", shellOptions(new DevcontainerOptions(), json).workingDir);
+    }
+
+    @Test
+    @DisplayName("maps containerEnv to --env values")
+    void shouldMapContainerEnv() {
+      final var json = DevcontainerBuilder.builder().containerEnv(Map.of("KEY", "value")).create();
+      assertIterableEquals(List.of("KEY=value"), shellOptions(new DevcontainerOptions(), json).variables);
+    }
+
+    @Test
+    @DisplayName("maps mounts to --volume source:target")
+    void shouldMapMounts() {
+      final var json = DevcontainerBuilder.builder()
+          .mounts(List.of(Map.of("type", "bind", "source", "/host/cache", "target", "/cache")))
+          .create();
+      assertIterableEquals(List.of("/host/cache:/cache"), shellOptions(new DevcontainerOptions(), json).volumes);
+    }
+
+    @Test
+    @DisplayName("ignores a mount without both source and target")
+    void shouldIgnoreIncompleteMount() {
+      final var json = DevcontainerBuilder.builder().mounts(List.of(Map.of("type", "volume"))).create();
+      assertIterableEquals(List.of(), shellOptions(new DevcontainerOptions(), json).volumes);
+    }
+
+    @Test
+    @DisplayName("maps appPort alongside forwardPorts")
+    void shouldMapAppPort() {
+      final var json = DevcontainerBuilder.builder()
+          .forwardPorts(List.of("8080"))
+          .appPort(List.of("9090:90"))
+          .create();
+      assertIterableEquals(List.of("8080:8080", "9090:90"), shellOptions(new DevcontainerOptions(), json).ports);
+    }
+
+    @Test
+    @DisplayName("maps containerUser to --user")
+    void shouldMapContainerUser() {
+      final var json = DevcontainerBuilder.builder().containerUser("node").create();
+      assertIterableEquals(List.of("--user", "node"), shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+    }
+
+    @Test
+    @DisplayName("falls back to remoteUser when containerUser is absent")
+    void shouldFallBackToRemoteUser() {
+      final var json = DevcontainerBuilder.builder().remoteUser("vscode").create();
+      assertIterableEquals(List.of("--user", "vscode"), shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+    }
+
+    @Test
+    @DisplayName("prefers containerUser over remoteUser")
+    void shouldPreferContainerUser() {
+      final var json = DevcontainerBuilder.builder().containerUser("node").remoteUser("vscode").create();
+      assertIterableEquals(List.of("--user", "node"), shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+    }
+
+    @Test
+    @DisplayName("maps init, privileged, capAdd and securityOpt to run options")
+    void shouldMapSecurityAndInitFlags() {
+      final var json = DevcontainerBuilder.builder()
+          .init(true)
+          .privileged(true)
+          .capAdd(List.of("SYS_PTRACE"))
+          .securityOpt(List.of("seccomp=unconfined"))
+          .create();
+      assertIterableEquals(
+          List.of("--init", "--privileged", "--cap-add", "SYS_PTRACE", "--security-opt", "seccomp=unconfined"),
+          shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+    }
+
+    @Test
+    @DisplayName("does not add init or privileged when false")
+    void shouldNotAddInitOrPrivilegedWhenFalse() {
+      final var json = DevcontainerBuilder.builder().init(false).privileged(false).create();
+      assertIterableEquals(List.of(), shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+    }
+
+    @Test
+    @DisplayName("keeps runArgs ahead of the derived run options")
+    void shouldKeepRunArgsFirst() {
+      final var json = DevcontainerBuilder.builder().runArgs(List.of("--add-host=db:127.0.0.1")).init(true).create();
+      assertIterableEquals(
+          List.of("--add-host=db:127.0.0.1", "--init"),
+          shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+    }
+
+    @Test
+    @DisplayName("maps build args, target and cacheFrom to build options")
+    void shouldMapBuildOptions() {
+      final var build = BuildBuilder.builder()
+          .args(Map.of("VERSION", "1.2.3"))
+          .target("builder")
+          .cacheFrom(List.of("registry/image:cache"))
+          .create();
+      final var json = DevcontainerBuilder.builder().build(build).create();
+      assertIterableEquals(
+          List.of("--build-arg", "VERSION=1.2.3", "--target", "builder", "--cache-from", "registry/image:cache"),
+          shellOptions(new DevcontainerOptions(), json).runtimeBuildOptions);
     }
 
   }

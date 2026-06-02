@@ -76,9 +76,28 @@ public final class ShellOptions implements Options {
 
   @CommandLine.Option(
       names = {"--remove-image"},
-      description = "Remove image after closing the shell."
+      description = "Remove the container and its image after closing the shell, instead of keeping them for reuse."
   )
   public boolean removeImage;
+
+  @CommandLine.Option(
+      names = {"--fresh"},
+      description = "Discard any reused container and start from a clean slate (rebuild and recreate)."
+  )
+  public boolean fresh;
+
+  @CommandLine.Option(
+      names = {"--keep-running"},
+      description = "Leave the container running after you exit instead of stopping it. Useful when attaching from several terminals."
+  )
+  public boolean keepRunning;
+
+  @CommandLine.Option(
+      names = {"--shell"},
+      description = "The shell to run when attaching interactively without a command.",
+      defaultValue = "/bin/sh"
+  )
+  public String shell;
 
   @CommandLine.Option(
       names = {"--runtime-option"},
@@ -147,6 +166,11 @@ public final class ShellOptions implements Options {
       description = "Command and its option(s) to run inside the container. Overwrites the command specified in the image."
   )
   public List<String> commands;
+
+  // Extra material that defines the environment but is not expressed as a container option above —
+  // used by 'ilo devcontainer' to fold the devcontainer.json (including its lifecycle commands) into
+  // the container's identity, so editing that file recreates the container. Not a command-line option.
+  public String identitySource;
 
   @Override
   public boolean debug() {

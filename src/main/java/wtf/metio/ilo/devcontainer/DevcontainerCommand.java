@@ -9,17 +9,24 @@ import picocli.CommandLine;
 import wtf.metio.devcontainer.Command;
 import wtf.metio.devcontainer.Devcontainer;
 import wtf.metio.ilo.cli.Executables;
+import wtf.metio.ilo.cli.SessionLifecycle;
 import wtf.metio.ilo.compose.ComposeCommand;
 import wtf.metio.ilo.errors.DevcontainerJsonMissingException;
 import wtf.metio.ilo.errors.RuntimeIOException;
 import wtf.metio.ilo.os.ShellTokenizer;
+import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellCommand;
+import wtf.metio.ilo.shell.ShellOptions;
 import wtf.metio.ilo.utils.Streams;
 import wtf.metio.ilo.utils.Strings;
 import wtf.metio.ilo.version.VersionProvider;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -66,11 +73,78 @@ public final class DevcontainerCommand implements Callable<Integer> {
       return command.call();
     } else if (Strings.isNotBlank(devcontainer.image())) {
       final var command = new ShellCommand();
-      command.options = shellOptions(options, devcontainer);
+      final var shellOptions = shellOptions(options, devcontainer);
+      // Fold the devcontainer.json into the container's identity so editing it — a lifecycle command,
+      // a mount, anything — recreates the container on the next run and re-runs the creation lifecycle.
+      shellOptions.identitySource = definition(json);
+      command.options = shellOptions;
+      command.lifecycle = (tool, containerName) -> lifecycle(tool, containerName, shellOptions, devcontainer);
       return command.call();
     }
 
     return CommandLine.ExitCode.USAGE;
+  }
+
+  // The full devcontainer.json contents, read best-effort, used as extra container-identity material.
+  // An unreadable file contributes nothing rather than failing the command.
+  // visible for testing
+  static String definition(final Path json) {
+    try {
+      return Files.readString(json);
+    } catch (final IOException unreadable) {
+      return "";
+    }
+  }
+
+  // Maps the devcontainer's in-container lifecycle commands onto the session's phases: the creation
+  // commands run once when the container is created, postStart on every start, postAttach on every
+  // attach. Each is gated by its --execute-* flag. initializeCommand is handled separately above
+  // because it runs on the host, before any container exists.
+  // visible for testing
+  SessionLifecycle.Lifecycle lifecycle(final ShellCLI tool, final String containerName,
+      final ShellOptions shellOptions, final Devcontainer devcontainer) {
+    final var onCreate = new ArrayList<List<String>>();
+    if (options.executeOnCreateCommand) {
+      onCreate.addAll(execLines(tool, containerName, shellOptions, devcontainer.onCreateCommand()));
+    }
+    if (options.executeUpdateContentCommand) {
+      onCreate.addAll(execLines(tool, containerName, shellOptions, devcontainer.updateContentCommand()));
+    }
+    if (options.executePostCreateCommand) {
+      onCreate.addAll(execLines(tool, containerName, shellOptions, devcontainer.postCreateCommand()));
+    }
+    final var onStart = new ArrayList<List<String>>();
+    if (options.executePostStartCommand) {
+      onStart.addAll(execLines(tool, containerName, shellOptions, devcontainer.postStartCommand()));
+    }
+    final var onAttach = new ArrayList<List<String>>();
+    if (options.executePostAttachCommand) {
+      onAttach.addAll(execLines(tool, containerName, shellOptions, devcontainer.postAttachCommand()));
+    }
+    return new SessionLifecycle.Lifecycle(List.copyOf(onCreate), List.copyOf(onStart), List.copyOf(onAttach));
+  }
+
+  // Turns one lifecycle command into the 'exec' command lines that run it inside the container. A
+  // string is handed to 'sh -c' so the container's shell parses it; an array is exec'd verbatim; an
+  // object's entries each become their own exec (run sequentially rather than in parallel, since the
+  // session executes steps one at a time).
+  private List<List<String>> execLines(final ShellCLI tool, final String containerName,
+      final ShellOptions shellOptions, final Command command) {
+    if (Objects.isNull(command)) {
+      return List.of();
+    }
+    if (Strings.isNotBlank(command.string())) {
+      return List.of(tool.execArguments(shellOptions, containerName, List.of("sh", "-c", command.string())));
+    }
+    if (Objects.nonNull(command.array()) && !command.array().isEmpty()) {
+      return List.of(tool.execArguments(shellOptions, containerName, command.array()));
+    }
+    if (Objects.nonNull(command.object()) && !command.object().isEmpty()) {
+      return command.object().values().stream()
+          .flatMap(nested -> execLines(tool, containerName, shellOptions, nested).stream())
+          .toList();
+    }
+    return List.of();
   }
 
   // visible for testing

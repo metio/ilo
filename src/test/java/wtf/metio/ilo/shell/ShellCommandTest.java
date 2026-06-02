@@ -7,17 +7,19 @@ package wtf.metio.ilo.shell;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
-import uk.org.webcompere.systemstubs.properties.SystemProperties;
+import wtf.metio.ilo.cli.ContainerState;
 import wtf.metio.ilo.test.TestMethodSources;
 
 import java.util.List;
-import java.util.function.Supplier;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("ShellCommand")
 @ExtendWith(SystemStubsExtension.class)
@@ -34,228 +36,167 @@ class ShellCommandTest extends TestMethodSources {
     options.missingVolumes = ShellVolumeBehavior.CREATE;
     options.workingDir = "some/dir";
     options.image = "fedora:latest";
+    options.shell = "/bin/sh";
     shell = new ShellCommand(executor);
     shell.options = options;
   }
 
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
-  @DisplayName("command line arguments with minimal settings")
-  void dockerLikeMinimal(final String runtime) {
-    final var tool = useRuntime(runtime);
-    assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
-        List.of());
+  // The container operation each executed command line performs (the token after the runtime name).
+  private List<String> operations() {
+    return executor.executed().stream().map(arguments -> arguments.get(1)).toList();
   }
 
   @ParameterizedTest
   @MethodSource("dockerLikeRuntimes")
-  @DisplayName("command line arguments with pull")
-  void dockerLikeWithPull(final String runtime) {
-    final var tool = useRuntime(runtime);
-    options.pull = true;
-    assertCommandLine(
-        List.of(tool, "pull", options.image),
-        List.of(),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
-        List.of());
-  }
-
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
-  @DisplayName("command line arguments with build")
-  void dockerLikeWithBuild(final String runtime) {
-    final var tool = useRuntime(runtime);
-    options.containerfile = "Dockerfile";
-    assertCommandLine(
-        List.of(),
-        List.of(tool, "build", "--file", options.containerfile, "--tag", options.image),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
-        List.of());
-  }
-
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
-  @DisplayName("command line arguments with cleanup")
-  void dockerLikeWithCleanup(final String runtime) {
-    final var tool = useRuntime(runtime);
-    options.removeImage = true;
-    assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
-        List.of(tool, "rmi", options.image));
-  }
-
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
-  @DisplayName("command line arguments with default settings")
-  void dockerLikeWithDefaults(final String runtime, final SystemProperties properties) {
-    properties.set("user.dir", "/some/folder");
-    final var tool = useRuntime(runtime);
-    options.interactive = true;
-    options.mountProjectDir = true;
-    options.workingDir = "";
-    assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "run", "--rm", "--volume", "/some/folder:/some/folder:z", "--workdir", "/some/folder", "--interactive", "--env", "ILO_CONTAINER=true", options.image),
-        List.of());
-  }
-
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
-  @DisplayName("command line arguments with runtime option")
-  void dockerLikeWithRuntimeOption(final String runtime) {
-    final var tool = useRuntime(runtime);
-    options.runtimeOptions = List.of("--remote");
-    assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "--remote", "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
-        List.of());
-  }
-
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
-  @DisplayName("command line arguments with runtime pull option")
-  void dockerLikeWithRuntimePullOption(final String runtime) {
-    final var tool = useRuntime(runtime);
-    options.pull = true;
-    options.runtimePullOptions = List.of("--all-tags");
-    assertCommandLine(
-        List.of(tool, "pull", "--all-tags", options.image),
-        List.of(),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
-        List.of());
-  }
-
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
-  @DisplayName("command line arguments with runtime build option")
-  void dockerLikeWithRuntimeBuildOption(final String runtime) {
-    final var tool = useRuntime(runtime);
-    options.containerfile = "Dockerfile";
-    options.runtimeBuildOptions = List.of("--squash-all");
-    assertCommandLine(
-        List.of(),
-        List.of(tool, "build", "--file", options.containerfile, "--squash-all", "--tag", options.image),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
-        List.of());
-  }
-
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
-  @DisplayName("command line arguments with runtime run option")
-  void dockerLikeWithRuntimeRunOption(final String runtime) {
-    final var tool = useRuntime(runtime);
-    options.runtimeRunOptions = List.of("--quiet");
-    assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "run", "--rm", "--quiet", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
-        List.of());
-  }
-
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
-  @DisplayName("command line arguments with runtime cleanup option")
-  void dockerLikeWithRuntimeCleanupOption(final String runtime) {
-    final var tool = useRuntime(runtime);
-    options.removeImage = true;
-    options.runtimeCleanupOptions = List.of("--force");
-    assertCommandLine(
-        List.of(),
-        List.of(),
-        List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image),
-        List.of(tool, "rmi", "--force", options.image));
-  }
-
-  @ParameterizedTest
-  @MethodSource("dockerLikeRuntimes")
-  @DisplayName("fail early after pull")
-  void failToPull(final String runtime) {
-    final var tool = useRuntime(runtime);
-    executor.exitCodes(1);
-    options.pull = true;
+  @DisplayName("creates and attaches when the container is absent")
+  void createWhenAbsent(final String runtime) {
+    useRuntime(runtime);
+    executor.probeState(ContainerState.ABSENT);
     final var exitCode = shell.call();
-    assertAll("command line",
-        () -> assertEquals(1, exitCode, "exitCode"),
-        () -> assertIterableEquals(List.of(tool, "pull", options.image), executor.pullArguments(), "pullArguments"),
-        () -> noExecution(executor::buildArguments, "buildArguments"),
-        () -> noExecution(executor::runArguments, "runArguments"),
-        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+    assertEquals(0, exitCode);
+    assertIterableEquals(List.of("run", "exec", "stop"), operations());
   }
 
   @ParameterizedTest
   @MethodSource("dockerLikeRuntimes")
-  @DisplayName("fail early after build")
-  void failToBuild(final String runtime) {
-    final var tool = useRuntime(runtime);
+  @DisplayName("pulls before creating an absent container")
+  void pullThenCreate(final String runtime) {
+    useRuntime(runtime);
+    options.pull = true;
+    executor.probeState(ContainerState.ABSENT);
+    shell.call();
+    assertIterableEquals(List.of("pull", "run", "exec", "stop"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("builds before creating an absent container")
+  void buildThenCreate(final String runtime) {
+    useRuntime(runtime);
+    options.containerfile = "Dockerfile";
+    executor.probeState(ContainerState.ABSENT);
+    shell.call();
+    assertIterableEquals(List.of("build", "run", "exec", "stop"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("starts a stopped container without rebuilding")
+  void startWhenStopped(final String runtime) {
+    useRuntime(runtime);
+    executor.probeState(ContainerState.STOPPED);
+    shell.call();
+    assertIterableEquals(List.of("start", "exec", "stop"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("attaches directly to a running container")
+  void attachWhenRunning(final String runtime) {
+    useRuntime(runtime);
+    executor.probeState(ContainerState.RUNNING);
+    shell.call();
+    assertIterableEquals(List.of("exec", "stop"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("removes the container and recreates it when fresh")
+  void recreateWhenFresh(final String runtime) {
+    useRuntime(runtime);
+    options.fresh = true;
+    executor.probeState(ContainerState.RUNNING);
+    shell.call();
+    assertIterableEquals(List.of("rm", "run", "exec", "stop"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("removes the container and its image instead of keeping them")
+  void removeImageTearsDown(final String runtime) {
+    useRuntime(runtime);
+    options.removeImage = true;
+    executor.probeState(ContainerState.ABSENT);
+    shell.call();
+    assertIterableEquals(List.of("run", "exec", "rm", "rmi"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("reports the exit code of the attached command")
+  void reportsAttachExitCode(final String runtime) {
+    useRuntime(runtime);
+    executor.probeState(ContainerState.RUNNING);
+    executor.exitCodes(7);
+    final var exitCode = shell.call();
+    assertEquals(7, exitCode);
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("does not create the container when the build fails")
+  void shortCircuitsOnBuildFailure(final String runtime) {
+    useRuntime(runtime);
+    options.containerfile = "Dockerfile";
+    executor.probeState(ContainerState.ABSENT);
+    // The empty pull step consumes the first exit code; the build then fails.
     executor.exitCodes(0, 1);
-    options.containerfile = "Dockerfile";
     final var exitCode = shell.call();
-    assertAll("command line",
-        () -> assertEquals(1, exitCode, "exitCode"),
-        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-        () -> assertIterableEquals(List.of(tool, "build", "--file", options.containerfile, "--tag", options.image), executor.buildArguments(), "buildArguments"),
-        () -> noExecution(executor::runArguments, "runArguments"),
-        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+    assertEquals(1, exitCode);
+    assertIterableEquals(List.of("build"), operations());
   }
 
   @ParameterizedTest
   @MethodSource("dockerLikeRuntimes")
-  @DisplayName("fail early after run")
-  void failToRun(final String runtime) {
-    final var tool = useRuntime(runtime);
-    executor.exitCodes(0, 0, 1);
-    final var exitCode = shell.call();
-    assertAll("command line",
-        () -> assertEquals(1, exitCode, "exitCode"),
-        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-        () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-        () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image), executor.runArguments(), "runArguments"),
-        () -> noExecution(executor::cleanupArguments, "cleanupArguments"));
+  @DisplayName("does not try to remove an absent container when fresh")
+  void freshAbsentSkipsRemove(final String runtime) {
+    useRuntime(runtime);
+    options.fresh = true;
+    executor.probeState(ContainerState.ABSENT);
+    shell.call();
+    assertIterableEquals(List.of("run", "exec", "stop"), operations());
   }
 
   @ParameterizedTest
   @MethodSource("dockerLikeRuntimes")
-  @DisplayName("return cleanup exit code")
-  void failToClean(final String runtime) {
-    final var tool = useRuntime(runtime);
-    executor.exitCodes(0, 0, 0, 1);
-    final var exitCode = shell.call();
-    assertAll("command line",
-        () -> assertEquals(1, exitCode, "exitCode"),
-        () -> assertIterableEquals(List.of(), executor.pullArguments(), "pullArguments"),
-        () -> assertIterableEquals(List.of(), executor.buildArguments(), "buildArguments"),
-        () -> assertIterableEquals(List.of(tool, "run", "--rm", "--workdir", options.workingDir, "--env", "ILO_CONTAINER=true", options.image), executor.runArguments(), "runArguments"),
-        () -> assertIterableEquals(List.of(), executor.cleanupArguments(), "cleanupArguments"));
+  @DisplayName("recreates the container so a pull takes effect")
+  void pullRecreates(final String runtime) {
+    useRuntime(runtime);
+    options.pull = true;
+    executor.probeState(ContainerState.RUNNING);
+    shell.call();
+    assertIterableEquals(List.of("rm", "pull", "run", "exec", "stop"), operations());
   }
 
-  private String useRuntime(final String runtime) {
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("leaves the container running when asked to keep it")
+  void keepRunningSkipsStop(final String runtime) {
+    useRuntime(runtime);
+    options.keepRunning = true;
+    executor.probeState(ContainerState.RUNNING);
+    shell.call();
+    assertIterableEquals(List.of("exec"), operations());
+  }
+
+  @Test
+  @DisplayName("removes stale project containers but keeps the current one")
+  void sweepsStaleContainers() {
+    options.runtime = ShellRuntime.DOCKER;
+    final var keep = ShellContainer.name(options, System.getProperty("user.dir"));
+    executor.captureOutput(keep + "\nilo-other-111111111111\n");
+    executor.probeState(ContainerState.RUNNING);
+    shell.call();
+    // The current container is running, so it is attached to and then stopped; the unrelated stale
+    // container is removed, while the current one is never an 'rm' target.
+    assertIterableEquals(List.of("rm", "exec", "stop"), operations());
+    assertTrue(executor.executed().stream().anyMatch(command -> command.contains("ilo-other-111111111111")));
+    assertTrue(executor.executed().stream()
+        .noneMatch(command -> "rm".equals(command.get(1)) && command.contains(keep)));
+  }
+
+  private void useRuntime(final String runtime) {
     options.runtime = ShellRuntime.fromAlias(runtime);
-    return options.runtime.aliases()[0];
-  }
-
-  private void assertCommandLine(
-      final List<String> pullArguments,
-      final List<String> buildArguments,
-      final List<String> runArguments,
-      final List<String> cleanupArguments) {
-    final var exitCode = shell.call();
-    assertAll("command line",
-        () -> assertEquals(0, exitCode, "exitCode"),
-        () -> assertIterableEquals(pullArguments, executor.pullArguments(), "pullArguments"),
-        () -> assertIterableEquals(buildArguments, executor.buildArguments(), "buildArguments"),
-        () -> assertIterableEquals(runArguments, executor.runArguments(), "runArguments"),
-        () -> assertIterableEquals(cleanupArguments, executor.cleanupArguments(), "cleanupArguments"));
-  }
-
-  private void noExecution(final Supplier<List<String>> arguments, final String name) {
-    assertThrows(IndexOutOfBoundsException.class, arguments::get, name);
   }
 
 }

@@ -6,10 +6,12 @@
 package wtf.metio.ilo.compose;
 
 import picocli.CommandLine;
-import wtf.metio.ilo.cli.CommandLifecycle;
+import wtf.metio.ilo.cli.ContainerState;
+import wtf.metio.ilo.cli.SessionLifecycle;
 import wtf.metio.ilo.model.CliExecutor;
 import wtf.metio.ilo.version.VersionProvider;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 @CommandLine.Command(
@@ -24,6 +26,10 @@ import java.util.concurrent.Callable;
     optionListHeading = "%n"
 )
 public final class ComposeCommand implements Callable<Integer> {
+
+  // 'up --detach' is idempotent, so a session always takes the create path; the state probe is not
+  // consulted (compose manages per-service state itself rather than exposing a single container).
+  private static final String COMPOSE_PROJECT = "";
 
   @CommandLine.Mixin
   public ComposeOptions options;
@@ -43,7 +49,18 @@ public final class ComposeCommand implements Callable<Integer> {
   @Override
   public Integer call() {
     final var tool = executor.selectRuntime(options.runtime);
-    return CommandLifecycle.run(tool, options, executor::execute);
+    final var steps = new SessionLifecycle.Steps(
+        List.of(),
+        tool.removeArguments(options, COMPOSE_PROJECT),
+        tool.pullArguments(options),
+        tool.buildArguments(options),
+        tool.createArguments(options, COMPOSE_PROJECT),
+        tool.startArguments(options, COMPOSE_PROJECT),
+        tool.attachArguments(options, COMPOSE_PROJECT),
+        // '--keep-running' leaves the services up after exit instead of stopping them.
+        options.keepRunning ? List.of() : List.of(tool.stopArguments(options, COMPOSE_PROJECT)));
+    return SessionLifecycle.run(steps, SessionLifecycle.Lifecycle.none(),
+        options.fresh, options.debug, executor::execute, arguments -> ContainerState.ABSENT);
   }
 
 }
