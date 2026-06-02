@@ -10,11 +10,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
 import wtf.metio.ilo.errors.NoMatchingRuntimeException;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -150,6 +155,22 @@ class ShellRuntimeTest {
     assumeTrue(new Docker().exists());
     environmentVariables.set("ILO_SHELL_RUNTIME", "docker");
     assertEquals("docker", autoSelect(null).name());
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("detects a runtime installed with a Windows executable extension")
+  void detectsRuntimeOnWindows(
+      @TempDir final Path directory,
+      final EnvironmentVariables environmentVariables,
+      final SystemProperties properties) throws Exception {
+    final var executable = Files.createFile(directory.resolve("podman.exe"));
+    assertTrue(executable.toFile().setExecutable(true));
+    environmentVariables.set("PATH", directory.toString());
+    environmentVariables.set("PATHEXT", ".exe");
+    properties.set("os.name", "Windows 10");
+
+    assertTrue(new Podman().exists());
   }
 
   @Test

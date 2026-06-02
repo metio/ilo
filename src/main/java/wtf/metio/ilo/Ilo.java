@@ -43,6 +43,15 @@ public final class Ilo implements Runnable {
   @CommandLine.Spec
   CommandLine.Model.CommandSpec spec;
 
+  // Run command (.rc) files are resolved before picocli parses, so this flag is acted upon in
+  // RunCommands.shouldAddRunCommands(). It is declared here only so picocli accepts the token
+  // instead of rejecting 'ilo --no-rc <command>' as an unknown option.
+  @CommandLine.Option(
+      names = {"--no-rc"},
+      description = "Disable loading of run command (.rc) argument files."
+  )
+  boolean noRunCommands;
+
   public static void main(final String... userInput) {
     System.setProperty("picocli.disable.closures", "true");
     System.exit(commandLine().execute(allArguments(userInput)));

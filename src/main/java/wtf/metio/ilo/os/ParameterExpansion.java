@@ -6,6 +6,7 @@
 package wtf.metio.ilo.os;
 
 import java.util.function.Function;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 abstract class ParameterExpansion {
@@ -30,7 +31,10 @@ abstract class ParameterExpansion {
     final var builder = new StringBuilder();
     final var matcher = pattern.matcher(value);
     while (matcher.find()) {
-      matcher.appendReplacement(builder, replacer.apply(matcher.group(MATCHER_GROUP_NAME)));
+      // The replacer returns a literal expansion (env value or command output). Quote it so that
+      // any '$' or '\' it contains is not interpreted by appendReplacement as a group reference.
+      final var replacement = replacer.apply(matcher.group(MATCHER_GROUP_NAME));
+      matcher.appendReplacement(builder, Matcher.quoteReplacement(replacement));
     }
     matcher.appendTail(builder);
     return builder.toString();
