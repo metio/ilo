@@ -36,6 +36,9 @@ class ShellContainerTest {
       "/home/user/my-project, my-project",
       "/srv/App_1.2, app_1.2",
       "/x/My Proj!, my-proj",
+      "/x/!leading, leading",
+      "/data/--weird--, weird",
+      "/x/---, project",
       "/, project"
   })
   void shouldDeriveSlug(final String projectDir, final String expected) {
