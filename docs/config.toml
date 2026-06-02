@@ -1,5 +1,5 @@
 baseURL = "https://ilo.projects.metio.wtf/"
-languageCode = "en"
+locale = "en"
 theme = "metio"
 title = "ilo"
 

@@ -7,17 +7,18 @@ package wtf.metio.ilo.cli;
 
 import wtf.metio.ilo.errors.*;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -125,23 +126,52 @@ public final class Executables {
     }
   }
 
+  // The expansion commands ilo runs (command substitution, parameter expansion) are expected to be
+  // near-instant; this bounds a runaway or stuck command so ilo cannot hang indefinitely.
+  static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
+
   public static String runAndReadOutput(final String... arguments) {
+    return runAndReadOutput(DEFAULT_TIMEOUT, arguments);
+  }
+
+  // visible for testing
+  static String runAndReadOutput(final Duration timeout, final String... arguments) {
+    final Process process;
     try {
-      final var processBuilder = new ProcessBuilder(arguments);
-      final var process = processBuilder.start();
-      try (final var reader = new InputStreamReader(process.getInputStream());
-           final var buffer = new BufferedReader(reader)) {
-        final var builder = new StringBuilder();
-        String line;
-        while (null != (line = buffer.readLine())) {
-          builder.append(line);
-          builder.append(System.lineSeparator());
-        }
-        return builder.toString().strip();
-      }
+      // Stderr is inherited rather than captured: it never fills a pipe ilo would have to drain (so
+      // a command that floods stderr cannot deadlock), and the user still sees the command's errors.
+      process = new ProcessBuilder(arguments)
+          .redirectError(ProcessBuilder.Redirect.INHERIT)
+          .start();
     } catch (final IOException exception) {
       throw new RuntimeIOException(exception);
     }
+
+    // Drain stdout on a separate thread so a stuck producer can be timed out instead of blocking a
+    // read forever, and so a full stdout pipe never blocks the command either.
+    final var output = new StringBuilder();
+    final var reader = new Thread(() -> {
+      try (final var stream = process.getInputStream()) {
+        output.append(new String(stream.readAllBytes(), StandardCharsets.UTF_8));
+      } catch (final IOException closedOnDestroy) {
+        // the stream is closed when the process is destroyed; whatever was read is kept
+      }
+    }, "ilo-output-reader");
+    reader.setDaemon(true);
+    reader.start();
+
+    try {
+      if (!process.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS)) {
+        process.destroyForcibly();
+        throw new CommandTimedOutException(timeout.toSeconds(), String.join(" ", arguments));
+      }
+      reader.join(timeout.toMillis());
+    } catch (final InterruptedException exception) {
+      process.destroyForcibly();
+      Thread.currentThread().interrupt();
+      throw new UnexpectedInterruptionException(exception);
+    }
+    return output.toString().strip();
   }
 
   private Executables() {
