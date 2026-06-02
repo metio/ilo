@@ -17,6 +17,6 @@ public final class StructureRules {
   @ArchTest
   public static final ArchRule iloDependsOnCommands = classes()
       .that().haveFullyQualifiedName("wtf.metio.ilo.Ilo")
-      .should().dependOnClassesThat().resideInAnyPackage("..shell..");
+      .should().dependOnClassesThat().resideInAnyPackage("..compose..", "..devcontainer..", "..devfile..", "..shell..");
 
 }
