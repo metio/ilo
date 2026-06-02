@@ -62,14 +62,19 @@ public final class ShellTokenizer {
               // Seen the close quote; continue this arg until whitespace is seen
               state = NORMAL_TOKEN_STATE;
             } else if ('\\' == character) {
-              // Look ahead, and only escape quotes or backslashes
-              index++;
-              final var next = arguments.charAt(index);
-              if ('"' == next || '\\' == next) {
-                builder.append(next);
+              // Look ahead, and only escape quotes or backslashes. A trailing backslash inside an
+              // unterminated quote has nothing to escape, so it is kept literally.
+              if (index + 1 < arguments.length()) {
+                index++;
+                final var next = arguments.charAt(index);
+                if ('"' == next || '\\' == next) {
+                  builder.append(next);
+                } else {
+                  builder.append(character);
+                  builder.append(next);
+                }
               } else {
                 builder.append(character);
-                builder.append(next);
               }
             } else {
               builder.append(character);

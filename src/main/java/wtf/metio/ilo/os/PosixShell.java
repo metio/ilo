@@ -44,13 +44,15 @@ final class PosixShell extends ParameterExpansion {
   @Override
   public String expandParameters(final String value) {
     return replace(expandTilde(value),
-        parameter -> Executables.runAndReadOutput("/usr/bin/env", shellBinary.toString(), "-c", "printf " + parameter),
+        parameter -> Executables.runAndReadOutput("/usr/bin/env", shellBinary.toString(), "-c", parameterCommand(parameter)),
         PARAMETER_WITH_BRACES_PATTERN, PARAMETER_PATTERN);
   }
 
-  private String expandTilde(final String value) {
-    final var userHome = System.getProperty("user.home");
-    return value.replace("~", userHome);
+  // visible for testing
+  static String parameterCommand(final String parameter) {
+    // '%s' is a literal format and the parameter is double-quoted, so the shell expands it but
+    // printf reuses the value verbatim — no word-splitting and no interpretation of '%' in it.
+    return "printf '%s' \"" + parameter + "\"";
   }
 
 }
