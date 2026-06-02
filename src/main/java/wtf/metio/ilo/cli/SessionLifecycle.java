@@ -2,11 +2,10 @@
  * SPDX-FileCopyrightText: The ilo Authors
  * SPDX-License-Identifier: 0BSD
  */
-
 package wtf.metio.ilo.cli;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.IntSupplier;
 
 /**
  * Drives a persistent-container session. Unlike a one-shot {@code run --rm}, a session reuses a
@@ -85,31 +84,10 @@ public final class SessionLifecycle {
     }
     final var state = fresh ? ContainerState.ABSENT : probe.state(steps.probe());
 
-    if (ContainerState.ABSENT == state) {
-      final var prepared = firstFailure(debug, executor,
-          steps.pull(), steps.build(), steps.create());
-      if (0 != prepared) {
-        return prepared;
-      }
-      final var created = runLifecycle(lifecycle.onCreate(), debug, executor);
-      if (0 != created) {
-        return created;
-      }
-      final var started = runLifecycle(lifecycle.onStart(), debug, executor);
-      if (0 != started) {
-        return started;
-      }
-    } else if (ContainerState.STOPPED == state) {
-      final var started = executor.execute(steps.start(), debug);
-      if (0 != started) {
-        return started;
-      }
-      final var hooks = runLifecycle(lifecycle.onStart(), debug, executor);
-      if (0 != hooks) {
-        return hooks;
-      }
+    final var prepared = prepare(state, steps, lifecycle, debug, executor);
+    if (0 != prepared) {
+      return prepared;
     }
-
     final var attached = runLifecycle(lifecycle.onAttach(), debug, executor);
     if (0 != attached) {
       return attached;
@@ -119,18 +97,41 @@ public final class SessionLifecycle {
     // Tear down after the interactive attach returns. The default teardown stops — but keeps — the
     // container so the next run resumes instead of rebuilding; a fuller teardown may also remove it.
     // Teardown is best-effort: its exit codes must not mask the exit code of the work the user ran.
-    for (final var command : steps.teardown()) {
-      executor.execute(command, debug);
-    }
+    steps.teardown().forEach(command -> executor.execute(command, debug));
     return attachExitCode;
   }
 
-  private static int firstFailure(
+  // Brings the container to a ready-to-attach state for the observed state: an absent container is
+  // pulled, built and created (then its create- and start-time lifecycle commands run), a stopped one
+  // is started (then its start-time commands run), a running one needs nothing. Returns the first
+  // non-zero exit code encountered, or zero.
+  private static int prepare(
+      final ContainerState state,
+      final Steps steps,
+      final Lifecycle lifecycle,
       final boolean debug,
-      final Executor executor,
-      final List<String>... steps) {
+      final Executor executor) {
+    if (ContainerState.ABSENT == state) {
+      return firstNonZero(
+          () -> executor.execute(steps.pull(), debug),
+          () -> executor.execute(steps.build(), debug),
+          () -> executor.execute(steps.create(), debug),
+          () -> runLifecycle(lifecycle.onCreate(), debug, executor),
+          () -> runLifecycle(lifecycle.onStart(), debug, executor));
+    }
+    if (ContainerState.STOPPED == state) {
+      return firstNonZero(
+          () -> executor.execute(steps.start(), debug),
+          () -> runLifecycle(lifecycle.onStart(), debug, executor));
+    }
+    return 0;
+  }
+
+  // Evaluates each step in order until one yields a non-zero exit code, which it returns; otherwise
+  // zero. The steps are lazy, so a failing step short-circuits the rest.
+  private static int firstNonZero(final IntSupplier... steps) {
     for (final var step : steps) {
-      final var exitCode = executor.execute(step, debug);
+      final var exitCode = step.getAsInt();
       if (0 != exitCode) {
         return exitCode;
       }

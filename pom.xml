@@ -69,7 +69,7 @@
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
 
         <pit.mutationCoverage>65</pit.mutationCoverage>
-        <pmd.skip>true</pmd.skip>
+        <pmd.skip>false</pmd.skip>
         <pgp.skip>true</pgp.skip>
     </properties>
 
@@ -230,9 +230,76 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+                <!-- PMD 7.x overrides the stale parent's PMD 6.x, which cannot parse JDK 25 (or the
+                     unnamed-variable syntax). A focused ruleset keeps the analysis actionable. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>3.28.0</version>
+                    <configuration>
+                        <printFailingErrors>true</printFailingErrors>
+                        <failOnViolation>true</failOnViolation>
+                        <!-- Standard threshold: flag genuine copy-paste, not short declarative
+                             boilerplate such as the shared arg-builder prefixes. -->
+                        <minimumTokens>100</minimumTokens>
+                        <rulesets>
+                            <ruleset>config/pmd/ruleset.xml</ruleset>
+                        </rulesets>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>net.sourceforge.pmd</groupId>
+                            <artifactId>pmd-core</artifactId>
+                            <version>7.25.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>net.sourceforge.pmd</groupId>
+                            <artifactId>pmd-java</artifactId>
+                            <version>7.25.0</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
+            <!-- Spotless enforces the SPDX license header, removes unused imports (via the
+                 JavaParser engine, so no JDK-internals access is needed) and normalises whitespace.
+                 Bound to 'verify' so it runs in CI; use 'mvn spotless:apply' to fix locally. -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <java>
+                        <includes>
+                            <include>src/main/java/**/*.java</include>
+                            <include>src/test/java/**/*.java</include>
+                        </includes>
+                        <removeUnusedImports>
+                            <engine>cleanthat-javaparser-unnecessaryimport</engine>
+                        </removeUnusedImports>
+                        <trimTrailingWhitespace/>
+                        <endWithNewline/>
+                        <licenseHeader>
+                            <content><![CDATA[/*
+ * SPDX-FileCopyrightText: The ilo Authors
+ * SPDX-License-Identifier: 0BSD
+ */
+]]></content>
+                            <delimiter>(package|module|import|open) </delimiter>
+                        </licenseHeader>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>spotless-check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

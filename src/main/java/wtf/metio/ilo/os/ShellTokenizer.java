@@ -2,7 +2,6 @@
  * SPDX-FileCopyrightText: The ilo Authors
  * SPDX-License-Identifier: 0BSD
  */
-
 package wtf.metio.ilo.os;
 
 import java.util.ArrayList;
@@ -36,6 +35,10 @@ public final class ShellTokenizer {
    * @param stringify Whether to include escape special characters
    * @return A list of parsed and properly escaped arguments.
    */
+  // A character-by-character tokenizer is inherently branch-heavy. Its cognitive complexity is
+  // accepted here rather than fragmenting the state machine into helpers that would be harder to
+  // follow than the single loop; the rule still guards the rest of the code base.
+  @SuppressWarnings("PMD.CognitiveComplexity")
   public static List<String> tokenize(final String arguments, final boolean stringify) {
     final var tokens = new ArrayList<String>();
     var builder = new StringBuilder();
