@@ -64,7 +64,8 @@
     <!-- https://maven.apache.org/pom.html#Properties -->
     <properties>
         <revision>0.0.0-SNAPSHOT</revision>
-        <version.jdk>25</version.jdk>
+        <!-- The parent derives the compiler release from global.jdkVersion (its default is 17). -->
+        <global.jdkVersion>25</global.jdkVersion>
         <skipNativeBuild>true</skipNativeBuild>
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
 
