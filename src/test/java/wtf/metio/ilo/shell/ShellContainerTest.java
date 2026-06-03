@@ -78,7 +78,7 @@ class ShellContainerTest {
   @DisplayName("fingerprint changes with the extra identity source")
   void shouldChangeWithIdentitySource() {
     final var other = options();
-    other.identitySource = "postCreateCommand: npm install";
+    other.identitySource("postCreateCommand: npm install");
     assertNotEquals(ShellContainer.fingerprint(options(), PROJECT), ShellContainer.fingerprint(other, PROJECT));
   }
 

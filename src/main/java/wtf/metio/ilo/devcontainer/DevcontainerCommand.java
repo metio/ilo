@@ -74,9 +74,9 @@ public final class DevcontainerCommand implements Callable<Integer> {
       final var shellOptions = shellOptions(options, devcontainer);
       // Fold the devcontainer.json into the container's identity so editing it — a lifecycle command,
       // a mount, anything — recreates the container on the next run and re-runs the creation lifecycle.
-      shellOptions.identitySource = definition(json);
+      shellOptions.identitySource(definition(json));
       command.options = shellOptions;
-      command.lifecycle = (tool, containerName) -> lifecycle(tool, containerName, shellOptions, devcontainer);
+      command.lifecycle((tool, containerName) -> lifecycle(tool, containerName, shellOptions, devcontainer));
       return command.call();
     }
 

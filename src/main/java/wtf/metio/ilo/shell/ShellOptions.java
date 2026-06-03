@@ -169,7 +169,15 @@ public final class ShellOptions implements Options {
   // Extra material that defines the environment but is not expressed as a container option above —
   // used by 'ilo devcontainer' to fold the devcontainer.json (including its lifecycle commands) into
   // the container's identity, so editing that file recreates the container. Not a command-line option.
-  public String identitySource;
+  private String identitySource;
+
+  public String identitySource() {
+    return identitySource;
+  }
+
+  public void identitySource(final String identitySource) {
+    this.identitySource = identitySource;
+  }
 
   @Override
   public boolean debug() {
