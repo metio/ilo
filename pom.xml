@@ -68,6 +68,10 @@
         <global.jdkVersion>25</global.jdkVersion>
         <skipNativeBuild>true</skipNativeBuild>
         <ilo.mainClass>wtf.metio.ilo.Ilo</ilo.mainClass>
+        <!-- picocli, its annotation processor and the man-page generator must move together. -->
+        <picocli.version>4.7.7</picocli.version>
+        <!-- Byte Buddy and its agent must move together. -->
+        <byte-buddy.version>1.18.9</byte-buddy.version>
 
         <pit.mutationCoverage>65</pit.mutationCoverage>
         <pmd.skip>false</pmd.skip>
@@ -96,12 +100,17 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- Pinned (not declared) so system-stubs' transitive Byte Buddy is new enough for JDK 25
-                 without being flagged as an unused declared dependency. -->
+            <!-- Pinned (not declared) so system-stubs' transitive Byte Buddy and its agent are new
+                 enough for JDK 25 without being flagged as unused declared dependencies. -->
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy</artifactId>
-                <version>1.18.9</version>
+                <version>${byte-buddy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-agent</artifactId>
+                <version>${byte-buddy.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -116,7 +125,7 @@
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>4.7.7</version>
+            <version>${picocli.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -319,7 +328,7 @@
                         <path>
                             <groupId>info.picocli</groupId>
                             <artifactId>picocli-codegen</artifactId>
-                            <version>4.7.7</version>
+                            <version>${picocli.version}</version>
                         </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
@@ -461,7 +470,7 @@
                     <dependency>
                         <groupId>info.picocli</groupId>
                         <artifactId>picocli-codegen</artifactId>
-                        <version>4.7.5</version>
+                        <version>${picocli.version}</version>
                         <type>jar</type>
                     </dependency>
                 </dependencies>
