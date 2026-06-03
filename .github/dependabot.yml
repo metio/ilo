@@ -9,3 +9,9 @@ updates:
       interval: daily
     assignees:
       - sebhoss
+  - package-ecosystem: maven
+    directory: /
+    schedule:
+      interval: daily
+    assignees:
+      - sebhoss
