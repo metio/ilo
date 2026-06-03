@@ -33,7 +33,7 @@ public final class ShellCommand implements Callable<Integer> {
   // Produces the lifecycle commands to run inside the session's container, given the resolved tool
   // and the derived container name. Plain 'ilo shell' has none; 'ilo devcontainer' supplies the
   // devcontainer's onCreate/postStart/postAttach commands here without coupling shell to that type.
-  public BiFunction<ShellCLI, String, SessionLifecycle.Lifecycle> lifecycle =
+  private BiFunction<ShellCLI, String, SessionLifecycle.Lifecycle> lifecycle =
       (tool, containerName) -> SessionLifecycle.Lifecycle.none();
 
   private final CliExecutor<? super ShellRuntime, ShellCLI, ShellOptions> executor;
@@ -46,6 +46,11 @@ public final class ShellCommand implements Callable<Integer> {
   // constructor for testing
   ShellCommand(final CliExecutor<? super ShellRuntime, ShellCLI, ShellOptions> executor) {
     this.executor = executor;
+  }
+
+  // 'ilo devcontainer' injects the in-container lifecycle commands here before calling.
+  public void lifecycle(final BiFunction<ShellCLI, String, SessionLifecycle.Lifecycle> lifecycle) {
+    this.lifecycle = lifecycle;
   }
 
   @Override

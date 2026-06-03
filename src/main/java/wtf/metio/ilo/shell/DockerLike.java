@@ -24,6 +24,9 @@ abstract class DockerLike implements ShellCLI {
   private static final List<String> KEEPALIVE = List.of("sh", "-c",
       "trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done");
 
+  // The runtimes restrict 'ps' output to containers matching the value that follows each '--filter'.
+  private static final String FILTER = "--filter";
+
   @Override
   public final List<String> pullArguments(final ShellOptions options) {
     if (options.pull && Strings.isBlank(options.containerfile)) {
@@ -60,7 +63,7 @@ abstract class DockerLike implements ShellCLI {
     return flatten(
         of(name()),
         fromList(expand.expand(options.runtimeOptions)),
-        of("ps", "--all", "--filter", "name=^" + containerName + "$", "--format", "{{.State}}"));
+        of("ps", "--all", FILTER, "name=^" + containerName + "$", "--format", "{{.State}}"));
   }
 
   @Override
@@ -151,11 +154,11 @@ abstract class DockerLike implements ShellCLI {
         of(name()),
         fromList(expand.expand(options.runtimeOptions)),
         of("ps", "--all",
-            "--filter", "label=ilo.project=" + projectDir,
-            "--filter", "status=created",
-            "--filter", "status=exited",
-            "--filter", "status=paused",
-            "--filter", "status=dead",
+            FILTER, "label=ilo.project=" + projectDir,
+            FILTER, "status=created",
+            FILTER, "status=exited",
+            FILTER, "status=paused",
+            FILTER, "status=dead",
             "--format", "{{.Names}}"));
   }
 

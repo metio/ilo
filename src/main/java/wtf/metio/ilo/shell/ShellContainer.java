@@ -75,7 +75,7 @@ final class ShellContainer {
     parts.addAll(values(options.variables));
     parts.addAll(values(options.ports));
     parts.add(containerfileContent(options.containerfile));
-    parts.add(Objects.toString(options.identitySource, ""));
+    parts.add(Objects.toString(options.identitySource(), ""));
     return String.join(SEPARATOR, parts);
   }
 
