@@ -33,7 +33,7 @@ class ComposeOptionsTest {
       "build",
       "pull",
       "fresh",
-      "keepRunning",
+      "overrideCommand",
       "shell",
       "runtimeOptions",
       "runtimePullOptions",

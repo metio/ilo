@@ -34,7 +34,6 @@ class DevcontainerOptionsTest {
       "pull",
       "removeImage",
       "fresh",
-      "keepRunning",
       "shell",
       "executeInitializeCommand",
       "executeOnCreateCommand",

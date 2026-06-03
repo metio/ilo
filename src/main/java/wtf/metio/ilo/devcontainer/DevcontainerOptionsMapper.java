@@ -30,7 +30,8 @@ final class DevcontainerOptionsMapper {
     opts.pull = options.pull;
     opts.removeImage = options.removeImage;
     opts.fresh = options.fresh;
-    opts.keepRunning = options.keepRunning;
+    // The devcontainer spec's overrideCommand defaults to true; only an explicit false opts out.
+    opts.overrideCommand = !Boolean.FALSE.equals(devcontainer.overrideCommand());
     opts.shell = options.shell;
     opts.runtime = options.shellRuntime;
     opts.mountProjectDir = options.mountProjectDir;
@@ -146,6 +147,8 @@ final class DevcontainerOptionsMapper {
     opts.service = devcontainer.service();
     opts.debug = options.debug;
     opts.pull = options.pull;
+    // The devcontainer spec's overrideCommand defaults to true; only an explicit false opts out.
+    opts.overrideCommand = !Boolean.FALSE.equals(devcontainer.overrideCommand());
     opts.runtime = options.composeRuntime;
     return opts;
   }

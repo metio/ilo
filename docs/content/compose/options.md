@@ -50,19 +50,21 @@ $ ilo compose
 
 By default, `--fresh` is not enabled.
 
-## `--keep-running`
+## `--override-command`
 
-The `--keep-running` option leaves the services running after you exit, instead of stopping them.
+So the attached service stays available for reuse across terminals, `ilo` runs it with a small keepalive (layered onto your compose file as an override, without editing it) and `exec`s into it. The services are then stopped only when the **last** attached session exits — so opening `ilo compose` from several terminals never interrupts the others, and there is no flag to manage. This needs a shell and `sleep` in the service's image, which practically every image has.
+
+For a service that already runs a long-lived process of its own, use `--no-override-command` to leave its compose-defined command in place and rely on that process instead; with the override off the services are stopped when you exit.
 
 ```console
-# leave the services running after exit
-$ ilo compose --keep-running
-
-# stop the services on exit (default)
+# run the service with a keepalive, last session out stops it (default)
 $ ilo compose
+
+# keep the service's own command from the compose file instead
+$ ilo compose --no-override-command
 ```
 
-By default, `--keep-running` is not enabled.
+By default, `--override-command` is enabled.
 
 ## `--shell`
 

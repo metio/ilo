@@ -86,10 +86,13 @@ public final class ShellOptions implements Options {
   public boolean fresh;
 
   @CommandLine.Option(
-      names = {"--keep-running"},
-      description = "Leave the container running after you exit instead of stopping it. Useful when attaching from several terminals."
+      names = {"--override-command"},
+      negatable = true,
+      defaultValue = "true",
+      fallbackValue = "true",
+      description = "Replace the image's entrypoint and command with a keepalive so the container stays running for reuse (default). Use --no-override-command to instead rely on the image's own long-running process — for images that already stay up."
   )
-  public boolean keepRunning;
+  public boolean overrideCommand = true;
 
   @CommandLine.Option(
       names = {"--shell"},

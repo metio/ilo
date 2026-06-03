@@ -8,11 +8,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import picocli.CommandLine;
 import wtf.metio.ilo.test.ClassTests;
 
 import java.lang.reflect.Modifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("ShellOptions")
@@ -35,7 +37,7 @@ class ShellOptionsTest {
       "hostname",
       "removeImage",
       "fresh",
-      "keepRunning",
+      "overrideCommand",
       "shell",
       "runtimeOptions",
       "runtimePullOptions",
@@ -61,6 +63,20 @@ class ShellOptionsTest {
     final var options = new ShellOptions();
     options.debug = value;
     assertEquals(value, options.debug());
+  }
+
+  @Test
+  @DisplayName("overrides the image command by default")
+  void overrideCommandDefaultsTrue() {
+    final var command = CommandLine.populateCommand(new ShellCommand(), "image:test");
+    assertTrue(command.options.overrideCommand);
+  }
+
+  @Test
+  @DisplayName("--no-override-command opts out of the keepalive override")
+  void noOverrideCommandDisablesOverride() {
+    final var command = CommandLine.populateCommand(new ShellCommand(), "--no-override-command", "image:test");
+    assertFalse(command.options.overrideCommand);
   }
 
 }

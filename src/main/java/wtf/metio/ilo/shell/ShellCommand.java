@@ -5,6 +5,7 @@
 package wtf.metio.ilo.shell;
 
 import picocli.CommandLine;
+import wtf.metio.ilo.cli.ContainerProcesses;
 import wtf.metio.ilo.cli.ContainerState;
 import wtf.metio.ilo.cli.SessionLifecycle;
 import wtf.metio.ilo.model.CliExecutor;
@@ -70,7 +71,7 @@ public final class ShellCommand implements Callable<Integer> {
         tool.createArguments(options, containerName),
         tool.startArguments(options, containerName),
         tool.attachArguments(options, containerName),
-        teardown(tool, containerName));
+        () -> teardown(tool, containerName));
     return SessionLifecycle.run(steps, lifecycle.apply(tool, containerName),
         fresh, options.debug, executor::execute, executor.probe());
   }
@@ -94,17 +95,26 @@ public final class ShellCommand implements Callable<Integer> {
     return List.of();
   }
 
-  // By default a session is stopped but kept for reuse. '--keep-running' leaves it running so other
-  // terminals attached to the same container are not interrupted. '--remove-image' opts out of reuse
-  // entirely: the container is removed and its image deleted, restoring clean-slate-every-run.
+  // Computed after the attach returns, so it reflects whoever is still attached. While another
+  // terminal has the container open the environment is left running; once this is the last session
+  // out, the container is stopped but kept for reuse, or — with '--remove-image' — removed along with
+  // its image to restore clean-slate-every-run.
   private List<List<String>> teardown(final ShellCLI tool, final String containerName) {
+    if (otherSessionsAttached(tool, containerName)) {
+      return List.of();
+    }
     if (options.removeImage) {
       return List.of(tool.removeArguments(options, containerName), tool.cleanupArguments(options));
     }
-    if (options.keepRunning) {
-      return List.of();
-    }
     return List.of(tool.stopArguments(options, containerName));
+  }
+
+  // A container is shared across terminals, so it must outlive this session if another is still
+  // attached. The runtime is the source of truth: any process besides the keepalive is another open
+  // session. This session's own attach has already returned by the time the teardown is computed, so
+  // it is not counted.
+  private boolean otherSessionsAttached(final ShellCLI tool, final String containerName) {
+    return ContainerProcesses.hasSessions(executor.capture(tool.processesArguments(options, containerName)));
   }
 
 }

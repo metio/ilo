@@ -29,7 +29,7 @@ class SessionLifecycleTest {
       List.of("create"),
       List.of("start"),
       List.of("attach"),
-      List.of(List.of("stop")));
+      () -> List.of(List.of("stop")));
 
   // Records the first token of every non-empty command line and returns configurable exit codes.
   private static final class RecordingExecutor implements SessionLifecycle.Executor {
@@ -183,7 +183,7 @@ class SessionLifecycleTest {
     final var steps = new SessionLifecycle.Steps(
         List.of("probe"), List.of("remove"), List.of("pull"), List.of("build"),
         List.of("create"), List.of("start"), List.of("attach"),
-        List.of(List.of("stop"), List.of("rmi")));
+        () -> List.of(List.of("stop"), List.of("rmi")));
     final var exitCode = SessionLifecycle.run(steps, SessionLifecycle.Lifecycle.none(),
         false, false, executor, probeReturning(ContainerState.RUNNING));
     assertEquals(0, exitCode);

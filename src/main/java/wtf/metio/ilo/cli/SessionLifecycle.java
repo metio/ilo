@@ -6,6 +6,7 @@ package wtf.metio.ilo.cli;
 
 import java.util.List;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 /**
  * Drives a persistent-container session. Unlike a one-shot {@code run --rm}, a session reuses a
@@ -18,9 +19,11 @@ import java.util.function.IntSupplier;
  *   (the create-time commands are skipped, which is what makes them run exactly once);</li>
  *   <li>{@link ContainerState#RUNNING} &rarr; attach directly.</li>
  * </ul>
- * The attach-time lifecycle commands and the interactive attach itself run on every invocation. The
- * container is stopped — but kept — when the attach returns, so the next run resumes it quickly. The
- * {@code fresh} flag removes any existing container first, forcing a clean-slate recreate.
+ * The attach-time lifecycle commands and the interactive attach itself run on every invocation. When
+ * the attach returns the container is torn down by the (lazily computed) teardown step — typically
+ * stopped but kept, so the next run resumes it quickly — unless that step observes a reason to leave
+ * it running. The {@code fresh} flag removes any existing container first, forcing a clean-slate
+ * recreate.
  */
 public final class SessionLifecycle {
 
@@ -48,7 +51,7 @@ public final class SessionLifecycle {
       List<String> create,
       List<String> start,
       List<String> attach,
-      List<List<String>> teardown) {
+      Supplier<List<List<String>>> teardown) {
   }
 
   /**
@@ -94,10 +97,11 @@ public final class SessionLifecycle {
     }
 
     final var attachExitCode = executor.execute(steps.attach(), debug);
-    // Tear down after the interactive attach returns. The default teardown stops — but keeps — the
-    // container so the next run resumes instead of rebuilding; a fuller teardown may also remove it.
+    // Tear down after the interactive attach returns. The teardown is computed now, not up front, so
+    // it can observe the container's current state — e.g. leaving it running while another terminal
+    // still has it open, and otherwise stopping (but keeping) it so the next run resumes quickly.
     // Teardown is best-effort: its exit codes must not mask the exit code of the work the user ran.
-    steps.teardown().forEach(command -> executor.execute(command, debug));
+    steps.teardown().get().forEach(command -> executor.execute(command, debug));
     return attachExitCode;
   }
 
