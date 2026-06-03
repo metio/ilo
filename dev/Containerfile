@@ -14,7 +14,11 @@ COPY --from=docker.io/library/maven:3-eclipse-temurin-21 /usr/share/maven/ref/se
 
 RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
-ENV MAVEN_CONFIG "/root/.m2"
+# The entrypoint copied from the maven image runs under `set -u` and dereferences
+# $MAVEN_CONFIG with no default, so it must be set or the container fails to start.
+# It is unset before mvn runs, so the value only governs where the entrypoint stages
+# its reference files — point it at a path writable by any uid (ilo runs rootless).
+ENV MAVEN_CONFIG "/tmp/.m2"
 
 ENTRYPOINT ["/usr/local/bin/mvn-entrypoint.sh"]
 CMD ["mvn"]
