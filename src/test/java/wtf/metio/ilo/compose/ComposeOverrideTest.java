@@ -12,8 +12,11 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermissions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 @DisplayName("ComposeOverride")
 class ComposeOverrideTest {
@@ -30,6 +33,18 @@ class ComposeOverrideTest {
       assertEquals("-c", entrypoint.get(1).asText());
       assertTrue(entrypoint.get(2).asText().contains("trap 'exit 0' TERM INT"), entrypoint.toString());
       assertTrue(service.path("command").isEmpty(), "command should be cleared");
+    } finally {
+      Files.deleteIfExists(Path.of(path));
+    }
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("creates the override readable only by its owner in the public temp directory")
+  void writesOwnerOnlyFile() throws Exception {
+    final var path = ComposeOverride.write("dev");
+    try {
+      assertEquals("rw-------", PosixFilePermissions.toString(Files.getPosixFilePermissions(Path.of(path))));
     } finally {
       Files.deleteIfExists(Path.of(path));
     }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 @CommandLine.Command(
     name = "compose",
@@ -39,7 +39,7 @@ public final class ComposeCommand implements Callable<Integer> {
   public ComposeOptions options;
 
   private final CliExecutor<? super ComposeRuntime, ComposeCLI, ComposeOptions> executor;
-  private final Function<String, String> keepaliveOverride;
+  private final UnaryOperator<String> keepaliveOverrideFile;
 
   // default constructor for picocli
   public ComposeCommand() {
@@ -54,9 +54,9 @@ public final class ComposeCommand implements Callable<Integer> {
   // constructor for testing with a stubbed keepalive-override writer (so the file path is known)
   ComposeCommand(
       final CliExecutor<? super ComposeRuntime, ComposeCLI, ComposeOptions> executor,
-      final Function<String, String> keepaliveOverride) {
+      final UnaryOperator<String> keepaliveOverrideFile) {
     this.executor = executor;
-    this.keepaliveOverride = keepaliveOverride;
+    this.keepaliveOverrideFile = keepaliveOverrideFile;
   }
 
   @Override
@@ -91,7 +91,7 @@ public final class ComposeCommand implements Callable<Integer> {
     }
     final var baseFiles = options.file;
     final var withOverride = new ArrayList<>(Optional.ofNullable(baseFiles).orElseGet(List::of));
-    withOverride.add(keepaliveOverride.apply(options.service));
+    withOverride.add(keepaliveOverrideFile.apply(options.service));
     options.file = withOverride;
     try {
       return tool.createArguments(options, COMPOSE_PROJECT);
