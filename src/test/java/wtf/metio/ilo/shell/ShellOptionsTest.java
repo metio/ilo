@@ -38,6 +38,7 @@ class ShellOptionsTest {
       "removeImage",
       "fresh",
       "overrideCommand",
+      "currentUser",
       "shell",
       "runtimeOptions",
       "runtimePullOptions",
@@ -77,6 +78,20 @@ class ShellOptionsTest {
   void noOverrideCommandDisablesOverride() {
     final var command = CommandLine.populateCommand(new ShellCommand(), "--no-override-command", "image:test");
     assertFalse(command.options.overrideCommand);
+  }
+
+  @Test
+  @DisplayName("does not map to the host user by default")
+  void currentUserDefaultsFalse() {
+    final var command = CommandLine.populateCommand(new ShellCommand(), "image:test");
+    assertFalse(command.options.currentUser);
+  }
+
+  @Test
+  @DisplayName("--current-user requests host-user mapping")
+  void currentUserFlagEnablesMapping() {
+    final var command = CommandLine.populateCommand(new ShellCommand(), "--current-user", "image:test");
+    assertTrue(command.options.currentUser);
   }
 
 }

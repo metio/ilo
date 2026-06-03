@@ -239,6 +239,60 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
   }
 
   @Test
+  @DisplayName("maps the container to the host user on create with --current-user")
+  void createWithCurrentUser() {
+    final var options = minimal();
+    options.currentUser = true;
+    final var arguments = String.join(" ", tool().createArguments(options, CONTAINER));
+    assertTrue(arguments.contains(currentUserCreateMapping()), arguments);
+  }
+
+  @Test
+  @DisplayName("requests the host user on exec only when the runtime needs it")
+  void attachWithCurrentUser() {
+    final var options = minimal();
+    options.currentUser = true;
+    final var arguments = String.join(" ", tool().attachArguments(options, CONTAINER));
+    assertEquals(currentUserOnExec(), arguments.contains("--user"));
+  }
+
+  // How this runtime maps the container to the host user on create. Podman/nerdctl use a keep-id user
+  // namespace; Docker (which has none) requests the host UID:GID explicitly.
+  protected String currentUserCreateMapping() {
+    return "--userns=keep-id";
+  }
+
+  // Whether the host-user request also has to be repeated on exec (true only where there is no user
+  // namespace for the exec to inherit, i.e. Docker).
+  protected boolean currentUserOnExec() {
+    return false;
+  }
+
+  @Test
+  @DisplayName("hints about file ownership only when the runtime needs --current-user")
+  void currentUserHintWhenNeeded() {
+    final var options = minimal();
+    // A security-options listing without 'rootless' stands in for a rootful daemon, the only case Docker warns about.
+    final var hint = tool().currentUserHint(options, args -> "[name=seccomp,profile=builtin]");
+    assertEquals(hintsAboutForeignFileOwnership(), hint.isPresent());
+  }
+
+  @Test
+  @DisplayName("never hints about file ownership once --current-user is set")
+  void noCurrentUserHintWithFlag() {
+    final var options = minimal();
+    options.currentUser = true;
+    assertTrue(tool().currentUserHint(options, args -> "[name=seccomp,profile=builtin]").isEmpty());
+  }
+
+  // Whether files written into the mounted project would be owned by a foreign user without
+  // --current-user, so the runtime should hint about it. Only rootful Docker does; podman and nerdctl
+  // map the host user automatically.
+  protected boolean hintsAboutForeignFileOwnership() {
+    return false;
+  }
+
+  @Test
   @DisplayName("stops the container by name")
   void stopArguments() {
     final var arguments = tool().stopArguments(minimal(), CONTAINER);

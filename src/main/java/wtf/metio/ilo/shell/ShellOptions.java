@@ -95,6 +95,12 @@ public final class ShellOptions implements Options {
   public boolean overrideCommand = true;
 
   @CommandLine.Option(
+      names = {"--current-user"},
+      description = "Run as your host user so files created in the mounted project stay owned by you. Mainly for rootful Docker; on rootless Podman/nerdctl it maps via a keep-id user namespace. See the File Ownership documentation."
+  )
+  public boolean currentUser;
+
+  @CommandLine.Option(
       names = {"--shell"},
       description = "The shell to run when attaching interactively without a command.",
       defaultValue = "/bin/sh"

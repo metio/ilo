@@ -23,6 +23,8 @@ Use [`--fresh`](#--fresh) when you want a clean slate even though nothing change
 
 You can attach several terminals to the same running container — just run `ilo shell` again with the same options and it joins the existing one. `ilo` keeps the container running until the **last** session exits, so leaving one terminal never interrupts the others; only the final one to leave stops the container. This is automatic — there is nothing to enable.
 
+Your project directory is mounted into the container read-write. With `ilo`'s default rootless Podman runtime, files written inside the container are owned by *you* on the host even when the image runs as `root`; on Docker it takes one extra step. See [File Ownership](../../usage/file-ownership) for the details.
+
 ## `--context`
 
 The `--context` option allows to specify the context when building an image with `--containerfile`/`--dockerfile`.
@@ -109,6 +111,17 @@ $ ilo shell --no-override-command
 ```
 
 By default, `--override-command` is enabled. Minimal images without a shell (`scratch`, distroless) need `--no-override-command` together with an image that stays running on its own.
+
+## `--current-user`
+
+Runs the container as **your** host user so that files created in the mounted project stay owned by you instead of `root`. `ilo` applies the right mechanism for the selected runtime — `--user <uid>:<gid>` on Docker (on both the container and every `exec`), or a `--userns=keep-id` user namespace on Podman/nerdctl.
+
+```console
+# run as your host user (files in the project stay yours)
+$ ilo shell --current-user
+```
+
+By default, `--current-user` is **not** enabled, because it is usually unnecessary: with rootless Podman a container running as `root` already writes files owned by you, and that lets the image's root-owned tools and caches stay writable. Reach for `--current-user` on **rootful Docker**, or for images that run as a non-root user. The trade-off is that the process is no longer `root` inside the container, so anything the image keeps under a root-owned path may need a writable location instead. See [File Ownership](../../usage/file-ownership) for the full picture.
 
 ## `--hostname`
 

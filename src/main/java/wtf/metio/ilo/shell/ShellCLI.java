@@ -7,8 +7,25 @@ package wtf.metio.ilo.shell;
 import wtf.metio.ilo.model.CliTool;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 public interface ShellCLI extends CliTool<ShellOptions> {
+
+  /**
+   * Produces an advisory shown before the container starts when files written into the mounted
+   * project would end up owned by a user other than the host one, telling the caller that
+   * {@code --current-user} fixes it. Podman, nerdctl, and rootless Docker map the host user
+   * automatically and so return nothing; only rootful Docker writes the files as root.
+   *
+   * @param options The options to use; an already-set {@code --current-user} suppresses the hint.
+   * @param capture Runs a command line and returns its standard output, used to ask the runtime
+   *                whether it is rootless.
+   * @return The advisory to print, or empty when none applies.
+   */
+  default Optional<String> currentUserHint(final ShellOptions options, final Function<List<String>, String> capture) {
+    return Optional.empty();
+  }
 
   /**
    * Builds a non-interactive {@code exec} into the running container, used to run an in-container
