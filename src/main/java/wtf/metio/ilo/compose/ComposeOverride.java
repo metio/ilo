@@ -10,7 +10,10 @@ import wtf.metio.ilo.cli.Keepalive;
 import wtf.metio.ilo.errors.RuntimeIOException;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +26,14 @@ import java.util.Map;
 final class ComposeOverride {
 
   private static final ObjectMapper YAML = new ObjectMapper(new YAMLFactory());
+
+  // The temp file lives in the world-writable system temp directory, so it is created atomically with
+  // owner-only permissions to keep its contents private. POSIX permissions do not exist on every file
+  // system (e.g. Windows), where temp files already sit in a per-user location, so they are omitted.
+  private static final FileAttribute<?>[] OWNER_ONLY =
+      FileSystems.getDefault().supportedFileAttributeViews().contains("posix")
+          ? new FileAttribute<?>[]{PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------"))}
+          : new FileAttribute<?>[0];
 
   /**
    * Writes the override for the given service to a temporary file and returns its path. The file is
@@ -38,7 +49,7 @@ final class ComposeOverride {
                 "entrypoint", Keepalive.command(),
                 "command", List.of())));
     try {
-      final var file = Files.createTempFile("ilo-compose-keepalive-", ".yml");
+      final var file = Files.createTempFile("ilo-compose-keepalive-", ".yml", OWNER_ONLY);
       file.toFile().deleteOnExit();
       YAML.writeValue(file.toFile(), definition);
       return file.toString();
