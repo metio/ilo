@@ -4,6 +4,7 @@
  */
 package wtf.metio.ilo.shell;
 
+import wtf.metio.ilo.cli.Keepalive;
 import wtf.metio.ilo.cli.Terminal;
 import wtf.metio.ilo.os.OSSupport;
 import wtf.metio.ilo.utils.Strings;
@@ -15,14 +16,6 @@ import static java.util.stream.Stream.of;
 import static wtf.metio.ilo.utils.Streams.*;
 
 abstract class DockerLike implements ShellCLI {
-
-  // Keeps the detached container alive without a foreground process so later runs can 'exec' into it.
-  // As PID 1 the shell receives no default signal handling, so it must trap SIGTERM explicitly and
-  // 'wait' on a backgrounded sleep (which a signal can interrupt) — otherwise 'stop' would block for
-  // the full grace period before the runtime resorts to SIGKILL. 'sh' and a numeric 'sleep' exist on
-  // practically every image, including BusyBox-based ones.
-  private static final List<String> KEEPALIVE = List.of("sh", "-c",
-      "trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done");
 
   // The runtimes restrict 'ps' output to containers matching the value that follows each '--filter'.
   private static final String FILTER = "--filter";
@@ -101,8 +94,11 @@ abstract class DockerLike implements ShellCLI {
         optional("--hostname", expand.expand(options.hostname)),
         withPrefix("--publish", expand.expand(options.ports)),
         withPrefix("--volume", missingVolumes.handleLocalDirectories(expand.expand(options.volumes))),
+        // With the override on, the keepalive replaces the image's entrypoint and command; with it
+        // off, neither is set and the image's own long-running process keeps the container alive.
+        maybe(options.overrideCommand, "--entrypoint", Keepalive.ENTRYPOINT),
         of(expand.expand(options.image)),
-        fromList(KEEPALIVE));
+        maybe(options.overrideCommand, "-c", Keepalive.SCRIPT));
   }
 
   @Override
@@ -153,13 +149,27 @@ abstract class DockerLike implements ShellCLI {
     return flatten(
         of(name()),
         fromList(expand.expand(options.runtimeOptions)),
-        of("ps", "--all",
-            FILTER, "label=ilo.project=" + projectDir,
-            FILTER, "status=created",
-            FILTER, "status=exited",
-            FILTER, "status=paused",
-            FILTER, "status=dead",
-            "--format", "{{.Names}}"));
+        of("ps", "--all", FILTER, "label=ilo.project=" + projectDir),
+        staleStatuses().stream().flatMap(status -> of(FILTER, "status=" + status)),
+        of("--format", "{{.Names}}"));
+  }
+
+  // The non-running states swept on reuse. 'dead' (a container whose removal failed) is a Docker-only
+  // state; podman and nerdctl reject it as an unknown status filter and fail the whole 'ps', so it is
+  // contributed by Docker alone rather than listed here.
+  List<String> staleStatuses() {
+    return List.of("created", "exited", "paused");
+  }
+
+  @Override
+  public final List<String> processesArguments(final ShellOptions options, final String containerName) {
+    final var expand = OSSupport.expander();
+    // The default 'top' columns include PID and PPID for all three runtimes, which is all the caller
+    // needs to distinguish the keepalive from attached sessions.
+    return flatten(
+        of(name()),
+        fromList(expand.expand(options.runtimeOptions)),
+        of("top", containerName));
   }
 
   @Override

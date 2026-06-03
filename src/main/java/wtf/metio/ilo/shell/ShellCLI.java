@@ -33,4 +33,16 @@ public interface ShellCLI extends CliTool<ShellOptions> {
    */
   List<String> staleContainersArguments(ShellOptions options, String projectDir);
 
+  /**
+   * Builds a command that lists the processes running inside the session's container, used to tell
+   * whether another terminal still has it open. The container's keepalive runs as PID 1 with its
+   * sleep as a direct child; every attached session is an {@code exec}'d process that is neither, so
+   * an open session is detected from the runtime alone, without any host-side bookkeeping.
+   *
+   * @param options       The options to use.
+   * @param containerName The reused name of the session's container.
+   * @return The process-listing command line.
+   */
+  List<String> processesArguments(ShellOptions options, String containerName);
+
 }

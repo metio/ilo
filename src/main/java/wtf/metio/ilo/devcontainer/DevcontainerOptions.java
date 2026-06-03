@@ -63,12 +63,6 @@ public final class DevcontainerOptions implements Options {
   public boolean fresh;
 
   @CommandLine.Option(
-      names = {"--keep-running"},
-      description = "Leave the container running after you exit instead of stopping it."
-  )
-  public boolean keepRunning;
-
-  @CommandLine.Option(
       names = {"--shell"},
       description = "The shell to run when attaching interactively to the container.",
       defaultValue = "/bin/bash"

@@ -51,6 +51,7 @@ Each command may be a string (run through the container's shell), an array (run 
 | `workspaceFolder`, `containerEnv`, `mounts`, `forwardPorts`, `appPort` | `secrets`, `hostRequirements` |
 | `containerUser`/`remoteUser`, `runArgs`, `init`, `privileged`, `capAdd`, `securityOpt` | `waitFor`, `userEnvProbe` |
 | `initializeCommand`, `onCreateCommand`, `updateContentCommand`, `postCreateCommand`, `postStartCommand`, `postAttachCommand` | |
+| `overrideCommand` (set `false` to keep the image's own long-running process) | |
 
 If you rely on `features` or editor `customizations`, use the [official `@devcontainers/cli`](https://github.com/devcontainers/cli) for those parts — `ilo` will not error on them, it simply does not act on them.
 
@@ -134,20 +135,6 @@ $ ilo devcontainer
 ```
 
 By default, `--fresh` is not enabled.
-
-## `--keep-running`
-
-The `--keep-running` option leaves the container running after you exit, instead of stopping it — useful when attaching from several terminals.
-
-```console
-# leave the container running after exit
-$ ilo devcontainer --keep-running
-
-# stop the container on exit (default)
-$ ilo devcontainer
-```
-
-By default, `--keep-running` is not enabled.
 
 ## `--shell`
 

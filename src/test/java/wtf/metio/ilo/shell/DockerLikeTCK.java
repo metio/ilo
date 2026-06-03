@@ -103,7 +103,20 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.workingDir = "some/dir";
     final var arguments = tool().createArguments(options, CONTAINER);
     assertEquals(
-        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=%s --workdir some/dir --env ILO_CONTAINER=true example:test sh -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER, System.getProperty("user.dir")),
+        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=%s --workdir some/dir --env ILO_CONTAINER=true --entrypoint sh example:test -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER, System.getProperty("user.dir")),
+        String.join(" ", arguments));
+  }
+
+  @Test
+  @DisplayName("leaves the image's entrypoint and command untouched when the override is off")
+  void createWithoutOverrideCommand() {
+    final var options = minimal();
+    options.workingDir = "some/dir";
+    options.overrideCommand = false;
+    final var arguments = tool().createArguments(options, CONTAINER);
+    // No --entrypoint and no keepalive command: the image's own long-running process keeps it alive.
+    assertEquals(
+        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=%s --workdir some/dir --env ILO_CONTAINER=true example:test", name(), CONTAINER, System.getProperty("user.dir")),
         String.join(" ", arguments));
   }
 
@@ -116,7 +129,7 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.workingDir = "";
     final var arguments = tool().createArguments(options, CONTAINER);
     assertEquals(
-        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=/some/folder --volume /some/folder:/some/folder:z --workdir /some/folder --env ILO_CONTAINER=true example:test sh -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER),
+        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=/some/folder --volume /some/folder:/some/folder:z --workdir /some/folder --env ILO_CONTAINER=true --entrypoint sh example:test -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER),
         String.join(" ", arguments));
   }
 
@@ -129,7 +142,7 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.runtimeRunOptions = List.of("--quiet");
     final var arguments = tool().createArguments(options, CONTAINER);
     assertEquals(
-        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=/work --quiet --workdir some/dir --env ILO_CONTAINER=true example:test sh -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER),
+        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=/work --quiet --workdir some/dir --env ILO_CONTAINER=true --entrypoint sh example:test -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER),
         String.join(" ", arguments));
   }
 
@@ -142,7 +155,7 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.workingDir = "some/dir";
     final var arguments = tool().createArguments(options, CONTAINER);
     assertEquals(
-        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=/work --workdir some/dir --env ILO_CONTAINER=true --hostname some-test example:test sh -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER),
+        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=/work --workdir some/dir --env ILO_CONTAINER=true --hostname some-test --entrypoint sh example:test -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER),
         String.join(" ", arguments));
   }
 
@@ -155,7 +168,7 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.workingDir = "some/dir";
     final var arguments = tool().createArguments(options, CONTAINER);
     assertEquals(
-        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=/work --workdir some/dir --env ILO_CONTAINER=true --env KEY=value --env OTHER=value example:test sh -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER),
+        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=/work --workdir some/dir --env ILO_CONTAINER=true --env KEY=value --env OTHER=value --entrypoint sh example:test -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER),
         String.join(" ", arguments));
   }
 
@@ -206,9 +219,23 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
   @DisplayName("lists this project's stopped containers for cleanup")
   void staleContainersArguments() {
     final var arguments = tool().staleContainersArguments(minimal(), "/work");
+    final var statusFilters = String.join(" ",
+        staleStatuses().stream().map(status -> "--filter status=" + status).toList());
     assertEquals(
-        String.format("%s ps --all --filter label=ilo.project=/work --filter status=created --filter status=exited --filter status=paused --filter status=dead --format {{.Names}}", name()),
+        String.format("%s ps --all --filter label=ilo.project=/work %s --format {{.Names}}", name(), statusFilters),
         String.join(" ", arguments));
+  }
+
+  // The non-running states this runtime sweeps; Docker additionally has 'dead'.
+  protected List<String> staleStatuses() {
+    return List.of("created", "exited", "paused");
+  }
+
+  @Test
+  @DisplayName("lists the container's processes to detect attached sessions")
+  void processesArguments() {
+    final var arguments = tool().processesArguments(minimal(), CONTAINER);
+    assertEquals(String.format("%s top %s", name(), CONTAINER), String.join(" ", arguments));
   }
 
   @Test

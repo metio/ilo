@@ -52,10 +52,13 @@ public final class ComposeOptions implements Options {
   public boolean fresh;
 
   @CommandLine.Option(
-      names = {"--keep-running"},
-      description = "Leave the services running after you exit instead of stopping them."
+      names = {"--override-command"},
+      negatable = true,
+      defaultValue = "true",
+      fallbackValue = "true",
+      description = "Run the attached service with a keepalive so it stays up for reuse across terminals, stopping only when the last session exits (default). Use --no-override-command to instead rely on the service's own command from the compose file."
   )
-  public boolean keepRunning;
+  public boolean overrideCommand = true;
 
   @CommandLine.Option(
       names = {"--shell"},

@@ -24,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 class ComposeCommandTest extends TestMethodSources {
 
   private static final String YML = "docker-compose.yml";
+  // Stands in for the generated keepalive override file, so its path is known in assertions.
+  private static final String OVERRIDE = "ilo-keepalive.yml";
 
   private ComposeCommand compose;
   private TestComposeExecutor executor;
@@ -35,7 +37,7 @@ class ComposeCommandTest extends TestMethodSources {
     options = new ComposeOptions();
     options.file = List.of(YML);
     options.service = "dev";
-    compose = new ComposeCommand(executor);
+    compose = new ComposeCommand(executor, service -> OVERRIDE);
     compose.options = options;
   }
 
@@ -47,7 +49,7 @@ class ComposeCommandTest extends TestMethodSources {
     final var exitCode = compose.call();
     assertEquals(0, exitCode);
     assertIterableEquals(List.of(
-        call(tool, "--file", YML, "up", "--detach", "dev"),
+        call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
         call(tool, "--file", YML, "stop")), executor.executed());
   }
@@ -61,7 +63,7 @@ class ComposeCommandTest extends TestMethodSources {
     compose.call();
     assertIterableEquals(List.of(
         call(tool, "--file", YML, "pull"),
-        call(tool, "--file", YML, "up", "--detach", "dev"),
+        call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
         call(tool, "--file", YML, "stop")), executor.executed());
   }
@@ -75,7 +77,7 @@ class ComposeCommandTest extends TestMethodSources {
     compose.call();
     assertIterableEquals(List.of(
         call(tool, "--file", YML, "build"),
-        call(tool, "--file", YML, "up", "--detach", "dev"),
+        call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
         call(tool, "--file", YML, "stop")), executor.executed());
   }
@@ -89,7 +91,7 @@ class ComposeCommandTest extends TestMethodSources {
     compose.call();
     assertIterableEquals(List.of(
         call(tool, "--file", YML, "down"),
-        call(tool, "--file", YML, "up", "--detach", "dev"),
+        call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
         call(tool, "--file", YML, "stop")), executor.executed());
   }
@@ -114,7 +116,7 @@ class ComposeCommandTest extends TestMethodSources {
     options.runtimeRunOptions = List.of("--use-aliases");
     compose.call();
     assertIterableEquals(
-        call(tool, "--file", YML, "up", "--detach", "--use-aliases", "dev"),
+        call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "--use-aliases", "dev"),
         executor.executed().get(0));
   }
 
@@ -143,14 +145,38 @@ class ComposeCommandTest extends TestMethodSources {
 
   @ParameterizedTest
   @MethodSource("dockerComposeLikeRuntimes")
-  @DisplayName("leaves the services running when asked to keep them")
-  void keepRunning(final String runtime) {
+  @DisplayName("leaves the services running while another session is still attached")
+  void otherSessionKeepsRunning(final String runtime) {
     final var tool = useRuntime(runtime);
-    options.keepRunning = true;
+    // 'compose top' prints the container name, then the process table; a process beyond the keepalive
+    // (PID 1 and its sleep child) means another terminal is attached.
+    executor.processesOutput("project-dev-1\nUID PID PPID CMD\nroot 1 0 sh\nroot 2 1 sleep\nroot 42 0 bash\n");
+    compose.call();
+    assertIterableEquals(List.of(
+        call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
+        call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh")), executor.executed());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("does not inject the keepalive and stops on exit with --no-override-command")
+  void noOverrideCommand(final String runtime) {
+    final var tool = useRuntime(runtime);
+    options.overrideCommand = false;
     compose.call();
     assertIterableEquals(List.of(
         call(tool, "--file", YML, "up", "--detach", "dev"),
-        call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh")), executor.executed());
+        call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
+        call(tool, "--file", YML, "stop")), executor.executed());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("lists the attached service's processes to detect other sessions")
+  void processesArguments(final String runtime) {
+    final var tool = useRuntime(runtime);
+    final var cli = ComposeRuntime.fromAlias(runtime).cli();
+    assertIterableEquals(call(tool, "--file", YML, "top", "dev"), cli.processesArguments(options));
   }
 
   private String useRuntime(final String runtime) {

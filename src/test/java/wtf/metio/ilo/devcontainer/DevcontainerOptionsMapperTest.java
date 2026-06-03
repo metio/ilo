@@ -175,11 +175,16 @@ class DevcontainerOptionsMapperTest {
     }
 
     @Test
-    @DisplayName("maps the keep-running flag")
-    void shouldMapKeepRunning() {
-      final var options = new DevcontainerOptions();
-      options.keepRunning = true;
-      assertTrue(shellOptions(options, DevcontainerBuilder.builder().create()).keepRunning);
+    @DisplayName("overrides the command by default when the definition is silent")
+    void shouldOverrideCommandByDefault() {
+      assertTrue(shellOptions(new DevcontainerOptions(), DevcontainerBuilder.builder().create()).overrideCommand);
+    }
+
+    @Test
+    @DisplayName("honours overrideCommand=false from the devcontainer definition")
+    void shouldRespectOverrideCommandFalse() {
+      final var json = DevcontainerBuilder.builder().overrideCommand(false).create();
+      assertFalse(shellOptions(new DevcontainerOptions(), json).overrideCommand);
     }
 
     @Test
@@ -339,6 +344,19 @@ class DevcontainerOptionsMapperTest {
 
       // then
       assertTrue(composeOptions.interactive);
+    }
+
+    @Test
+    @DisplayName("overrides the command by default when the definition is silent")
+    void shouldOverrideCommandByDefault() {
+      assertTrue(composeOptions(new DevcontainerOptions(), DevcontainerBuilder.builder().create(), Paths.get(".")).overrideCommand);
+    }
+
+    @Test
+    @DisplayName("honours overrideCommand=false from the devcontainer definition")
+    void shouldRespectOverrideCommandFalse() {
+      final var json = DevcontainerBuilder.builder().overrideCommand(false).create();
+      assertFalse(composeOptions(new DevcontainerOptions(), json, Paths.get(".")).overrideCommand);
     }
 
   }

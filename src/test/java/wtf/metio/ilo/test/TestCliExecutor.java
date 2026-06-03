@@ -20,6 +20,7 @@ public abstract class TestCliExecutor<RUNTIME extends Runtime<CLI>, CLI extends 
   private final ArrayDeque<Integer> exitCodes = new ArrayDeque<>(4);
   private ContainerState probeState = ContainerState.ABSENT;
   private String captureOutput = "";
+  private String processesOutput = "";
 
   @Override
   public final int execute(final List<String> arguments, final boolean debug) {
@@ -34,7 +35,9 @@ public abstract class TestCliExecutor<RUNTIME extends Runtime<CLI>, CLI extends 
 
   @Override
   public final String capture(final List<String> arguments) {
-    return captureOutput;
+    // The session captures two different listings; a 'top' command lists processes, anything else
+    // (the 'ps' sweep) lists container names.
+    return arguments.contains("top") ? processesOutput : captureOutput;
   }
 
   /** Controls the container state the next session sees. */
@@ -45,6 +48,11 @@ public abstract class TestCliExecutor<RUNTIME extends Runtime<CLI>, CLI extends 
   /** Controls the output the next {@link #capture} call returns (e.g. a list of container names). */
   public final void captureOutput(final String output) {
     captureOutput = output;
+  }
+
+  /** Controls the {@code top} output the next process check returns (the in-container process table). */
+  public final void processesOutput(final String output) {
+    processesOutput = output;
   }
 
   /** Every command line passed to {@link #execute}, including the empty (skipped) ones, in order. */

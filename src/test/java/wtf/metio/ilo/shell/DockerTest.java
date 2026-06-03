@@ -6,6 +6,8 @@ package wtf.metio.ilo.shell;
 
 import org.junit.jupiter.api.DisplayName;
 
+import java.util.List;
+
 @DisplayName("Docker")
 class DockerTest extends DockerLikeTCK {
 
@@ -22,6 +24,11 @@ class DockerTest extends DockerLikeTCK {
   @Override
   protected String name() {
     return "docker";
+  }
+
+  @Override
+  protected List<String> staleStatuses() {
+    return List.of("created", "exited", "paused", "dead");
   }
 
 }

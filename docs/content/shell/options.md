@@ -21,7 +21,7 @@ The container is named `ilo-<project>-<hash>` (for example `ilo-my-project-1a2b3
 
 Use [`--fresh`](#--fresh) when you want a clean slate even though nothing changed — to re-pull a `latest` image, or to reset a container whose state has drifted — or [`--remove-image`](#--remove-image) to remove the container and its image entirely when you exit.
 
-You can attach several terminals to the same running container. By default the container is stopped when you exit, which would interrupt the others — use [`--keep-running`](#--keep-running) in the additional terminals (or all of them) to leave it running.
+You can attach several terminals to the same running container — just run `ilo shell` again with the same options and it joins the existing one. `ilo` keeps the container running until the **last** session exits, so leaving one terminal never interrupts the others; only the final one to leave stops the container. This is automatic — there is nothing to enable.
 
 ## `--context`
 
@@ -94,19 +94,21 @@ $ ilo shell
 
 By default, `--fresh` is not enabled.
 
-## `--keep-running`
+## `--override-command`
 
-The `--keep-running` option leaves the container running after you exit, instead of stopping it. This is useful when you attach to the same container from several terminals: by default the first terminal to exit stops the container and ends the others' sessions, which `--keep-running` avoids.
+To keep the container around for reuse, `ilo` needs it to stay running between sessions. By default it injects a small keepalive as the container's entrypoint and command — so the container stays up regardless of the image's own entrypoint — and `exec`s your shell into it. This needs a shell and `sleep` in the image, which practically every distribution and dev image has (including BusyBox/Alpine).
+
+For images that already run a long-lived process of their own (a server, or a `CMD ["sleep", "infinity"]`), use `--no-override-command` to leave the image's entrypoint and command in place and rely on that process to keep the container alive instead.
 
 ```console
-# leave the container running after exit
-$ ilo shell --keep-running
-
-# stop the container on exit (default)
+# inject the keepalive (default)
 $ ilo shell
+
+# keep the image's own entrypoint/command running instead
+$ ilo shell --no-override-command
 ```
 
-By default, `--keep-running` is not enabled. The container is still reused on the next run either way; this only controls whether it keeps running in the meantime.
+By default, `--override-command` is enabled. Minimal images without a shell (`scratch`, distroless) need `--no-override-command` together with an image that stays running on its own.
 
 ## `--hostname`
 

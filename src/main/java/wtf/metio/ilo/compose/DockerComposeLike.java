@@ -88,6 +88,19 @@ abstract class DockerComposeLike implements ComposeCLI {
         of("stop"));
   }
 
+  // Lists the attached service's processes so the session can tell whether another terminal is still
+  // attached (see ContainerProcesses). 'top' reports the running service's container only.
+  @Override
+  public final List<String> processesArguments(final ComposeOptions options) {
+    final var expand = OSSupport.expander();
+    return flatten(
+        of(name(), command()),
+        fromList(expand.expand(options.runtimeOptions)),
+        withPrefix("--file", expand.expand(options.file)),
+        of("top"),
+        optional("", expand.expand(options.service)));
+  }
+
   // Removes the services entirely, used to force a clean-slate recreate on the next run.
   @Override
   public final List<String> removeArguments(final ComposeOptions options, final String containerName) {
