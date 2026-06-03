@@ -15,9 +15,9 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- https://maven.apache.org/pom.html#Inheritance -->
     <parent>
-        <groupId>wtf.metio.maven.parents</groupId>
-        <artifactId>maven-parents-java-stable</artifactId>
-        <version>2024.1.12</version>
+        <groupId>wtf.metio.maven</groupId>
+        <artifactId>maven-parent</artifactId>
+        <version>2026.5.29</version>
     </parent>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -76,9 +76,9 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!--                          DEPENDENCY MANAGEMENT                          -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-    <!-- These overrides are newer than the (stale) parent's managed versions and are required for
-         JDK 25: the parent predates it, so its Jackson/JUnit/ASM/Byte Buddy versions cannot read
-         class file major version 69. BOM imports keep each family internally consistent. -->
+    <!-- The parent does not manage these families, so the versions are supplied here. The BOM imports
+         keep each Jackson/JUnit artifact internally consistent; the JDK 25 build needs Jackson/JUnit/ASM/
+         Byte Buddy new enough to read class file major version 69. -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -109,7 +109,8 @@
     <!--                               DEPENDENCIES                              -->
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- https://maven.apache.org/pom.html#Dependencies -->
-    <!-- Versions are pinned here (overriding the stale parent) so the build works on JDK 25. -->
+    <!-- Versions for the families above come from dependencyManagement; every other dependency the
+         parent does not manage carries an explicit version inline. -->
     <dependencies>
         <dependency>
             <groupId>info.picocli</groupId>
@@ -198,9 +199,9 @@
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     <!-- https://maven.apache.org/pom.html#Build -->
     <build>
-        <!-- Version overrides for JDK 25: surefire/JaCoCo/PIT read, instrument and mutate bytecode,
-             so they need ASM/engine versions that understand class file major 69 — newer than the
-             stale parent provides. The PIT JUnit 5 plugin is pinned to match the PIT engine. -->
+        <!-- surefire/JaCoCo/PIT read, instrument and mutate bytecode, so they are pinned to versions
+             whose ASM understands class file major 69 (JDK 25). The PIT JUnit 5 plugin is pinned to
+             match the PIT engine. -->
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -230,8 +231,9 @@
                         </dependency>
                     </dependencies>
                 </plugin>
-                <!-- PMD 7.x overrides the stale parent's PMD 6.x, which cannot parse JDK 25 (or the
-                     unnamed-variable syntax). A focused ruleset keeps the analysis actionable. -->
+                <!-- The parent does not bind PMD; the execution under build/plugins wires it into
+                     verify. PMD 7.x is required to parse JDK 25 sources (including the unnamed-variable
+                     syntax); 6.x cannot. A focused ruleset keeps the analysis actionable. -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
@@ -300,6 +302,13 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Declaring the plugin activates the parent's managed PMD execution (source and
+                 copy-paste analysis bound to verify); the version, ruleset and CPD threshold come from
+                 pluginManagement above. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -357,10 +366,13 @@
                             <goal>compile-no-fork</goal>
                         </goals>
                         <phase>package</phase>
+                        <!-- Skipping is driven by the skipNativeBuild property (the mojo binds it
+                             directly); the JVM build leaves it true, the native profiles flip it to
+                             false. Setting it as a configuration element instead would be rejected as
+                             an unknown parameter. -->
                         <configuration>
                             <imageName>ilo</imageName>
                             <mainClass>${ilo.mainClass}</mainClass>
-                            <skipNativeBuild>${skipNativeBuild}</skipNativeBuild>
                         </configuration>
                     </execution>
                 </executions>
