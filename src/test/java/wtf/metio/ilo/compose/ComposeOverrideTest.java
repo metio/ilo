@@ -7,8 +7,6 @@ package wtf.metio.ilo.compose;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 @DisplayName("ComposeOverride")
 class ComposeOverrideTest {
@@ -26,12 +25,12 @@ class ComposeOverrideTest {
   void writesKeepaliveOverride() throws Exception {
     final var path = ComposeOverride.write("dev");
     try {
-      final var tree = new ObjectMapper(new YAMLFactory()).readTree(new File(path));
+      final var tree = YAMLMapper.builder().build().readTree(new File(path));
       final var service = tree.path("services").path("dev");
       final var entrypoint = service.path("entrypoint");
-      assertEquals("sh", entrypoint.get(0).asText());
-      assertEquals("-c", entrypoint.get(1).asText());
-      assertTrue(entrypoint.get(2).asText().contains("trap 'exit 0' TERM INT"), entrypoint.toString());
+      assertEquals("sh", entrypoint.get(0).asString());
+      assertEquals("-c", entrypoint.get(1).asString());
+      assertTrue(entrypoint.get(2).asString().contains("trap 'exit 0' TERM INT"), entrypoint.toString());
       assertTrue(service.path("command").isEmpty(), "command should be cleared");
     } finally {
       Files.deleteIfExists(Path.of(path));

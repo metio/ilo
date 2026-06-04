@@ -4,8 +4,8 @@
  */
 package wtf.metio.ilo.compose;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.core.JacksonException;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 import wtf.metio.ilo.cli.Keepalive;
 import wtf.metio.ilo.errors.RuntimeIOException;
 
@@ -25,7 +25,7 @@ import java.util.Map;
  */
 final class ComposeOverride {
 
-  private static final ObjectMapper YAML = new ObjectMapper(new YAMLFactory());
+  private static final YAMLMapper YAML = YAMLMapper.builder().build();
 
   // The temp file lives in the world-writable system temp directory, so it is created atomically with
   // owner-only permissions to keep its contents private. POSIX permissions do not exist on every file
@@ -55,6 +55,11 @@ final class ComposeOverride {
       return file.toString();
     } catch (final IOException exception) {
       throw new RuntimeIOException(exception);
+    } catch (final JacksonException exception) {
+      // The serialized value is a constant map of strings and lists, so serialization itself cannot
+      // fail; a failure here is the underlying write to the temp file, which the runtime wraps as an
+      // unchecked JacksonException.
+      throw new RuntimeIOException(new IOException(exception));
     }
   }
 
