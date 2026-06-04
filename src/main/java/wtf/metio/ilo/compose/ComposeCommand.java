@@ -74,8 +74,8 @@ public final class ComposeCommand implements Callable<Integer> {
         tool.attachArguments(options, COMPOSE_PROJECT),
         // Stop only once this is the last attached session; while another terminal still has the
         // managed service open, the services are left running. Without the override there is nothing
-        // to ref-count, so the services are stopped on exit.
-        () -> managed && otherSessionsAttached(tool)
+        // to ref-count, so the services are stopped on exit. '--keep-running' leaves them up regardless.
+        () -> options.keepRunningOnExit || (managed && otherSessionsAttached(tool))
             ? List.of()
             : List.of(tool.stopArguments(options, COMPOSE_PROJECT)));
     // 'up --detach' is idempotent, so a compose session always takes the create path regardless of any

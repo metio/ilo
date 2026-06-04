@@ -50,6 +50,34 @@ $ ilo compose
 
 By default, `--fresh` is not enabled.
 
+## `--keep-running`
+
+The `--keep-running` option leaves the services running after the last session exits, instead of stopping them. Use it when you want the compose project to keep running in the background between `ilo compose` sessions. This mirrors a `devcontainer.json` [`shutdownAction`](https://containers.dev/implementors/json_reference/) of `none`.
+
+```console
+# leave the services running on exit
+$ ilo compose --keep-running
+
+# stop the services on exit (default)
+$ ilo compose
+```
+
+By default, `--keep-running` is not enabled.
+
+## `--run-service`
+
+The `--run-service` option brings up additional services alongside the one you attach to (repeat it for several). By default `ilo compose` brings up the attached service and its dependencies; use `--run-service` to also start services that are not dependencies. This mirrors the devcontainer specification's [`runServices`](https://containers.dev/implementors/json_reference/).
+
+```console
+# attach to 'dev' and also start 'db' and 'cache'
+$ ilo compose dev --run-service db --run-service cache
+
+# attach to 'dev' and its dependencies only (default)
+$ ilo compose dev
+```
+
+By default, `--run-service` brings up no extra services.
+
 ## `--override-command`
 
 So the attached service stays available for reuse across terminals, `ilo` runs it with a small keepalive (layered onto your compose file as an override, without editing it) and `exec`s into it. The services are then stopped only when the **last** attached session exits — so opening `ilo compose` from several terminals never interrupts the others, and there is no flag to manage. This needs a shell and `sleep` in the service's image, which practically every image has.

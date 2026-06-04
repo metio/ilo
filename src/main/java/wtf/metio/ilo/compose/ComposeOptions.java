@@ -52,6 +52,12 @@ public final class ComposeOptions implements Options {
   public boolean fresh;
 
   @CommandLine.Option(
+      names = {"--keep-running"},
+      description = "Leave the services running after the last session exits instead of stopping them. Maps to a devcontainer.json shutdownAction of 'none'."
+  )
+  public boolean keepRunningOnExit;
+
+  @CommandLine.Option(
       names = {"--override-command"},
       negatable = true,
       defaultValue = "true",
@@ -110,6 +116,12 @@ public final class ComposeOptions implements Options {
       defaultValue = "dev"
   )
   public String service;
+
+  @CommandLine.Option(
+      names = {"--run-service"},
+      description = "Additional service to bring up alongside the attached service (repeatable). Maps to devcontainer.json runServices."
+  )
+  public List<String> runServices;
 
   @CommandLine.Parameters(index = "1..*")
   public List<String> arguments;

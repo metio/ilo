@@ -86,6 +86,12 @@ public final class ShellOptions implements Options {
   public boolean fresh;
 
   @CommandLine.Option(
+      names = {"--keep-running"},
+      description = "Leave the container running after the last session exits instead of stopping it (it is kept for reuse either way). Maps to a devcontainer.json shutdownAction of 'none'."
+  )
+  public boolean keepRunningOnExit;
+
+  @CommandLine.Option(
       names = {"--override-command"},
       negatable = true,
       defaultValue = "true",
@@ -129,6 +135,12 @@ public final class ShellOptions implements Options {
   public String shell;
 
   @CommandLine.Option(
+      names = {"--shell-arg"},
+      description = "Pass an extra argument to the interactive shell (repeatable), e.g. '-l'/'-i' for a login/interactive shell. Ignored when an explicit command is given. 'ilo devcontainer' fills this from userEnvProbe. The shell must support the arguments."
+  )
+  public List<String> shellArguments;
+
+  @CommandLine.Option(
       names = {"--runtime-option"},
       description = "Options for the selected runtime itself."
   )
@@ -165,6 +177,12 @@ public final class ShellOptions implements Options {
   public List<String> volumes;
 
   @CommandLine.Option(
+      names = {"--workspace-mount"},
+      description = "Override the default project bind-mount with an explicit '--mount' specification. Its target should match --working-dir."
+  )
+  public String workspaceMount;
+
+  @CommandLine.Option(
       names = {"--missing-volumes"},
       description = "Specifies how missing local volume directories should be handles. Valid values: ${COMPLETION-CANDIDATES}",
       defaultValue = "CREATE"
@@ -176,6 +194,12 @@ public final class ShellOptions implements Options {
       description = "Specify a environment variable for the container."
   )
   public List<String> variables;
+
+  @CommandLine.Option(
+      names = {"--remote-env"},
+      description = "Specify an environment variable applied on exec — for the interactive shell and lifecycle commands — rather than on the container itself like --env."
+  )
+  public List<String> remoteVariables;
 
   @CommandLine.Option(
       names = {"--publish"},

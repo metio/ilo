@@ -110,6 +110,18 @@ class ComposeCommandTest extends TestMethodSources {
 
   @ParameterizedTest
   @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("brings up additional run services alongside the attached service")
+  void withRunServices(final String runtime) {
+    final var tool = useRuntime(runtime);
+    options.runServices = List.of("db", "cache");
+    compose.call();
+    assertIterableEquals(
+        call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev", "db", "cache"),
+        executor.executed().get(0));
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
   @DisplayName("passes runtime run options to the up step")
   void withRuntimeRunOption(final String runtime) {
     final var tool = useRuntime(runtime);
@@ -151,6 +163,18 @@ class ComposeCommandTest extends TestMethodSources {
     // 'compose top' prints the container name, then the process table; a process beyond the keepalive
     // (PID 1 and its sleep child) means another terminal is attached.
     executor.processesOutput("project-dev-1\nUID PID PPID CMD\nroot 1 0 sh\nroot 2 1 sleep\nroot 42 0 bash\n");
+    compose.call();
+    assertIterableEquals(List.of(
+        call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
+        call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh")), executor.executed());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("leaves the services running on exit with --keep-running")
+  void keepRunning(final String runtime) {
+    final var tool = useRuntime(runtime);
+    options.keepRunningOnExit = true;
     compose.call();
     assertIterableEquals(List.of(
         call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),

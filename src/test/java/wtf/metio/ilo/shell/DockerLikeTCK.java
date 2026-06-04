@@ -174,6 +174,20 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
   }
 
   @Test
+  @DisplayName("uses an explicit workspace mount instead of the default project volume")
+  void createWithWorkspaceMount(final SystemProperties properties) {
+    properties.set("user.dir", "/work");
+    final var options = minimal();
+    options.mountProjectDir = true;
+    options.workspaceMount = "type=bind,source=/host,target=/w";
+    options.workingDir = "/w";
+    final var arguments = tool().createArguments(options, CONTAINER);
+    assertEquals(
+        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=/work --mount type=bind,source=/host,target=/w --workdir /w --env ILO_CONTAINER=true --entrypoint sh example:test -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER),
+        String.join(" ", arguments));
+  }
+
+  @Test
   @DisplayName("starts the existing container by name")
   void startArguments() {
     final var arguments = tool().startArguments(minimal(), CONTAINER);
@@ -210,10 +224,49 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
   }
 
   @Test
+  @DisplayName("appends shell arguments to the interactive shell")
+  void attachWithShellArguments() {
+    final var options = minimal();
+    options.shell = "/bin/bash";
+    options.shellArguments = List.of("-l", "-i");
+    final var arguments = tool().attachArguments(options, CONTAINER);
+    assertEquals(String.format("%s exec %s /bin/bash -l -i", name(), CONTAINER), String.join(" ", arguments));
+  }
+
+  @Test
+  @DisplayName("ignores shell arguments when an explicit command is given")
+  void attachShellArgumentsIgnoredWithCommand() {
+    final var options = minimal();
+    options.commands = List.of("ls");
+    options.shellArguments = List.of("-l");
+    final var arguments = tool().attachArguments(options, CONTAINER);
+    assertEquals(String.format("%s exec %s ls", name(), CONTAINER), String.join(" ", arguments));
+  }
+
+  @Test
+  @DisplayName("applies remoteEnv on the attach exec rather than the container")
+  void attachWithRemoteEnv() {
+    final var options = minimal();
+    options.shell = "/bin/sh";
+    options.remoteVariables = List.of("FOO=bar");
+    final var arguments = tool().attachArguments(options, CONTAINER);
+    assertEquals(String.format("%s exec --env FOO=bar %s /bin/sh", name(), CONTAINER), String.join(" ", arguments));
+  }
+
+  @Test
   @DisplayName("execs a lifecycle command into the running container")
   void execArguments() {
     final var arguments = tool().execArguments(minimal(), CONTAINER, List.of("sh", "-c", "echo hi"));
     assertEquals(String.format("%s exec %s sh -c echo hi", name(), CONTAINER), String.join(" ", arguments));
+  }
+
+  @Test
+  @DisplayName("applies remoteEnv on a lifecycle exec")
+  void execWithRemoteEnv() {
+    final var options = minimal();
+    options.remoteVariables = List.of("FOO=bar");
+    final var arguments = tool().execArguments(options, CONTAINER, List.of("sh", "-c", "echo hi"));
+    assertEquals(String.format("%s exec --env FOO=bar %s sh -c echo hi", name(), CONTAINER), String.join(" ", arguments));
   }
 
   @Test

@@ -68,6 +68,7 @@ final class ShellContainer {
     parts.add(Objects.toString(options.workingDir, ""));
     parts.add(Objects.toString(options.hostname, ""));
     parts.add(Boolean.toString(options.mountProjectDir));
+    parts.add(Objects.toString(options.workspaceMount, ""));
     parts.add(Objects.toString(options.userMapping, ""));
     parts.add(Objects.toString(options.remoteUser, ""));
     parts.addAll(values(options.runtimeOptions));
