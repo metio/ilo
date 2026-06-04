@@ -24,4 +24,9 @@ class PodmanTest extends DockerLikeTCK {
     return "podman";
   }
 
+  @Override
+  protected boolean expectedKeepIdUidSupport() {
+    return true;
+  }
+
 }

@@ -11,4 +11,10 @@ public final class Podman extends DockerLike {
     return "podman";
   }
 
+  // Podman accepts '--userns=keep-id:uid=…,gid=…' to pin the host user onto a specific container user.
+  @Override
+  public boolean supportsKeepIdUid() {
+    return true;
+  }
+
 }

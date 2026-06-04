@@ -129,7 +129,7 @@ $ ilo shell --no-update-remote-user-uid image:test
 
 `--update-remote-user-uid` is **enabled by default**. `--remote-user` names the container user to run as and align; when it is omitted, `ilo` reads the image's configured user (falling back to `root`). `ilo` then applies whatever the selected runtime needs:
 
-- **Rootless Podman/nerdctl** — a `--userns=keep-id` user namespace for a non-root user; nothing for `root`, which the runtime already maps to you.
+- **Rootless Podman/nerdctl** — a `--userns=keep-id` user namespace for a non-root user, pinned to that user's UID/GID so it works even when your host UID differs; nothing for `root`, which the runtime already maps to you.
 - **Rootful Docker** — for a non-root user, a small derived image that remaps that user's UID/GID to yours (so it keeps its name, home and shell, on the container and every `exec`); for a `root` image, the bare host `--user <uid>:<gid>`.
 - **Rootless Docker / Docker Desktop** — nothing; the runtime (or its VM) already maps ownership.
 

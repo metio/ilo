@@ -94,7 +94,7 @@ abstract class DockerLike implements ShellCLI {
         optional("--hostname", expand.expand(options.hostname)),
         withPrefix("--publish", expand.expand(options.ports)),
         withPrefix("--volume", missingVolumes.handleLocalDirectories(expand.expand(options.volumes))),
-        fromList(options.userMapping.createArguments(options.remoteUser, expand)),
+        fromList(options.userMapping.createArguments(options.remoteUser, options.remoteUid, options.remoteGid, expand)),
         // With the override on, the keepalive replaces the image's entrypoint and command; with it
         // off, neither is set and the image's own long-running process keeps the container alive.
         maybe(options.overrideCommand, "--entrypoint", Keepalive.ENTRYPOINT),

@@ -74,12 +74,23 @@ enum RemoteUserMapping {
    * @param expand     Expands host-shell expressions such as {@code $(id -u)}.
    * @return The arguments to add to the run command.
    */
-  List<String> createArguments(final String remoteUser, final OSSupport.Expander expand) {
+  List<String> createArguments(final String remoteUser, final String remoteUid, final String remoteGid,
+      final OSSupport.Expander expand) {
     return switch (this) {
       case NONE, REMAP -> runAs(remoteUser);
-      case KEEP_ID -> Stream.concat(Stream.of("--userns=keep-id"), runAs(remoteUser).stream()).toList();
+      case KEEP_ID -> Stream.concat(Stream.of(keepId(remoteUid, remoteGid)), runAs(remoteUser).stream()).toList();
       case HOST_USER -> List.of("--user", expand.expand("$(id -u):$(id -g)"));
     };
+  }
+
+  // Pins the keep-id namespace to the container user's own UID/GID so the host user maps onto that user
+  // regardless of whether the host UID matches it. Without the user's ids a plain keep-id is used, which
+  // only aligns a container user whose UID already equals the host UID.
+  private static String keepId(final String remoteUid, final String remoteGid) {
+    if (remoteUid == null || remoteGid == null) {
+      return "--userns=keep-id";
+    }
+    return "--userns=keep-id:uid=" + remoteUid + ",gid=" + remoteGid;
   }
 
   /**

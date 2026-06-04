@@ -60,6 +60,37 @@ class RemoteUserImageTest {
   }
 
   @Nested
+  @DisplayName("userId")
+  class UserId {
+
+    private static final String ID = "uid=1000(node) gid=1000(node) groups=1000(node),27(sudo)";
+
+    @Test
+    @DisplayName("reads the uid from an id result")
+    void uid() {
+      assertEquals("1000", RemoteUserImage.userId(ID, "uid"));
+    }
+
+    @Test
+    @DisplayName("reads the gid from an id result")
+    void gid() {
+      assertEquals("1000", RemoteUserImage.userId(ID, "gid"));
+    }
+
+    @Test
+    @DisplayName("returns null when the field is absent")
+    void absent() {
+      assertNull(RemoteUserImage.userId("id: 'node': no such user", "uid"));
+    }
+
+    @Test
+    @DisplayName("returns null for a null result")
+    void nullResult() {
+      assertNull(RemoteUserImage.userId(null, "uid"));
+    }
+  }
+
+  @Nested
   @DisplayName("containerfile")
   class Containerfile {
 
