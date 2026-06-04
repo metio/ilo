@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import wtf.metio.devcontainer.BuildBuilder;
 import wtf.metio.devcontainer.DevcontainerBuilder;
+import wtf.metio.devcontainer.Mount;
+import wtf.metio.devcontainer.MountObject;
+import wtf.metio.devcontainer.MountType;
 import wtf.metio.ilo.shell.ShellVolumeBehavior;
 
 import java.nio.file.Paths;
@@ -202,19 +205,42 @@ class DevcontainerOptionsMapperTest {
     }
 
     @Test
-    @DisplayName("maps mounts to --volume source:target")
-    void shouldMapMounts() {
+    @DisplayName("maps an object-form mount to --mount honoring its declared type")
+    void shouldMapObjectMount() {
       final var json = DevcontainerBuilder.builder()
-          .mounts(List.of(Map.of("type", "bind", "source", "/host/cache", "target", "/cache")))
+          .mounts(List.of(new Mount(null, new MountObject(MountType.bind, "/host/cache", "/cache"))))
           .create();
-      assertIterableEquals(List.of("/host/cache:/cache"), shellOptions(new DevcontainerOptions(), json).volumes);
+      assertIterableEquals(List.of("--mount", "type=bind,source=/host/cache,target=/cache"),
+          shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
     }
 
     @Test
-    @DisplayName("ignores a mount without both source and target")
-    void shouldIgnoreIncompleteMount() {
-      final var json = DevcontainerBuilder.builder().mounts(List.of(Map.of("type", "volume"))).create();
-      assertIterableEquals(List.of(), shellOptions(new DevcontainerOptions(), json).volumes);
+    @DisplayName("keeps a source-less anonymous volume mount")
+    void shouldMapAnonymousVolumeMount() {
+      final var json = DevcontainerBuilder.builder()
+          .mounts(List.of(new Mount(null, new MountObject(MountType.volume, null, "/cache"))))
+          .create();
+      assertIterableEquals(List.of("--mount", "type=volume,target=/cache"),
+          shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+    }
+
+    @Test
+    @DisplayName("forwards a string-form mount verbatim")
+    void shouldForwardStringMount() {
+      final var json = DevcontainerBuilder.builder()
+          .mounts(List.of(new Mount("source=dind,target=/var/lib/docker,type=volume", null)))
+          .create();
+      assertIterableEquals(List.of("--mount", "source=dind,target=/var/lib/docker,type=volume"),
+          shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+    }
+
+    @Test
+    @DisplayName("ignores a mount that carries neither a string nor a populated object")
+    void shouldIgnoreEmptyMount() {
+      final var json = DevcontainerBuilder.builder()
+          .mounts(List.of(new Mount(null, null), new Mount(null, new MountObject(null, null, null))))
+          .create();
+      assertIterableEquals(List.of(), shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
     }
 
     @Test
