@@ -281,6 +281,17 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     assertEquals(RemoteUserMapping.NONE, tool().remoteUserMapping(false, "node", rootfulCapture()));
   }
 
+  @Test
+  @DisplayName("reports whether it supports a UID-pinned keep-id namespace")
+  void keepIdUidSupport() {
+    assertEquals(expectedKeepIdUidSupport(), tool().supportsKeepIdUid());
+  }
+
+  // Only podman supports '--userns=keep-id:uid=…,gid=…'.
+  protected boolean expectedKeepIdUidSupport() {
+    return false;
+  }
+
   // Podman/nerdctl map a non-root user with a keep-id namespace and need nothing for root. Docker
   // overrides these to remap on a rootful daemon and to request the host user when there is none.
   protected RemoteUserMapping expectedNonRootMapping() {

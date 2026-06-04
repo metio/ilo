@@ -116,6 +116,11 @@ public final class ShellOptions implements Options {
   // created; not a command-line option. Defaults to NONE so a directly-constructed instance maps nothing.
   public RemoteUserMapping userMapping = RemoteUserMapping.NONE;
 
+  // The remote user's UID/GID inside the image, probed for a keep-id mapping so the host user can be
+  // pinned onto them; null when unknown (then a plain keep-id is used). Not command-line options.
+  public String remoteUid;
+  public String remoteGid;
+
   @CommandLine.Option(
       names = {"--shell"},
       description = "The shell to run when attaching interactively without a command.",

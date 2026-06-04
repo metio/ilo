@@ -28,6 +28,17 @@ public interface ShellCLI extends CliTool<ShellOptions> {
   }
 
   /**
+   * Whether this runtime supports pinning a keep-id user namespace to a specific UID/GID
+   * ({@code --userns=keep-id:uid=…,gid=…}). Only podman does; the others use a plain keep-id, which
+   * aligns a container user only when its UID already matches the host UID.
+   *
+   * @return Whether {@code keep-id:uid=…,gid=…} is supported.
+   */
+  default boolean supportsKeepIdUid() {
+    return false;
+  }
+
+  /**
    * Builds a non-interactive {@code exec} into the running container, used to run an in-container
    * lifecycle command. The command is passed verbatim — it is not expanded on the host, so any
    * variables or globs in it are resolved inside the container where they are meant to apply.

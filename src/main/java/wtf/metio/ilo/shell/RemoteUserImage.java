@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 /**
  * Builds the derived image that aligns a non-root container user's UID/GID with the host's, the way
@@ -47,6 +48,21 @@ final class RemoteUserImage {
     }
     final var name = trimmed.split(":", 2)[0];
     return name.isBlank() ? null : name;
+  }
+
+  /**
+   * Extracts a numeric id from the output of {@code id <user>}, e.g. {@code uid=1000(node) gid=1000(node)}.
+   *
+   * @param idOutput The captured {@code id} output.
+   * @param field    The field to read, {@code uid} or {@code gid}.
+   * @return The numeric id, or null when the field is absent.
+   */
+  static String userId(final String idOutput, final String field) {
+    if (idOutput == null) {
+      return null;
+    }
+    final var matcher = Pattern.compile(field + "=(\\d+)").matcher(idOutput);
+    return matcher.find() ? matcher.group(1) : null;
   }
 
   /**

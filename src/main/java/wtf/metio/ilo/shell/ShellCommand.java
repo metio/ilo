@@ -67,9 +67,17 @@ public final class ShellCommand implements Callable<Integer> {
     // '--pull' has to recreate the container: a reused container would never see the freshly pulled
     // image, so the flag would otherwise do nothing.
     final var fresh = options.fresh || options.pull;
+    final var state = executor.probe().state(tool.probeArguments(options, containerName));
+    final var creating = fresh || ContainerState.ABSENT == state;
+    // A keep-id mapping pinned to the user's UID/GID needs the user's in-image IDs, read by probing the
+    // image. That probe only matters when the container is created — a reused one already has them baked
+    // in — so it is deferred to here rather than run on every invocation.
+    RemoteUser.pinKeepId(tool, options, executor::capture, creating);
     final var steps = new SessionLifecycle.Steps(
         tool.probeArguments(options, containerName),
-        removeStep(tool, containerName, fresh),
+        // When starting fresh, only remove a container that actually exists — running 'rm' against an
+        // absent one would print a spurious "no such container" error on every clean-slate first run.
+        fresh && ContainerState.ABSENT != state ? tool.removeArguments(options, containerName) : List.of(),
         tool.pullArguments(options),
         tool.buildArguments(options),
         tool.createArguments(options, containerName),
@@ -88,15 +96,6 @@ public final class ShellCommand implements Callable<Integer> {
         .map(String::strip)
         .filter(name -> !name.isBlank() && !name.equals(keep))
         .forEach(name -> executor.execute(tool.removeArguments(options, name), options.debug));
-  }
-
-  // When starting fresh, only remove a container that actually exists — running 'rm' against an
-  // absent one would print a spurious "no such container" error on every clean-slate first run.
-  private List<String> removeStep(final ShellCLI tool, final String containerName, final boolean fresh) {
-    if (fresh && ContainerState.ABSENT != executor.probe().state(tool.probeArguments(options, containerName))) {
-      return tool.removeArguments(options, containerName);
-    }
-    return List.of();
   }
 
   // Computed after the attach returns, so it reflects whoever is still attached. While another

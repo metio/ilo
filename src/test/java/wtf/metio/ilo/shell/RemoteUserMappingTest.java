@@ -90,33 +90,47 @@ class RemoteUserMappingTest {
     @Test
     @DisplayName("NONE runs as a named user without aligning it")
     void noneNamed() {
-      assertIterableEquals(List.of("--user", "node"), RemoteUserMapping.NONE.createArguments("node", EXPAND));
+      assertIterableEquals(List.of("--user", "node"), RemoteUserMapping.NONE.createArguments("node", null, null, EXPAND));
     }
 
     @Test
     @DisplayName("NONE contributes nothing for the root user")
     void noneRoot() {
-      assertIterableEquals(List.of(), RemoteUserMapping.NONE.createArguments("root", EXPAND));
+      assertIterableEquals(List.of(), RemoteUserMapping.NONE.createArguments("root", null, null, EXPAND));
     }
 
     @Test
-    @DisplayName("KEEP_ID requests a keep-id user namespace and runs as the user")
-    void keepId() {
+    @DisplayName("KEEP_ID pins the keep-id namespace to the user's UID/GID when known")
+    void keepIdWithIds() {
+      assertIterableEquals(List.of("--userns=keep-id:uid=1000,gid=1000", "--user", "node"),
+          RemoteUserMapping.KEEP_ID.createArguments("node", "1000", "1000", EXPAND));
+    }
+
+    @Test
+    @DisplayName("KEEP_ID falls back to a plain keep-id namespace when the UID/GID are unknown")
+    void keepIdWithoutIds() {
       assertIterableEquals(List.of("--userns=keep-id", "--user", "node"),
-          RemoteUserMapping.KEEP_ID.createArguments("node", EXPAND));
+          RemoteUserMapping.KEEP_ID.createArguments("node", null, null, EXPAND));
+    }
+
+    @Test
+    @DisplayName("KEEP_ID falls back to a plain keep-id namespace when only one id is known")
+    void keepIdWithPartialIds() {
+      assertIterableEquals(List.of("--userns=keep-id", "--user", "node"),
+          RemoteUserMapping.KEEP_ID.createArguments("node", "1000", null, EXPAND));
     }
 
     @Test
     @DisplayName("HOST_USER requests the host UID and GID")
     void hostUser() {
       assertIterableEquals(List.of("--user", EXPAND.expand("$(id -u):$(id -g)")),
-          RemoteUserMapping.HOST_USER.createArguments("root", EXPAND));
+          RemoteUserMapping.HOST_USER.createArguments("root", null, null, EXPAND));
     }
 
     @Test
     @DisplayName("REMAP runs as the remapped user by name")
     void remap() {
-      assertIterableEquals(List.of("--user", "node"), RemoteUserMapping.REMAP.createArguments("node", EXPAND));
+      assertIterableEquals(List.of("--user", "node"), RemoteUserMapping.REMAP.createArguments("node", null, null, EXPAND));
     }
   }
 
