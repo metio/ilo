@@ -62,6 +62,13 @@ class DevfileCommandTest {
   }
 
   @Test
+  @DisplayName("supports the first supported component when no component is requested")
+  void shouldSupportFirstComponentWhenNoneRequested() {
+    final var devfile = devfile(containerComponent("container", "docker.io/library/maven:latest"));
+    assertTrue(DevfileCommand.hasSupportedDevfileConfiguration(devfile, null));
+  }
+
+  @Test
   @DisplayName("maps a predefined image to shell options")
   void shouldMapPredefinedImages() {
     final var container = new Container("docker.io/library/maven:latest", true, "/workspace",
@@ -90,6 +97,32 @@ class DevfileCommandTest {
         () -> assertEquals("python:latest", shellOptions.image, "image"),
         () -> assertEquals("docker/Dockerfile", shellOptions.containerfile, "containerfile"),
         () -> assertEquals(".", shellOptions.context, "context"));
+  }
+
+  @Test
+  @DisplayName("maps the first supported component when no component is requested")
+  void shouldMapFirstSupportedComponentWhenNoneRequested() {
+    final var devfile = devfile(
+        containerComponent("first", "first:latest"),
+        containerComponent("second", "second:latest"));
+
+    final var shellOptions = DevfileCommand.mapOptions(new DevfileOptions(), devfile);
+
+    assertEquals("first:latest", shellOptions.image);
+  }
+
+  @Test
+  @DisplayName("maps the requested component rather than the first supported one")
+  void shouldMapRequestedComponent() {
+    final var options = new DevfileOptions();
+    options.component = "second";
+    final var devfile = devfile(
+        containerComponent("first", "first:latest"),
+        containerComponent("second", "second:latest"));
+
+    final var shellOptions = DevfileCommand.mapOptions(options, devfile);
+
+    assertEquals("second:latest", shellOptions.image);
   }
 
   @Test
@@ -132,6 +165,24 @@ class DevfileCommandTest {
     final var exitCode = command.call();
 
     assertAll("supported devfile",
+        () -> assertEquals(42, exitCode, "exit code from the shell runner"),
+        () -> assertEquals("eclipse/maven-jdk8:latest", captured.get().image, "mapped image"));
+  }
+
+  @Test
+  @DisplayName("opens a shell for the first supported component when none is requested")
+  void shouldRunFirstSupportedComponentWhenNoneRequested(final SystemProperties properties) throws Exception {
+    final var captured = new AtomicReference<ShellOptions>();
+    final var command = new DevfileCommand(shellOptions -> {
+      captured.set(shellOptions);
+      return 42;
+    });
+    command.options = optionsFor(null);
+    properties.set("user.dir", resourceDir("container"));
+
+    final var exitCode = command.call();
+
+    assertAll("default component",
         () -> assertEquals(42, exitCode, "exit code from the shell runner"),
         () -> assertEquals("eclipse/maven-jdk8:latest", captured.get().image, "mapped image"));
   }
