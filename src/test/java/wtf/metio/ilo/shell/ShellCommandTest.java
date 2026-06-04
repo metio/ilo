@@ -181,6 +181,19 @@ class ShellCommandTest extends TestMethodSources {
 
   @ParameterizedTest
   @MethodSource("dockerLikeRuntimes")
+  @DisplayName("leaves the container running on exit with --keep-running")
+  void keepRunningSkipsStop(final String runtime) {
+    useRuntime(runtime);
+    options.keepRunningOnExit = true;
+    // Only the keepalive remains, so this would normally be stopped; --keep-running leaves it up.
+    executor.processesOutput("PID PPID COMMAND\n1 0 sh\n2 1 sleep\n");
+    executor.probeState(ContainerState.RUNNING);
+    shell.call();
+    assertIterableEquals(List.of("exec"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
   @DisplayName("stops the container when this is the last attached session")
   void lastSessionStops(final String runtime) {
     useRuntime(runtime);

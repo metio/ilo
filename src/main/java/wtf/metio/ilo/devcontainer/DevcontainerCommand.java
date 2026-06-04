@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -59,6 +60,7 @@ public final class DevcontainerCommand implements Callable<Integer> {
     final var json = Streams.findFirst(currentDir, options.locations)
         .orElseThrow(DevcontainerJsonMissingException::new);
     final var devcontainer = Devcontainer.parse(json);
+    warnAboutUnsupportedFields(devcontainer);
 
     if (options.executeInitializeCommand && Objects.nonNull(devcontainer.initializeCommand())) {
       final var exitCode = runCommand(devcontainer.initializeCommand(), options.debug);
@@ -83,6 +85,29 @@ public final class DevcontainerCommand implements Callable<Integer> {
     }
 
     return CommandLine.ExitCode.USAGE;
+  }
+
+  // Warns about devcontainer.json fields ilo recognizes but does not act on, so a missing effect is not
+  // mistaken for a silent success. Only environment-shaping fields are reported; IDE-only fields such as
+  // 'customizations' are left out so the warning stays signal-rich.
+  private static void warnAboutUnsupportedFields(final Devcontainer devcontainer) {
+    final var ignored = unsupportedFields(devcontainer);
+    if (!ignored.isEmpty()) {
+      System.err.println("ilo ignores these unsupported devcontainer.json fields: " + String.join(", ", ignored));
+    }
+  }
+
+  // visible for testing
+  static List<String> unsupportedFields(final Devcontainer devcontainer) {
+    final var ignored = new ArrayList<String>();
+    if (isNotEmpty(devcontainer.features())) {
+      ignored.add("features");
+    }
+    return ignored;
+  }
+
+  private static boolean isNotEmpty(final Map<String, ?> map) {
+    return Objects.nonNull(map) && !map.isEmpty();
   }
 
   // The full devcontainer.json contents, read best-effort, used as extra container-identity material.

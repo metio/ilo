@@ -13,6 +13,7 @@ import org.junit.jupiter.api.io.TempDir;
 import picocli.CommandLine;
 import wtf.metio.devcontainer.Command;
 import wtf.metio.devcontainer.DevcontainerBuilder;
+import wtf.metio.devcontainer.UserEnvProbe;
 import wtf.metio.ilo.shell.Docker;
 import wtf.metio.ilo.shell.ShellOptions;
 
@@ -205,6 +206,32 @@ class DevcontainerCommandTest {
         .create();
     final var exitCode = devcontainer.runCommand(command, false);
     assertEquals(CommandLine.ExitCode.USAGE, exitCode);
+  }
+
+  @Test
+  void unsupportedFieldsListsOnlyTrulyUnsupportedFields() {
+    // remoteEnv and userEnvProbe are now supported, so they are not reported even when present.
+    final var devcontainer = DevcontainerBuilder.builder()
+        .features(Map.of("ghcr.io/devcontainers/features/node:1", Map.of("version", "lts")))
+        .remoteEnv(Map.of("FOO", "bar"))
+        .userEnvProbe(UserEnvProbe.loginInteractiveShell)
+        .create();
+    assertIterableEquals(List.of("features"),
+        DevcontainerCommand.unsupportedFields(devcontainer));
+  }
+
+  @Test
+  void unsupportedFieldsIsEmptyWhenNonePresent() {
+    assertTrue(DevcontainerCommand.unsupportedFields(DevcontainerBuilder.builder().create()).isEmpty());
+  }
+
+  @Test
+  void unsupportedFieldsIgnoresEmptyCollections() {
+    final var devcontainer = DevcontainerBuilder.builder()
+        .features(Map.of())
+        .remoteEnv(Map.of())
+        .create();
+    assertTrue(DevcontainerCommand.unsupportedFields(devcontainer).isEmpty());
   }
 
   @Test

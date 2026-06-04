@@ -7,11 +7,16 @@ package wtf.metio.ilo.devcontainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.stream.SystemErr;
 import wtf.metio.devcontainer.BuildBuilder;
 import wtf.metio.devcontainer.DevcontainerBuilder;
 import wtf.metio.devcontainer.Mount;
 import wtf.metio.devcontainer.MountObject;
 import wtf.metio.devcontainer.MountType;
+import wtf.metio.devcontainer.ShutdownAction;
+import wtf.metio.devcontainer.UserEnvProbe;
 import wtf.metio.ilo.shell.ShellVolumeBehavior;
 
 import java.nio.file.Paths;
@@ -24,6 +29,7 @@ import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.composeOption
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.shellOptions;
 
 @DisplayName("DevcontainerOptionsMapper")
+@ExtendWith(SystemStubsExtension.class)
 class DevcontainerOptionsMapperTest {
 
   @Nested
@@ -216,6 +222,58 @@ class DevcontainerOptionsMapperTest {
     }
 
     @Test
+    @DisplayName("maps remoteEnv to remote (exec) variables, dropping null values")
+    void shouldMapRemoteEnv() {
+      final var env = new HashMap<String, String>();
+      env.put("KEEP", "value");
+      env.put("DROP", null);
+      final var json = DevcontainerBuilder.builder().remoteEnv(env).create();
+      assertIterableEquals(List.of("KEEP=value"), shellOptions(new DevcontainerOptions(), json).remoteVariables);
+    }
+
+    @Test
+    @DisplayName("maps userEnvProbe to interactive shell arguments")
+    void shouldMapUserEnvProbe() {
+      assertAll(
+          () -> assertEquals(List.of("-l", "-i"), shellArgumentsFor(UserEnvProbe.loginInteractiveShell)),
+          () -> assertEquals(List.of("-l"), shellArgumentsFor(UserEnvProbe.loginShell)),
+          () -> assertEquals(List.of("-i"), shellArgumentsFor(UserEnvProbe.interactiveShell)),
+          () -> assertEquals(List.of(), shellArgumentsFor(UserEnvProbe.none)));
+    }
+
+    @Test
+    @DisplayName("adds no shell arguments when userEnvProbe is unset")
+    void shouldNotMapAbsentUserEnvProbe() {
+      assertEquals(List.of(),
+          shellOptions(new DevcontainerOptions(), DevcontainerBuilder.builder().create()).shellArguments);
+    }
+
+    private List<String> shellArgumentsFor(final UserEnvProbe probe) {
+      final var json = DevcontainerBuilder.builder().userEnvProbe(probe).create();
+      return shellOptions(new DevcontainerOptions(), json).shellArguments;
+    }
+
+    @Test
+    @DisplayName("maps the workspaceMount override")
+    void shouldMapWorkspaceMount() {
+      final var json = DevcontainerBuilder.builder().workspaceMount("type=bind,source=/h,target=/w").create();
+      assertEquals("type=bind,source=/h,target=/w", shellOptions(new DevcontainerOptions(), json).workspaceMount);
+    }
+
+    @Test
+    @DisplayName("keeps the container running on exit for shutdownAction none")
+    void shouldKeepRunningForShutdownActionNone() {
+      final var json = DevcontainerBuilder.builder().shutdownAction(ShutdownAction.none).create();
+      assertTrue(shellOptions(new DevcontainerOptions(), json).keepRunningOnExit);
+    }
+
+    @Test
+    @DisplayName("stops the container on exit when shutdownAction is unset")
+    void shouldNotKeepRunningByDefault() {
+      assertFalse(shellOptions(new DevcontainerOptions(), DevcontainerBuilder.builder().create()).keepRunningOnExit);
+    }
+
+    @Test
     @DisplayName("maps an object-form mount to --mount honoring its declared type")
     void shouldMapObjectMount() {
       final var json = DevcontainerBuilder.builder()
@@ -246,12 +304,13 @@ class DevcontainerOptionsMapperTest {
     }
 
     @Test
-    @DisplayName("ignores a mount that carries neither a string nor a populated object")
-    void shouldIgnoreEmptyMount() {
+    @DisplayName("ignores a mount that carries neither a string nor a populated object, and warns")
+    void shouldIgnoreEmptyMount(final SystemErr systemErr) {
       final var json = DevcontainerBuilder.builder()
           .mounts(List.of(new Mount(null, null), new Mount(null, new MountObject(null, null, null))))
           .create();
       assertIterableEquals(List.of(), shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+      assertTrue(systemErr.getText().contains("mount"), systemErr.getText());
     }
 
     @Test
@@ -418,6 +477,21 @@ class DevcontainerOptionsMapperTest {
     void shouldRespectOverrideCommandFalse() {
       final var json = DevcontainerBuilder.builder().overrideCommand(false).create();
       assertFalse(composeOptions(new DevcontainerOptions(), json, Paths.get(".")).overrideCommand);
+    }
+
+    @Test
+    @DisplayName("keeps the services running on exit for shutdownAction none")
+    void shouldKeepServicesRunningForShutdownActionNone() {
+      final var json = DevcontainerBuilder.builder().shutdownAction(ShutdownAction.none).create();
+      assertTrue(composeOptions(new DevcontainerOptions(), json, Paths.get(".")).keepRunningOnExit);
+    }
+
+    @Test
+    @DisplayName("maps runServices to additional services to bring up")
+    void shouldMapRunServices() {
+      final var json = DevcontainerBuilder.builder().runServices(List.of("db", "cache")).create();
+      assertIterableEquals(List.of("db", "cache"),
+          composeOptions(new DevcontainerOptions(), json, Paths.get(".")).runServices);
     }
 
   }

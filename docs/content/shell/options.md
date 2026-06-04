@@ -96,6 +96,20 @@ $ ilo shell
 
 By default, `--fresh` is not enabled.
 
+## `--keep-running`
+
+The `--keep-running` option leaves the container running after the last session exits, instead of stopping it. `ilo` keeps the container for reuse either way, but with this flag it stays *running* — so background processes inside it keep going and the next attach is instant. This mirrors a `devcontainer.json` [`shutdownAction`](https://containers.dev/implementors/json_reference/) of `none`.
+
+```console
+# leave the container running on exit
+$ ilo shell --keep-running
+
+# stop the container on exit, keeping it for reuse (default)
+$ ilo shell
+```
+
+By default, `--keep-running` is not enabled. An explicit [`--remove-image`](#--remove-image) still removes the container on exit.
+
 ## `--override-command`
 
 To keep the container around for reuse, `ilo` needs it to stay running between sessions. By default it injects a small keepalive as the container's entrypoint and command — so the container stays up regardless of the image's own entrypoint — and `exec`s your shell into it. This needs a shell and `sleep` in the image, which practically every distribution and dev image has (including BusyBox/Alpine).
@@ -232,6 +246,20 @@ $ ilo shell
 
 By default, `--pull` is not enabled.
 
+## `--remote-env`
+
+The `--remote-env` option sets environment variables for processes `ilo` runs *inside* the container — the interactive shell and any lifecycle commands — as opposed to [`--env`](#--env), which bakes the variable onto the container itself. Because the variables are applied on `exec`, changing them takes effect on the next attach without recreating the container. This mirrors the devcontainer specification's [`remoteEnv`](https://containers.dev/implementors/json_reference/).
+
+```console
+# set a variable for the interactive shell
+$ ilo shell --remote-env EDITOR=vim
+
+# set it on the container instead
+$ ilo shell --env EDITOR=vim
+```
+
+By default, `--remote-env` does not set any environment variables.
+
 ## `--remove-image`
 
 The `--remove-image` option opts out of container reuse: after you close your shell, or the non-interactive command finishes, `ilo` removes the container **and** its image from your local system instead of keeping them. This restores the clean-slate-every-run behavior and is especially useful in combination with `--containerfile`/`--dockerfile`.
@@ -355,6 +383,20 @@ $ ilo shell
 
 By default, `--shell` is `/bin/sh`, which exists on practically every image. When you pass a command to run instead of an interactive session (for example `ilo shell my-image ls -la`), that command is used and `--shell` is ignored.
 
+## `--shell-arg`
+
+The `--shell-arg` option passes extra arguments to the interactive shell (repeat it for several). The most common use is `-l` (login) and `-i` (interactive) so the shell sources the user's profile (`/etc/profile`, `~/.bash_profile`, `~/.bashrc`, …). This is how `ilo devcontainer` honors the devcontainer specification's [`userEnvProbe`](https://containers.dev/implementors/json_reference/): `loginInteractiveShell` becomes `-l -i`, `loginShell` becomes `-l`, `interactiveShell` becomes `-i`, and `none` adds nothing.
+
+```console
+# start a login + interactive shell so profiles are sourced
+$ ilo shell --shell /bin/bash --shell-arg -l --shell-arg -i
+
+# default: the shell is started with no extra arguments
+$ ilo shell
+```
+
+By default, `--shell-arg` adds no arguments. The arguments are ignored when you pass an explicit command, and the chosen [`--shell`](#--shell) must understand them (a minimal `/bin/sh` may reject `-l`).
+
 ## `--volume`
 
 The `--volume` option can be used to mount additional volumes into your container.
@@ -382,3 +424,17 @@ $ ilo shell
 ```
 
 By default, `--working-dir` uses the current directory on the host machine in order to have the same paths on the host and in the container.
+
+## `--workspace-mount`
+
+The `--workspace-mount` option replaces the default project bind-mount with an explicit `--mount` specification. Normally `ilo` bind-mounts the current directory onto [`--working-dir`](#--working-dir); pass `--workspace-mount` when you need full control over how the project is mounted (for example a named volume, or different mount options). Its target should match `--working-dir`. This mirrors the devcontainer specification's [`workspaceMount`](https://containers.dev/implementors/json_reference/).
+
+```console
+# mount the project through a named volume
+$ ilo shell --workspace-mount type=volume,source=project,target=/workspace --working-dir /workspace
+
+# bind-mount the current directory (default)
+$ ilo shell
+```
+
+By default, `--workspace-mount` is not set and the current directory is bind-mounted.

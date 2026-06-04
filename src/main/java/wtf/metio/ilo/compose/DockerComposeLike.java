@@ -55,7 +55,9 @@ abstract class DockerComposeLike implements ComposeCLI {
         withPrefix("--file", expand.expand(options.file)),
         of("up", "--detach"),
         fromList(expand.expand(options.runtimeRunOptions)),
-        optional("", expand.expand(options.service)));
+        optional("", expand.expand(options.service)),
+        // Additional services to start besides the attached one (devcontainer runServices).
+        fromList(expand.expand(options.runServices)));
   }
 
   @Override

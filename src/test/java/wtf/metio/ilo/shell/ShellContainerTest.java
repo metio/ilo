@@ -75,6 +75,14 @@ class ShellContainerTest {
   }
 
   @Test
+  @DisplayName("fingerprint changes with the workspace mount")
+  void shouldChangeWithWorkspaceMount() {
+    final var other = options();
+    other.workspaceMount = "type=bind,source=/host,target=/w";
+    assertNotEquals(ShellContainer.fingerprint(options(), PROJECT), ShellContainer.fingerprint(other, PROJECT));
+  }
+
+  @Test
   @DisplayName("fingerprint changes with the extra identity source")
   void shouldChangeWithIdentitySource() {
     final var other = options();

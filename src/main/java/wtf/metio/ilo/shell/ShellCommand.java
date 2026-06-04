@@ -110,6 +110,11 @@ public final class ShellCommand implements Callable<Integer> {
     if (options.removeImage) {
       return List.of(tool.removeArguments(options, containerName), tool.cleanupArguments(options));
     }
+    // Leaving the container running keeps its background processes alive and makes the next attach
+    // instant; an explicit '--remove-image' still wins over it.
+    if (options.keepRunningOnExit) {
+      return List.of();
+    }
     return List.of(tool.stopArguments(options, containerName));
   }
 

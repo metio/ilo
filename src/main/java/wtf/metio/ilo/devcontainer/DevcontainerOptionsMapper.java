@@ -8,6 +8,8 @@ import wtf.metio.devcontainer.Build;
 import wtf.metio.devcontainer.Devcontainer;
 import wtf.metio.devcontainer.Mount;
 import wtf.metio.devcontainer.MountObject;
+import wtf.metio.devcontainer.ShutdownAction;
+import wtf.metio.devcontainer.UserEnvProbe;
 import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.shell.ShellOptions;
 import wtf.metio.ilo.shell.ShellVolumeBehavior;
@@ -17,6 +19,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -48,7 +51,12 @@ final class DevcontainerOptionsMapper {
         .map(Build::dockerfile)
         .orElse("");
     opts.ports = ports(devcontainer);
-    opts.variables = environment(devcontainer);
+    opts.variables = environment(devcontainer.containerEnv());
+    opts.remoteVariables = environment(devcontainer.remoteEnv());
+    opts.shellArguments = shellArguments(devcontainer.userEnvProbe());
+    opts.workspaceMount = devcontainer.workspaceMount();
+    // The spec's shutdownAction defaults to stopping; only 'none' keeps the container up on exit.
+    opts.keepRunningOnExit = ShutdownAction.none == devcontainer.shutdownAction();
     opts.runtimeBuildOptions = buildOptions(devcontainer.build());
     opts.runtimeRunOptions = runOptions(devcontainer);
     return opts;
@@ -62,11 +70,11 @@ final class DevcontainerOptionsMapper {
         .toList();
   }
 
-  // containerEnv name/value pairs become '--env NAME=VALUE'. An entry without a value is dropped rather
-  // than passed through as the literal 'NAME=null'.
-  private static List<String> environment(final Devcontainer devcontainer) {
-    return Stream.ofNullable(devcontainer.containerEnv())
-        .flatMap(env -> env.entrySet().stream())
+  // Turns a name/value map (containerEnv or remoteEnv) into 'NAME=VALUE' pairs. An entry without a
+  // value is dropped rather than passed through as the literal 'NAME=null'.
+  private static List<String> environment(final Map<String, String> env) {
+    return Stream.ofNullable(env)
+        .flatMap(map -> map.entrySet().stream())
         .filter(entry -> Objects.nonNull(entry.getValue()))
         .map(entry -> entry.getKey() + "=" + entry.getValue())
         .toList();
@@ -88,10 +96,14 @@ final class DevcontainerOptionsMapper {
     if (Strings.isNotBlank(mount.string())) {
       return mount.string();
     }
-    return Optional.ofNullable(mount.object())
+    final var spec = Optional.ofNullable(mount.object())
         .map(DevcontainerOptionsMapper::asMountSpec)
         .filter(Strings::isNotBlank)
         .orElse(null);
+    if (Objects.isNull(spec)) {
+      System.err.println("ilo ignores a devcontainer.json mount entry with no type, source, or target.");
+    }
+    return spec;
   }
 
   private static String asMountSpec(final MountObject mount) {
@@ -100,6 +112,21 @@ final class DevcontainerOptionsMapper {
     Optional.ofNullable(mount.source()).filter(Strings::isNotBlank).ifPresent(source -> fields.add("source=" + source));
     Optional.ofNullable(mount.target()).filter(Strings::isNotBlank).ifPresent(target -> fields.add("target=" + target));
     return String.join(",", fields);
+  }
+
+  // userEnvProbe controls how the user's shell environment is sourced for the interactive shell; it
+  // maps to the shell's login ('-l') and interactive ('-i') arguments. An unset probe adds nothing,
+  // so a minimal '/bin/sh' is not handed flags it may not understand.
+  private static List<String> shellArguments(final UserEnvProbe probe) {
+    if (Objects.isNull(probe)) {
+      return List.of();
+    }
+    return switch (probe) {
+      case loginInteractiveShell -> List.of("-l", "-i");
+      case loginShell -> List.of("-l");
+      case interactiveShell -> List.of("-i");
+      case none -> List.of();
+    };
   }
 
   // build.args -> --build-arg NAME=VALUE, build.target -> --target, build.cacheFrom -> --cache-from.
@@ -166,8 +193,11 @@ final class DevcontainerOptionsMapper {
         .map(Path::toString)
         .toList();
     opts.service = devcontainer.service();
+    opts.runServices = devcontainer.runServices();
     opts.debug = options.debug;
     opts.pull = options.pull;
+    // The spec's shutdownAction defaults to stopping; only 'none' keeps the services up on exit.
+    opts.keepRunningOnExit = ShutdownAction.none == devcontainer.shutdownAction();
     // The devcontainer spec's overrideCommand defaults to true; only an explicit false opts out.
     opts.overrideCommand = !Boolean.FALSE.equals(devcontainer.overrideCommand());
     opts.runtime = options.composeRuntime;

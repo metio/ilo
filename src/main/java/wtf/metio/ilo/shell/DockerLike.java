@@ -75,8 +75,11 @@ abstract class DockerLike implements ShellCLI {
     final var workingDir = Optional.ofNullable(options.workingDir)
         .filter(Strings::isNotBlank)
         .orElse(currentDir);
-    final var projectDir = maybe(options.mountProjectDir,
-        "--volume", currentDir + ":" + workingDir + ":z");
+    // An explicit workspace mount replaces the default project bind-mount entirely; otherwise the
+    // project directory is bind-mounted onto the working directory (with an SELinux relabel).
+    final var projectDir = Strings.isNotBlank(options.workspaceMount)
+        ? of("--mount", expand.expand(options.workspaceMount))
+        : maybe(options.mountProjectDir, "--volume", currentDir + ":" + workingDir + ":z");
     // picocli supplies a default, but a directly-constructed ShellOptions may leave this null.
     final var missingVolumes = Optional.ofNullable(options.missingVolumes).orElse(ShellVolumeBehavior.CREATE);
     return flatten(
@@ -115,14 +118,19 @@ abstract class DockerLike implements ShellCLI {
   public final List<String> attachArguments(final ShellOptions options, final String containerName) {
     final var expand = OSSupport.expander();
     final var shell = Strings.isNotBlank(options.shell) ? options.shell : "/bin/sh";
+    // Without an explicit command, attach the configured shell plus any shell arguments — userEnvProbe
+    // maps to '-l'/'-i' here so the user's login/interactive shell profile is sourced.
     final var command = Optional.ofNullable(options.commands)
         .filter(commands -> !commands.isEmpty())
         .map(expand::expand)
-        .orElseGet(() -> List.of(expand.expand(shell)));
+        .orElseGet(() -> flatten(of(expand.expand(shell)), fromList(expand.expand(options.shellArguments))));
     return flatten(
         of(name()),
         fromList(expand.expand(options.runtimeOptions)),
         of("exec"),
+        // remoteEnv applies to processes the tool runs in the container — the interactive shell here —
+        // so it is set on 'exec', not baked onto the container like --env.
+        withPrefix("--env", expand.expand(options.remoteVariables)),
         fromList(options.userMapping.execArguments(options.remoteUser, expand)),
         maybe(options.interactive, "--interactive"),
         // A pseudo-TTY is only allocated when ilo is attached to a real terminal; otherwise an
@@ -139,7 +147,10 @@ abstract class DockerLike implements ShellCLI {
     return flatten(
         of(name()),
         fromList(expand.expand(options.runtimeOptions)),
-        of("exec", containerName),
+        of("exec"),
+        // Lifecycle commands run as remote processes too, so they see remoteEnv as well.
+        withPrefix("--env", expand.expand(options.remoteVariables)),
+        of(containerName),
         fromList(command));
   }
 
