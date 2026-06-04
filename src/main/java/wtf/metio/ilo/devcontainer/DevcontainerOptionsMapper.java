@@ -6,16 +6,18 @@ package wtf.metio.ilo.devcontainer;
 
 import wtf.metio.devcontainer.Build;
 import wtf.metio.devcontainer.Devcontainer;
+import wtf.metio.devcontainer.Mount;
+import wtf.metio.devcontainer.MountObject;
 import wtf.metio.ilo.compose.ComposeOptions;
 import wtf.metio.ilo.shell.ShellOptions;
 import wtf.metio.ilo.shell.ShellVolumeBehavior;
+import wtf.metio.ilo.utils.Strings;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -45,7 +47,6 @@ final class DevcontainerOptionsMapper {
         .orElse("");
     opts.ports = ports(devcontainer);
     opts.variables = environment(devcontainer);
-    opts.volumes = mounts(devcontainer);
     opts.runtimeBuildOptions = buildOptions(devcontainer.build());
     opts.runtimeRunOptions = runOptions(devcontainer);
     return opts;
@@ -67,19 +68,34 @@ final class DevcontainerOptionsMapper {
         .toList();
   }
 
-  // 'mounts' entries (objects with a source and target) become '--volume source:target'.
+  // Each 'mounts' entry becomes a '--mount <spec>' run option. The string form already carries the
+  // Docker '--mount' syntax and is forwarded verbatim; the object form is rendered from its fields so
+  // the declared type is honored and a source-less (anonymous volume) entry is still emitted.
   private static List<String> mounts(final Devcontainer devcontainer) {
     return Stream.ofNullable(devcontainer.mounts())
         .flatMap(Collection::stream)
-        .map(DevcontainerOptionsMapper::asVolume)
+        .map(DevcontainerOptionsMapper::asMount)
         .filter(Objects::nonNull)
+        .flatMap(spec -> Stream.of("--mount", spec))
         .toList();
   }
 
-  private static String asVolume(final Map<String, String> mount) {
-    final var source = mount.get("source");
-    final var target = mount.get("target");
-    return Objects.nonNull(source) && Objects.nonNull(target) ? source + ":" + target : null;
+  private static String asMount(final Mount mount) {
+    if (Strings.isNotBlank(mount.string())) {
+      return mount.string();
+    }
+    return Optional.ofNullable(mount.object())
+        .map(DevcontainerOptionsMapper::asMountSpec)
+        .filter(Strings::isNotBlank)
+        .orElse(null);
+  }
+
+  private static String asMountSpec(final MountObject mount) {
+    final var fields = new ArrayList<String>();
+    Optional.ofNullable(mount.type()).ifPresent(type -> fields.add("type=" + type));
+    Optional.ofNullable(mount.source()).filter(Strings::isNotBlank).ifPresent(source -> fields.add("source=" + source));
+    Optional.ofNullable(mount.target()).filter(Strings::isNotBlank).ifPresent(target -> fields.add("target=" + target));
+    return String.join(",", fields);
   }
 
   // build.args -> --build-arg NAME=VALUE, build.target -> --target, build.cacheFrom -> --cache-from.
@@ -124,6 +140,7 @@ final class DevcontainerOptionsMapper {
       args.add("--security-opt");
       args.add(option);
     });
+    args.addAll(mounts(devcontainer));
     return args;
   }
 
