@@ -17,6 +17,7 @@ import wtf.metio.ilo.devfile.DevfileYaml.Env;
 import wtf.metio.ilo.devfile.DevfileYaml.Image;
 import wtf.metio.ilo.shell.ShellOptions;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -83,6 +84,21 @@ class DevfileCommandTest {
         () -> assertEquals("/workspace", shellOptions.workingDir, "workingDir"),
         () -> assertEquals(List.of("FOO=bar"), shellOptions.variables, "variables"),
         () -> assertEquals(List.of("sleep", "infinity"), shellOptions.commands, "commands"));
+  }
+
+  @Test
+  @DisplayName("drops env entries with a null name or value instead of emitting null=… or …=null")
+  void shouldDropIncompleteEnv() {
+    final var env = Arrays.asList(
+        new Env("KEEP", "value"),
+        new Env("NO_VALUE", null),
+        new Env(null, "orphan"));
+    final var container = new Container("maven:latest", false, null, List.of(), List.of(), env);
+    final var devfile = devfile(new Component("container", container, emptyImage()));
+
+    final var shellOptions = DevfileCommand.mapOptions(new DevfileOptions(), devfile);
+
+    assertEquals(List.of("KEEP=value"), shellOptions.variables);
   }
 
   @Test

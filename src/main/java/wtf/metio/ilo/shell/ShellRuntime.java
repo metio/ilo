@@ -48,8 +48,7 @@ public enum ShellRuntime implements Runtime<ShellCLI> {
    */
   public static ShellCLI autoSelect(final ShellRuntime preferred) {
     return Optional.ofNullable(preferred)
-        .or(() -> Optional.ofNullable(System.getenv(EnvironmentVariables.ILO_SHELL_RUNTIME.name()))
-            .map(ShellRuntime::fromAlias))
+        .or(() -> Runtime.fromEnvironment(EnvironmentVariables.ILO_SHELL_RUNTIME.name(), values()))
         .map(ShellRuntime::cli)
         .or(() -> Arrays.stream(ShellRuntime.values())
             .map(ShellRuntime::cli)

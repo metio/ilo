@@ -15,6 +15,7 @@ import wtf.metio.devcontainer.MountType;
 import wtf.metio.ilo.shell.ShellVolumeBehavior;
 
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -202,6 +203,16 @@ class DevcontainerOptionsMapperTest {
     void shouldMapContainerEnv() {
       final var json = DevcontainerBuilder.builder().containerEnv(Map.of("KEY", "value")).create();
       assertIterableEquals(List.of("KEY=value"), shellOptions(new DevcontainerOptions(), json).variables);
+    }
+
+    @Test
+    @DisplayName("drops containerEnv entries with a null value instead of emitting NAME=null")
+    void shouldDropNullContainerEnv() {
+      final var env = new HashMap<String, String>();
+      env.put("KEEP", "value");
+      env.put("DROP", null);
+      final var json = DevcontainerBuilder.builder().containerEnv(env).create();
+      assertIterableEquals(List.of("KEEP=value"), shellOptions(new DevcontainerOptions(), json).variables);
     }
 
     @Test

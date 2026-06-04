@@ -5,13 +5,14 @@
 package wtf.metio.ilo.cli;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 /**
  * Drives a persistent-container session. Unlike a one-shot {@code run --rm}, a session reuses a
  * long-lived container across invocations: it is created and set up once, then merely started and
- * attached to on later runs. The state observed by a probe selects the path:
+ * attached to on later runs. The state observed by the caller selects the path:
  * <ul>
  *   <li>{@link ContainerState#ABSENT} &rarr; pull, build, create, then run the create-time and
  *   start-time lifecycle commands;</li>
@@ -44,7 +45,6 @@ public final class SessionLifecycle {
    * skipped (e.g. {@code pull}/{@code build} for an image that needs neither).
    */
   public record Steps(
-      List<String> probe,
       List<String> remove,
       List<String> pull,
       List<String> build,
@@ -55,17 +55,19 @@ public final class SessionLifecycle {
   }
 
   /**
-   * The lifecycle command lines to execute at each phase. Each phase holds zero or more fully-formed
-   * command lines (e.g. {@code docker exec <name> sh -c "<command>"}). Commands run in order.
+   * The lifecycle commands to execute at each phase. Each phase is an ordered list of steps; a step is
+   * a group of command lines that run together — a single command runs on its own, several commands
+   * run in parallel (the devcontainer object-form lifecycle semantics). Steps within a phase run in
+   * order, stopping at the first failure.
    *
    * @param onCreate Run once, immediately after the container is created.
    * @param onStart  Run after every start, including the start implied by creation.
    * @param onAttach Run before every attach.
    */
   public record Lifecycle(
-      List<List<String>> onCreate,
-      List<List<String>> onStart,
-      List<List<String>> onAttach) {
+      List<List<List<String>>> onCreate,
+      List<List<List<String>>> onStart,
+      List<List<List<String>>> onAttach) {
 
     /** A lifecycle with no commands, for commands that have none (shell, compose). */
     public static Lifecycle none() {
@@ -79,13 +81,13 @@ public final class SessionLifecycle {
       final boolean fresh,
       final boolean debug,
       final Executor executor,
-      final Probe probe) {
+      final ContainerState observedState) {
     if (fresh) {
       // The removal may fail simply because nothing exists yet; its exit code is irrelevant to the
       // clean-slate intent, so it is ignored and the session proceeds as if the container is absent.
       executor.execute(steps.remove(), debug);
     }
-    final var state = fresh ? ContainerState.ABSENT : probe.state(steps.probe());
+    final var state = fresh ? ContainerState.ABSENT : observedState;
 
     final var prepared = prepare(state, steps, lifecycle, debug, executor);
     if (0 != prepared) {
@@ -143,17 +145,36 @@ public final class SessionLifecycle {
     return 0;
   }
 
+  // Runs each step of a phase in order, stopping at the first step that fails.
   private static int runLifecycle(
-      final List<List<String>> commands,
+      final List<List<List<String>>> steps,
       final boolean debug,
       final Executor executor) {
-    for (final var command : commands) {
-      final var exitCode = executor.execute(command, debug);
+    for (final var step : steps) {
+      final var exitCode = runStep(step, debug, executor);
       if (0 != exitCode) {
         return exitCode;
       }
     }
     return 0;
+  }
+
+  // Runs one step's command lines: a single command runs inline, several run in parallel. All are
+  // awaited and the first non-zero exit code is surfaced, so a failure in any command fails the step.
+  private static int runStep(
+      final List<List<String>> commands,
+      final boolean debug,
+      final Executor executor) {
+    if (1 == commands.size()) {
+      return executor.execute(commands.get(0), debug);
+    }
+    final var futures = commands.stream()
+        .map(command -> CompletableFuture.supplyAsync(() -> executor.execute(command, debug)))
+        .toList();
+    // Await every command before reporting, so a failure never leaves a sibling still running against
+    // the container; then surface the first non-zero exit code.
+    final var exitCodes = futures.stream().map(CompletableFuture::join).toList();
+    return exitCodes.stream().filter(exitCode -> 0 != exitCode).findFirst().orElse(0);
   }
 
   private SessionLifecycle() {

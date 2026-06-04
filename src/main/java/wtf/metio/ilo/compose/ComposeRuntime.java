@@ -48,8 +48,7 @@ public enum ComposeRuntime implements Runtime<ComposeCLI> {
    */
   public static ComposeCLI autoSelect(final ComposeRuntime preferred) {
     return Optional.ofNullable(preferred)
-        .or(() -> Optional.ofNullable(System.getenv(EnvironmentVariables.ILO_COMPOSE_RUNTIME.name()))
-            .map(ComposeRuntime::fromAlias))
+        .or(() -> Runtime.fromEnvironment(EnvironmentVariables.ILO_COMPOSE_RUNTIME.name(), values()))
         .map(ComposeRuntime::cli)
         .or(() -> Arrays.stream(ComposeRuntime.values())
             .map(ComposeRuntime::cli)
