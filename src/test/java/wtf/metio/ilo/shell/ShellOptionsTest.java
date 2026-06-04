@@ -38,7 +38,9 @@ class ShellOptionsTest {
       "removeImage",
       "fresh",
       "overrideCommand",
-      "currentUser",
+      "updateRemoteUserUID",
+      "remoteUser",
+      "userMapping",
       "shell",
       "runtimeOptions",
       "runtimePullOptions",
@@ -81,17 +83,24 @@ class ShellOptionsTest {
   }
 
   @Test
-  @DisplayName("does not map to the host user by default")
-  void currentUserDefaultsFalse() {
+  @DisplayName("aligns the remote user UID by default")
+  void updateRemoteUserUidDefaultsTrue() {
     final var command = CommandLine.populateCommand(new ShellCommand(), "image:test");
-    assertFalse(command.options.currentUser);
+    assertTrue(command.options.updateRemoteUserUID);
   }
 
   @Test
-  @DisplayName("--current-user requests host-user mapping")
-  void currentUserFlagEnablesMapping() {
-    final var command = CommandLine.populateCommand(new ShellCommand(), "--current-user", "image:test");
-    assertTrue(command.options.currentUser);
+  @DisplayName("--no-update-remote-user-uid opts out of aligning the user")
+  void noUpdateRemoteUserUidOptsOut() {
+    final var command = CommandLine.populateCommand(new ShellCommand(), "--no-update-remote-user-uid", "image:test");
+    assertFalse(command.options.updateRemoteUserUID);
+  }
+
+  @Test
+  @DisplayName("--remote-user selects the container user to align")
+  void remoteUserSelectsUser() {
+    final var command = CommandLine.populateCommand(new ShellCommand(), "--remote-user", "vscode", "image:test");
+    assertEquals("vscode", command.options.remoteUser);
   }
 
 }

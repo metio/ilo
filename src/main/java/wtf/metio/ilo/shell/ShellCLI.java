@@ -7,24 +7,24 @@ package wtf.metio.ilo.shell;
 import wtf.metio.ilo.model.CliTool;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 public interface ShellCLI extends CliTool<ShellOptions> {
 
   /**
-   * Produces an advisory shown before the container starts when files written into the mounted
-   * project would end up owned by a user other than the host one, telling the caller that
-   * {@code --current-user} fixes it. Podman, nerdctl, and rootless Docker map the host user
-   * automatically and so return nothing; only rootful Docker writes the files as root.
+   * Resolves how this runtime aligns the container user with the host user so files written into the
+   * mounted project stay owned by the caller. Podman and nerdctl map the container's root to the host
+   * user already and use a keep-id namespace for a non-root user; {@link Docker} overrides this to
+   * account for its lack of a default user namespace.
    *
-   * @param options The options to use; an already-set {@code --current-user} suppresses the hint.
-   * @param capture Runs a command line and returns its standard output, used to ask the runtime
-   *                whether it is rootless.
-   * @return The advisory to print, or empty when none applies.
+   * @param enabled    Whether {@code --update-remote-user-uid} is in effect.
+   * @param remoteUser The container user, or {@code null} for the image's default (root) user.
+   * @param capture    Runs a command line and returns its standard output, used to probe the runtime.
+   * @return The mapping to apply.
    */
-  default Optional<String> currentUserHint(final ShellOptions options, final Function<List<String>, String> capture) {
-    return Optional.empty();
+  default RemoteUserMapping remoteUserMapping(final boolean enabled, final String remoteUser,
+      final Function<List<String>, String> capture) {
+    return RemoteUserMapping.resolve(false, false, remoteUser, enabled);
   }
 
   /**

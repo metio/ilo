@@ -94,7 +94,7 @@ abstract class DockerLike implements ShellCLI {
         optional("--hostname", expand.expand(options.hostname)),
         withPrefix("--publish", expand.expand(options.ports)),
         withPrefix("--volume", missingVolumes.handleLocalDirectories(expand.expand(options.volumes))),
-        fromList(currentUserCreateArguments(options, expand)),
+        fromList(options.userMapping.createArguments(options.remoteUser, expand)),
         // With the override on, the keepalive replaces the image's entrypoint and command; with it
         // off, neither is set and the image's own long-running process keeps the container alive.
         maybe(options.overrideCommand, "--entrypoint", Keepalive.ENTRYPOINT),
@@ -123,7 +123,7 @@ abstract class DockerLike implements ShellCLI {
         of(name()),
         fromList(expand.expand(options.runtimeOptions)),
         of("exec"),
-        fromList(currentUserExecArguments(options, expand)),
+        fromList(options.userMapping.execArguments(options.remoteUser, expand)),
         maybe(options.interactive, "--interactive"),
         // A pseudo-TTY is only allocated when ilo is attached to a real terminal; otherwise an
         // interactive attach in a non-interactive session (e.g. CI) would fail with "the input
@@ -161,18 +161,6 @@ abstract class DockerLike implements ShellCLI {
   // contributed by Docker alone rather than listed here.
   List<String> staleStatuses() {
     return List.of("created", "exited", "paused");
-  }
-
-  // Maps the container's user to the host user so files written into the mounted project stay owned by
-  // the host user. Podman and nerdctl do this with a keep-id user namespace requested once at create
-  // time; the exec then inherits it, so no per-exec argument is needed. Docker, which has no user
-  // namespace by default, overrides both to request the host UID/GID explicitly.
-  List<String> currentUserCreateArguments(final ShellOptions options, final OSSupport.Expander expand) {
-    return options.currentUser ? List.of("--userns=keep-id") : List.of();
-  }
-
-  List<String> currentUserExecArguments(final ShellOptions options, final OSSupport.Expander expand) {
-    return List.of();
   }
 
   @Override

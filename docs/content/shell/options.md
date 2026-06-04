@@ -112,16 +112,28 @@ $ ilo shell --no-override-command
 
 By default, `--override-command` is enabled. Minimal images without a shell (`scratch`, distroless) need `--no-override-command` together with an image that stays running on its own.
 
-## `--current-user`
+## `--update-remote-user-uid`
 
-Runs the container as **your** host user so that files created in the mounted project stay owned by you instead of `root`. `ilo` applies the right mechanism for the selected runtime — `--user <uid>:<gid>` on Docker (on both the container and every `exec`), or a `--userns=keep-id` user namespace on Podman/nerdctl.
+Aligns the container user's UID and GID with **your** host user, so files created in the mounted project stay owned by you instead of by the container user (often `root`, or a fixed non-root user). This mirrors the devcontainer specification's [`updateRemoteUserUID`](https://containers.dev/implementors/json_reference/).
 
 ```console
-# run as your host user (files in the project stay yours)
-$ ilo shell --current-user
+# align the container user with your host user (the default)
+$ ilo shell image:test
+
+# align a specific user
+$ ilo shell --remote-user node image:test
+
+# leave the container user exactly as the image defines it
+$ ilo shell --no-update-remote-user-uid image:test
 ```
 
-By default, `--current-user` is **not** enabled, because it is usually unnecessary: with rootless Podman a container running as `root` already writes files owned by you, and that lets the image's root-owned tools and caches stay writable. Reach for `--current-user` on **rootful Docker**, or for images that run as a non-root user. The trade-off is that the process is no longer `root` inside the container, so anything the image keeps under a root-owned path may need a writable location instead. See [File Ownership](../../usage/file-ownership) for the full picture.
+`--update-remote-user-uid` is **enabled by default**. `--remote-user` names the container user to run as and align; when it is omitted, `ilo` reads the image's configured user (falling back to `root`). `ilo` then applies whatever the selected runtime needs:
+
+- **Rootless Podman/nerdctl** — a `--userns=keep-id` user namespace for a non-root user; nothing for `root`, which the runtime already maps to you.
+- **Rootful Docker** — for a non-root user, a small derived image that remaps that user's UID/GID to yours (so it keeps its name, home and shell, on the container and every `exec`); for a `root` image, the bare host `--user <uid>:<gid>`.
+- **Rootless Docker / Docker Desktop** — nothing; the runtime (or its VM) already maps ownership.
+
+Because the default does nothing exactly where the runtime already maps you, leaving it on is safe. Pass `--no-update-remote-user-uid` when you want the container user left untouched. See [File Ownership](../../usage/file-ownership) for the full picture.
 
 ## `--hostname`
 

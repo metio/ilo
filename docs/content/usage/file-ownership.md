@@ -1,6 +1,6 @@
 ---
 title: File Ownership
-date: 2026-06-03
+date: 2026-06-04
 menu:
   main:
     parent: usage
@@ -23,13 +23,13 @@ On Linux `ilo` selects [Podman](https://podman.io/) first, and rootless Podman r
 
 **Images that run as `root` (most build images — Maven, Node, GCC, …): there is nothing to do.** The container is `root` *inside* — so it can write the image's root-owned caches and tools, e.g. Maven's `/root/.m2` — while those writes map to *your* UID *outside*, so files in your project are owned by **you**. This "root inside, you outside" mapping is exactly what makes a container-based build environment pleasant, and it is the default.
 
-**Images that run as a fixed non-root user** are the exception. Without help, their writes land on the host under a high "phantom" sub-UID (from your `/etc/subuid` range) that you cannot easily edit or delete. Map that user back to yourself with Podman's [`--userns=keep-id`](https://docs.podman.io/en/latest/markdown/podman-run.1.html#userns-mode):
+**Images that run as a fixed non-root user** are the exception. Without help, their writes land on the host under a high "phantom" sub-UID (from your `/etc/subuid` range) that you cannot easily edit or delete. `ilo` handles this for you: [`--update-remote-user-uid`](../../shell/options#--update-remote-user-uid) is **on by default** and maps that user back to yourself with a [`--userns=keep-id`](https://docs.podman.io/en/latest/markdown/podman-run.1.html#userns-mode) user namespace. It reads the image's user automatically, or you can name it with `--remote-user`:
 
 ```console
-$ ilo shell --runtime-run-option=--userns=keep-id my-nonroot-image
+$ ilo shell my-nonroot-image
 ```
 
-or simply [`--current-user`](../../shell/options#--current-user), which `ilo` translates to the right mechanism for the selected runtime. You *can* instead set `userns = "keep-id"` globally in `containers.conf`, but be aware that makes **every** container run as your non-root user — which removes the "root inside" benefit above and can break images that genuinely need `root`. Prefer the per-run flag.
+You *can* instead set `userns = "keep-id"` globally in `containers.conf`, but be aware that makes **every** container run as your non-root user — which removes the "root inside" benefit above and can break images that genuinely need `root`. Prefer the default, which only maps the user when the image actually needs it.
 
 ## What `:z` does (and does not) do
 
@@ -41,9 +41,7 @@ The Docker daemon runs as real `root` and does **not** remap UIDs for bind mount
 
 The clean fix is to **run Docker in [rootless mode](https://docs.docker.com/engine/security/rootless/)**, which gives you the same user-namespace mapping as rootless Podman — the problem then disappears the same way, with no per-command flags.
 
-If you cannot use rootless Docker, pass [`--current-user`](../../shell/options#--current-user). `ilo` runs your work by `exec`ing into a long-lived container, so the user mapping has to apply to **both** the container *and* every `exec` — `--current-user` does that (a raw `--runtime-run-option=--user=…` would only cover the container's main process, not the shell you actually work in). The trade-off still stands: as a non-root user the image's root-owned paths (for example a cache under `/root`) may not be writable, so point such tools at a writable location — your mounted working directory, a `$HOME` you own, or a dedicated cache volume. For build images that insist on `root`, rootless Docker remains the smoother path.
-
-To make this easy to discover, when `ilo` opens a shell on a **rootful** Docker daemon without `--current-user`, it prints a one-line hint pointing you here. Rootless Docker (and Podman/nerdctl) already map the host user, so no hint is shown there; passing `--current-user` also silences it.
+If you cannot use rootless Docker, `ilo` aligns ownership for you: [`--update-remote-user-uid`](../../shell/options#--update-remote-user-uid) is **on by default**. Because `ilo` runs your work by `exec`ing into a long-lived container, the mapping applies to **both** the container *and* every `exec` (a raw `--runtime-run-option=--user=…` would only cover the container's main process, not the shell you actually work in). For an image with a non-root user, `ilo` builds a small derived image that remaps that user's UID/GID to yours, so it keeps its name, home and shell while writing files you own. For an image that runs as `root`, `ilo` instead runs it as your host `--user <uid>:<gid>`; the trade-off there is that the process is no longer `root`, so paths the image keeps under `/root` may not be writable — point such tools at a writable location (your mounted working directory, a `$HOME` you own, or a dedicated cache volume), or use rootless Docker, which keeps `root` working while still mapping ownership. Pass `--no-update-remote-user-uid` to opt out entirely.
 
 ## Not mounting at all
 

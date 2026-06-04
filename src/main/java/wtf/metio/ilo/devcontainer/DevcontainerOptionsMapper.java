@@ -37,6 +37,9 @@ final class DevcontainerOptionsMapper {
     opts.shell = options.shell;
     opts.runtime = options.shellRuntime;
     opts.mountProjectDir = options.mountProjectDir;
+    opts.remoteUser = user(devcontainer).orElse(null);
+    // The devcontainer spec's updateRemoteUserUID defaults to true; only an explicit false opts out.
+    opts.updateRemoteUserUID = !Boolean.FALSE.equals(devcontainer.updateRemoteUserUID());
     opts.image = devcontainer.image();
     opts.workingDir = devcontainer.workspaceFolder();
     opts.context = Optional.ofNullable(devcontainer.build())
@@ -118,14 +121,12 @@ final class DevcontainerOptionsMapper {
     return args;
   }
 
-  // runArgs are forwarded verbatim, followed by the dedicated run-configuration knobs.
+  // runArgs are forwarded verbatim, followed by the dedicated run-configuration knobs. The run-as user
+  // is not added here: it is carried by shellOptions.remoteUser and applied by the resolved user mapping
+  // (which also aligns its UID/GID with the host), so it is handled once for the shell and devcontainer.
   private static List<String> runOptions(final Devcontainer devcontainer) {
     final var args = new ArrayList<String>();
     Stream.ofNullable(devcontainer.runArgs()).flatMap(Collection::stream).forEach(args::add);
-    user(devcontainer).ifPresent(user -> {
-      args.add("--user");
-      args.add(user);
-    });
     if (Boolean.TRUE.equals(devcontainer.init())) {
       args.add("--init");
     }
