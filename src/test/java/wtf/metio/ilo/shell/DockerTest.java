@@ -6,11 +6,11 @@ package wtf.metio.ilo.shell;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import wtf.metio.ilo.os.OSSupport;
 
 import java.util.List;
+import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Docker")
 class DockerTest extends DockerLikeTCK {
@@ -35,35 +35,37 @@ class DockerTest extends DockerLikeTCK {
     return List.of("created", "exited", "paused", "dead");
   }
 
+  // On a rootful daemon Docker has no user namespace, so a non-root user is remapped via a derived
+  // image and a root user is replaced with the bare host UID/GID.
   @Override
-  protected String currentUserCreateMapping() {
-    // Computed the same way the production code does, so the expectation matches the running user.
-    return "--user " + OSSupport.expander().expand("$(id -u):$(id -g)");
+  protected RemoteUserMapping expectedNonRootMapping() {
+    return RemoteUserMapping.REMAP;
   }
 
   @Override
-  protected boolean currentUserOnExec() {
-    return true;
+  protected RemoteUserMapping expectedRootMapping() {
+    return RemoteUserMapping.HOST_USER;
   }
 
   @Override
-  protected boolean hintsAboutForeignFileOwnership() {
-    return true;
+  protected Function<List<String>, String> rootfulCapture() {
+    // A security-options listing without 'rootless' stands in for a rootful daemon.
+    return args -> "[name=seccomp,profile=builtin]";
   }
 
   @Test
-  @DisplayName("suppresses the file-ownership hint on rootless Docker")
-  void noHintOnRootlessDocker() {
-    // Rootless Docker maps the container's root to the host user, so files stay owned by the caller.
-    assertTrue(tool().currentUserHint(new ShellOptions(), args -> "[name=rootless]").isEmpty());
+  @DisplayName("does not remap on rootless Docker, which maps the container root to the host user")
+  void noMappingOnRootlessDocker() {
+    assertEquals(RemoteUserMapping.NONE, tool().remoteUserMapping(true, "node", args -> "[name=rootless]"));
   }
 
   @Test
-  @DisplayName("makes no file-ownership claim when no Docker daemon answers with security options")
-  void noHintWithoutDockerSecurityOptions() {
+  @DisplayName("does not remap when no Docker daemon answers with security options")
+  void noMappingWithoutDockerSecurityOptions() {
     // The podman 'docker' shim has no SecurityOptions field and an unreachable daemon returns nothing;
-    // neither is a rootful Docker daemon, so no hint is shown.
-    assertTrue(tool().currentUserHint(new ShellOptions(), args -> "Error: can't evaluate field SecurityOptions").isEmpty());
+    // neither is treated as a rootful Docker daemon.
+    assertEquals(RemoteUserMapping.NONE,
+        tool().remoteUserMapping(true, "node", args -> "Error: can't evaluate field SecurityOptions"));
   }
 
 }

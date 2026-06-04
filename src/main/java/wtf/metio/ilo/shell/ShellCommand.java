@@ -57,7 +57,10 @@ public final class ShellCommand implements Callable<Integer> {
   @Override
   public Integer call() {
     final var tool = executor.selectRuntime(options.runtime);
-    tool.currentUserHint(options, executor::capture).ifPresent(System.err::println);
+    // Resolve the file-ownership mapping (and, on rootful Docker, build the derived remap image) before
+    // the container name is derived, so toggling it recreates the container rather than reusing one
+    // created with a different user mapping.
+    RemoteUser.resolve(tool, options, executor::capture);
     final var projectDir = System.getProperty("user.dir");
     final var containerName = ShellContainer.name(options, projectDir);
     sweepStaleContainers(tool, projectDir, containerName);

@@ -14,6 +14,7 @@ import uk.org.webcompere.systemstubs.properties.SystemProperties;
 import wtf.metio.ilo.test.CliToolTCK;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -239,57 +240,60 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
   }
 
   @Test
-  @DisplayName("maps the container to the host user on create with --current-user")
-  void createWithCurrentUser() {
+  @DisplayName("applies the resolved user mapping on create")
+  void createAppliesUserMapping() {
     final var options = minimal();
-    options.currentUser = true;
-    final var arguments = String.join(" ", tool().createArguments(options, CONTAINER));
-    assertTrue(arguments.contains(currentUserCreateMapping()), arguments);
+    options.userMapping = RemoteUserMapping.KEEP_ID;
+    assertTrue(String.join(" ", tool().createArguments(options, CONTAINER)).contains("--userns=keep-id"));
   }
 
   @Test
-  @DisplayName("requests the host user on exec only when the runtime needs it")
-  void attachWithCurrentUser() {
+  @DisplayName("requests the user on exec for a mapping that does not survive in a namespace")
+  void attachRequestsUserForHostMapping() {
     final var options = minimal();
-    options.currentUser = true;
-    final var arguments = String.join(" ", tool().attachArguments(options, CONTAINER));
-    assertEquals(currentUserOnExec(), arguments.contains("--user"));
-  }
-
-  // How this runtime maps the container to the host user on create. Podman/nerdctl use a keep-id user
-  // namespace; Docker (which has none) requests the host UID:GID explicitly.
-  protected String currentUserCreateMapping() {
-    return "--userns=keep-id";
-  }
-
-  // Whether the host-user request also has to be repeated on exec (true only where there is no user
-  // namespace for the exec to inherit, i.e. Docker).
-  protected boolean currentUserOnExec() {
-    return false;
+    options.userMapping = RemoteUserMapping.HOST_USER;
+    assertTrue(String.join(" ", tool().attachArguments(options, CONTAINER)).contains("--user"));
   }
 
   @Test
-  @DisplayName("hints about file ownership only when the runtime needs --current-user")
-  void currentUserHintWhenNeeded() {
+  @DisplayName("inherits the user namespace on exec for a keep-id mapping")
+  void attachInheritsKeepId() {
     final var options = minimal();
-    // A security-options listing without 'rootless' stands in for a rootful daemon, the only case Docker warns about.
-    final var hint = tool().currentUserHint(options, args -> "[name=seccomp,profile=builtin]");
-    assertEquals(hintsAboutForeignFileOwnership(), hint.isPresent());
+    options.userMapping = RemoteUserMapping.KEEP_ID;
+    assertFalse(String.join(" ", tool().attachArguments(options, CONTAINER)).contains("--user"));
   }
 
   @Test
-  @DisplayName("never hints about file ownership once --current-user is set")
-  void noCurrentUserHintWithFlag() {
-    final var options = minimal();
-    options.currentUser = true;
-    assertTrue(tool().currentUserHint(options, args -> "[name=seccomp,profile=builtin]").isEmpty());
+  @DisplayName("resolves a mapping for a non-root user")
+  void resolvesNonRootUser() {
+    assertEquals(expectedNonRootMapping(), tool().remoteUserMapping(true, "node", rootfulCapture()));
   }
 
-  // Whether files written into the mounted project would be owned by a foreign user without
-  // --current-user, so the runtime should hint about it. Only rootful Docker does; podman and nerdctl
-  // map the host user automatically.
-  protected boolean hintsAboutForeignFileOwnership() {
-    return false;
+  @Test
+  @DisplayName("resolves a mapping for the root user")
+  void resolvesRootUser() {
+    assertEquals(expectedRootMapping(), tool().remoteUserMapping(true, "root", rootfulCapture()));
+  }
+
+  @Test
+  @DisplayName("resolves no mapping when the feature is disabled")
+  void resolvesDisabled() {
+    assertEquals(RemoteUserMapping.NONE, tool().remoteUserMapping(false, "node", rootfulCapture()));
+  }
+
+  // Podman/nerdctl map a non-root user with a keep-id namespace and need nothing for root. Docker
+  // overrides these to remap on a rootful daemon and to request the host user when there is none.
+  protected RemoteUserMapping expectedNonRootMapping() {
+    return RemoteUserMapping.KEEP_ID;
+  }
+
+  protected RemoteUserMapping expectedRootMapping() {
+    return RemoteUserMapping.NONE;
+  }
+
+  // The capture used while resolving: podman/nerdctl ignore it; Docker reads 'docker info' from it.
+  protected Function<List<String>, String> rootfulCapture() {
+    return args -> "";
   }
 
   @Test

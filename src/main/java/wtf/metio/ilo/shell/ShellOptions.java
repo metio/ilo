@@ -94,11 +94,27 @@ public final class ShellOptions implements Options {
   )
   public boolean overrideCommand = true;
 
+  // Defaults to false on a directly-constructed instance so the compose and devcontainer commands,
+  // which build ShellOptions programmatically, opt in deliberately; picocli sets it to true for
+  // 'ilo shell' via the option default below.
   @CommandLine.Option(
-      names = {"--current-user"},
-      description = "Run as your host user so files created in the mounted project stay owned by you. Mainly for rootful Docker; on rootless Podman/nerdctl it maps via a keep-id user namespace. See the File Ownership documentation."
+      names = {"--update-remote-user-uid"},
+      negatable = true,
+      defaultValue = "true",
+      fallbackValue = "true",
+      description = "Align the container user's UID/GID with your host user so files created in the mounted project stay owned by you (default). Use --no-update-remote-user-uid to leave the container user as-is. See the File Ownership documentation."
   )
-  public boolean currentUser;
+  public boolean updateRemoteUserUID;
+
+  @CommandLine.Option(
+      names = {"--remote-user"},
+      description = "The container user to run as and align with your host user. When omitted, the image's configured user is used."
+  )
+  public String remoteUser;
+
+  // Resolved from updateRemoteUserUID, remoteUser, and the selected runtime before the container is
+  // created; not a command-line option. Defaults to NONE so a directly-constructed instance maps nothing.
+  public RemoteUserMapping userMapping = RemoteUserMapping.NONE;
 
   @CommandLine.Option(
       names = {"--shell"},

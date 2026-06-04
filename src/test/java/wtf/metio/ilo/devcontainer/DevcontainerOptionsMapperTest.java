@@ -254,24 +254,45 @@ class DevcontainerOptionsMapperTest {
     }
 
     @Test
-    @DisplayName("maps containerUser to --user")
+    @DisplayName("maps containerUser to the remote user")
     void shouldMapContainerUser() {
       final var json = DevcontainerBuilder.builder().containerUser("node").create();
-      assertIterableEquals(List.of("--user", "node"), shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+      assertEquals("node", shellOptions(new DevcontainerOptions(), json).remoteUser);
     }
 
     @Test
     @DisplayName("falls back to remoteUser when containerUser is absent")
     void shouldFallBackToRemoteUser() {
       final var json = DevcontainerBuilder.builder().remoteUser("vscode").create();
-      assertIterableEquals(List.of("--user", "vscode"), shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+      assertEquals("vscode", shellOptions(new DevcontainerOptions(), json).remoteUser);
     }
 
     @Test
     @DisplayName("prefers containerUser over remoteUser")
     void shouldPreferContainerUser() {
       final var json = DevcontainerBuilder.builder().containerUser("node").remoteUser("vscode").create();
-      assertIterableEquals(List.of("--user", "node"), shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+      assertEquals("node", shellOptions(new DevcontainerOptions(), json).remoteUser);
+    }
+
+    @Test
+    @DisplayName("does not add the user to the run options")
+    void shouldNotAddUserToRunOptions() {
+      final var json = DevcontainerBuilder.builder().containerUser("node").create();
+      assertIterableEquals(List.of(), shellOptions(new DevcontainerOptions(), json).runtimeRunOptions);
+    }
+
+    @Test
+    @DisplayName("aligns the remote user UID by default")
+    void shouldUpdateRemoteUserUidByDefault() {
+      final var json = DevcontainerBuilder.builder().remoteUser("vscode").create();
+      assertTrue(shellOptions(new DevcontainerOptions(), json).updateRemoteUserUID);
+    }
+
+    @Test
+    @DisplayName("honors an explicit updateRemoteUserUID of false")
+    void shouldHonorDisabledUpdateRemoteUserUid() {
+      final var json = DevcontainerBuilder.builder().remoteUser("vscode").updateRemoteUserUID(false).create();
+      assertFalse(shellOptions(new DevcontainerOptions(), json).updateRemoteUserUID);
     }
 
     @Test
