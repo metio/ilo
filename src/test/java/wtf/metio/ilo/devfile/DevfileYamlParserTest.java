@@ -6,149 +6,125 @@ package wtf.metio.ilo.devfile;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.dataformat.yaml.YAMLMapper;
+import wtf.metio.ilo.errors.DevfileYamlMissingException;
+import wtf.metio.ilo.errors.JsonParsingException;
 
 import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static wtf.metio.ilo.devfile.DevfileYamlParser.findDevfile;
+import static wtf.metio.ilo.devfile.DevfileYamlParser.parseDevfile;
+import static wtf.metio.ilo.devfile.DevfileYamlParser.toDevfile;
 import static wtf.metio.ilo.test.TestResources.testResources;
 
+@DisplayName("DevfileYamlParser")
 class DevfileYamlParserTest {
 
   private static final List<String> DEFAULT_LOCATIONS = List.of(".devfile.yaml", "devfile.yaml");
 
   @Test
-  @DisplayName("can parse example/devfile.yaml")
-  void shouldParseYaml() {
-    final var devfile = DevfileYamlParser.parseDevfile(findYamlIn("example"));
-    assertAll("devfile",
-        () -> assertEquals("2.2.0", devfile.schemaVersion, "schemaVersion"),
-        () -> assertEquals("devfile-api", devfile.metadata.name, "metadata.name"),
-        () -> assertEquals("1.2.3", devfile.metadata.version, "metadata.version"));
+  @DisplayName("extracts the container component from container/devfile.yaml")
+  void shouldParseContainer() {
+    final var component = parseDevfile(findYamlIn("container")).components().get(0);
+    final var container = component.container();
+    assertAll("container component",
+        () -> assertEquals("maven", component.name(), "name"),
+        () -> assertEquals("eclipse/maven-jdk8:latest", container.image(), "container.image"),
+        () -> assertEquals(List.of("tail"), container.command(), "container.command"),
+        () -> assertEquals(List.of("-f", "/dev/null"), container.args(), "container.args"),
+        () -> assertEquals("ENV_VAR", container.env().get(0).name(), "env.name"),
+        () -> assertEquals("value", container.env().get(0).value(), "env.value"));
   }
 
   @Test
-  @DisplayName("can parse variable/devfile.yaml")
-  void shouldParseYaml2() {
-    final var devfile = DevfileYamlParser.parseDevfile(findYamlIn("variable"));
-    assertAll("devfile",
-        () -> assertEquals("2.2.0", devfile.schemaVersion, "schemaVersion"),
-        () -> assertEquals("java-maven", devfile.metadata.name, "metadata.name"),
-        () -> assertEquals("1.1.1", devfile.metadata.version, "metadata.version"),
-        () -> assertEquals("11", devfile.variables.get("javaVersion"), "variables.javaVersion"));
+  @DisplayName("extracts the local-dockerfile image component from image/devfile.yaml")
+  void shouldParseImage() {
+    final var component = parseDevfile(findYamlIn("image")).components().get(0);
+    final var image = component.image();
+    assertAll("image component",
+        () -> assertEquals("outerloop-build", component.name(), "name"),
+        () -> assertEquals("python-image:latest", image.imageName(), "image.imageName"),
+        () -> assertEquals("docker/Dockerfile", image.dockerfile().uri(), "dockerfile.uri"),
+        () -> assertEquals(".", image.dockerfile().buildContext(), "dockerfile.buildContext"));
   }
 
   @Test
-  @DisplayName("can parse plain/devfile.yaml")
-  void shouldParseYaml3() {
-    final var devfile = DevfileYamlParser.parseDevfile(findYamlIn("plain"));
-    assertAll("devfile",
-        () -> assertEquals("2.2.0", devfile.schemaVersion, "schemaVersion"),
-        () -> assertEquals("devfile-sample", devfile.metadata.name, "metadata.name"),
-        () -> assertEquals("2.1.0", devfile.metadata.version, "metadata.version"));
+  @DisplayName("leaves the dockerfile uri empty when the image is built from git")
+  void shouldParseImageWithoutDockerfileUri() {
+    final var component = parseDevfile(findYamlIn("image-git")).components().get(0);
+    assertAll("git-built image component",
+        () -> assertEquals("python-image:latest", component.image().imageName(), "image.imageName"),
+        () -> assertNull(component.image().dockerfile().uri(), "dockerfile.uri"));
   }
 
   @Test
-  @DisplayName("can parse openshift/devfile.yaml")
-  void shouldParseYaml4() {
-    final var devfile = DevfileYamlParser.parseDevfile(findYamlIn("openshift"));
-    assertAll("devfile",
-        () -> assertEquals("2.1.0", devfile.schemaVersion, "schemaVersion"),
-        () -> assertEquals("devfile-openshift", devfile.metadata.name, "metadata.name"),
-        () -> assertEquals("1.2.3", devfile.metadata.version, "metadata.version"));
+  @DisplayName("extracts every component from volume/devfile.yaml")
+  void shouldParseMultipleComponents() {
+    final var components = parseDevfile(findYamlIn("volume")).components();
+    assertAll("components",
+        () -> assertEquals(2, components.size(), "size"),
+        () -> assertEquals("golang", components.get(0).container().image(), "first.container.image"),
+        () -> assertTrue(components.get(0).container().mountSources(), "first.container.mountSources"),
+        () -> assertEquals(List.of("sleep", "infinity"), components.get(0).container().command(), "first.container.command"),
+        () -> assertEquals("cache", components.get(1).name(), "second.name"),
+        () -> assertNull(components.get(1).container().image(), "second.container.image"));
   }
 
   @Test
-  @DisplayName("can parse kubernetes-inline/devfile.yaml")
-  void shouldParseYaml5() {
-    final var devfile = DevfileYamlParser.parseDevfile(findYamlIn("kubernetes-inline"));
-    assertAll("devfile",
-        () -> assertEquals("2.2.2", devfile.schemaVersion, "schemaVersion"),
-        () -> assertEquals("devfile-kubernetes-inline", devfile.metadata.name, "metadata.name"),
-        () -> assertEquals("1.2.3", devfile.metadata.version, "metadata.version"));
+  @DisplayName("yields no components when the devfile declares none")
+  void shouldParseWithoutComponents() {
+    assertEquals(List.of(), parseDevfile(findYamlIn("plain")).components(), "components");
   }
 
   @Test
-  @DisplayName("can parse container/devfile.yaml")
-  void shouldParseYaml6() {
-    final var devfile = DevfileYamlParser.parseDevfile(findYamlIn("container"));
-    assertAll("devfile",
-        () -> assertEquals("2.2.0", devfile.schemaVersion, "schemaVersion"),
-        () -> assertEquals("devfile-container", devfile.metadata.name, "metadata.name"),
-        () -> assertEquals("1.2.3", devfile.metadata.version, "metadata.version"),
-        () -> assertEquals(1, devfile.components.size(), "components.size"),
-        () -> assertEquals("maven", devfile.components.get(0).name, "component.name"),
-        () -> assertEquals("eclipse/maven-jdk8:latest", devfile.components.get(0).container.image, "container.image"),
-        () -> assertEquals("ENV_VAR", devfile.components.get(0).container.env.get(0).name, "env.name"),
-        () -> assertEquals("maven-server", devfile.components.get(0).container.endpoints.get(0).name, "endpoint.name"),
-        () -> assertEquals("mavenrepo", devfile.components.get(0).container.volumeMounts.get(0).name, "volumeMount.name"),
-        () -> assertEquals("/root/.m2", devfile.components.get(0).container.volumeMounts.get(0).path, "volumeMount.path"));
+  @DisplayName("represents a component that is neither container nor image with empty values")
+  void shouldParseUnsupportedComponentKind() {
+    final var component = parseDevfile(findYamlIn("kubernetes-inline")).components().get(0);
+    assertAll("unsupported component",
+        () -> assertEquals("myk8deploy", component.name(), "name"),
+        () -> assertNull(component.container().image(), "container.image"),
+        () -> assertNull(component.image().dockerfile().uri(), "dockerfile.uri"));
   }
 
   @Test
-  @DisplayName("can parse image/devfile.yaml")
-  void shouldParseYaml7() {
-    final var devfile = DevfileYamlParser.parseDevfile(findYamlIn("image"));
-    assertAll("devfile",
-        () -> assertEquals("2.2.0", devfile.schemaVersion, "schemaVersion"),
-        () -> assertEquals("devfile-image", devfile.metadata.name, "metadata.name"),
-        () -> assertEquals("1.2.3", devfile.metadata.version, "metadata.version"),
-        () -> assertEquals(1, devfile.components.size(), "components.size"),
-        () -> assertEquals("outerloop-build", devfile.components.get(0).name, "component.name"),
-        () -> assertEquals("python-image:latest", devfile.components.get(0).image.imageName, "image.imageName"),
-        () -> assertEquals(".", devfile.components.get(0).image.dockerfile.buildContext, "image.dockerfile.buildContext"),
-        () -> assertEquals("docker/Dockerfile", devfile.components.get(0).image.dockerfile.uri, "image.dockerfile.uri"));
+  @DisplayName("treats a null scalar the same as an absent one")
+  void shouldTolerateNullScalars() {
+    final var component = toDevfile(tree("""
+        components:
+          - name: null
+            container:
+              image:
+        """)).components().get(0);
+    assertAll("null scalars",
+        () -> assertNull(component.name(), "name"),
+        () -> assertNull(component.container().image(), "container.image"));
   }
 
   @Test
-  @DisplayName("can parse volume/devfile.yaml")
-  void shouldParseYaml8() {
-    final var devfile = DevfileYamlParser.parseDevfile(findYamlIn("volume"));
-    assertAll("devfile",
-        () -> assertEquals("2.2.0", devfile.schemaVersion, "schemaVersion"),
-        () -> assertEquals("devfile-volume", devfile.metadata.name, "metadata.name"),
-        () -> assertEquals("1.2.3", devfile.metadata.version, "metadata.version"),
-        () -> assertEquals(2, devfile.components.size(), "components.size"),
-        () -> assertEquals("mydevfile", devfile.components.get(0).name, "component.name"),
-        () -> assertEquals("cache", devfile.components.get(1).name, "component.name"),
-        () -> assertEquals("2Gi", devfile.components.get(1).volume.size, "volume.size"));
+  @DisplayName("reports a parsing failure for a malformed devfile")
+  void shouldRejectMalformedYaml() {
+    assertThrows(JsonParsingException.class, () -> parseDevfile(findYamlIn("malformed")));
   }
 
   @Test
-  @DisplayName("can parse image-registry/devfile.yaml")
-  void shouldParseYaml9() {
-    final var devfile = DevfileYamlParser.parseDevfile(findYamlIn("image-registry"));
-    assertAll("devfile",
-        () -> assertEquals("2.2.0", devfile.schemaVersion, "schemaVersion"),
-        () -> assertEquals("devfile-image", devfile.metadata.name, "metadata.name"),
-        () -> assertEquals("1.2.3", devfile.metadata.version, "metadata.version"),
-        () -> assertEquals(1, devfile.components.size(), "components.size"),
-        () -> assertEquals("outerloop-build", devfile.components.get(0).name, "component.name"),
-        () -> assertEquals("python-image:latest", devfile.components.get(0).image.imageName, "image.imageName"),
-        () -> assertEquals(".", devfile.components.get(0).image.dockerfile.buildContext, "image.dockerfile.buildContext"),
-        () -> assertEquals("some-id", devfile.components.get(0).image.dockerfile.devfileRegistry.id, "image.dockerfile.devfileRegistry.id"),
-        () -> assertEquals("https://example.com", devfile.components.get(0).image.dockerfile.devfileRegistry.registryUrl, "image.dockerfile.devfileRegistry.registryUrl"));
+  @DisplayName("reports a missing devfile when no location matches")
+  void shouldReportMissingDevfile() {
+    final var directory = testResources(DevfileYamlParser.class).resolve("does-not-exist");
+    assertThrows(DevfileYamlMissingException.class, () -> findDevfile(directory, DEFAULT_LOCATIONS));
   }
 
-  @Test
-  @DisplayName("can parse image-git/devfile.yaml")
-  void shouldParseYaml10() {
-    final var devfile = DevfileYamlParser.parseDevfile(findYamlIn("image-git"));
-    assertAll("devfile",
-        () -> assertEquals("2.2.0", devfile.schemaVersion, "schemaVersion"),
-        () -> assertEquals("devfile-image", devfile.metadata.name, "metadata.name"),
-        () -> assertEquals("1.2.3", devfile.metadata.version, "metadata.version"),
-        () -> assertEquals(1, devfile.components.size(), "components.size"),
-        () -> assertEquals("outerloop-build", devfile.components.get(0).name, "component.name"),
-        () -> assertEquals("python-image:latest", devfile.components.get(0).image.imageName, "image.imageName"),
-        () -> assertEquals(".", devfile.components.get(0).image.dockerfile.buildContext, "image.dockerfile.buildContext"),
-        () -> assertEquals("origin", devfile.components.get(0).image.dockerfile.git.checkoutFrom.remote, "image.dockerfile.git.checkoutFrom.remote"),
-        () -> assertEquals("HEAD", devfile.components.get(0).image.dockerfile.git.checkoutFrom.revision, "image.dockerfile.git.checkoutFrom.revision"));
+  private static JsonNode tree(final String yaml) {
+    return YAMLMapper.builder().build().readTree(yaml);
   }
 
-  private Path findYamlIn(final String testDirectory) {
+  private static Path findYamlIn(final String testDirectory) {
     return findDevfile(testResources(DevfileYamlParser.class).resolve(testDirectory), DEFAULT_LOCATIONS);
   }
 
