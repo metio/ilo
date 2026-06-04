@@ -4,16 +4,13 @@
  */
 package wtf.metio.ilo.devfile;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 import wtf.metio.ilo.errors.DevfileYamlMissingException;
 import wtf.metio.ilo.errors.JsonParsingException;
-import wtf.metio.ilo.errors.RuntimeIOException;
 import wtf.metio.ilo.utils.Streams;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -24,14 +21,13 @@ final class DevfileYamlParser {
   }
 
   static DevfileYaml parseDevfile(final Path devfile) {
+    final var mapper = YAMLMapper.builder()
+        .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+        .build();
     try {
-      final var mapper = new ObjectMapper(new YAMLFactory());
-      mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
       return mapper.readValue(devfile.toFile(), DevfileYaml.class);
-    } catch (final JsonProcessingException exception) {
+    } catch (final JacksonException exception) {
       throw new JsonParsingException(exception);
-    } catch (final IOException exception) {
-      throw new RuntimeIOException(exception);
     }
   }
 
