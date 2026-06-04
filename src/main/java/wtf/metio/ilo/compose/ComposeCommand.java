@@ -66,7 +66,6 @@ public final class ComposeCommand implements Callable<Integer> {
     // cannot identify a single container, so it falls back to stopping the services on exit.
     final var managed = options.overrideCommand && Strings.isNotBlank(options.service);
     final var steps = new SessionLifecycle.Steps(
-        List.of(),
         tool.removeArguments(options, COMPOSE_PROJECT),
         tool.pullArguments(options),
         tool.buildArguments(options),
@@ -79,8 +78,10 @@ public final class ComposeCommand implements Callable<Integer> {
         () -> managed && otherSessionsAttached(tool)
             ? List.of()
             : List.of(tool.stopArguments(options, COMPOSE_PROJECT)));
+    // 'up --detach' is idempotent, so a compose session always takes the create path regardless of any
+    // observed state.
     return SessionLifecycle.run(steps, SessionLifecycle.Lifecycle.none(),
-        options.fresh, options.debug, executor::execute, _ -> ContainerState.ABSENT);
+        options.fresh, options.debug, executor::execute, ContainerState.ABSENT);
   }
 
   // The keepalive override is layered onto the project's compose file(s) for the 'up' step only; the

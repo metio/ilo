@@ -67,6 +67,8 @@ public final class ShellCommand implements Callable<Integer> {
     // '--pull' has to recreate the container: a reused container would never see the freshly pulled
     // image, so the flag would otherwise do nothing.
     final var fresh = options.fresh || options.pull;
+    // Probe the container state once and reuse it for every decision below as well as the session run,
+    // rather than probing again inside the lifecycle.
     final var state = executor.probe().state(tool.probeArguments(options, containerName));
     final var creating = fresh || ContainerState.ABSENT == state;
     // A keep-id mapping pinned to the user's UID/GID needs the user's in-image IDs, read by probing the
@@ -74,7 +76,6 @@ public final class ShellCommand implements Callable<Integer> {
     // in — so it is deferred to here rather than run on every invocation.
     RemoteUser.pinKeepId(tool, options, executor::capture, creating);
     final var steps = new SessionLifecycle.Steps(
-        tool.probeArguments(options, containerName),
         // When starting fresh, only remove a container that actually exists — running 'rm' against an
         // absent one would print a spurious "no such container" error on every clean-slate first run.
         fresh && ContainerState.ABSENT != state ? tool.removeArguments(options, containerName) : List.of(),
@@ -85,7 +86,7 @@ public final class ShellCommand implements Callable<Integer> {
         tool.attachArguments(options, containerName),
         () -> teardown(tool, containerName));
     return SessionLifecycle.run(steps, lifecycle.apply(tool, containerName),
-        fresh, options.debug, executor::execute, executor.probe());
+        fresh, options.debug, executor::execute, state);
   }
 
   // Keeps only the container matching the current definition: removes this project's stopped

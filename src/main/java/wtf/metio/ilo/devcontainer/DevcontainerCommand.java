@@ -27,10 +27,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.composeOptions;
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.shellOptions;
@@ -101,31 +103,39 @@ public final class DevcontainerCommand implements Callable<Integer> {
   // visible for testing
   SessionLifecycle.Lifecycle lifecycle(final ShellCLI tool, final String containerName,
       final ShellOptions shellOptions, final Devcontainer devcontainer) {
-    final var onCreate = new ArrayList<List<String>>();
+    final var onCreate = new ArrayList<List<List<String>>>();
     if (options.executeOnCreateCommand) {
-      onCreate.addAll(execLines(tool, containerName, shellOptions, devcontainer.onCreateCommand()));
+      onCreate.addAll(execGroups(tool, containerName, shellOptions, devcontainer.onCreateCommand()));
     }
     if (options.executeUpdateContentCommand) {
-      onCreate.addAll(execLines(tool, containerName, shellOptions, devcontainer.updateContentCommand()));
+      onCreate.addAll(execGroups(tool, containerName, shellOptions, devcontainer.updateContentCommand()));
     }
     if (options.executePostCreateCommand) {
-      onCreate.addAll(execLines(tool, containerName, shellOptions, devcontainer.postCreateCommand()));
+      onCreate.addAll(execGroups(tool, containerName, shellOptions, devcontainer.postCreateCommand()));
     }
-    final var onStart = new ArrayList<List<String>>();
+    final var onStart = new ArrayList<List<List<String>>>();
     if (options.executePostStartCommand) {
-      onStart.addAll(execLines(tool, containerName, shellOptions, devcontainer.postStartCommand()));
+      onStart.addAll(execGroups(tool, containerName, shellOptions, devcontainer.postStartCommand()));
     }
-    final var onAttach = new ArrayList<List<String>>();
+    final var onAttach = new ArrayList<List<List<String>>>();
     if (options.executePostAttachCommand) {
-      onAttach.addAll(execLines(tool, containerName, shellOptions, devcontainer.postAttachCommand()));
+      onAttach.addAll(execGroups(tool, containerName, shellOptions, devcontainer.postAttachCommand()));
     }
     return new SessionLifecycle.Lifecycle(List.copyOf(onCreate), List.copyOf(onStart), List.copyOf(onAttach));
   }
 
-  // Turns one lifecycle command into the 'exec' command lines that run it inside the container. A
-  // string is handed to 'sh -c' so the container's shell parses it; an array is exec'd verbatim; an
-  // object's entries each become their own exec (run sequentially rather than in parallel, since the
-  // session executes steps one at a time).
+  // Turns one lifecycle command into the parallel step(s) that run it inside the container. A string or
+  // array command is a single step with one exec; an object command is a single step whose entries run
+  // in parallel, matching the devcontainer spec's object-form semantics. An empty command yields no
+  // step at all.
+  private List<List<List<String>>> execGroups(final ShellCLI tool, final String containerName,
+      final ShellOptions shellOptions, final Command command) {
+    final var commands = execLines(tool, containerName, shellOptions, command);
+    return commands.isEmpty() ? List.of() : List.of(commands);
+  }
+
+  // The 'exec' command lines for a command: a string is handed to 'sh -c' so the container's shell
+  // parses it; an array is exec'd verbatim; an object contributes one line per entry.
   private List<List<String>> execLines(final ShellCLI tool, final String containerName,
       final ShellOptions shellOptions, final Command command) {
     if (Objects.isNull(command)) {
@@ -175,9 +185,22 @@ public final class DevcontainerCommand implements Callable<Integer> {
 
       return CommandLine.ExitCode.OK;
     } catch (final RuntimeIOException | CompletionException exception) {
-      System.err.println(exception.getCause().getMessage());
+      System.err.println(rootMessage(exception));
       return CommandLine.ExitCode.USAGE;
     }
+  }
+
+  // The message to report for a failed host command, resilient to a missing cause or message: the
+  // cause's message is the most specific, then the exception's own, and finally its type so the output
+  // is never a bare "null".
+  // visible for testing
+  static String rootMessage(final Throwable exception) {
+    return Stream.of(
+            Optional.ofNullable(exception.getCause()).map(Throwable::getMessage).orElse(null),
+            exception.getMessage())
+        .filter(Objects::nonNull)
+        .findFirst()
+        .orElseGet(exception::toString);
   }
 
 }

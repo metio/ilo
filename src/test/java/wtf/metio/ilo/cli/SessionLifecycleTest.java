@@ -22,7 +22,6 @@ class SessionLifecycleTest {
 
   // Each step carries a single marker token so the executed sequence is easy to assert.
   private static final SessionLifecycle.Steps STEPS = new SessionLifecycle.Steps(
-      List.of("probe"),
       List.of("remove"),
       List.of("pull"),
       List.of("build"),
@@ -37,7 +36,7 @@ class SessionLifecycleTest {
     final Map<String, Integer> failures = new HashMap<>();
 
     @Override
-    public int execute(final List<String> arguments, final boolean debug) {
+    public synchronized int execute(final List<String> arguments, final boolean debug) {
       if (arguments.isEmpty()) {
         return 0;
       }
@@ -47,8 +46,9 @@ class SessionLifecycleTest {
     }
   }
 
-  private static SessionLifecycle.Probe probeReturning(final ContainerState state) {
-    return _ -> state;
+  // A single-command lifecycle step carrying one marker token.
+  private static List<List<String>> step(final String marker) {
+    return List.of(List.of(marker));
   }
 
   @Test
@@ -56,7 +56,7 @@ class SessionLifecycleTest {
   void shouldCreateWhenAbsent() {
     final var executor = new RecordingExecutor();
     final var exitCode = SessionLifecycle.run(STEPS, SessionLifecycle.Lifecycle.none(),
-        false, false, executor, probeReturning(ContainerState.ABSENT));
+        false, false, executor, ContainerState.ABSENT);
     assertEquals(0, exitCode);
     assertIterableEquals(List.of("pull", "build", "create", "attach", "stop"), executor.executed);
   }
@@ -66,7 +66,7 @@ class SessionLifecycleTest {
   void shouldStartWhenStopped() {
     final var executor = new RecordingExecutor();
     SessionLifecycle.run(STEPS, SessionLifecycle.Lifecycle.none(),
-        false, false, executor, probeReturning(ContainerState.STOPPED));
+        false, false, executor, ContainerState.STOPPED);
     assertIterableEquals(List.of("start", "attach", "stop"), executor.executed);
   }
 
@@ -75,7 +75,7 @@ class SessionLifecycleTest {
   void shouldAttachWhenRunning() {
     final var executor = new RecordingExecutor();
     SessionLifecycle.run(STEPS, SessionLifecycle.Lifecycle.none(),
-        false, false, executor, probeReturning(ContainerState.RUNNING));
+        false, false, executor, ContainerState.RUNNING);
     assertIterableEquals(List.of("attach", "stop"), executor.executed);
   }
 
@@ -83,22 +83,10 @@ class SessionLifecycleTest {
   @DisplayName("removes the container first and recreates it when fresh")
   void shouldRecreateWhenFresh() {
     final var executor = new RecordingExecutor();
-    // A probe that would report RUNNING must be ignored when fresh is requested.
+    // A state of RUNNING must be ignored when fresh is requested.
     SessionLifecycle.run(STEPS, SessionLifecycle.Lifecycle.none(),
-        true, false, executor, probeReturning(ContainerState.RUNNING));
+        true, false, executor, ContainerState.RUNNING);
     assertIterableEquals(List.of("remove", "pull", "build", "create", "attach", "stop"), executor.executed);
-  }
-
-  @Test
-  @DisplayName("does not probe when fresh is requested")
-  void shouldSkipProbeWhenFresh() {
-    final var executor = new RecordingExecutor();
-    final var probed = new ArrayList<List<String>>();
-    SessionLifecycle.run(STEPS, SessionLifecycle.Lifecycle.none(), true, false, executor, arguments -> {
-      probed.add(arguments);
-      return ContainerState.RUNNING;
-    });
-    assertTrue(probed.isEmpty());
   }
 
   @Test
@@ -106,10 +94,10 @@ class SessionLifecycleTest {
   void shouldRunLifecycleInOrderOnCreate() {
     final var executor = new RecordingExecutor();
     final var lifecycle = new SessionLifecycle.Lifecycle(
-        List.of(List.of("onCreate")),
-        List.of(List.of("onStart")),
-        List.of(List.of("onAttach")));
-    SessionLifecycle.run(STEPS, lifecycle, false, false, executor, probeReturning(ContainerState.ABSENT));
+        List.of(step("onCreate")),
+        List.of(step("onStart")),
+        List.of(step("onAttach")));
+    SessionLifecycle.run(STEPS, lifecycle, false, false, executor, ContainerState.ABSENT);
     assertIterableEquals(
         List.of("pull", "build", "create", "onCreate", "onStart", "onAttach", "attach", "stop"),
         executor.executed);
@@ -120,10 +108,10 @@ class SessionLifecycleTest {
   void shouldSkipCreateLifecycleWhenStopped() {
     final var executor = new RecordingExecutor();
     final var lifecycle = new SessionLifecycle.Lifecycle(
-        List.of(List.of("onCreate")),
-        List.of(List.of("onStart")),
-        List.of(List.of("onAttach")));
-    SessionLifecycle.run(STEPS, lifecycle, false, false, executor, probeReturning(ContainerState.STOPPED));
+        List.of(step("onCreate")),
+        List.of(step("onStart")),
+        List.of(step("onAttach")));
+    SessionLifecycle.run(STEPS, lifecycle, false, false, executor, ContainerState.STOPPED);
     assertIterableEquals(List.of("start", "onStart", "onAttach", "attach", "stop"), executor.executed);
     assertFalse(executor.executed.contains("onCreate"));
   }
@@ -133,11 +121,35 @@ class SessionLifecycleTest {
   void shouldRunOnlyAttachLifecycleWhenRunning() {
     final var executor = new RecordingExecutor();
     final var lifecycle = new SessionLifecycle.Lifecycle(
-        List.of(List.of("onCreate")),
-        List.of(List.of("onStart")),
-        List.of(List.of("onAttach")));
-    SessionLifecycle.run(STEPS, lifecycle, false, false, executor, probeReturning(ContainerState.RUNNING));
+        List.of(step("onCreate")),
+        List.of(step("onStart")),
+        List.of(step("onAttach")));
+    SessionLifecycle.run(STEPS, lifecycle, false, false, executor, ContainerState.RUNNING);
     assertIterableEquals(List.of("onAttach", "attach", "stop"), executor.executed);
+  }
+
+  @Test
+  @DisplayName("runs the commands of a parallel step and awaits them all")
+  void shouldRunParallelStepCommands() {
+    final var executor = new RecordingExecutor();
+    final var lifecycle = new SessionLifecycle.Lifecycle(
+        List.of(List.of(List.of("a"), List.of("b"))), List.of(), List.of());
+    final var exitCode = SessionLifecycle.run(STEPS, lifecycle, false, false, executor, ContainerState.ABSENT);
+    assertEquals(0, exitCode);
+    assertTrue(executor.executed.containsAll(List.of("a", "b")), executor.executed.toString());
+    assertTrue(executor.executed.contains("attach"));
+  }
+
+  @Test
+  @DisplayName("fails the step and skips the attach when a parallel command fails")
+  void shouldFailWhenAParallelCommandFails() {
+    final var executor = new RecordingExecutor();
+    executor.failures.put("b", 9);
+    final var lifecycle = new SessionLifecycle.Lifecycle(
+        List.of(List.of(List.of("a"), List.of("b"))), List.of(), List.of());
+    final var exitCode = SessionLifecycle.run(STEPS, lifecycle, false, false, executor, ContainerState.ABSENT);
+    assertEquals(9, exitCode);
+    assertFalse(executor.executed.contains("attach"));
   }
 
   @Test
@@ -146,7 +158,7 @@ class SessionLifecycleTest {
     final var executor = new RecordingExecutor();
     executor.failures.put("build", 3);
     final var exitCode = SessionLifecycle.run(STEPS, SessionLifecycle.Lifecycle.none(),
-        false, false, executor, probeReturning(ContainerState.ABSENT));
+        false, false, executor, ContainerState.ABSENT);
     assertEquals(3, exitCode);
     assertIterableEquals(List.of("pull", "build"), executor.executed);
   }
@@ -157,10 +169,21 @@ class SessionLifecycleTest {
     final var executor = new RecordingExecutor();
     executor.failures.put("onCreate", 5);
     final var lifecycle = new SessionLifecycle.Lifecycle(
-        List.of(List.of("onCreate")), List.of(), List.of());
+        List.of(step("onCreate")), List.of(), List.of());
     final var exitCode = SessionLifecycle.run(STEPS, lifecycle,
-        false, false, executor, probeReturning(ContainerState.ABSENT));
+        false, false, executor, ContainerState.ABSENT);
     assertEquals(5, exitCode);
+    assertFalse(executor.executed.contains("attach"));
+  }
+
+  @Test
+  @DisplayName("does not attach when an attach-time lifecycle command fails")
+  void shouldShortCircuitOnAttachLifecycleFailure() {
+    final var executor = new RecordingExecutor();
+    executor.failures.put("onAttach", 4);
+    final var lifecycle = new SessionLifecycle.Lifecycle(List.of(), List.of(), List.of(step("onAttach")));
+    final var exitCode = SessionLifecycle.run(STEPS, lifecycle, false, false, executor, ContainerState.RUNNING);
+    assertEquals(4, exitCode);
     assertFalse(executor.executed.contains("attach"));
   }
 
@@ -170,7 +193,7 @@ class SessionLifecycleTest {
     final var executor = new RecordingExecutor();
     executor.failures.put("attach", 130);
     final var exitCode = SessionLifecycle.run(STEPS, SessionLifecycle.Lifecycle.none(),
-        false, false, executor, probeReturning(ContainerState.RUNNING));
+        false, false, executor, ContainerState.RUNNING);
     assertEquals(130, exitCode);
     assertTrue(executor.executed.contains("stop"));
   }
@@ -181,26 +204,14 @@ class SessionLifecycleTest {
     final var executor = new RecordingExecutor();
     executor.failures.put("stop", 1);
     final var steps = new SessionLifecycle.Steps(
-        List.of("probe"), List.of("remove"), List.of("pull"), List.of("build"),
+        List.of("remove"), List.of("pull"), List.of("build"),
         List.of("create"), List.of("start"), List.of("attach"),
         () -> List.of(List.of("stop"), List.of("rmi")));
     final var exitCode = SessionLifecycle.run(steps, SessionLifecycle.Lifecycle.none(),
-        false, false, executor, probeReturning(ContainerState.RUNNING));
+        false, false, executor, ContainerState.RUNNING);
     assertEquals(0, exitCode);
     assertTrue(executor.executed.contains("stop"));
     assertTrue(executor.executed.contains("rmi"));
-  }
-
-  @Test
-  @DisplayName("passes the probe command line to the probe")
-  void shouldProbeWithProbeArguments() {
-    final var executor = new RecordingExecutor();
-    final var probed = new ArrayList<List<String>>();
-    SessionLifecycle.run(STEPS, SessionLifecycle.Lifecycle.none(), false, false, executor, arguments -> {
-      probed.add(arguments);
-      return ContainerState.RUNNING;
-    });
-    assertIterableEquals(List.of(List.of("probe")), probed);
   }
 
 }

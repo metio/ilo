@@ -62,10 +62,12 @@ final class DevcontainerOptionsMapper {
         .toList();
   }
 
-  // containerEnv name/value pairs become '--env NAME=VALUE'.
+  // containerEnv name/value pairs become '--env NAME=VALUE'. An entry without a value is dropped rather
+  // than passed through as the literal 'NAME=null'.
   private static List<String> environment(final Devcontainer devcontainer) {
     return Stream.ofNullable(devcontainer.containerEnv())
         .flatMap(env -> env.entrySet().stream())
+        .filter(entry -> Objects.nonNull(entry.getValue()))
         .map(entry -> entry.getKey() + "=" + entry.getValue())
         .toList();
   }

@@ -15,6 +15,7 @@ import wtf.metio.ilo.utils.Strings;
 import wtf.metio.ilo.version.VersionProvider;
 
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.ToIntFunction;
@@ -117,6 +118,7 @@ public final class DevfileCommand implements Callable<Integer> {
     opts.workingDir = container.sourceMapping();
     opts.image = container.image();
     opts.variables = container.env().stream()
+        .filter(env -> Objects.nonNull(env.name()) && Objects.nonNull(env.value()))
         .map(env -> String.format("%s=%s", env.name(), env.value()))
         .toList();
     opts.commands = Streams.fromLists(container.command(), container.args()).toList();

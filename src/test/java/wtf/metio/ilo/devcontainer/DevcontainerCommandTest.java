@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
@@ -207,6 +208,30 @@ class DevcontainerCommandTest {
   }
 
   @Test
+  void rootMessagePrefersTheCauseMessage() {
+    final var exception = new CompletionException("wrapper", new RuntimeException("boom"));
+    assertEquals("boom", DevcontainerCommand.rootMessage(exception));
+  }
+
+  @Test
+  void rootMessageFallsBackToTheExceptionMessageWhenTheCauseHasNone() {
+    final var exception = new CompletionException("outer", new RuntimeException());
+    assertEquals("outer", DevcontainerCommand.rootMessage(exception));
+  }
+
+  @Test
+  void rootMessageUsesTheExceptionMessageWhenThereIsNoCause() {
+    final var exception = new CompletionException("only", null);
+    assertEquals("only", DevcontainerCommand.rootMessage(exception));
+  }
+
+  @Test
+  void rootMessageFallsBackToTheTypeWhenNoMessageIsAvailable() {
+    final var exception = new CompletionException(null, null);
+    assertTrue(DevcontainerCommand.rootMessage(exception).contains("CompletionException"));
+  }
+
+  @Test
   void definitionReadsTheFileContents(@TempDir final Path directory) throws IOException {
     final var json = directory.resolve("devcontainer.json");
     Files.writeString(json, "{\"image\":\"example:test\"}");
@@ -235,7 +260,7 @@ class DevcontainerCommandTest {
       return command;
     }
 
-    private List<List<String>> onCreate(final wtf.metio.devcontainer.Devcontainer devcontainer) {
+    private List<List<List<String>>> onCreate(final wtf.metio.devcontainer.Devcontainer devcontainer) {
       return command().lifecycle(new Docker(), CONTAINER, new ShellOptions(), devcontainer).onCreate();
     }
 
@@ -246,7 +271,7 @@ class DevcontainerCommandTest {
           .onCreateCommand(Command.builder().string("npm install").create())
           .create();
       assertIterableEquals(
-          List.of(List.of("docker", "exec", CONTAINER, "sh", "-c", "npm install")),
+          List.of(List.of(List.of("docker", "exec", CONTAINER, "sh", "-c", "npm install"))),
           onCreate(devcontainer));
     }
 
@@ -257,7 +282,7 @@ class DevcontainerCommandTest {
           .onCreateCommand(Command.builder().array(List.of("npm", "ci")).create())
           .create();
       assertIterableEquals(
-          List.of(List.of("docker", "exec", CONTAINER, "npm", "ci")),
+          List.of(List.of(List.of("docker", "exec", CONTAINER, "npm", "ci"))),
           onCreate(devcontainer));
     }
 
@@ -270,8 +295,26 @@ class DevcontainerCommandTest {
               .create())
           .create();
       assertIterableEquals(
-          List.of(List.of("docker", "exec", CONTAINER, "sh", "-c", "setup")),
+          List.of(List.of(List.of("docker", "exec", CONTAINER, "sh", "-c", "setup"))),
           onCreate(devcontainer));
+    }
+
+    @Test
+    @DisplayName("groups the entries of an object command into one parallel step")
+    void shouldGroupObjectEntriesIntoOneStep() {
+      final var devcontainer = DevcontainerBuilder.builder()
+          .onCreateCommand(Command.builder()
+              .object(Map.of(
+                  "a", Command.builder().string("setup-a").create(),
+                  "b", Command.builder().string("setup-b").create()))
+              .create())
+          .create();
+      final var steps = onCreate(devcontainer);
+      assertEquals(1, steps.size(), "an object command is a single parallel step");
+      final var group = steps.get(0);
+      assertEquals(2, group.size(), "both entries belong to the same step");
+      assertTrue(group.contains(List.of("docker", "exec", CONTAINER, "sh", "-c", "setup-a")), group.toString());
+      assertTrue(group.contains(List.of("docker", "exec", CONTAINER, "sh", "-c", "setup-b")), group.toString());
     }
 
     @Test
@@ -283,9 +326,9 @@ class DevcontainerCommandTest {
           .postCreateCommand(Command.builder().string("post-create").create())
           .create();
       assertIterableEquals(List.of(
-          List.of("docker", "exec", CONTAINER, "sh", "-c", "on-create"),
-          List.of("docker", "exec", CONTAINER, "sh", "-c", "update-content"),
-          List.of("docker", "exec", CONTAINER, "sh", "-c", "post-create")), onCreate(devcontainer));
+          List.of(List.of("docker", "exec", CONTAINER, "sh", "-c", "on-create")),
+          List.of(List.of("docker", "exec", CONTAINER, "sh", "-c", "update-content")),
+          List.of(List.of("docker", "exec", CONTAINER, "sh", "-c", "post-create"))), onCreate(devcontainer));
     }
 
     @Test
@@ -296,8 +339,8 @@ class DevcontainerCommandTest {
           .postAttachCommand(Command.builder().string("post-attach").create())
           .create();
       final var lifecycle = command().lifecycle(new Docker(), CONTAINER, new ShellOptions(), devcontainer);
-      assertIterableEquals(List.of(List.of("docker", "exec", CONTAINER, "sh", "-c", "post-start")), lifecycle.onStart());
-      assertIterableEquals(List.of(List.of("docker", "exec", CONTAINER, "sh", "-c", "post-attach")), lifecycle.onAttach());
+      assertIterableEquals(List.of(List.of(List.of("docker", "exec", CONTAINER, "sh", "-c", "post-start"))), lifecycle.onStart());
+      assertIterableEquals(List.of(List.of(List.of("docker", "exec", CONTAINER, "sh", "-c", "post-attach"))), lifecycle.onAttach());
       assertTrue(lifecycle.onCreate().isEmpty());
     }
 
