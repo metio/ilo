@@ -15,6 +15,7 @@ import wtf.metio.ilo.utils.Strings;
 import wtf.metio.ilo.version.VersionProvider;
 
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.ToIntFunction;
 
@@ -70,9 +71,17 @@ public final class DevfileCommand implements Callable<Integer> {
   }
 
   static boolean hasSupportedDevfileConfiguration(final DevfileYaml devfile, final String component) {
+    return selectComponent(devfile, component).isPresent();
+  }
+
+  // Picks the component to run: the one named by '--component', or — when none is requested — the first
+  // component ilo can handle, in document order. The name is matched on the requested value so a
+  // component without a name simply never matches rather than throwing.
+  private static Optional<Component> selectComponent(final DevfileYaml devfile, final String component) {
     return devfile.components().stream()
-        .filter(c -> c.name().equalsIgnoreCase(component))
-        .anyMatch(c -> usesPredefinedImage(c) || usesLocalDockerfile(c));
+        .filter(c -> Strings.isBlank(component) || component.equalsIgnoreCase(c.name()))
+        .filter(c -> usesPredefinedImage(c) || usesLocalDockerfile(c))
+        .findFirst();
   }
 
   private static boolean usesPredefinedImage(final Component component) {
@@ -84,17 +93,10 @@ public final class DevfileCommand implements Callable<Integer> {
   }
 
   static ShellOptions mapOptions(final DevfileOptions options, final DevfileYaml devfile) {
-    final var opts = devfile.components().stream()
-        .filter(DevfileCommand::usesPredefinedImage)
-        .map(Component::container)
-        .findFirst()
-        .map(DevfileCommand::optionsForPredefinedImage)
-        .or(() -> devfile.components().stream()
-            .filter(DevfileCommand::usesLocalDockerfile)
-            .map(Component::image)
-            .findFirst()
-            .map(DevfileCommand::optionsForLocalDockerfile))
-        .orElseThrow();
+    final var component = selectComponent(devfile, options.component).orElseThrow();
+    final var opts = usesPredefinedImage(component)
+        ? optionsForPredefinedImage(component.container())
+        : optionsForLocalDockerfile(component.image());
 
     opts.debug = options.debug;
     opts.pull = options.pull;

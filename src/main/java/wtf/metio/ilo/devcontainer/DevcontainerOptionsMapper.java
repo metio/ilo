@@ -14,7 +14,6 @@ import wtf.metio.ilo.shell.ShellVolumeBehavior;
 import wtf.metio.ilo.utils.Strings;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -155,11 +154,13 @@ final class DevcontainerOptionsMapper {
   static ComposeOptions composeOptions(final DevcontainerOptions options, final Devcontainer devcontainer, final Path devcontainerJson) {
     final var opts = new ComposeOptions();
     opts.interactive = true;
+    // dockerComposeFile entries are declared relative to the directory holding the devcontainer.json,
+    // so each is resolved against that directory. The base is made absolute first so a bare filename
+    // (no parent) still yields a directory to resolve against.
+    final var baseDir = devcontainerJson.toAbsolutePath().getParent();
     opts.file = Stream.ofNullable(devcontainer.dockerComposeFile())
         .flatMap(Collection::stream)
-        .map(Paths::get)
-        .map(devcontainerJson::relativize)
-        .map(Path::toAbsolutePath)
+        .map(baseDir::resolve)
         .map(Path::toString)
         .toList();
     opts.service = devcontainer.service();

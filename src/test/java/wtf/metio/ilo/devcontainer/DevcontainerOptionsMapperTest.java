@@ -352,17 +352,20 @@ class DevcontainerOptionsMapperTest {
     }
 
     @Test
-    @DisplayName("maps the dockerComposeFile field")
+    @DisplayName("resolves the dockerComposeFile against the devcontainer.json directory")
     void shouldMapDockerComposeFile() {
       // given
       final var options = new DevcontainerOptions();
       final var json = DevcontainerBuilder.builder().dockerComposeFile(List.of("your-compose.yml")).create();
+      // The devcontainer.json is read as an absolute path in production, so the compose file path must
+      // be resolved relative to its directory rather than relativized against the file itself.
+      final var devcontainerJson = Paths.get("/home/user/project/.devcontainer/devcontainer.json");
 
       // when
-      final var composeOptions = composeOptions(options, json, Paths.get("."));
+      final var composeOptions = composeOptions(options, json, devcontainerJson);
 
       // then
-      assertTrue(composeOptions.file.get(0).endsWith("your-compose.yml"));
+      assertEquals("/home/user/project/.devcontainer/your-compose.yml", composeOptions.file.get(0));
     }
 
     @Test
