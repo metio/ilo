@@ -61,8 +61,9 @@ jobs:
             ${{ runner.os }}-maven-
       - id: integration
         name: Run Integration Tests
-        # ubuntu-latest ships rootful Docker; require the Docker tests to actually run rather than
-        # silently skip if the runtime is somehow unavailable.
+        # ubuntu-latest ships rootful Docker and rootless Podman; require both runtimes' tests to
+        # actually run rather than silently skip if a runtime is somehow unavailable.
         run: mvn --batch-mode -Pintegration verify
         env:
           ILO_IT_DOCKER: "true"
+          ILO_IT_PODMAN: "true"
