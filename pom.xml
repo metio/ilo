@@ -221,6 +221,11 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>3.5.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>3.11.0</version>
                 </plugin>
@@ -525,6 +530,7 @@
                                     <element>BUNDLE</element>
                                     <excludes>
                                         <exclude>*Test</exclude>
+                                        <exclude>*IT</exclude>
                                     </excludes>
                                     <limits>
                                         <limit>
@@ -548,6 +554,28 @@
     </build>
 
     <profiles>
+        <!-- Runs the integration tests (named '*IT') against a real container runtime via failsafe.
+             They are excluded from the normal unit-test build (surefire ignores '*IT'), so they only
+             run when this profile is active, e.g. the dedicated CI job: 'mvn -Pintegration verify'. -->
+        <profile>
+            <id>integration</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>release</id>
             <build>
