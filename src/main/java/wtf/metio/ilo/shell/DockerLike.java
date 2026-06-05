@@ -186,6 +186,15 @@ abstract class DockerLike implements ShellCLI {
   }
 
   @Override
+  public final List<String> mainPidArguments(final ShellOptions options, final String containerName) {
+    final var expand = OSSupport.expander();
+    return flatten(
+        of(name()),
+        fromList(expand.expand(options.runtimeOptions)),
+        of("inspect", "--format", "{{.State.Pid}}", containerName));
+  }
+
+  @Override
   public final List<String> stopArguments(final ShellOptions options, final String containerName) {
     final var expand = OSSupport.expander();
     return flatten(

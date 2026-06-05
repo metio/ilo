@@ -83,6 +83,14 @@ class ShellContainerTest {
   }
 
   @Test
+  @DisplayName("fingerprint changes when the keepalive override is toggled")
+  void shouldChangeWithOverrideCommand() {
+    final var other = options();
+    other.overrideCommand = false;
+    assertNotEquals(ShellContainer.fingerprint(options(), PROJECT), ShellContainer.fingerprint(other, PROJECT));
+  }
+
+  @Test
   @DisplayName("fingerprint changes with the extra identity source")
   void shouldChangeWithIdentitySource() {
     final var other = options();

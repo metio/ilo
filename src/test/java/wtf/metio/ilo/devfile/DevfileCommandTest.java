@@ -142,6 +142,18 @@ class DevfileCommandTest {
   }
 
   @Test
+  @DisplayName("opens an interactive shell for both component kinds")
+  void shouldOpenInteractiveShell() {
+    final var predefined = DevfileCommand.mapOptions(new DevfileOptions(),
+        devfile(containerComponent("container", "maven:latest")));
+    final var dockerfile = DevfileCommand.mapOptions(new DevfileOptions(),
+        devfile(dockerfileComponent("image", "image:latest", "Dockerfile")));
+    assertAll(
+        () -> assertTrue(predefined.interactive, "predefined image"),
+        () -> assertTrue(dockerfile.interactive, "local dockerfile"));
+  }
+
+  @Test
   @DisplayName("copies runtime options onto the shell options")
   void shouldCopyRuntimeOptions() {
     final var options = new DevfileOptions();

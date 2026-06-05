@@ -7,6 +7,7 @@ package wtf.metio.ilo.devcontainer;
 import picocli.CommandLine;
 import wtf.metio.devcontainer.Command;
 import wtf.metio.devcontainer.Devcontainer;
+import wtf.metio.ilo.cli.ContainerNaming;
 import wtf.metio.ilo.cli.Executables;
 import wtf.metio.ilo.cli.SessionLifecycle;
 import wtf.metio.ilo.compose.ComposeCommand;
@@ -73,9 +74,12 @@ public final class DevcontainerCommand implements Callable<Integer> {
       final var command = new ComposeCommand();
       command.options = composeOptions(options, devcontainer, json);
       return command.call();
-    } else if (Strings.isNotBlank(devcontainer.image())) {
+    } else if (usesImageOrDockerfile(devcontainer)) {
       final var command = new ShellCommand();
       final var shellOptions = shellOptions(options, devcontainer);
+      // A Dockerfile-only devcontainer declares no image name; give the build a stable tag to produce
+      // and run from. An explicit image is kept as-is.
+      shellOptions.image = imageTag(devcontainer, json);
       // Fold the devcontainer.json into the container's identity so editing it — a lifecycle command,
       // a mount, anything — recreates the container on the next run and re-runs the creation lifecycle.
       shellOptions.identitySource(definition(json));
@@ -85,6 +89,23 @@ public final class DevcontainerCommand implements Callable<Integer> {
     }
 
     return CommandLine.ExitCode.USAGE;
+  }
+
+  // The shell path handles a devcontainer described by an explicit image or by a Dockerfile build; a
+  // definition with neither (and no dockerComposeFile) is not something ilo can open.
+  // visible for testing
+  static boolean usesImageOrDockerfile(final Devcontainer devcontainer) {
+    return Strings.isNotBlank(devcontainer.image())
+        || (Objects.nonNull(devcontainer.build()) && Strings.isNotBlank(devcontainer.build().dockerfile()));
+  }
+
+  // The image to tag and run: the declared image when set, otherwise a stable synthetic tag derived
+  // from the devcontainer.json's location so the same project reuses the same built image.
+  // visible for testing
+  static String imageTag(final Devcontainer devcontainer, final Path json) {
+    return Strings.isNotBlank(devcontainer.image())
+        ? devcontainer.image()
+        : ContainerNaming.containerName("ilo-devcontainer", json.toString());
   }
 
   // Warns about devcontainer.json fields ilo recognizes but does not act on, so a missing effect is not

@@ -139,6 +139,12 @@ class RunCommandsTest {
   }
 
   @Test
+  @DisplayName("allow to disable run commands after the subcommand")
+  void turnOffRunCommandsAfterSubcommand() {
+    assertFalse(RunCommands.shouldAddRunCommands(new String[]{"shell", "--no-rc"}));
+  }
+
+  @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("allow to configure different run command file")
   void configureRunCommandFile(final uk.org.webcompere.systemstubs.environment.EnvironmentVariables environmentVariables) {

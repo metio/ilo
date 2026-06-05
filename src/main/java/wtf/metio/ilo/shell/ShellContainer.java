@@ -69,6 +69,8 @@ final class ShellContainer {
     parts.add(Objects.toString(options.hostname, ""));
     parts.add(Boolean.toString(options.mountProjectDir));
     parts.add(Objects.toString(options.workspaceMount, ""));
+    // The override changes the created container's entrypoint/command, so toggling it must recreate.
+    parts.add(Boolean.toString(options.overrideCommand));
     parts.add(Objects.toString(options.userMapping, ""));
     parts.add(Objects.toString(options.remoteUser, ""));
     parts.addAll(values(options.runtimeOptions));

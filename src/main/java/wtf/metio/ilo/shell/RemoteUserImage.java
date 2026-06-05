@@ -8,9 +8,13 @@ import wtf.metio.ilo.errors.RuntimeIOException;
 import wtf.metio.ilo.utils.Strings;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
 import java.util.regex.Pattern;
 
 /**
@@ -122,9 +126,14 @@ final class RemoteUserImage {
 
   // Written to a deterministic path so the same definition yields the same file across runs, keeping
   // the container fingerprint (which includes the Containerfile path and contents) stable for reuse.
+  // The file lives under a per-user subdirectory of the temp dir so two users on a shared host never
+  // collide on the same path.
   private static Path write(final String content) {
-    final var file = Paths.get(System.getProperty("java.io.tmpdir"), "ilo-remote-user-" + hash(content) + ".containerfile");
+    final var directory = Paths.get(System.getProperty("java.io.tmpdir"),
+        "ilo-" + System.getProperty("user.name", "user"));
     try {
+      Files.createDirectories(directory);
+      final var file = directory.resolve("remote-user-" + hash(content) + ".containerfile");
       Files.writeString(file, content);
       return file;
     } catch (final IOException exception) {
@@ -140,8 +149,15 @@ final class RemoteUserImage {
     }
   }
 
+  // A SHA-256 digest (truncated) rather than String.hashCode, so two different generated files cannot
+  // collide onto the same tag/path and silently reuse each other's derived image.
   private static String hash(final String content) {
-    return Integer.toHexString(content.hashCode() & 0x7fffffff);
+    try {
+      final var digest = MessageDigest.getInstance("SHA-256").digest(content.getBytes(StandardCharsets.UTF_8));
+      return HexFormat.of().formatHex(digest).substring(0, 16);
+    } catch (final NoSuchAlgorithmException exception) {
+      throw new IllegalStateException("SHA-256 is required to be present on every JVM", exception);
+    }
   }
 
   private RemoteUserImage() {

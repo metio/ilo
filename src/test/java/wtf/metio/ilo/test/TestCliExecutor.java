@@ -21,6 +21,7 @@ public abstract class TestCliExecutor<RUNTIME extends Runtime<CLI>, CLI extends 
   private ContainerState probeState = ContainerState.ABSENT;
   private String captureOutput = "";
   private String processesOutput = "";
+  private String inspectOutput = "";
 
   @Override
   public final int execute(final List<String> arguments, final boolean debug) {
@@ -35,9 +36,15 @@ public abstract class TestCliExecutor<RUNTIME extends Runtime<CLI>, CLI extends 
 
   @Override
   public final String capture(final List<String> arguments) {
-    // The session captures two different listings; a 'top' command lists processes, anything else
-    // (the 'ps' sweep) lists container names.
-    return arguments.contains("top") ? processesOutput : captureOutput;
+    // The session captures three listings: a 'top' command lists processes, an 'inspect' reports the
+    // main process PID, and anything else (the 'ps' sweep) lists container names.
+    if (arguments.contains("top")) {
+      return processesOutput;
+    }
+    if (arguments.contains("inspect")) {
+      return inspectOutput;
+    }
+    return captureOutput;
   }
 
   /** Controls the container state the next session sees. */
@@ -53,6 +60,11 @@ public abstract class TestCliExecutor<RUNTIME extends Runtime<CLI>, CLI extends 
   /** Controls the {@code top} output the next process check returns (the in-container process table). */
   public final void processesOutput(final String output) {
     processesOutput = output;
+  }
+
+  /** Controls the {@code inspect} output the next main-PID lookup returns. */
+  public final void inspectOutput(final String output) {
+    inspectOutput = output;
   }
 
   /** Every command line passed to {@link #execute}, including the empty (skipped) ones, in order. */

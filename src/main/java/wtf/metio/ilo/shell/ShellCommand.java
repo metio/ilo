@@ -121,9 +121,15 @@ public final class ShellCommand implements Callable<Integer> {
   // A container is shared across terminals, so it must outlive this session if another is still
   // attached. The runtime is the source of truth: any process besides the keepalive is another open
   // session. This session's own attach has already returned by the time the teardown is computed, so
-  // it is not counted.
+  // it is not counted. With the keepalive in use its command marker identifies the container's own
+  // processes; without it (--no-override-command) the container's main process is identified by its
+  // inspected host PID instead, so the ref-count works whatever PIDs the runtime's 'top' reports.
   private boolean otherSessionsAttached(final ShellCLI tool, final String containerName) {
-    return ContainerProcesses.hasSessions(executor.capture(tool.processesArguments(options, containerName)));
+    final var mainPid = options.overrideCommand
+        ? ""
+        : executor.capture(tool.mainPidArguments(options, containerName));
+    return ContainerProcesses.hasSessions(
+        executor.capture(tool.processesArguments(options, containerName)), mainPid);
   }
 
 }

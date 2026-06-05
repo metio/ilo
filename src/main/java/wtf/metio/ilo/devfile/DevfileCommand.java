@@ -99,6 +99,9 @@ public final class DevfileCommand implements Callable<Integer> {
         ? optionsForPredefinedImage(component.container())
         : optionsForLocalDockerfile(component.image());
 
+    // A devfile session is meant to be entered interactively; a programmatically-built ShellOptions
+    // defaults this to false, so it is set explicitly (picocli only defaults it for 'ilo shell').
+    opts.interactive = true;
     opts.debug = options.debug;
     opts.pull = options.pull;
     opts.removeImage = options.removeImage;

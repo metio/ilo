@@ -293,6 +293,13 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
   }
 
   @Test
+  @DisplayName("inspects the container's main process host PID")
+  void mainPidArguments() {
+    final var arguments = tool().mainPidArguments(minimal(), CONTAINER);
+    assertEquals(String.format("%s inspect --format {{.State.Pid}} %s", name(), CONTAINER), String.join(" ", arguments));
+  }
+
+  @Test
   @DisplayName("applies the resolved user mapping on create")
   void createAppliesUserMapping() {
     final var options = minimal();

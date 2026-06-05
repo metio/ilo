@@ -83,7 +83,9 @@ public final class RunCommands {
     final var isHelp = (hasArguments && ("-h".equals(args[0]) || "--help".equals(args[0])))
         || (1 < args.length && ("-h".equals(args[1]) || "--help".equals(args[1])));
     final var isCompletion = hasArguments && "generate-completion".equals(args[0]);
-    final var disableRunCommands = hasArguments && NO_RC_FLAG.equals(args[0]);
+    // '--no-rc' is a global flag, so it is honored wherever it appears — including after the subcommand
+    // ('ilo shell --no-rc'), not only as the very first argument.
+    final var disableRunCommands = Arrays.asList(args).contains(NO_RC_FLAG);
 
     return !isVersion && !isHelp && !isCompletion && !disableRunCommands;
   }

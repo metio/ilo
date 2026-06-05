@@ -194,6 +194,33 @@ class ShellCommandTest extends TestMethodSources {
 
   @ParameterizedTest
   @MethodSource("dockerLikeRuntimes")
+  @DisplayName("with the keepalive off, uses the inspected main PID to stop when no session remains")
+  void noOverrideCommandStopsViaMainPid(final String runtime) {
+    useRuntime(runtime);
+    options.overrideCommand = false;
+    executor.inspectOutput("5000");
+    // Host-PID 'top': only the main process (5000) and its worker child — no attached session.
+    executor.processesOutput("UID PID PPID COMMAND\nroot 5000 4990 init\nroot 5001 5000 worker\n");
+    executor.probeState(ContainerState.RUNNING);
+    shell.call();
+    assertIterableEquals(List.of("exec", "stop"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("with the keepalive off, keeps running when a session sits beside the main process")
+  void noOverrideCommandKeepsRunningWithSession(final String runtime) {
+    useRuntime(runtime);
+    options.overrideCommand = false;
+    executor.inspectOutput("5000");
+    executor.processesOutput("UID PID PPID COMMAND\nroot 5000 4990 init\nroot 5050 4990 bash\n");
+    executor.probeState(ContainerState.RUNNING);
+    shell.call();
+    assertIterableEquals(List.of("exec"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
   @DisplayName("stops the container when this is the last attached session")
   void lastSessionStops(final String runtime) {
     useRuntime(runtime);

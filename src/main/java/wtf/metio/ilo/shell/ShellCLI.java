@@ -73,4 +73,16 @@ public interface ShellCLI extends CliTool<ShellOptions> {
    */
   List<String> processesArguments(ShellOptions options, String containerName);
 
+  /**
+   * Builds a command that reports the host PID of the container's main process ({@code PID 1} inside
+   * the container). When the keepalive is off there is no command marker to recognise the container's
+   * own process in {@code top} output, and a runtime whose {@code top} reports host PIDs (Docker) shows
+   * it at its host PID rather than {@code 1}; this lets the session ref-count exclude it anyway.
+   *
+   * @param options       The options to use.
+   * @param containerName The reused name of the session's container.
+   * @return The inspect command line yielding the main process's host PID.
+   */
+  List<String> mainPidArguments(ShellOptions options, String containerName);
+
 }
