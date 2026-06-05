@@ -5,17 +5,12 @@
 package wtf.metio.ilo.os;
 
 /**
- * Fallback implementation that does no parameter expansion.
+ * Fallback implementation that does no expansion: the value is returned verbatim.
  */
 public class NoOpExpansion extends ParameterExpansion {
 
   @Override
-  public String substituteCommands(final String value) {
-    return value;
-  }
-
-  @Override
-  public String expandParameters(final String value) {
+  String expand(final String value) {
     return value;
   }
 

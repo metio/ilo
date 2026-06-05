@@ -4,10 +4,13 @@
  */
 package wtf.metio.ilo.os;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@DisplayName("NoOpExpansion")
 class NoOpExpansionTest {
 
   private ParameterExpansion expansion;
@@ -18,17 +21,21 @@ class NoOpExpansionTest {
   }
 
   @Test
-  void shouldNotSubstituteCommand() {
-    final var command = "$(git diff)";
-    final var result = expansion.substituteCommands(command);
-    Assertions.assertEquals(command, result);
+  @DisplayName("returns a command substitution verbatim")
+  void keepsCommand() {
+    assertEquals("$(git diff)", expansion.expand("$(git diff)"));
   }
 
   @Test
-  void shouldNotExpandParameter() {
-    final var command = "${HOME}";
-    final var result = expansion.expandParameters(command);
-    Assertions.assertEquals(command, result);
+  @DisplayName("returns a parameter reference verbatim")
+  void keepsParameter() {
+    assertEquals("${HOME}", expansion.expand("${HOME}"));
+  }
+
+  @Test
+  @DisplayName("returns a leading tilde verbatim")
+  void keepsTilde() {
+    assertEquals("~/work", expansion.expand("~/work"));
   }
 
 }

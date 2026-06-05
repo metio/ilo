@@ -82,8 +82,7 @@ public final class OSSupport {
 
     public String expand(final String value) {
       return Optional.ofNullable(value)
-          .map(expansion::expandParameters)
-          .map(expansion::substituteCommands)
+          .map(expansion::expand)
           .orElse(value);
     }
 
