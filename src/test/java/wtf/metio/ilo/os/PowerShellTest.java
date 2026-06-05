@@ -17,6 +17,23 @@ import static wtf.metio.ilo.os.ParameterExpansion.MATCHER_GROUP_NAME;
 @DisplayName("PowerShell")
 class PowerShellTest {
 
+  @Test
+  @DisplayName("builds a Write-Output command that reads the environment variable")
+  void buildsParameterCommand() {
+    assertEquals("Write-Output $env:HOME", PowerShell.parameterCommand("$HOME"));
+  }
+
+  @Test
+  @DisplayName("expands the variable rather than echoing the command literally")
+  void parameterCommandExpandsRatherThanEchoes() {
+    final var command = PowerShell.parameterCommand("$USERNAME");
+    assertAll(
+        // A single-quoted command makes PowerShell print the literal text instead of expanding it.
+        () -> assertFalse(command.startsWith("'"), command),
+        // Environment variables are read through the 'env:' drive, not as plain '$USERNAME'.
+        () -> assertTrue(command.contains("$env:USERNAME"), command));
+  }
+
   @Nested
   @DisplayName("regex")
   class Regex {
@@ -80,6 +97,39 @@ class PowerShellTest {
     void replacesParameter() {
       final var result = powerShell.replace("$HOME:abc", input -> "test", PowerShell.PARAMETER_PATTERN);
       assertEquals("test:abc", result);
+    }
+
+    @Test
+    @DisplayName("expands an environment variable to its value")
+    void expandsEnvironmentVariable() {
+      // OS is always set to "Windows_NT" on Windows; this exercises the real PowerShell, so it catches
+      // a parameter command that echoes its text literally or reads '$OS' instead of '$env:OS'.
+      assertEquals(System.getenv("OS"), powerShell.expandParameters("$OS"));
+    }
+
+    @Test
+    @DisplayName("expands an environment variable surrounded by constants")
+    void expandsEnvironmentVariableAmongConstants() {
+      assertEquals(System.getenv("OS") + ":tail", powerShell.expandParameters("$OS:tail"));
+    }
+
+    @Test
+    @DisplayName("expands multiple environment variables in one value")
+    void expandsMultipleEnvironmentVariables() {
+      assertEquals(System.getenv("OS") + ":" + System.getenv("USERNAME"),
+          powerShell.expandParameters("$OS:$USERNAME"));
+    }
+
+    @Test
+    @DisplayName("expands an unset environment variable to an empty string")
+    void expandsUnsetVariableToEmpty() {
+      assertEquals(":done", powerShell.expandParameters("$ILO_DEFINITELY_NOT_SET_VARIABLE:done"));
+    }
+
+    @Test
+    @DisplayName("expands an environment variable through the full expander")
+    void expandsEnvironmentVariableThroughExpander() {
+      assertEquals(System.getenv("OS"), OSSupport.expander().expand("$OS"));
     }
 
     @Test

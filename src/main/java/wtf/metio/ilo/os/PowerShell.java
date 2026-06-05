@@ -39,8 +39,16 @@ final class PowerShell extends ParameterExpansion {
   @Override
   public String expandParameters(final String value) {
     return replace(expandTilde(value),
-        parameter -> Executables.runAndReadOutput(shellBinary.toString(), "-OutputFormat", "Text", "-Command", "'Write-Output \"" + parameter + "\"'"),
+        parameter -> Executables.runAndReadOutput(shellBinary.toString(), "-OutputFormat", "Text", "-Command", parameterCommand(parameter)),
         PARAMETER_PATTERN);
+  }
+
+  // visible for testing
+  static String parameterCommand(final String parameter) {
+    // 'parameter' is a POSIX-style reference such as "$HOME"; PowerShell reads an environment variable
+    // as "$env:HOME". The reference is passed as a single variable expression (not quoted), so
+    // Write-Output emits its value verbatim — spaces and all — and an unset variable yields nothing.
+    return "Write-Output $env:" + parameter.substring(1);
   }
 
 }
