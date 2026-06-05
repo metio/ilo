@@ -55,9 +55,10 @@ public final class ContainerProcesses {
     final var header = lines.get(headerIndex).trim().split("\\s+");
     final var pid = indexOf(header, "PID");
     final var ppid = indexOf(header, "PPID");
+    final var command = commandIndex(header);
     return lines.stream()
         .skip(headerIndex + 1L)
-        .anyMatch(line -> isSession(line, pid, ppid, mainPid));
+        .anyMatch(line -> isSession(line, pid, ppid, command, mainPid));
   }
 
   // A process line is an attached session unless it belongs to the container's own infrastructure. The
@@ -65,15 +66,40 @@ public final class ContainerProcesses {
   // container PIDs). Otherwise a process is infrastructure when it is the container's main process or a
   // direct child of it — identified as PID 1 (container-namespace 'top', e.g. podman) or as the
   // inspected main host PID (host-namespace 'top', e.g. docker), so both are covered symmetrically.
-  private static boolean isSession(final String line, final int pid, final int ppid, final String mainPid) {
-    if (line.isBlank() || line.contains(Keepalive.SLEEP_SECONDS)) {
+  private static boolean isSession(final String line, final int pid, final int ppid, final int command, final String mainPid) {
+    if (line.isBlank()) {
       return false;
     }
     final var columns = line.trim().split("\\s+");
+    if (isKeepaliveCommand(columns, command)) {
+      return false;
+    }
     if (columns.length <= Math.max(pid, ppid)) {
       return false;
     }
     return !isMainProcess(columns[pid], mainPid) && !isMainProcess(columns[ppid], mainPid);
+  }
+
+  // The keepalive marker is matched only within the command column (and the columns after it, since a
+  // command line is itself whitespace-separated), so a session whose PID, elapsed time or any other
+  // field merely happens to equal the marker is not misread as the keepalive. When no command column is
+  // named, the whole row is used as a fallback.
+  private static boolean isKeepaliveCommand(final String[] columns, final int command) {
+    if (command < 0) {
+      return String.join(" ", columns).contains(Keepalive.SLEEP_SECONDS);
+    }
+    for (var index = command; index < columns.length; index++) {
+      if (columns[index].contains(Keepalive.SLEEP_SECONDS)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // The command column is named COMMAND (podman/nerdctl) or CMD (docker); -1 when neither is present.
+  private static int commandIndex(final String[] header) {
+    final var command = indexOf(header, "COMMAND");
+    return command >= 0 ? command : indexOf(header, "CMD");
   }
 
   // The container's main process is PID 1 under a container-namespace 'top', or the inspected main host

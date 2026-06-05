@@ -96,6 +96,31 @@ class ContainerProcessesTest {
   }
 
   @Test
+  @DisplayName("counts a session whose non-command column merely equals the marker value")
+  void sessionWithMarkerInNonCommandColumn() {
+    // The keepalive marker (its sleep duration) happens to appear in the ELAPSED column of a genuine
+    // session whose command is an ordinary shell; only a marker in the command column means keepalive.
+    final var output = """
+        USER  PID    PPID   ELAPSED     COMMAND
+        root  12345  12340  00:00       sh -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done
+        root  12346  12345  00:00       sleep 2147483647
+        root  12399  12340  2147483647  bash
+        """;
+    assertTrue(ContainerProcesses.hasSessions(output));
+  }
+
+  @Test
+  @DisplayName("recognises the keepalive by the marker in its command even without a command column")
+  void keepaliveMarkerFallbackWithoutCommandColumn() {
+    // A 'top' variant that names neither COMMAND nor CMD falls back to matching the whole row.
+    final var output = """
+        USER  PID    PPID
+        root  12345  12340  sleep 2147483647
+        """;
+    assertFalse(ContainerProcesses.hasSessions(output));
+  }
+
+  @Test
   @DisplayName("treats empty output as no session")
   void emptyOutput() {
     assertFalse(ContainerProcesses.hasSessions(""));

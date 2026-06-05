@@ -184,6 +184,32 @@ class SessionLifecycleTest {
   }
 
   @Test
+  @DisplayName("prints a parallel command's captured output even when a sibling command throws")
+  void shouldPrintCapturedOutputWhenAParallelCommandThrows(final SystemOut systemOut) {
+    final var executor = new SessionLifecycle.Executor() {
+      @Override
+      public int execute(final List<String> arguments, final boolean debug) {
+        return 0;
+      }
+
+      @Override
+      public SessionLifecycle.CommandResult executeCaptured(final List<String> arguments, final boolean debug) {
+        if (arguments.contains("boom")) {
+          throw new RuntimeIOException(new IOException("kaboom"));
+        }
+        return new SessionLifecycle.CommandResult(0, "output-of-" + arguments.get(0) + "\n");
+      }
+    };
+    final var lifecycle = new SessionLifecycle.Lifecycle(
+        List.of(List.of(List.of("ok"), List.of("boom"))), List.of(), List.of());
+
+    // The failure is still surfaced, but the surviving command's captured output is not discarded.
+    assertThrows(RuntimeIOException.class,
+        () -> SessionLifecycle.run(STEPS, lifecycle, false, false, executor, ContainerState.ABSENT));
+    assertTrue(systemOut.getText().contains("output-of-ok"), systemOut.getText());
+  }
+
+  @Test
   @DisplayName("fails the step and skips the attach when a parallel command fails")
   void shouldFailWhenAParallelCommandFails() {
     final var executor = new RecordingExecutor();

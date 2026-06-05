@@ -4,6 +4,7 @@
  */
 package wtf.metio.ilo.cli;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -191,11 +192,28 @@ public final class SessionLifecycle {
       final var futures = commands.stream()
           .map(command -> CompletableFuture.supplyAsync(() -> executor.executeCaptured(command, debug), pool))
           .toList();
-      final var results = futures.stream().map(SessionLifecycle::await).toList();
+      // Await every command before acting on any result. A command whose execution throws (an IO or
+      // similar failure, as opposed to a non-zero exit) must not discard the captured output of its
+      // siblings, so each outcome is collected and the first thrown failure is held back until that
+      // output has been printed. Iterating in submission order keeps the surfaced failure deterministic.
+      final var results = new ArrayList<CommandResult>();
+      RuntimeException failure = null;
+      for (final var future : futures) {
+        try {
+          results.add(await(future));
+        } catch (final RuntimeException exception) {
+          if (null == failure) {
+            failure = exception;
+          }
+        }
+      }
       results.stream()
           .map(CommandResult::output)
           .filter(output -> !output.isEmpty())
           .forEach(System.out::print);
+      if (null != failure) {
+        throw failure;
+      }
       return results.stream().map(CommandResult::exitCode).filter(exitCode -> 0 != exitCode).findFirst().orElse(0);
     }
   }
