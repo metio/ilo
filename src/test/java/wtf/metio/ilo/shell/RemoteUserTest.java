@@ -6,6 +6,10 @@ package wtf.metio.ilo.shell;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
+import uk.org.webcompere.systemstubs.stream.SystemErr;
 
 import java.util.List;
 import java.util.function.Function;
@@ -15,11 +19,16 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("RemoteUser")
+@ExtendWith(SystemStubsExtension.class)
 class RemoteUserTest {
 
-  // Distinguishes the inspect probe (returns the image's user), the 'docker info' probe (reports a
-  // rootful daemon), and the 'id' probe (reports the user's UID/GID); anything else returns nothing.
+  // Distinguishes the usermod/groupmod probe (reports the tools are present), the inspect probe
+  // (returns the image's user), the 'docker info' probe (reports a rootful daemon), and the 'id' probe
+  // (reports the user's UID/GID); anything else returns nothing.
   private static final Function<List<String>, String> CAPTURE = args -> {
+    if (args.stream().anyMatch(arg -> arg.contains("usermod"))) {
+      return "ok";
+    }
     if (args.contains("inspect")) {
       return "vscode";
     }
@@ -118,6 +127,69 @@ class RemoteUserTest {
     RemoteUser.resolve(new Podman(), options, CAPTURE);
     assertEquals("vscode", options.remoteUser);
     assertEquals(RemoteUserMapping.KEEP_ID, options.userMapping);
+  }
+
+  @Test
+  @DisplayName("builds the derived image when the remap can be performed")
+  void remapBuildsDerivedImage() {
+    final var options = options(true, "node", "python:3");
+    assertEquals(RemoteUserMapping.REMAP, RemoteUser.prepareRemap(new Docker(), options, CAPTURE, "1000", "1000"));
+    assertTrue(options.image.startsWith("ilo-remote-user:"), options.image);
+  }
+
+  @Test
+  @DisplayName("falls back to the host user when the image lacks usermod/groupmod")
+  void remapWithoutUserToolsFallsBackToHostUser() {
+    final var options = options(true, "node", "python:3");
+    assertEquals(RemoteUserMapping.HOST_USER, RemoteUser.prepareRemap(new Docker(), options, args -> "", "1000", "1000"));
+    assertNull(options.containerfile, "no derived image is built");
+  }
+
+  @Test
+  @DisplayName("falls back to the host user for a user name that cannot be safely remapped")
+  void remapWithUnsafeUserFallsBackToHostUser() {
+    final var options = options(true, "bad user; rm", "python:3");
+    assertEquals(RemoteUserMapping.HOST_USER, RemoteUser.prepareRemap(new Docker(), options, CAPTURE, "1000", "1000"));
+  }
+
+  @Test
+  @DisplayName("falls back to the host user for a numeric user, which usermod cannot take")
+  void remapWithNumericUserFallsBackToHostUser() {
+    final var options = options(true, "1000", "python:3");
+    assertEquals(RemoteUserMapping.HOST_USER, RemoteUser.prepareRemap(new Docker(), options, CAPTURE, "1000", "1000"));
+  }
+
+  @Test
+  @DisplayName("skips alignment when the host UID/GID cannot be determined")
+  void remapWithUnknownHostIdsIsSkipped() {
+    final var options = options(true, "node", "python:3");
+    assertEquals(RemoteUserMapping.NONE, RemoteUser.prepareRemap(new Docker(), options, CAPTURE, "$(id -u)", "1000"));
+  }
+
+  @Test
+  @DisplayName("falls back to the host user when the derived image cannot be written")
+  void remapWriteFailureFallsBackToHostUser(final SystemProperties properties) throws Exception {
+    properties.set("java.io.tmpdir", "/does/not/exist");
+    final var options = options(true, "node", "python:3");
+    assertEquals(RemoteUserMapping.HOST_USER, RemoteUser.prepareRemap(new Docker(), options, CAPTURE, "1000", "1000"));
+  }
+
+  @Test
+  @DisplayName("warns when auto-detecting a user but the image is not available yet")
+  void warnsWhenImageUnavailable(final SystemErr systemErr) {
+    final var options = options(true, null, "missing:image");
+    RemoteUser.resolve(new Podman(), options, args -> "");
+    assertEquals(RemoteUserMapping.NONE, options.userMapping);
+    assertTrue(systemErr.getText().contains("not available"), systemErr.getText());
+  }
+
+  @Test
+  @DisplayName("does not warn for a present root image")
+  void doesNotWarnForPresentRootImage(final SystemErr systemErr) {
+    final var options = options(true, null, "alpine");
+    RemoteUser.resolve(new Podman(), options, args -> args.contains("{{.Id}}") ? "sha256:abc" : "");
+    assertEquals(RemoteUserMapping.NONE, options.userMapping);
+    assertTrue(systemErr.getText().isBlank(), systemErr.getText());
   }
 
   private static ShellOptions options(final boolean enabled, final String remoteUser, final String image) {

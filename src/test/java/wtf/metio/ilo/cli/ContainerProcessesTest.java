@@ -46,6 +46,55 @@ class ContainerProcessesTest {
     assertTrue(ContainerProcesses.hasSessions(output));
   }
 
+  // docker top reports HOST PIDs, so the keepalive is not PID 1 — it is recognised by its command
+  // marker (the sleep duration) instead, which appears in both the shell and its sleep child.
+  private static final String HOST_PID_KEEPALIVE = """
+      UID  PID    PPID   COMMAND
+      root 12345  12340  sh -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done
+      root 12346  12345  sleep 2147483647
+      """;
+
+  @Test
+  @DisplayName("recognises a host-PID keepalive by its command marker (docker top)")
+  void hostPidKeepaliveOnly() {
+    assertFalse(ContainerProcesses.hasSessions(HOST_PID_KEEPALIVE));
+  }
+
+  @Test
+  @DisplayName("detects a session alongside a host-PID keepalive (docker top)")
+  void hostPidWithSession() {
+    assertTrue(ContainerProcesses.hasSessions(HOST_PID_KEEPALIVE + "root 12399 12340 bash\n"));
+  }
+
+  // --no-override-command on docker: no keepalive marker and host PIDs, so the container's own main
+  // process is identified by its inspected host PID (5000 here) instead of PID 1.
+  private static final String HOST_PID_MAIN_PROCESS = """
+      UID  PID   PPID  COMMAND
+      root 5000  4990  /sbin/init --serve
+      root 5001  5000  worker
+      """;
+
+  @Test
+  @DisplayName("excludes the main process and its children by inspected host PID (docker, no keepalive)")
+  void hostPidMainProcessOnly() {
+    assertFalse(ContainerProcesses.hasSessions(HOST_PID_MAIN_PROCESS, "5000"));
+  }
+
+  @Test
+  @DisplayName("detects a session beside the host-PID main process")
+  void hostPidMainProcessWithSession() {
+    // An exec'd session is a child of the runtime shim (PPID 4990), not of the main process (5000).
+    assertTrue(ContainerProcesses.hasSessions(HOST_PID_MAIN_PROCESS + "root 5050 4990 bash\n", "5000"));
+  }
+
+  @Test
+  @DisplayName("without an inspected main PID the host-PID main process is miscounted as a session")
+  void hostPidMainProcessNeedsInspect() {
+    // Confirms the inspected PID is what closes the gap: with no marker and host PIDs, the main process
+    // is otherwise indistinguishable from a session.
+    assertTrue(ContainerProcesses.hasSessions(HOST_PID_MAIN_PROCESS));
+  }
+
   @Test
   @DisplayName("treats empty output as no session")
   void emptyOutput() {

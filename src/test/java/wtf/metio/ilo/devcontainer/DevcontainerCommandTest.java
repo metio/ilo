@@ -11,6 +11,7 @@ import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.io.TempDir;
 import picocli.CommandLine;
+import wtf.metio.devcontainer.BuildBuilder;
 import wtf.metio.devcontainer.Command;
 import wtf.metio.devcontainer.DevcontainerBuilder;
 import wtf.metio.devcontainer.UserEnvProbe;
@@ -20,11 +21,13 @@ import wtf.metio.ilo.shell.ShellOptions;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -232,6 +235,42 @@ class DevcontainerCommandTest {
         .remoteEnv(Map.of())
         .create();
     assertTrue(DevcontainerCommand.unsupportedFields(devcontainer).isEmpty());
+  }
+
+  @Test
+  void usesShellPathForAnImageDevcontainer() {
+    final var devcontainer = DevcontainerBuilder.builder().image("example:1").create();
+    assertTrue(DevcontainerCommand.usesImageOrDockerfile(devcontainer));
+  }
+
+  @Test
+  void usesShellPathForADockerfileOnlyDevcontainer() {
+    final var devcontainer = DevcontainerBuilder.builder()
+        .build(BuildBuilder.builder().dockerfile("Dockerfile").create())
+        .create();
+    assertTrue(DevcontainerCommand.usesImageOrDockerfile(devcontainer));
+  }
+
+  @Test
+  void doesNotUseShellPathWithoutImageOrDockerfile() {
+    assertFalse(DevcontainerCommand.usesImageOrDockerfile(DevcontainerBuilder.builder().create()));
+  }
+
+  @Test
+  void imageTagKeepsAnExplicitImage() {
+    final var devcontainer = DevcontainerBuilder.builder().image("example:1").create();
+    assertEquals("example:1", DevcontainerCommand.imageTag(devcontainer, Paths.get("/p/.devcontainer/devcontainer.json")));
+  }
+
+  @Test
+  void imageTagSynthesizesAStableTagForADockerfileOnlyDevcontainer() {
+    final var devcontainer = DevcontainerBuilder.builder()
+        .build(BuildBuilder.builder().dockerfile("Dockerfile").create())
+        .create();
+    final var json = Paths.get("/p/.devcontainer/devcontainer.json");
+    final var tag = DevcontainerCommand.imageTag(devcontainer, json);
+    assertTrue(tag.startsWith("ilo-devcontainer-"), tag);
+    assertEquals(tag, DevcontainerCommand.imageTag(devcontainer, json), "tag must be stable for the same definition");
   }
 
   @Test

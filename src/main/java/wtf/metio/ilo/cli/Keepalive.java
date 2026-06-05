@@ -22,9 +22,17 @@ public final class Keepalive {
   /** The executable run as the container's entrypoint. */
   public static final String ENTRYPOINT = "sh";
 
+  /**
+   * The keepalive's sleep duration in seconds (~68 years). It doubles as the marker that identifies
+   * the keepalive's own processes — it appears in both the keepalive shell's command line and its
+   * {@code sleep} child — so {@link ContainerProcesses} can tell the keepalive apart from an attached
+   * session whatever PIDs the runtime's {@code top} reports.
+   */
+  public static final String SLEEP_SECONDS = "2147483647";
+
   /** The script run by the entrypoint, passed after a {@code -c} flag. */
   public static final String SCRIPT =
-      "trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done";
+      "trap 'exit 0' TERM INT; while true; do sleep " + SLEEP_SECONDS + " & wait $!; done";
 
   /** The entrypoint and its script as a single argument list ({@code sh -c "<script>"}). */
   public static List<String> command() {
