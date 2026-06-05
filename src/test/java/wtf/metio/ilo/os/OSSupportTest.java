@@ -40,12 +40,7 @@ class OSSupportTest {
   void appliesExpansionToEachValue() {
     final var expand = new OSSupport.Expander(new ParameterExpansion() {
       @Override
-      String substituteCommands(final String value) {
-        return value;
-      }
-
-      @Override
-      String expandParameters(final String value) {
+      String expand(final String value) {
         return value.toUpperCase(Locale.ROOT);
       }
     });
@@ -54,21 +49,16 @@ class OSSupportTest {
   }
 
   @Test
-  @DisplayName("expands parameters before substituting commands")
-  void expandsParametersBeforeCommands() {
+  @DisplayName("delegates each value to the shell expansion")
+  void delegatesToExpansion() {
     final var expand = new OSSupport.Expander(new ParameterExpansion() {
       @Override
-      String substituteCommands(final String value) {
-        return value + ":cmd";
-      }
-
-      @Override
-      String expandParameters(final String value) {
-        return value + ":param";
+      String expand(final String value) {
+        return value + ":expanded";
       }
     });
 
-    assertEquals("v:param:cmd", expand.expand("v"));
+    assertEquals("v:expanded", expand.expand("v"));
   }
 
   @Test

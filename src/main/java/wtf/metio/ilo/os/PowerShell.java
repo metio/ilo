@@ -7,19 +7,13 @@ package wtf.metio.ilo.os;
 import wtf.metio.ilo.cli.Executables;
 
 import java.nio.file.Path;
-import java.util.regex.Pattern;
 
 /**
  * Support for Windows PowerShell
  *
  * @see <a href="https://microsoft.com/powershell">PowerShell</a>
  */
-final class PowerShell extends ParameterExpansion {
-
-  private static final String PARAMETER_STYLE = String.format("(?<%s>\\$[a-zA-Z][a-zA-Z0-9_]*)", MATCHER_GROUP_NAME);
-
-  // visible for testing
-  static final Pattern PARAMETER_PATTERN = Pattern.compile(PARAMETER_STYLE);
+final class PowerShell extends ShellExpansion {
 
   private final Path shellBinary;
 
@@ -28,17 +22,19 @@ final class PowerShell extends ParameterExpansion {
   }
 
   @Override
-  public String substituteCommands(final String value) {
-    // '$(...)' is scanned with balanced parentheses so nested substitutions survive.
-    return substituteBalanced(value,
-        command -> Executables.runForExpansion(shellBinary.toString(), "-OutputFormat", "Text", "-Command", command));
+  String commandOutput(final String script) {
+    return Executables.runForExpansion(shellBinary.toString(), "-OutputFormat", "Text", "-Command", script);
   }
 
   @Override
-  public String expandParameters(final String value) {
-    return replace(expandTilde(value),
-        parameter -> Executables.runForExpansion(shellBinary.toString(), "-OutputFormat", "Text", "-Command", parameterCommand(parameter)),
-        PARAMETER_PATTERN);
+  String parameterValue(final String reference) {
+    return Executables.runForExpansion(shellBinary.toString(), "-OutputFormat", "Text", "-Command", parameterCommand(reference));
+  }
+
+  @Override
+  boolean backticksAreCommands() {
+    // PowerShell uses the backtick as its escape character, not for command substitution.
+    return false;
   }
 
   // visible for testing

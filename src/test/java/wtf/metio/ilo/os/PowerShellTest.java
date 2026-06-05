@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
-import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static wtf.metio.ilo.os.ParameterExpansion.MATCHER_GROUP_NAME;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("PowerShell")
 class PowerShellTest {
@@ -37,69 +37,6 @@ class PowerShellTest {
   }
 
   @Nested
-  @DisplayName("balanced command substitution")
-  class BalancedTest {
-
-    // The replacer is a marker, so the shell binary is never invoked: these tests run on any host.
-    private final PowerShell shell = new PowerShell(Path.of("pwsh"));
-
-    @Test
-    @DisplayName("substitutes a single command")
-    void substitutesSingleCommand() {
-      assertEquals("[some-command --with-option]",
-          shell.substituteBalanced("$(some-command --with-option)", inner -> "[" + inner + "]"));
-    }
-
-    @Test
-    @DisplayName("substitutes multiple commands")
-    void substitutesMultipleCommands() {
-      assertEquals("[some-command --with-option]:[other --option]",
-          shell.substituteBalanced("$(some-command --with-option):$(other --option)", inner -> "[" + inner + "]"));
-    }
-
-    @Test
-    @DisplayName("hands a nested command to the replacer as a single unit")
-    void handsNestedCommandToReplacer() {
-      assertEquals("[Get-Date $(Get-Random)]",
-          shell.substituteBalanced("$(Get-Date $(Get-Random))", inner -> "[" + inner + "]"));
-    }
-
-    @Test
-    @DisplayName("leaves an unbalanced command substitution untouched")
-    void leavesUnbalancedSubstitutionUntouched() {
-      assertEquals("prefix:$(Get-Date",
-          shell.substituteBalanced("prefix:$(Get-Date", inner -> "[" + inner + "]"));
-    }
-
-  }
-
-  @Nested
-  @DisplayName("regex")
-  class Regex {
-
-    @Test
-    @DisplayName("regex for parameter")
-    void regexMatchesParameter() {
-      final var matcher = PowerShell.PARAMETER_PATTERN.matcher("$HOME");
-      assertAll("new style",
-          () -> assertTrue(matcher.find(), "matches"),
-          () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "extraction"));
-    }
-
-    @Test
-    @DisplayName("regex for parameters")
-    void regexMatchesParameters() {
-      final var matcher = PowerShell.PARAMETER_PATTERN.matcher("$HOME:$OTHER");
-      assertAll("new style",
-          () -> assertTrue(matcher.find(), "first matches"),
-          () -> assertEquals("$HOME", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
-          () -> assertTrue(matcher.find(), "second matches"),
-          () -> assertEquals("$OTHER", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
-    }
-
-  }
-
-  @Nested
   @DisplayName("expansion")
   @EnabledOnOs({OS.WINDOWS})
   class Expansion {
@@ -112,37 +49,36 @@ class PowerShellTest {
     }
 
     @Test
-    @DisplayName("replaces parameter")
-    void replacesParameter() {
-      final var result = powerShell.replace("$HOME:abc", input -> "test", PowerShell.PARAMETER_PATTERN);
-      assertEquals("test:abc", result);
-    }
-
-    @Test
     @DisplayName("expands an environment variable to its value")
     void expandsEnvironmentVariable() {
       // OS is always set to "Windows_NT" on Windows; this exercises the real PowerShell, so it catches
       // a parameter command that echoes its text literally or reads '$OS' instead of '$env:OS'.
-      assertEquals(System.getenv("OS"), powerShell.expandParameters("$OS"));
+      assertEquals(System.getenv("OS"), powerShell.expand("$OS"));
+    }
+
+    @Test
+    @DisplayName("expands a braced environment variable to its value")
+    void expandsBracedEnvironmentVariable() {
+      assertEquals(System.getenv("OS"), powerShell.expand("${OS}"));
     }
 
     @Test
     @DisplayName("expands an environment variable surrounded by constants")
     void expandsEnvironmentVariableAmongConstants() {
-      assertEquals(System.getenv("OS") + ":tail", powerShell.expandParameters("$OS:tail"));
+      assertEquals(System.getenv("OS") + ":tail", powerShell.expand("$OS:tail"));
     }
 
     @Test
     @DisplayName("expands multiple environment variables in one value")
     void expandsMultipleEnvironmentVariables() {
       assertEquals(System.getenv("OS") + ":" + System.getenv("USERNAME"),
-          powerShell.expandParameters("$OS:$USERNAME"));
+          powerShell.expand("$OS:$USERNAME"));
     }
 
     @Test
     @DisplayName("expands an unset environment variable to an empty string")
     void expandsUnsetVariableToEmpty() {
-      assertEquals(":done", powerShell.expandParameters("$ILO_DEFINITELY_NOT_SET_VARIABLE:done"));
+      assertEquals(":done", powerShell.expand("$ILO_DEFINITELY_NOT_SET_VARIABLE:done"));
     }
 
     @Test
@@ -155,35 +91,24 @@ class PowerShellTest {
     }
 
     @Test
-    @DisplayName("keeps constants as-is in parameters")
-    void keepConstantsInParameters() {
-      assertEquals("1000:1000", powerShell.expandParameters("1000:1000"));
-    }
-
-    @Test
-    @DisplayName("keeps constants as-is in commands")
-    void keepConstantsInCommands() {
-      assertEquals("1000:1000", powerShell.substituteCommands("1000:1000"));
+    @DisplayName("keeps constants as-is")
+    void keepsConstants() {
+      assertEquals("1000:1000", powerShell.expand("1000:1000"));
     }
 
     @Test
     @DisplayName("substitutes commands with their results")
-    void substituteCommands() {
-      assertEquals("hello:world", powerShell.substituteCommands("$(echo hello):$(echo world)"));
+    void substitutesCommands() {
+      assertEquals("hello:world", powerShell.expand("$(echo hello):$(echo world)"));
     }
 
     @Test
-    @DisplayName("substitutes command with its result and keeps constant")
-    void substituteCommandAndKeepConstant() {
-      assertEquals("hello:1234", powerShell.substituteCommands("$(echo hello):1234"));
+    @DisplayName("substitutes a command and keeps a surrounding constant")
+    void substitutesCommandAmongConstants() {
+      assertAll(
+          () -> assertEquals("hello:1234", powerShell.expand("$(echo hello):1234")),
+          () -> assertEquals("1234:world", powerShell.expand("1234:$(echo world)")));
     }
-
-    @Test
-    @DisplayName("substitutes command with its result and keeps constant")
-    void keepConstantAndSubstituteCommand() {
-      assertEquals("1234:world", powerShell.substituteCommands("1234:$(echo world)"));
-    }
-
   }
 
 }
