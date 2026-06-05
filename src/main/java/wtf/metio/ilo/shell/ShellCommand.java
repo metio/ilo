@@ -64,12 +64,13 @@ public final class ShellCommand implements Callable<Integer> {
     final var projectDir = System.getProperty("user.dir");
     final var containerName = ShellContainer.name(options, projectDir);
     sweepStaleContainers(tool, projectDir, containerName);
-    // '--pull' has to recreate the container: a reused container would never see the freshly pulled
-    // image, so the flag would otherwise do nothing.
-    final var fresh = options.fresh || options.pull;
     // Probe the container state once and reuse it for every decision below as well as the session run,
     // rather than probing again inside the lifecycle.
     final var state = executor.probe().state(tool.probeArguments(options, containerName));
+    // '--pull' has to recreate the container: a reused container would never see the freshly pulled
+    // image, so the flag would otherwise do nothing. A paused container is recreated too, since it
+    // cannot be started.
+    final var fresh = options.fresh || options.pull || ContainerState.PAUSED == state;
     final var creating = fresh || ContainerState.ABSENT == state;
     // A keep-id mapping pinned to the user's UID/GID needs the user's in-image IDs, read by probing the
     // image. That probe only matters when the container is created — a reused one already has them baked
@@ -105,6 +106,10 @@ public final class ShellCommand implements Callable<Integer> {
   // its image to restore clean-slate-every-run.
   private List<List<String>> teardown(final ShellCLI tool, final String containerName) {
     if (otherSessionsAttached(tool, containerName)) {
+      if (options.removeImage) {
+        System.err.println("ilo: another session is still attached, so --remove-image is skipped; "
+            + "the container and its image are kept for the other session.");
+      }
       return List.of();
     }
     if (options.removeImage) {

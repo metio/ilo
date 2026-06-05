@@ -184,6 +184,9 @@ public final class Executables {
 
   // visible for testing
   static String runAndReadOutput(final Duration timeout, final String... arguments) {
+    if (null == arguments || 0 == arguments.length) {
+      return "";
+    }
     final Process process;
     try {
       // Stderr is inherited rather than captured: it never fills a pipe ilo would have to drain (so

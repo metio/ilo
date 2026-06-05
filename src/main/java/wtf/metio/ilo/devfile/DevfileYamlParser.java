@@ -79,7 +79,11 @@ final class DevfileYamlParser {
   private static List<String> strings(final JsonNode node) {
     final var values = new ArrayList<String>();
     for (final var value : node) {
-      values.add(value.stringValue(null));
+      // A non-string scalar (e.g. a number in a command array) is coerced to its text rather than
+      // becoming a null token; an explicit null element is dropped rather than rendered as "null".
+      if (!value.isNull()) {
+        values.add(value.asString());
+      }
     }
     return values;
   }

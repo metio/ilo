@@ -62,10 +62,12 @@ final class DevcontainerOptionsMapper {
     return opts;
   }
 
-  // forwardPorts are published 1:1 (host == container); appPort entries are passed through verbatim.
+  // A bare forwardPorts entry is published 1:1 (host == container); a 'host:port' entry already names
+  // both sides and is forwarded verbatim. appPort entries are always passed through verbatim.
   private static List<String> ports(final Devcontainer devcontainer) {
     return Stream.concat(
-            Stream.ofNullable(devcontainer.forwardPorts()).flatMap(Collection::stream).map(port -> port + ":" + port),
+            Stream.ofNullable(devcontainer.forwardPorts()).flatMap(Collection::stream)
+                .map(port -> port.contains(":") ? port : port + ":" + port),
             Stream.ofNullable(devcontainer.appPort()).flatMap(Collection::stream))
         .toList();
   }

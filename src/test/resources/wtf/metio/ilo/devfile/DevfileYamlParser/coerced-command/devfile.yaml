@@ -1,0 +1,9 @@
+schemaVersion: 2.2.0
+metadata:
+  name: coerced-command
+components:
+  - name: dev
+    container:
+      image: docker.io/library/alpine:3
+      command: [echo, 8080, null]
+      args: [--retries, 3]

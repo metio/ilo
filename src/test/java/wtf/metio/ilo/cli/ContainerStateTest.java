@@ -32,9 +32,16 @@ class ContainerStateTest {
 
   @ParameterizedTest
   @DisplayName("treats any other non-blank state as stopped")
-  @ValueSource(strings = {"exited", "created", "paused", "dead"})
+  @ValueSource(strings = {"exited", "created", "dead"})
   void shouldDetectStopped(final String probeOutput) {
     assertEquals(ContainerState.STOPPED, ContainerState.fromProbe(probeOutput));
+  }
+
+  @ParameterizedTest
+  @DisplayName("treats a paused state as paused, case-insensitively")
+  @ValueSource(strings = {"paused", "Paused", " PAUSED "})
+  void shouldDetectPaused(final String probeOutput) {
+    assertEquals(ContainerState.PAUSED, ContainerState.fromProbe(probeOutput));
   }
 
   @Test

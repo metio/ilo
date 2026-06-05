@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.stream.SystemErr;
 import wtf.metio.ilo.cli.ContainerState;
 import wtf.metio.ilo.test.TestMethodSources;
 
@@ -100,6 +101,16 @@ class ShellCommandTest extends TestMethodSources {
 
   @ParameterizedTest
   @MethodSource("dockerLikeRuntimes")
+  @DisplayName("recreates a paused container, which cannot be started")
+  void recreatesPausedContainer(final String runtime) {
+    useRuntime(runtime);
+    executor.probeState(ContainerState.PAUSED);
+    shell.call();
+    assertIterableEquals(List.of("rm", "run", "exec", "stop"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
   @DisplayName("removes the container and recreates it when fresh")
   void recreateWhenFresh(final String runtime) {
     useRuntime(runtime);
@@ -165,6 +176,20 @@ class ShellCommandTest extends TestMethodSources {
     executor.probeState(ContainerState.RUNNING);
     shell.call();
     assertIterableEquals(List.of("rm", "pull", "run", "exec", "stop"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("warns that --remove-image is skipped while another session is attached")
+  void removeImageSkippedWhileAttachedWarns(final String runtime, final SystemErr systemErr) {
+    useRuntime(runtime);
+    options.removeImage = true;
+    // A process beyond the keepalive means another terminal is attached, so the image is kept.
+    executor.processesOutput("PID PPID COMMAND\n1 0 sh\n2 1 sleep\n42 0 bash\n");
+    executor.probeState(ContainerState.RUNNING);
+    shell.call();
+    assertIterableEquals(List.of("exec"), operations());
+    assertTrue(systemErr.getText().contains("remove-image"), systemErr.getText());
   }
 
   @ParameterizedTest

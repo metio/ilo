@@ -20,7 +20,10 @@ public enum ContainerState {
   STOPPED,
 
   /** A container exists and is currently running. */
-  RUNNING;
+  RUNNING,
+
+  /** A container exists but is paused; it cannot be started, only unpaused or recreated. */
+  PAUSED;
 
   /**
    * Interprets the output of a {@code ps --format '{{.State}}'} probe. The probe filters on the exact
@@ -33,8 +36,14 @@ public enum ContainerState {
     if (null == probeOutput || probeOutput.isBlank()) {
       return ABSENT;
     }
-    final var firstLine = probeOutput.strip().lines().findFirst().orElse("").strip();
-    return "running".equals(firstLine.toLowerCase(Locale.ROOT)) ? RUNNING : STOPPED;
+    final var firstLine = probeOutput.strip().lines().findFirst().orElse("").strip().toLowerCase(Locale.ROOT);
+    return switch (firstLine) {
+      case "running" -> RUNNING;
+      // A paused container rejects 'start', so it is reported separately and recreated rather than
+      // reused; every other non-running state ('exited', 'created', …) is startable.
+      case "paused" -> PAUSED;
+      default -> STOPPED;
+    };
   }
 
 }
