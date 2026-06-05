@@ -37,8 +37,8 @@ class ParameterExpansionTest {
   @Test
   @DisplayName("applies every pattern in the given order")
   void appliesAllPatterns() {
-    final var result = expansion.replace("$(cmd):$HOME", input -> "X",
-        PosixShell.NEW_COMMAND_PATTERN, PosixShell.PARAMETER_PATTERN);
+    final var result = expansion.replace("`cmd`:$HOME", input -> "X",
+        PosixShell.OLD_COMMAND_PATTERN, PosixShell.PARAMETER_PATTERN);
     assertEquals("X:X", result);
   }
 

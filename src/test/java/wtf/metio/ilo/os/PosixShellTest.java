@@ -14,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.properties.SystemProperties;
 
+import java.nio.file.Path;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.os.ParameterExpansion.MATCHER_GROUP_NAME;
 
@@ -31,32 +33,12 @@ class PosixShellTest {
   class RegexTest {
 
     @Test
-    @DisplayName("regex for command using new style")
-    void regexMatchesCommandWithNewStyle() {
-      final var matcher = PosixShell.NEW_COMMAND_PATTERN.matcher("$(some-command --with-option)");
-      assertAll("new style",
-          () -> assertTrue(matcher.find(), "matches"),
-          () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "extraction"));
-    }
-
-    @Test
     @DisplayName("regex for command using old style")
     void regexMatchesCommandWithOldStyle() {
       final var matcher = PosixShell.OLD_COMMAND_PATTERN.matcher("`some-command --with-option`");
       assertAll("old style",
           () -> assertTrue(matcher.find(), "matches"),
           () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "extraction"));
-    }
-
-    @Test
-    @DisplayName("regex for commands using new style")
-    void regexMatchesCommandsWithNewStyle() {
-      final var matcher = PosixShell.NEW_COMMAND_PATTERN.matcher("$(some-command --with-option):$(other --option)");
-      assertAll("new style",
-          () -> assertTrue(matcher.find(), "first match"),
-          () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
-          () -> assertTrue(matcher.find(), "second match"),
-          () -> assertEquals("other --option", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
     }
 
     @Test
@@ -113,6 +95,51 @@ class PosixShellTest {
   }
 
   @Nested
+  @DisplayName("balanced command substitution")
+  class BalancedTest {
+
+    // The replacer is a marker, so the shell binary is never invoked: these tests run on any host.
+    private final PosixShell shell = new PosixShell(Path.of("/bin/sh"));
+
+    @Test
+    @DisplayName("leaves a value without a command substitution untouched")
+    void leavesPlainValueUntouched() {
+      assertEquals("1000:1000", shell.substituteBalanced("1000:1000", inner -> "[" + inner + "]"));
+    }
+
+    @Test
+    @DisplayName("substitutes a single command")
+    void substitutesSingleCommand() {
+      assertEquals("[some-command --with-option]",
+          shell.substituteBalanced("$(some-command --with-option)", inner -> "[" + inner + "]"));
+    }
+
+    @Test
+    @DisplayName("substitutes multiple commands")
+    void substitutesMultipleCommands() {
+      assertEquals("[some-command --with-option]:[other --option]",
+          shell.substituteBalanced("$(some-command --with-option):$(other --option)", inner -> "[" + inner + "]"));
+    }
+
+    @Test
+    @DisplayName("hands a nested command to the replacer as a single unit")
+    void handsNestedCommandToReplacer() {
+      // A regex bounded by '[^)]+' would stop at the first ')'; the balanced scan keeps the inner
+      // '$(echo nested)' as part of the outer command's body for the shell to evaluate.
+      assertEquals("[echo $(echo nested)]",
+          shell.substituteBalanced("$(echo $(echo nested))", inner -> "[" + inner + "]"));
+    }
+
+    @Test
+    @DisplayName("leaves an unbalanced command substitution untouched")
+    void leavesUnbalancedSubstitutionUntouched() {
+      assertEquals("prefix:$(echo unclosed",
+          shell.substituteBalanced("prefix:$(echo unclosed", inner -> "[" + inner + "]"));
+    }
+
+  }
+
+  @Nested
   @DisplayName("expansion")
   @EnabledOnOs({OS.LINUX, OS.MAC})
   @ExtendWith(SystemStubsExtension.class)
@@ -140,17 +167,21 @@ class PosixShellTest {
     }
 
     @Test
-    @DisplayName("replaces command with new style")
-    void replacesCommandWithNewStyle() {
-      final var result = bourneShell.replace("$(id -u):abc", input -> "test", PosixShell.NEW_COMMAND_PATTERN);
-      assertEquals("test:abc", result);
+    @DisplayName("substitutes a nested command via the real shell")
+    void substitutesNestedCommand() {
+      assertEquals("nested", bourneShell.substituteCommands("$(echo $(echo nested))"));
     }
 
     @Test
-    @DisplayName("replaces commands with new style")
-    void replacesCommandsWithNewStyle() {
-      final var result = bourneShell.replace("$(id -u):$(id -u)", input -> "test", PosixShell.NEW_COMMAND_PATTERN);
-      assertEquals("test:test", result);
+    @DisplayName("keeps interior and leading whitespace in command output, trimming only trailing newlines")
+    void keepsInteriorWhitespaceInCommandOutput() {
+      assertEquals("  spaced  ", bourneShell.substituteCommands("$(printf '  spaced  \\n')"));
+    }
+
+    @Test
+    @DisplayName("uses the output of a failing command as-is rather than aborting")
+    void usesFailingCommandOutputAsIs() {
+      assertEquals("partial", bourneShell.substituteCommands("$(printf partial; false)"));
     }
 
     @Test

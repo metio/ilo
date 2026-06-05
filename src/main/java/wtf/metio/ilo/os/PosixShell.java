@@ -16,13 +16,11 @@ import java.util.regex.Pattern;
  */
 final class PosixShell extends ParameterExpansion {
 
-  private static final String NEW_COMMAND_STYLE = String.format("\\$\\((?<%s>[^)]+)\\)", MATCHER_GROUP_NAME);
   private static final String OLD_COMMAND_STYLE = String.format("`(?<%s>[^`]+)`", MATCHER_GROUP_NAME);
   private static final String PARAMETER_STYLE = String.format("(?<%s>\\$[a-zA-Z][a-zA-Z0-9_]*)", MATCHER_GROUP_NAME);
   private static final String PARAMETER_WITH_BRACES_STYLE = String.format("(?<%s>\\$\\{[a-zA-Z][a-zA-Z0-9_]*})", MATCHER_GROUP_NAME);
 
   // visible for testing
-  static final Pattern NEW_COMMAND_PATTERN = Pattern.compile(NEW_COMMAND_STYLE);
   static final Pattern OLD_COMMAND_PATTERN = Pattern.compile(OLD_COMMAND_STYLE);
   static final Pattern PARAMETER_WITH_BRACES_PATTERN = Pattern.compile(PARAMETER_WITH_BRACES_STYLE);
   static final Pattern PARAMETER_PATTERN = Pattern.compile(PARAMETER_STYLE);
@@ -35,15 +33,19 @@ final class PosixShell extends ParameterExpansion {
 
   @Override
   public String substituteCommands(final String value) {
-    return replace(value,
-        command -> Executables.runAndReadOutput(shellBinary.toString(), "-c", command),
-        NEW_COMMAND_PATTERN, OLD_COMMAND_PATTERN);
+    // New-style '$(...)' is scanned with balanced parentheses so nested substitutions survive; the
+    // old-style backtick form (which does not nest) is handled by a regex.
+    final var newStyle = substituteBalanced(value,
+        command -> Executables.runForExpansion(shellBinary.toString(), "-c", command));
+    return replace(newStyle,
+        command -> Executables.runForExpansion(shellBinary.toString(), "-c", command),
+        OLD_COMMAND_PATTERN);
   }
 
   @Override
   public String expandParameters(final String value) {
     return replace(expandTilde(value),
-        parameter -> Executables.runAndReadOutput("/usr/bin/env", shellBinary.toString(), "-c", parameterCommand(parameter)),
+        parameter -> Executables.runForExpansion("/usr/bin/env", shellBinary.toString(), "-c", parameterCommand(parameter)),
         PARAMETER_WITH_BRACES_PATTERN, PARAMETER_PATTERN);
   }
 
