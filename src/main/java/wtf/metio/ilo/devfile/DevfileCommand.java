@@ -133,7 +133,11 @@ public final class DevfileCommand implements Callable<Integer> {
     opts.mountProjectDir = true;
     opts.image = image.imageName();
     opts.containerfile = image.dockerfile().uri();
-    opts.context = image.dockerfile().buildContext();
+    // buildContext is optional in the devfile schema and defaults to the project root; without a
+    // default the build would run with no context path and the runtime would reject it.
+    opts.context = Optional.ofNullable(image.dockerfile().buildContext())
+        .filter(Strings::isNotBlank)
+        .orElse(".");
     return opts;
   }
 

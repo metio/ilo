@@ -14,6 +14,7 @@ import picocli.CommandLine;
 import wtf.metio.devcontainer.BuildBuilder;
 import wtf.metio.devcontainer.Command;
 import wtf.metio.devcontainer.DevcontainerBuilder;
+import wtf.metio.devcontainer.Mount;
 import wtf.metio.devcontainer.UserEnvProbe;
 import wtf.metio.ilo.shell.Docker;
 import wtf.metio.ilo.shell.ShellOptions;
@@ -221,6 +222,72 @@ class DevcontainerCommandTest {
         .create();
     assertIterableEquals(List.of("features"),
         DevcontainerCommand.unsupportedFields(devcontainer));
+  }
+
+  @Test
+  void unsupportedFieldsReportsFieldsDroppedOnTheComposePath() {
+    // The compose path delegates container creation to docker-compose/podman-compose, so the fields
+    // ilo applies itself on the image/Dockerfile path have no effect and must be reported.
+    final var devcontainer = DevcontainerBuilder.builder()
+        .dockerComposeFile(List.of("docker-compose.yml"))
+        .service("app")
+        .onCreateCommand(Command.builder().string("on-create").create())
+        .updateContentCommand(Command.builder().string("update-content").create())
+        .postCreateCommand(Command.builder().string("npm install").create())
+        .postStartCommand(Command.builder().string("post-start").create())
+        .postAttachCommand(Command.builder().string("post-attach").create())
+        .containerEnv(Map.of("FOO", "bar"))
+        .remoteEnv(Map.of("BAR", "baz"))
+        .userEnvProbe(UserEnvProbe.loginInteractiveShell)
+        .forwardPorts(List.of("8080"))
+        .appPort(List.of("9090"))
+        .runArgs(List.of("--privileged"))
+        .mounts(List.of(new Mount("type=bind,source=/a,target=/b", null)))
+        .create();
+
+    assertIterableEquals(List.of(
+            "onCreateCommand", "updateContentCommand", "postCreateCommand", "postStartCommand",
+            "postAttachCommand", "containerEnv", "remoteEnv", "userEnvProbe", "forwardPorts",
+            "appPort", "runArgs", "mounts"),
+        DevcontainerCommand.unsupportedFields(devcontainer));
+  }
+
+  @Test
+  void unsupportedFieldsDoesNotReportLifecycleFieldsOnTheShellPath() {
+    // On the image/Dockerfile path these fields are honored, so they must not be reported.
+    final var devcontainer = DevcontainerBuilder.builder()
+        .image("example:1")
+        .postCreateCommand(Command.builder().string("npm install").create())
+        .containerEnv(Map.of("FOO", "bar"))
+        .remoteEnv(Map.of("BAR", "baz"))
+        .userEnvProbe(UserEnvProbe.loginInteractiveShell)
+        .forwardPorts(List.of("8080"))
+        .runArgs(List.of("--privileged"))
+        .create();
+
+    assertTrue(DevcontainerCommand.unsupportedFields(devcontainer).isEmpty());
+  }
+
+  @Test
+  void unsupportedFieldsReportsFeaturesAlongsideComposeDroppedFields() {
+    final var devcontainer = DevcontainerBuilder.builder()
+        .dockerComposeFile(List.of("docker-compose.yml"))
+        .features(Map.of("ghcr.io/devcontainers/features/node:1", Map.of("version", "lts")))
+        .postCreateCommand(Command.builder().string("npm install").create())
+        .create();
+
+    assertIterableEquals(List.of("features", "postCreateCommand"),
+        DevcontainerCommand.unsupportedFields(devcontainer));
+  }
+
+  @Test
+  void unsupportedFieldsIgnoresEmptyComposeFileList() {
+    final var devcontainer = DevcontainerBuilder.builder()
+        .dockerComposeFile(List.of())
+        .postCreateCommand(Command.builder().string("npm install").create())
+        .create();
+
+    assertTrue(DevcontainerCommand.unsupportedFields(devcontainer).isEmpty());
   }
 
   @Test

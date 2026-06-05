@@ -116,6 +116,39 @@ class DevfileCommandTest {
   }
 
   @Test
+  @DisplayName("defaults the build context to the project root when the dockerfile omits one")
+  void shouldDefaultLocalDockerfileContextWhenAbsent() {
+    final var devfile = devfile(new Component("image", emptyContainer(),
+        new Image("image:latest", new Dockerfile("Dockerfile", null))));
+
+    final var shellOptions = DevfileCommand.mapOptions(new DevfileOptions(), devfile);
+
+    assertEquals(".", shellOptions.context);
+  }
+
+  @Test
+  @DisplayName("defaults the build context to the project root when the dockerfile context is blank")
+  void shouldDefaultLocalDockerfileContextWhenBlank() {
+    final var devfile = devfile(new Component("image", emptyContainer(),
+        new Image("image:latest", new Dockerfile("Dockerfile", "   "))));
+
+    final var shellOptions = DevfileCommand.mapOptions(new DevfileOptions(), devfile);
+
+    assertEquals(".", shellOptions.context);
+  }
+
+  @Test
+  @DisplayName("keeps an explicit build context")
+  void shouldKeepExplicitLocalDockerfileContext() {
+    final var devfile = devfile(new Component("image", emptyContainer(),
+        new Image("image:latest", new Dockerfile("docker/Dockerfile", "subdir"))));
+
+    final var shellOptions = DevfileCommand.mapOptions(new DevfileOptions(), devfile);
+
+    assertEquals("subdir", shellOptions.context);
+  }
+
+  @Test
   @DisplayName("maps the first supported component when no component is requested")
   void shouldMapFirstSupportedComponentWhenNoneRequested() {
     final var devfile = devfile(

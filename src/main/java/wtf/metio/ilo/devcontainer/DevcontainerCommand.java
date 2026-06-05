@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -70,7 +71,7 @@ public final class DevcontainerCommand implements Callable<Integer> {
       }
     }
 
-    if (Objects.nonNull(devcontainer.dockerComposeFile()) && !devcontainer.dockerComposeFile().isEmpty()) {
+    if (isComposeBased(devcontainer)) {
       final var command = new ComposeCommand();
       command.options = composeOptions(options, devcontainer, json);
       return command.call();
@@ -124,11 +125,66 @@ public final class DevcontainerCommand implements Callable<Integer> {
     if (isNotEmpty(devcontainer.features())) {
       ignored.add("features");
     }
+    if (isComposeBased(devcontainer)) {
+      addComposeDroppedFields(devcontainer, ignored);
+    }
     return ignored;
+  }
+
+  // The compose path hands container creation to docker-compose/podman-compose, so the devcontainer
+  // fields ilo applies itself on the image/Dockerfile path — the in-container lifecycle commands, the
+  // environment, the forwarded ports, and the run customizations — have no effect there. They are
+  // reported so a dropped effect is not mistaken for a silent success. initializeCommand is left out:
+  // it runs on the host before either path, so it is honored regardless.
+  private static void addComposeDroppedFields(final Devcontainer devcontainer, final List<String> ignored) {
+    if (Objects.nonNull(devcontainer.onCreateCommand())) {
+      ignored.add("onCreateCommand");
+    }
+    if (Objects.nonNull(devcontainer.updateContentCommand())) {
+      ignored.add("updateContentCommand");
+    }
+    if (Objects.nonNull(devcontainer.postCreateCommand())) {
+      ignored.add("postCreateCommand");
+    }
+    if (Objects.nonNull(devcontainer.postStartCommand())) {
+      ignored.add("postStartCommand");
+    }
+    if (Objects.nonNull(devcontainer.postAttachCommand())) {
+      ignored.add("postAttachCommand");
+    }
+    if (isNotEmpty(devcontainer.containerEnv())) {
+      ignored.add("containerEnv");
+    }
+    if (isNotEmpty(devcontainer.remoteEnv())) {
+      ignored.add("remoteEnv");
+    }
+    if (Objects.nonNull(devcontainer.userEnvProbe())) {
+      ignored.add("userEnvProbe");
+    }
+    if (isNotEmpty(devcontainer.forwardPorts())) {
+      ignored.add("forwardPorts");
+    }
+    if (isNotEmpty(devcontainer.appPort())) {
+      ignored.add("appPort");
+    }
+    if (isNotEmpty(devcontainer.runArgs())) {
+      ignored.add("runArgs");
+    }
+    if (isNotEmpty(devcontainer.mounts())) {
+      ignored.add("mounts");
+    }
+  }
+
+  private static boolean isComposeBased(final Devcontainer devcontainer) {
+    return Objects.nonNull(devcontainer.dockerComposeFile()) && !devcontainer.dockerComposeFile().isEmpty();
   }
 
   private static boolean isNotEmpty(final Map<String, ?> map) {
     return Objects.nonNull(map) && !map.isEmpty();
+  }
+
+  private static boolean isNotEmpty(final Collection<?> collection) {
+    return Objects.nonNull(collection) && !collection.isEmpty();
   }
 
   // The full devcontainer.json contents, read best-effort, used as extra container-identity material.
