@@ -81,7 +81,7 @@ public final class ComposeCommand implements Callable<Integer> {
     // 'up --detach' is idempotent, so a compose session always takes the create path regardless of any
     // observed state.
     return SessionLifecycle.run(steps, SessionLifecycle.Lifecycle.none(),
-        options.fresh, options.debug, executor::execute, ContainerState.ABSENT);
+        options.fresh, options.debug, executor.sessionExecutor(), ContainerState.ABSENT);
   }
 
   // The keepalive override is layered onto the project's compose file(s) for the 'up' step only; the

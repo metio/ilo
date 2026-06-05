@@ -6,7 +6,12 @@ package wtf.metio.ilo.cli;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.stream.SystemOut;
+import wtf.metio.ilo.errors.RuntimeIOException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,9 +20,11 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("SessionLifecycle")
+@ExtendWith(SystemStubsExtension.class)
 class SessionLifecycleTest {
 
   // Each step carries a single marker token so the executed sequence is easy to assert.
@@ -138,6 +145,42 @@ class SessionLifecycleTest {
     assertEquals(0, exitCode);
     assertTrue(executor.executed.containsAll(List.of("a", "b")), executor.executed.toString());
     assertTrue(executor.executed.contains("attach"));
+  }
+
+  @Test
+  @DisplayName("prints each parallel command's captured output as a whole block")
+  void shouldPrintCapturedParallelOutput(final SystemOut systemOut) {
+    final var executor = new SessionLifecycle.Executor() {
+      @Override
+      public int execute(final List<String> arguments, final boolean debug) {
+        return 0;
+      }
+
+      @Override
+      public SessionLifecycle.CommandResult executeCaptured(final List<String> arguments, final boolean debug) {
+        return new SessionLifecycle.CommandResult(0, "output-of-" + arguments.get(0) + "\n");
+      }
+    };
+    final var lifecycle = new SessionLifecycle.Lifecycle(
+        List.of(List.of(List.of("a"), List.of("b"))), List.of(), List.of());
+    SessionLifecycle.run(STEPS, lifecycle, false, false, executor, ContainerState.ABSENT);
+    assertTrue(systemOut.getText().contains("output-of-a"), systemOut.getText());
+    assertTrue(systemOut.getText().contains("output-of-b"), systemOut.getText());
+  }
+
+  @Test
+  @DisplayName("propagates a parallel command's business exception unwrapped, not as a CompletionException")
+  void shouldUnwrapBusinessExceptionFromParallelStep() {
+    final SessionLifecycle.Executor executor = (arguments, debug) -> {
+      if (arguments.contains("a") || arguments.contains("b")) {
+        throw new RuntimeIOException(new IOException("boom"));
+      }
+      return 0;
+    };
+    final var lifecycle = new SessionLifecycle.Lifecycle(
+        List.of(List.of(List.of("a"), List.of("b"))), List.of(), List.of());
+    assertThrows(RuntimeIOException.class,
+        () -> SessionLifecycle.run(STEPS, lifecycle, false, false, executor, ContainerState.ABSENT));
   }
 
   @Test
