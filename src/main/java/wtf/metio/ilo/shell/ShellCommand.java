@@ -86,7 +86,7 @@ public final class ShellCommand implements Callable<Integer> {
         tool.attachArguments(options, containerName),
         () -> teardown(tool, containerName));
     return SessionLifecycle.run(steps, lifecycle.apply(tool, containerName),
-        fresh, options.debug, executor::execute, state);
+        fresh, options.debug, executor.sessionExecutor(), state);
   }
 
   // Keeps only the container matching the current definition: removes this project's stopped

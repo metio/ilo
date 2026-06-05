@@ -6,6 +6,8 @@ package wtf.metio.ilo.cli;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.Executors;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
@@ -29,9 +31,23 @@ import java.util.function.Supplier;
 public final class SessionLifecycle {
 
   /** Runs a command line, returning its exit code. An empty argument list is a no-op returning zero. */
-  @FunctionalInterface
   public interface Executor {
+
     int execute(List<String> arguments, boolean debug);
+
+    /**
+     * Runs a command line capturing its (combined) output instead of inheriting the terminal, so the
+     * caller can print it as one block. Used for the parallel steps of a phase, where inheriting would
+     * let concurrent commands interleave on the terminal. The default keeps the inheriting behavior and
+     * captures nothing, which suits in-process test doubles.
+     */
+    default CommandResult executeCaptured(final List<String> arguments, final boolean debug) {
+      return new CommandResult(execute(arguments, debug), "");
+    }
+  }
+
+  /** The exit code and captured output of a command run via {@link Executor#executeCaptured}. */
+  public record CommandResult(int exitCode, String output) {
   }
 
   /** Observes the current container state by running and interpreting the probe command line. */
@@ -159,8 +175,11 @@ public final class SessionLifecycle {
     return 0;
   }
 
-  // Runs one step's command lines: a single command runs inline, several run in parallel. All are
-  // awaited and the first non-zero exit code is surfaced, so a failure in any command fails the step.
+  // Runs one step's command lines: a single command runs inline (inheriting the terminal), several run
+  // in parallel. The parallel commands run on virtual threads (so the blocking subprocess waits do not
+  // tie up the shared common pool) with their output captured; each captured block is printed whole
+  // afterwards so concurrent commands do not interleave on the terminal. All are awaited and the first
+  // non-zero exit code is surfaced, so a failure in any command fails the step.
   private static int runStep(
       final List<List<String>> commands,
       final boolean debug,
@@ -168,13 +187,31 @@ public final class SessionLifecycle {
     if (1 == commands.size()) {
       return executor.execute(commands.get(0), debug);
     }
-    final var futures = commands.stream()
-        .map(command -> CompletableFuture.supplyAsync(() -> executor.execute(command, debug)))
-        .toList();
-    // Await every command before reporting, so a failure never leaves a sibling still running against
-    // the container; then surface the first non-zero exit code.
-    final var exitCodes = futures.stream().map(CompletableFuture::join).toList();
-    return exitCodes.stream().filter(exitCode -> 0 != exitCode).findFirst().orElse(0);
+    try (final var pool = Executors.newVirtualThreadPerTaskExecutor()) {
+      final var futures = commands.stream()
+          .map(command -> CompletableFuture.supplyAsync(() -> executor.executeCaptured(command, debug), pool))
+          .toList();
+      final var results = futures.stream().map(SessionLifecycle::await).toList();
+      results.stream()
+          .map(CommandResult::output)
+          .filter(output -> !output.isEmpty())
+          .forEach(System.out::print);
+      return results.stream().map(CommandResult::exitCode).filter(exitCode -> 0 != exitCode).findFirst().orElse(0);
+    }
+  }
+
+  // Awaits a captured command, unwrapping the CompletionException that join() raises on failure so a
+  // BusinessException keeps its identity — and therefore its mapped exit code — rather than reaching the
+  // top-level handler as a generic wrapper.
+  private static CommandResult await(final CompletableFuture<CommandResult> future) {
+    try {
+      return future.join();
+    } catch (final CompletionException exception) {
+      if (exception.getCause() instanceof final RuntimeException cause) {
+        throw cause;
+      }
+      throw exception;
+    }
   }
 
   private SessionLifecycle() {

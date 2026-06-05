@@ -133,6 +133,47 @@ public final class Executables {
     }
   }
 
+  /**
+   * Runs a command capturing its combined stdout/stderr instead of inheriting the terminal, returning
+   * the exit code and that output. Used for lifecycle commands that run in parallel, so each one's
+   * output can be printed as a single block rather than interleaving on the terminal. Stdin is closed
+   * (these commands are non-interactive), and there is no timeout — setup commands may legitimately run
+   * for a long time.
+   *
+   * @param arguments The command line to run.
+   * @param debug     Whether to echo the command line first.
+   * @return The exit code and captured combined output.
+   */
+  public static SessionLifecycle.CommandResult runAndCapture(final List<String> arguments, final boolean debug) {
+    if (null == arguments || arguments.isEmpty()) {
+      return new SessionLifecycle.CommandResult(0, "");
+    }
+    if (debug) {
+      System.err.println("ilo executes: " + String.join(" ", arguments));
+    }
+    try {
+      final var process = new ProcessBuilder(arguments)
+          .redirectErrorStream(true)
+          .start();
+      // Non-interactive: closing stdin gives the command an immediate EOF rather than the parent's.
+      process.getOutputStream().close();
+      final var output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+      return new SessionLifecycle.CommandResult(process.waitFor(), output);
+    } catch (final InterruptedException exception) {
+      throw new UnexpectedInterruptionException(exception);
+    } catch (final UnsupportedOperationException exception) {
+      throw new OperatingSystemNotSupportedException(exception);
+    } catch (final NullPointerException exception) {
+      throw new CommandListContainsNullException(exception, arguments);
+    } catch (final IndexOutOfBoundsException exception) {
+      throw new CommandListIsEmptyException(exception);
+    } catch (final SecurityException exception) {
+      throw new SecurityManagerDeniesAccessException(exception);
+    } catch (final IOException exception) {
+      throw new RuntimeIOException(exception);
+    }
+  }
+
   // The expansion commands ilo runs (command substitution, parameter expansion) are expected to be
   // near-instant; this bounds a runaway or stuck command so ilo cannot hang indefinitely.
   static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);

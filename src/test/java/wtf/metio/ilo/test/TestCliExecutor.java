@@ -29,6 +29,13 @@ public abstract class TestCliExecutor<RUNTIME extends Runtime<CLI>, CLI extends 
     return Optional.ofNullable(exitCodes.pollFirst()).orElse(0);
   }
 
+  // Records the command like execute and captures nothing, so tests never spawn a real process for the
+  // parallel (captured) lifecycle steps.
+  @Override
+  public final SessionLifecycle.CommandResult executeCaptured(final List<String> arguments, final boolean debug) {
+    return new SessionLifecycle.CommandResult(execute(arguments, debug), "");
+  }
+
   @Override
   public final SessionLifecycle.Probe probe() {
     return _ -> probeState;
