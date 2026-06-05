@@ -127,9 +127,12 @@ class PowerShellTest {
     }
 
     @Test
-    @DisplayName("expands an environment variable through the full expander")
+    @DisplayName("expands an environment variable through the expander backed by PowerShell")
     void expandsEnvironmentVariableThroughExpander() {
-      assertEquals(System.getenv("OS"), OSSupport.expander().expand("$OS"));
+      // Force PowerShell rather than auto-detecting: a Windows CI runner also has Git Bash on PATH,
+      // which auto-detection would pick instead.
+      final var expander = OSSupport.expander(() -> OSSupport.powerShell().orElseThrow());
+      assertEquals(System.getenv("OS"), expander.expand("$OS"));
     }
 
     @Test

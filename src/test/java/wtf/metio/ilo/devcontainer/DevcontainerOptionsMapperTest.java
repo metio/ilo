@@ -427,15 +427,17 @@ class DevcontainerOptionsMapperTest {
       // given
       final var options = new DevcontainerOptions();
       final var json = DevcontainerBuilder.builder().dockerComposeFile(List.of("your-compose.yml")).create();
-      // The devcontainer.json is read as an absolute path in production, so the compose file path must
-      // be resolved relative to its directory rather than relativized against the file itself.
-      final var devcontainerJson = Paths.get("/home/user/project/.devcontainer/devcontainer.json");
+      // The compose file must be resolved relative to the devcontainer.json's directory rather than
+      // relativized against the file itself; the expected path is built the same way so the assertion
+      // holds on any OS (drive letters and separators differ on Windows).
+      final var devcontainerJson = Paths.get("project", ".devcontainer", "devcontainer.json");
+      final var expected = devcontainerJson.toAbsolutePath().getParent().resolve("your-compose.yml").toString();
 
       // when
       final var composeOptions = composeOptions(options, json, devcontainerJson);
 
       // then
-      assertEquals("/home/user/project/.devcontainer/your-compose.yml", composeOptions.file.get(0));
+      assertEquals(expected, composeOptions.file.get(0));
     }
 
     @Test
