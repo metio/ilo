@@ -187,10 +187,50 @@ public final class Executables {
     if (null == arguments || 0 == arguments.length) {
       return "";
     }
+    return run(timeout, arguments).output().strip();
+  }
+
+  /**
+   * Runs a host-shell expansion command (command substitution or parameter expansion) and returns its
+   * output with trailing newlines removed — matching how a shell's {@code $(...)} trims — while, unlike
+   * {@link #runAndReadOutput}, preserving the leading and interior whitespace a value legitimately
+   * contains. A non-zero exit is reported on stderr (the command's own error is already there) and its
+   * output is used as-is, so a failed expansion is surfaced rather than silently swallowed.
+   *
+   * @param arguments The command line to run.
+   * @return The command's output with trailing newlines removed.
+   */
+  public static String runForExpansion(final String... arguments) {
+    return runForExpansion(DEFAULT_TIMEOUT, arguments);
+  }
+
+  // visible for testing
+  static String runForExpansion(final Duration timeout, final String... arguments) {
+    if (null == arguments || 0 == arguments.length) {
+      return "";
+    }
+    final var result = run(timeout, arguments);
+    if (0 != result.exitCode()) {
+      System.err.println("ilo: expansion command exited with status " + result.exitCode()
+          + "; using its output as-is: " + String.join(" ", arguments));
+    }
+    return stripTrailingNewlines(result.output());
+  }
+
+  private static String stripTrailingNewlines(final String value) {
+    var end = value.length();
+    while (end > 0 && ('\n' == value.charAt(end - 1) || '\r' == value.charAt(end - 1))) {
+      end--;
+    }
+    return value.substring(0, end);
+  }
+
+  // Runs a command, draining its stdout on a separate thread, and returns the exit code with the raw
+  // (untrimmed) output. Stderr is inherited rather than captured: it never fills a pipe ilo would have
+  // to drain (so a command that floods stderr cannot deadlock), and the user still sees the errors.
+  private static Captured run(final Duration timeout, final String... arguments) {
     final Process process;
     try {
-      // Stderr is inherited rather than captured: it never fills a pipe ilo would have to drain (so
-      // a command that floods stderr cannot deadlock), and the user still sees the command's errors.
       process = new ProcessBuilder(arguments)
           .redirectError(ProcessBuilder.Redirect.INHERIT)
           .start();
@@ -230,7 +270,10 @@ public final class Executables {
       process.destroyForcibly();
       throw new CommandTimedOutException(timeout.toSeconds(), String.join(" ", arguments));
     }
-    return captured.get().strip();
+    return new Captured(process.exitValue(), captured.get());
+  }
+
+  private record Captured(int exitCode, String output) {
   }
 
   private Executables() {

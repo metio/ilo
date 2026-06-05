@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
+import java.nio.file.Path;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.os.ParameterExpansion.MATCHER_GROUP_NAME;
 
@@ -35,28 +37,45 @@ class PowerShellTest {
   }
 
   @Nested
+  @DisplayName("balanced command substitution")
+  class BalancedTest {
+
+    // The replacer is a marker, so the shell binary is never invoked: these tests run on any host.
+    private final PowerShell shell = new PowerShell(Path.of("pwsh"));
+
+    @Test
+    @DisplayName("substitutes a single command")
+    void substitutesSingleCommand() {
+      assertEquals("[some-command --with-option]",
+          shell.substituteBalanced("$(some-command --with-option)", inner -> "[" + inner + "]"));
+    }
+
+    @Test
+    @DisplayName("substitutes multiple commands")
+    void substitutesMultipleCommands() {
+      assertEquals("[some-command --with-option]:[other --option]",
+          shell.substituteBalanced("$(some-command --with-option):$(other --option)", inner -> "[" + inner + "]"));
+    }
+
+    @Test
+    @DisplayName("hands a nested command to the replacer as a single unit")
+    void handsNestedCommandToReplacer() {
+      assertEquals("[Get-Date $(Get-Random)]",
+          shell.substituteBalanced("$(Get-Date $(Get-Random))", inner -> "[" + inner + "]"));
+    }
+
+    @Test
+    @DisplayName("leaves an unbalanced command substitution untouched")
+    void leavesUnbalancedSubstitutionUntouched() {
+      assertEquals("prefix:$(Get-Date",
+          shell.substituteBalanced("prefix:$(Get-Date", inner -> "[" + inner + "]"));
+    }
+
+  }
+
+  @Nested
   @DisplayName("regex")
   class Regex {
-
-    @Test
-    @DisplayName("regex for command")
-    void regexMatchesCommand() {
-      final var matcher = PowerShell.COMMAND_PATTERN.matcher("$(some-command --with-option)");
-      assertAll("new style",
-          () -> assertTrue(matcher.find(), "matches"),
-          () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "extraction"));
-    }
-
-    @Test
-    @DisplayName("regex for commands")
-    void regexMatchesCommands() {
-      final var matcher = PowerShell.COMMAND_PATTERN.matcher("$(some-command --with-option):$(other --option)");
-      assertAll("new style",
-          () -> assertTrue(matcher.find(), "first match"),
-          () -> assertEquals("some-command --with-option", matcher.group(MATCHER_GROUP_NAME), "first extraction"),
-          () -> assertTrue(matcher.find(), "second match"),
-          () -> assertEquals("other --option", matcher.group(MATCHER_GROUP_NAME), "second extraction"));
-    }
 
     @Test
     @DisplayName("regex for parameter")
@@ -133,20 +152,6 @@ class PowerShellTest {
       // which auto-detection would pick instead.
       final var expander = OSSupport.expander(() -> OSSupport.powerShell().orElseThrow());
       assertEquals(System.getenv("OS"), expander.expand("$OS"));
-    }
-
-    @Test
-    @DisplayName("replaces command")
-    void replacesCommandWithNewStyle() {
-      final var result = powerShell.replace("$(id -u):abc", input -> "test", PowerShell.COMMAND_PATTERN);
-      assertEquals("test:abc", result);
-    }
-
-    @Test
-    @DisplayName("replaces commands")
-    void replacesCommandsWithNewStyle() {
-      final var result = powerShell.replace("$(id -u):$(id -u)", input -> "test", PowerShell.COMMAND_PATTERN);
-      assertEquals("test:test", result);
     }
 
     @Test

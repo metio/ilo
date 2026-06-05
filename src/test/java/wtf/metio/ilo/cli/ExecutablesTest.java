@@ -332,6 +332,30 @@ class ExecutablesTest {
   }
 
   @Test
+  @DisplayName("captures nothing for empty expansion arguments instead of throwing")
+  void runForExpansionCapturesNothingForEmptyArguments() {
+    assertEquals("", Executables.runForExpansion());
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("removes only trailing newlines and keeps interior and leading whitespace")
+  void runForExpansionTrimsOnlyTrailingNewlines() {
+    assertEquals("  spaced value  ",
+        Executables.runForExpansion(java.time.Duration.ofSeconds(10), "sh", "-c", "printf '  spaced value  \\n\\n'"));
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("uses the output of a failing command as-is and reports the exit status on stderr")
+  void runForExpansionUsesFailingCommandOutput(final SystemErr systemErr) {
+    final var output = Executables.runForExpansion(java.time.Duration.ofSeconds(10), "sh", "-c", "printf partial; exit 3");
+    assertAll(
+        () -> assertEquals("partial", output),
+        () -> assertTrue(systemErr.getText().contains("status 3"), systemErr.getText()));
+  }
+
+  @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("does not resolve a Windows executable without its extension on non-Windows hosts")
   void doesNotResolveWindowsExecutableOnNonWindows(

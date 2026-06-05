@@ -16,11 +16,9 @@ import java.util.regex.Pattern;
  */
 final class PowerShell extends ParameterExpansion {
 
-  private static final String COMMAND_STYLE = String.format("\\$\\((?<%s>[^)]+)\\)", MATCHER_GROUP_NAME);
   private static final String PARAMETER_STYLE = String.format("(?<%s>\\$[a-zA-Z][a-zA-Z0-9_]*)", MATCHER_GROUP_NAME);
 
   // visible for testing
-  static final Pattern COMMAND_PATTERN = Pattern.compile(COMMAND_STYLE);
   static final Pattern PARAMETER_PATTERN = Pattern.compile(PARAMETER_STYLE);
 
   private final Path shellBinary;
@@ -31,15 +29,15 @@ final class PowerShell extends ParameterExpansion {
 
   @Override
   public String substituteCommands(final String value) {
-    return replace(value,
-        command -> Executables.runAndReadOutput(shellBinary.toString(), "-OutputFormat", "Text", "-Command", command),
-        COMMAND_PATTERN);
+    // '$(...)' is scanned with balanced parentheses so nested substitutions survive.
+    return substituteBalanced(value,
+        command -> Executables.runForExpansion(shellBinary.toString(), "-OutputFormat", "Text", "-Command", command));
   }
 
   @Override
   public String expandParameters(final String value) {
     return replace(expandTilde(value),
-        parameter -> Executables.runAndReadOutput(shellBinary.toString(), "-OutputFormat", "Text", "-Command", parameterCommand(parameter)),
+        parameter -> Executables.runForExpansion(shellBinary.toString(), "-OutputFormat", "Text", "-Command", parameterCommand(parameter)),
         PARAMETER_PATTERN);
   }
 
