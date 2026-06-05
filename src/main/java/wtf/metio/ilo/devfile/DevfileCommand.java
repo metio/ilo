@@ -10,7 +10,6 @@ import wtf.metio.ilo.devfile.DevfileYaml.Container;
 import wtf.metio.ilo.devfile.DevfileYaml.Image;
 import wtf.metio.ilo.shell.ShellCommand;
 import wtf.metio.ilo.shell.ShellOptions;
-import wtf.metio.ilo.utils.Streams;
 import wtf.metio.ilo.utils.Strings;
 import wtf.metio.ilo.version.VersionProvider;
 
@@ -124,7 +123,9 @@ public final class DevfileCommand implements Callable<Integer> {
         .filter(env -> Objects.nonNull(env.name()) && Objects.nonNull(env.value()))
         .map(env -> String.format("%s=%s", env.name(), env.value()))
         .toList();
-    opts.commands = Streams.fromLists(container.command(), container.args()).toList();
+    // The container's command/args define its main process (PID 1). ilo's keepalive replaces that so
+    // the container stays up for reuse, and attaching opens the configured shell — so the devfile
+    // command/args are deliberately not carried into 'commands' (which would run on attach instead).
     return opts;
   }
 

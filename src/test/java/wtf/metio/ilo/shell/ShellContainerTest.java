@@ -6,9 +6,12 @@ package wtf.metio.ilo.shell;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("ShellContainer")
+@ExtendWith(SystemStubsExtension.class)
 class ShellContainerTest {
 
   private static final String PROJECT = "/home/user/my-project";
@@ -96,6 +100,32 @@ class ShellContainerTest {
     final var other = options();
     other.identitySource("postCreateCommand: npm install");
     assertNotEquals(ShellContainer.fingerprint(options(), PROJECT), ShellContainer.fingerprint(other, PROJECT));
+  }
+
+  @Test
+  @DisplayName("fingerprint is computed over expanded option values, so a changed expansion recreates")
+  void fingerprintExpandsValues(final SystemProperties properties) {
+    final var options = options();
+    options.volumes = List.of("~/cache:/cache");
+
+    properties.set("user.home", "/home/alice");
+    final var alice = ShellContainer.fingerprint(options, PROJECT);
+    properties.set("user.home", "/home/bob");
+    final var bob = ShellContainer.fingerprint(options, PROJECT);
+
+    assertNotEquals(alice, bob);
+  }
+
+  @Test
+  @DisplayName("fingerprint matches for values that expand to the same result")
+  void fingerprintEqualForEquivalentExpansions(final SystemProperties properties) {
+    properties.set("user.home", "/home/alice");
+    final var withTilde = options();
+    withTilde.volumes = List.of("~/cache:/cache");
+    final var expanded = options();
+    expanded.volumes = List.of("/home/alice/cache:/cache");
+
+    assertEquals(ShellContainer.fingerprint(withTilde, PROJECT), ShellContainer.fingerprint(expanded, PROJECT));
   }
 
   @Test

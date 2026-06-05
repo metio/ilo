@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -83,7 +84,23 @@ class DevfileCommandTest {
         () -> assertTrue(shellOptions.mountProjectDir, "mountProjectDir"),
         () -> assertEquals("/workspace", shellOptions.workingDir, "workingDir"),
         () -> assertEquals(List.of("FOO=bar"), shellOptions.variables, "variables"),
-        () -> assertEquals(List.of("sleep", "infinity"), shellOptions.commands, "commands"));
+        // The container's command/args define its PID 1, which the keepalive replaces; routing them
+        // into 'commands' would make the interactive attach run them instead of opening a shell.
+        () -> assertNull(shellOptions.commands, "commands"));
+  }
+
+  @Test
+  @DisplayName("does not run the container's command/args on attach, so an interactive shell opens")
+  void shouldNotRouteContainerCommandIntoTheAttachShell() {
+    final var container = new Container("maven:latest", false, null,
+        List.of("tail"), List.of("-f", "/dev/null"), List.of());
+    final var devfile = devfile(new Component("container", container, emptyImage()));
+
+    final var shellOptions = DevfileCommand.mapOptions(new DevfileOptions(), devfile);
+
+    assertAll(
+        () -> assertNull(shellOptions.commands, "the keepalive command must not become the attach command"),
+        () -> assertTrue(shellOptions.interactive, "the session is interactive"));
   }
 
   @Test

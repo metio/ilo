@@ -5,13 +5,13 @@
 package wtf.metio.ilo.shell;
 
 import wtf.metio.ilo.cli.ContainerNaming;
+import wtf.metio.ilo.os.OSSupport;
 import wtf.metio.ilo.utils.Strings;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -60,32 +60,35 @@ final class ShellContainer {
 
   // visible for testing
   static String fingerprint(final ShellOptions options, final String projectDir) {
+    // The container is created from values run through host-shell expansion, so identity is computed
+    // over the same expanded strings: a value whose expansion changes (e.g. '${HOME}/cache' after HOME
+    // changes) yields a different name and a fresh container, rather than silently reusing a stale one
+    // built from a different definition. Only the fields the create/build commands actually expand are
+    // expanded here; workingDir, remoteUser and the booleans are used raw there too.
+    final var expand = OSSupport.expander();
+    final var containerfile = expand.expand(options.containerfile);
     final var parts = new ArrayList<String>();
     parts.add(projectDir);
-    parts.add(Objects.toString(options.image, ""));
-    parts.add(Objects.toString(options.containerfile, ""));
-    parts.add(Objects.toString(options.context, ""));
+    parts.add(Objects.toString(expand.expand(options.image), ""));
+    parts.add(Objects.toString(containerfile, ""));
+    parts.add(Objects.toString(expand.expand(options.context), ""));
     parts.add(Objects.toString(options.workingDir, ""));
-    parts.add(Objects.toString(options.hostname, ""));
+    parts.add(Objects.toString(expand.expand(options.hostname), ""));
     parts.add(Boolean.toString(options.mountProjectDir));
-    parts.add(Objects.toString(options.workspaceMount, ""));
+    parts.add(Objects.toString(expand.expand(options.workspaceMount), ""));
     // The override changes the created container's entrypoint/command, so toggling it must recreate.
     parts.add(Boolean.toString(options.overrideCommand));
     parts.add(Objects.toString(options.userMapping, ""));
     parts.add(Objects.toString(options.remoteUser, ""));
-    parts.addAll(values(options.runtimeOptions));
-    parts.addAll(values(options.runtimeBuildOptions));
-    parts.addAll(values(options.runtimeRunOptions));
-    parts.addAll(values(options.volumes));
-    parts.addAll(values(options.variables));
-    parts.addAll(values(options.ports));
-    parts.add(containerfileContent(options.containerfile));
+    parts.addAll(expand.expand(options.runtimeOptions));
+    parts.addAll(expand.expand(options.runtimeBuildOptions));
+    parts.addAll(expand.expand(options.runtimeRunOptions));
+    parts.addAll(expand.expand(options.volumes));
+    parts.addAll(expand.expand(options.variables));
+    parts.addAll(expand.expand(options.ports));
+    parts.add(containerfileContent(containerfile));
     parts.add(Objects.toString(options.identitySource(), ""));
     return String.join(SEPARATOR, parts);
-  }
-
-  private static List<String> values(final List<String> values) {
-    return Objects.isNull(values) ? List.of() : values;
   }
 
   // The Containerfile's contents are part of the identity so editing it produces a new container. It
