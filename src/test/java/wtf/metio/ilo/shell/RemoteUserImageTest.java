@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.properties.SystemProperties;
 import wtf.metio.ilo.errors.RuntimeIOException;
@@ -198,8 +199,11 @@ class RemoteUserImageTest {
 
     @Test
     @DisplayName("reports a generated containerfile that cannot be written")
-    void unwritableTempDirectory(final SystemProperties properties) throws Exception {
-      properties.set("java.io.tmpdir", "/does/not/exist");
+    void unwritableTempDirectory(@TempDir final Path directory, final SystemProperties properties) throws Exception {
+      // Point the temp dir at a regular file: creating a subdirectory under it fails on every OS,
+      // whereas a non-existent path would be created silently on Windows.
+      final var file = Files.createFile(directory.resolve("not-a-directory"));
+      properties.set("java.io.tmpdir", file.toString());
       final var options = new ShellOptions();
       options.image = "python:3";
       options.remoteUser = "node";

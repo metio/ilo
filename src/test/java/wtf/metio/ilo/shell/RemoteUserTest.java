@@ -7,10 +7,13 @@ package wtf.metio.ilo.shell;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.properties.SystemProperties;
 import uk.org.webcompere.systemstubs.stream.SystemErr;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Function;
 
@@ -168,8 +171,11 @@ class RemoteUserTest {
 
   @Test
   @DisplayName("falls back to the host user when the derived image cannot be written")
-  void remapWriteFailureFallsBackToHostUser(final SystemProperties properties) throws Exception {
-    properties.set("java.io.tmpdir", "/does/not/exist");
+  void remapWriteFailureFallsBackToHostUser(@TempDir final Path directory, final SystemProperties properties) throws Exception {
+    // A regular file as the temp dir makes the write fail on every OS (a missing path would be created
+    // silently on Windows).
+    final var file = Files.createFile(directory.resolve("not-a-directory"));
+    properties.set("java.io.tmpdir", file.toString());
     final var options = options(true, "node", "python:3");
     assertEquals(RemoteUserMapping.HOST_USER, RemoteUser.prepareRemap(new Docker(), options, CAPTURE, "1000", "1000"));
   }
