@@ -564,6 +564,12 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <!-- With the profile active we expect integration tests to exist, so a run
+                                 that finds none (e.g. the test sources were not committed) is a failure,
+                                 not a silent pass. -->
+                            <failIfNoTests>true</failIfNoTests>
+                        </configuration>
                         <executions>
                             <execution>
                                 <goals>
