@@ -13,7 +13,11 @@ public final class PrintingExceptionHandler implements CommandLine.IExecutionExc
       final Exception exception,
       final CommandLine commandLine,
       final CommandLine.ParseResult parseResult) {
-    commandLine.getErr().println(commandLine.getColorScheme().errorText(exception.getMessage()));
+    // Fall back to the exception's type when it carries no message, so the output is never a bare
+    // "null" (BusinessExceptions always have a message; an unexpected exception may not).
+    final var message = exception.getMessage();
+    commandLine.getErr().println(commandLine.getColorScheme().errorText(
+        message != null ? message : exception.toString()));
     final var mapper = commandLine.getExitCodeExceptionMapper();
     return mapper.getExitCode(exception);
   }

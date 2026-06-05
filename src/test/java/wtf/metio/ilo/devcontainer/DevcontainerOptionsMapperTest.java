@@ -99,6 +99,13 @@ class DevcontainerOptionsMapperTest {
     }
 
     @Test
+    @DisplayName("forwards a host:port forwardPorts entry verbatim")
+    void shouldForwardHostPort() {
+      final var json = DevcontainerBuilder.builder().forwardPorts(List.of("db:5432", "8080")).create();
+      assertIterableEquals(List.of("db:5432", "8080:8080"), shellOptions(new DevcontainerOptions(), json).ports);
+    }
+
+    @Test
     @DisplayName("maps the runArgs field")
     void shouldMapRunArgs() {
       // given

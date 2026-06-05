@@ -166,6 +166,12 @@ class ExecutablesTest {
   }
 
   @Test
+  @DisplayName("captures nothing for empty arguments instead of throwing")
+  void shouldCaptureNothingForEmptyArguments() {
+    assertEquals("", Executables.runAndReadOutput());
+  }
+
+  @Test
   @DisplayName("yields no paths when PATH is unset")
   void allPathsWithoutPathVariable() {
     assertEquals(0, Executables.allPaths(null).count());

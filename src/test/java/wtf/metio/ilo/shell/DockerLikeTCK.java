@@ -91,6 +91,14 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
   }
 
   @Test
+  @DisplayName("escapes a dot in the container name so the probe filter matches it literally")
+  void probeEscapesDotInName() {
+    final var arguments = tool().probeArguments(minimal(), "ilo-my.proj-0123456789ab");
+    assertTrue(String.join(" ", arguments).contains("name=^ilo-my\\.proj-0123456789ab$"),
+        String.join(" ", arguments));
+  }
+
+  @Test
   @DisplayName("removes the container by name")
   void removeArguments() {
     final var arguments = tool().removeArguments(minimal(), CONTAINER);

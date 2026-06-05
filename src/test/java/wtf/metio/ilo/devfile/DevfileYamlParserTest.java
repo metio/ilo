@@ -30,6 +30,15 @@ class DevfileYamlParserTest {
   private static final List<String> DEFAULT_LOCATIONS = List.of(".devfile.yaml", "devfile.yaml");
 
   @Test
+  @DisplayName("coerces non-string command/args elements and drops nulls")
+  void shouldCoerceAndDropArrayElements() {
+    final var container = parseDevfile(findYamlIn("coerced-command")).components().get(0).container();
+    assertAll("coerced elements",
+        () -> assertEquals(List.of("echo", "8080"), container.command(), "container.command"),
+        () -> assertEquals(List.of("--retries", "3"), container.args(), "container.args"));
+  }
+
+  @Test
   @DisplayName("extracts the container component from container/devfile.yaml")
   void shouldParseContainer() {
     final var component = parseDevfile(findYamlIn("container")).components().get(0);

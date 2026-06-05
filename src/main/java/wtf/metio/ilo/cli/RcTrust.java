@@ -7,9 +7,11 @@ package wtf.metio.ilo.cli;
 import wtf.metio.ilo.errors.RuntimeIOException;
 
 import java.io.IOException;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -71,12 +73,29 @@ public final class RcTrust {
     entries.add(entry(runCommandFile));
     try {
       final var parent = store.toAbsolutePath().getParent();
-      if (null != parent) {
-        Files.createDirectories(parent);
+      Files.createDirectories(parent);
+      // Write to a sibling temp file and move it into place, so a crash or a concurrent writer can
+      // never leave the trust store half-written (which would silently drop trusted entries).
+      final var temp = Files.createTempFile(parent, "trusted-rc", ".tmp");
+      try {
+        Files.write(temp, entries);
+        move(temp, store);
+      } catch (final IOException exception) {
+        Files.deleteIfExists(temp);
+        throw exception;
       }
-      Files.write(store, entries);
     } catch (final IOException exception) {
       throw new RuntimeIOException(exception);
+    }
+  }
+
+  // Atomic where the filesystem supports it; otherwise a plain replace, which is still a single rename
+  // rather than an in-place truncate-and-write.
+  private static void move(final Path temp, final Path store) throws IOException {
+    try {
+      Files.move(temp, store, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+    } catch (final AtomicMoveNotSupportedException unsupported) {
+      Files.move(temp, store, StandardCopyOption.REPLACE_EXISTING);
     }
   }
 

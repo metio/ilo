@@ -53,10 +53,13 @@ abstract class DockerLike implements ShellCLI {
   @Override
   public final List<String> probeArguments(final ShellOptions options, final String containerName) {
     final var expand = OSSupport.expander();
+    // The runtimes treat 'name=' as a regex, so the '.' a slug may contain is escaped to match
+    // literally and the anchors pin it to this exact container.
+    final var nameFilter = "name=^" + containerName.replace(".", "\\.") + "$";
     return flatten(
         of(name()),
         fromList(expand.expand(options.runtimeOptions)),
-        of("ps", "--all", FILTER, "name=^" + containerName + "$", "--format", "{{.State}}"));
+        of("ps", "--all", FILTER, nameFilter, "--format", "{{.State}}"));
   }
 
   @Override
