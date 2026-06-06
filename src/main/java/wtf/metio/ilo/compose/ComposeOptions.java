@@ -29,7 +29,7 @@ public final class ComposeOptions implements Options {
 
   @CommandLine.Option(
       names = {"--debug"},
-      description = "Show additional debug information."
+      description = "Print the runtime commands to stderr before executing them."
   )
   public boolean debug;
 
@@ -112,7 +112,8 @@ public final class ComposeOptions implements Options {
 
   @CommandLine.Parameters(
       index = "0",
-      description = "Specify the service to run.",
+      description = "The compose service to attach to (the first positional argument, default 'dev'). "
+          + "Note: 'ilo compose ls' means the service named 'ls', not 'run ls in the dev service'.",
       defaultValue = "dev"
   )
   public String service;
@@ -123,7 +124,11 @@ public final class ComposeOptions implements Options {
   )
   public List<String> runServices;
 
-  @CommandLine.Parameters(index = "1..*")
+  @CommandLine.Parameters(
+      index = "1..*",
+      description = "Command to run in the service instead of the interactive shell (everything after "
+          + "the service name). When given, --shell is ignored."
+  )
   public List<String> arguments;
 
   @Override

@@ -46,6 +46,8 @@ class DevfileYamlParserTest {
     assertAll("container component",
         () -> assertEquals("maven", component.name(), "name"),
         () -> assertEquals("eclipse/maven-jdk8:latest", container.image(), "container.image"),
+        // The fixture omits mountSources; the devfile spec default is true (sources are mounted).
+        () -> assertTrue(container.mountSources(), "container.mountSources defaults to true"),
         () -> assertEquals(List.of("tail"), container.command(), "container.command"),
         () -> assertEquals(List.of("-f", "/dev/null"), container.args(), "container.args"),
         () -> assertEquals("ENV_VAR", container.env().get(0).name(), "env.name"),
@@ -61,7 +63,8 @@ class DevfileYamlParserTest {
         () -> assertEquals("outerloop-build", component.name(), "name"),
         () -> assertEquals("python-image:latest", image.imageName(), "image.imageName"),
         () -> assertEquals("docker/Dockerfile", image.dockerfile().uri(), "dockerfile.uri"),
-        () -> assertEquals(".", image.dockerfile().buildContext(), "dockerfile.buildContext"));
+        () -> assertEquals(".", image.dockerfile().buildContext(), "dockerfile.buildContext"),
+        () -> assertEquals(List.of("MY_ENV=/home/path"), image.dockerfile().args(), "dockerfile.args"));
   }
 
   @Test

@@ -14,6 +14,8 @@ import wtf.metio.ilo.utils.Strings;
 import wtf.metio.ilo.version.VersionProvider;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -61,7 +63,20 @@ public final class DevfileCommand implements Callable<Integer> {
       return shellRunner.applyAsInt(mapOptions(options, devfile));
     }
 
+    warnNoSupportedComponent(devfile, options.component);
     return CommandLine.ExitCode.USAGE;
+  }
+
+  // Explains the message-less failure: ilo can open a component that defines an image or builds from a
+  // local Dockerfile (one with a 'uri'); a component with no container/image, or one whose Dockerfile is
+  // sourced from git/a registry, is not something ilo can open. Lists the names present so a mistyped
+  // '--component' is obvious.
+  private static void warnNoSupportedComponent(final DevfileYaml devfile, final String component) {
+    final var names = devfile.components().stream().map(Component::name).filter(Objects::nonNull).toList();
+    final var what = Strings.isBlank(component)
+        ? "no component ilo can open (one with a predefined image or a local Dockerfile)"
+        : "no component named '" + component + "' that ilo can open";
+    System.err.println("ilo: " + what + " was found in this devfile. Components present: " + names + ".");
   }
 
   private static int openShell(final ShellOptions options) {
@@ -107,11 +122,30 @@ public final class DevfileCommand implements Callable<Integer> {
     opts.runtime = options.runtime;
     opts.runtimeOptions = options.runtimeOptions;
     opts.runtimePullOptions = options.runtimePullOptions;
-    opts.runtimeBuildOptions = options.runtimeBuildOptions;
+    // A local Dockerfile's build args (NAME=VALUE) become '--build-arg' pairs, ahead of any explicit
+    // --runtime-build-option so the user's CLI value can still override the devfile's.
+    opts.runtimeBuildOptions = buildOptions(options, component);
     opts.runtimeRunOptions = options.runtimeRunOptions;
     opts.runtimeCleanupOptions = options.runtimeCleanupOptions;
 
     return opts;
+  }
+
+  // The build options for the session: each devfile 'dockerfile.args' entry expanded to a '--build-arg'
+  // pair, followed by the explicit '--runtime-build-option' values. A predefined-image component
+  // contributes no Dockerfile args.
+  private static List<String> buildOptions(final DevfileOptions options, final Component component) {
+    final var buildOptions = new ArrayList<String>();
+    if (usesLocalDockerfile(component)) {
+      for (final var arg : component.image().dockerfile().args()) {
+        buildOptions.add("--build-arg");
+        buildOptions.add(arg);
+      }
+    }
+    if (Objects.nonNull(options.runtimeBuildOptions)) {
+      buildOptions.addAll(options.runtimeBuildOptions);
+    }
+    return buildOptions;
   }
 
   private static ShellOptions optionsForPredefinedImage(final Container container) {
@@ -119,6 +153,10 @@ public final class DevfileCommand implements Callable<Integer> {
     opts.mountProjectDir = container.mountSources();
     opts.workingDir = container.sourceMapping();
     opts.image = container.image();
+    container.env().stream()
+        .filter(env -> Objects.nonNull(env.name()) && Objects.isNull(env.value()))
+        .forEach(env -> System.err.println("ilo ignores the devfile environment variable '" + env.name()
+            + "' because it has no value."));
     opts.variables = container.env().stream()
         .filter(env -> Objects.nonNull(env.name()) && Objects.nonNull(env.value()))
         .map(env -> String.format("%s=%s", env.name(), env.value()))

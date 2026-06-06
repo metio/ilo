@@ -62,19 +62,42 @@ final class DevcontainerOptionsMapper {
     return opts;
   }
 
-  // A bare forwardPorts entry is published 1:1 (host == container); a 'host:port' entry already names
-  // both sides and is forwarded verbatim. appPort entries are always passed through verbatim.
+  // forwardPorts entries become '--publish' values; appPort entries are always passed through verbatim.
   private static List<String> ports(final Devcontainer devcontainer) {
     return Stream.concat(
             Stream.ofNullable(devcontainer.forwardPorts()).flatMap(Collection::stream)
-                .map(port -> port.contains(":") ? port : port + ":" + port),
+                .map(DevcontainerOptionsMapper::publishSpec)
+                .filter(Objects::nonNull),
             Stream.ofNullable(devcontainer.appPort()).flatMap(Collection::stream))
         .toList();
   }
 
+  // Turns a forwardPorts entry into a '--publish' value: a bare port is published 1:1, and a numeric
+  // 'hostPort:containerPort' is kept verbatim. A 'service:port' form (a non-numeric host) is a
+  // Compose-only concept naming another service; for a single container it has no meaning and would
+  // become a '--publish' the runtime rejects, so it is dropped with a warning instead.
+  private static String publishSpec(final String forwardPort) {
+    final var colon = forwardPort.indexOf(':');
+    if (colon < 0) {
+      return forwardPort + ":" + forwardPort;
+    }
+    if (forwardPort.substring(0, colon).matches("\\d+")) {
+      return forwardPort;
+    }
+    System.err.println("ilo ignores the forwardPorts entry '" + forwardPort + "': a 'service:port' form "
+        + "only applies to a Compose-based devcontainer, not a single-container one.");
+    return null;
+  }
+
   // Turns a name/value map (containerEnv or remoteEnv) into 'NAME=VALUE' pairs. An entry without a
-  // value is dropped rather than passed through as the literal 'NAME=null'.
+  // value is dropped — rather than passed through as the literal 'NAME=null' — and a warning names it
+  // so the drop is not mistaken for success.
   private static List<String> environment(final Map<String, String> env) {
+    Stream.ofNullable(env)
+        .flatMap(map -> map.entrySet().stream())
+        .filter(entry -> Objects.isNull(entry.getValue()))
+        .forEach(entry -> System.err.println("ilo ignores the devcontainer environment variable '"
+            + entry.getKey() + "' because it has no value."));
     return Stream.ofNullable(env)
         .flatMap(map -> map.entrySet().stream())
         .filter(entry -> Objects.nonNull(entry.getValue()))
@@ -131,7 +154,8 @@ final class DevcontainerOptionsMapper {
     };
   }
 
-  // build.args -> --build-arg NAME=VALUE, build.target -> --target, build.cacheFrom -> --cache-from.
+  // build.args -> --build-arg NAME=VALUE, build.target -> --target, build.cacheFrom -> --cache-from,
+  // build.options -> appended verbatim (they are already build-command CLI arguments).
   private static List<String> buildOptions(final Build build) {
     final var args = new ArrayList<String>();
     if (Objects.nonNull(build)) {
@@ -147,6 +171,7 @@ final class DevcontainerOptionsMapper {
         args.add("--cache-from");
         args.add(cache);
       });
+      Stream.ofNullable(build.options()).flatMap(Collection::stream).forEach(args::add);
     }
     return args;
   }

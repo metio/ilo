@@ -56,7 +56,7 @@ class ComposeCommandTest extends TestMethodSources {
     assertIterableEquals(List.of(
         call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
-        call(tool, "--file", YML, "stop")), executor.executed());
+        call(tool, "--file", YML, "stop", "dev")), executor.executed());
   }
 
   @ParameterizedTest
@@ -70,7 +70,7 @@ class ComposeCommandTest extends TestMethodSources {
         call(tool, "--file", YML, "pull"),
         call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
-        call(tool, "--file", YML, "stop")), executor.executed());
+        call(tool, "--file", YML, "stop", "dev")), executor.executed());
   }
 
   @ParameterizedTest
@@ -84,7 +84,7 @@ class ComposeCommandTest extends TestMethodSources {
         call(tool, "--file", YML, "build"),
         call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
-        call(tool, "--file", YML, "stop")), executor.executed());
+        call(tool, "--file", YML, "stop", "dev")), executor.executed());
   }
 
   @ParameterizedTest
@@ -98,7 +98,7 @@ class ComposeCommandTest extends TestMethodSources {
         call(tool, "--file", YML, "down"),
         call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
-        call(tool, "--file", YML, "stop")), executor.executed());
+        call(tool, "--file", YML, "stop", "dev")), executor.executed());
   }
 
   @ParameterizedTest
@@ -196,7 +196,30 @@ class ComposeCommandTest extends TestMethodSources {
     assertIterableEquals(List.of(
         call(tool, "--file", YML, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
-        call(tool, "--file", YML, "stop")), executor.executed());
+        call(tool, "--file", YML, "stop", "dev")), executor.executed());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("passes cleanup options to the compose down when recreating")
+  void wiresCleanupOptionsIntoDown(final String runtime) {
+    final var tool = useRuntime(runtime);
+    options.fresh = true;
+    options.runtimeCleanupOptions = List.of("--volumes");
+    compose.call();
+    assertTrue(executor.executed().contains(call(tool, "--file", YML, "down", "--volumes")),
+        executor.executed().toString());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("stops only the attached service on exit, leaving other services for other terminals")
+  void stopsOnlyTheAttachedService(final String runtime) {
+    final var tool = useRuntime(runtime);
+    options.service = "web";
+    compose.call();
+    assertTrue(executor.executed().contains(call(tool, "--file", YML, "stop", "web")),
+        executor.executed().toString());
   }
 
   @ParameterizedTest
@@ -227,7 +250,7 @@ class ComposeCommandTest extends TestMethodSources {
         () -> assertIterableEquals(List.of(
             call(tool, "--file", YML, "up", "--detach", "dev"),
             call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
-            call(tool, "--file", YML, "stop")), executor.executed()));
+            call(tool, "--file", YML, "stop", "dev")), executor.executed()));
   }
 
   @ParameterizedTest

@@ -123,6 +123,14 @@ class ShellVolumeBehaviorTest {
   }
 
   @Test
+  @DisplayName("extract local directory from a Windows drive path without splitting on the drive colon")
+  void shouldExtractWindowsDriveLocalDirectory() {
+    final var mount = "C:\\Users\\me:/container:ro";
+    final var localPart = ShellVolumeBehavior.extractLocalPart(mount);
+    assertEquals("C:\\Users\\me", localPart);
+  }
+
+  @Test
   @DisplayName("extract local directory in a mount directive without a container path")
   void shouldExtractLocalDirectoryWithoutContainerPath() {
     final var mount = "/local/directory";
@@ -137,7 +145,10 @@ class ShellVolumeBehaviorTest {
       "/host:/container:ro",
       "./relative:/container",
       "nested/path:/container",
-      "~/cache:/container"
+      "~/cache:/container",
+      ".:/container",
+      "..:/container",
+      "C:\\Users\\me:/container"
   })
   void recognizesBindMounts(final String volume) {
     assertTrue(ShellVolumeBehavior.isBindMount(volume));

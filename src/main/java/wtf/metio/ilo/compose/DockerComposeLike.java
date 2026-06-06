@@ -79,7 +79,11 @@ abstract class DockerComposeLike implements ComposeCLI {
         fromList(command));
   }
 
-  // Stops — but keeps — the services so the next 'up --detach' restarts them instead of recreating.
+  // Stops — but keeps — the attached service so the next 'up --detach' restarts it instead of
+  // recreating. Scoped to the session's own service: a bare 'compose stop' would stop the whole
+  // project, tearing down services another terminal (attached to a different service) is still using.
+  // With no service set it falls back to stopping the whole project, which is the intended behavior
+  // for an unscoped session.
   @Override
   public final List<String> stopArguments(final ComposeOptions options, final String containerName) {
     final var expand = OSSupport.expander();
@@ -87,7 +91,8 @@ abstract class DockerComposeLike implements ComposeCLI {
         of(name(), command()),
         fromList(expand.expand(options.runtimeOptions)),
         withPrefix("--file", expand.expand(options.file)),
-        of("stop"));
+        of("stop"),
+        optional("", expand.expand(options.service)));
   }
 
   // Lists the attached service's processes so the session can tell whether another terminal is still
@@ -103,7 +108,9 @@ abstract class DockerComposeLike implements ComposeCLI {
         optional("", expand.expand(options.service)));
   }
 
-  // Removes the services entirely, used to force a clean-slate recreate on the next run.
+  // Removes the services entirely (compose 'down'), used to force a clean-slate recreate on the next
+  // run. This is the compose teardown/cleanup step, so '--runtime-cleanup-option' values (e.g.
+  // '--volumes', '--rmi all') are passed to it.
   @Override
   public final List<String> removeArguments(final ComposeOptions options, final String containerName) {
     final var expand = OSSupport.expander();
@@ -111,7 +118,8 @@ abstract class DockerComposeLike implements ComposeCLI {
         of(name(), command()),
         fromList(expand.expand(options.runtimeOptions)),
         withPrefix("--file", expand.expand(options.file)),
-        of("down"));
+        of("down"),
+        fromList(expand.expand(options.runtimeCleanupOptions)));
   }
 
   private static String shell(final ComposeOptions options) {

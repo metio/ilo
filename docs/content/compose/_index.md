@@ -49,7 +49,7 @@ In order to exit the container either use exit or hit Ctrl + d:
 [you@hostname project-dir]$
 ```
 
-In case you want images to be pulled first, specify the `-pull` flag like this:
+In case you want images to be pulled first, specify the `--pull` flag like this:
 
 ```console
 [you@hostname project-dir]$ ilo compose --pull
@@ -67,7 +67,7 @@ Non-interactive CI builds can use `--no-interactive` like this:
 
 ```console
 [you@hostname project-dir]$ ilo compose --no-interactive dev mvn verify
-[you@hostname project-dir]$f
+[you@hostname project-dir]$
 ```
 
 Take a look at all available [options](./options) or use `ilo compose --help` to get a list of all options, and their default values. In order to simplify handling of long command line options, consider using [argument files](../usage/argument-files).

@@ -9,8 +9,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import picocli.CommandLine;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
+import uk.org.webcompere.systemstubs.stream.SystemErr;
 import wtf.metio.devcontainer.BuildBuilder;
 import wtf.metio.devcontainer.Command;
 import wtf.metio.devcontainer.DevcontainerBuilder;
@@ -69,11 +73,39 @@ class DevcontainerCommandTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("runs a string command through the host shell, honoring shell operators")
+  void runsStringCommandInShell() {
+    final var devcontainer = new DevcontainerCommand();
+    // 'false || true' exits 0 only when a shell evaluates it; tokenized, 'false' ignores the rest.
+    final var command = Command.builder().string("false || true").create();
+    assertEquals(CommandLine.ExitCode.OK, devcontainer.runCommand(command, false));
+  }
+
+  @Test
+  @ExtendWith(SystemStubsExtension.class)
+  @DisplayName("reports a clear message and USAGE when the devcontainer.json declares nothing to open")
+  void warnsWhenNothingToOpen(@TempDir final Path directory, final SystemProperties properties,
+      final SystemErr systemErr) throws Exception {
+    Files.writeString(directory.resolve("devcontainer.json"), "{}");
+    properties.set("user.dir", directory.toString());
+    final var command = new DevcontainerCommand();
+    command.options = new DevcontainerOptions();
+    command.options.locations = List.of("devcontainer.json");
+
+    final var exitCode = command.call();
+
+    assertEquals(CommandLine.ExitCode.USAGE, exitCode);
+    assertTrue(systemErr.getText().contains("nothing for ilo to open"), systemErr.getText());
+  }
+
+  @Test
   void shouldRunFailingStringCommand() {
     final var devcontainer = new DevcontainerCommand();
     final var command = Command.builder().string("sdlkfj").create();
     final var exitCode = devcontainer.runCommand(command, false);
-    assertEquals(CommandLine.ExitCode.USAGE, exitCode);
+    // The shell runs the command and reports its failure (e.g. 127 for "command not found").
+    assertTrue(CommandLine.ExitCode.OK != exitCode);
   }
 
   @Test
@@ -199,7 +231,8 @@ class DevcontainerCommandTest {
             Map.of("fail", Command.builder().string("sdlkfj").create()))
         .create();
     final var exitCode = devcontainer.runCommand(command, false);
-    assertEquals(CommandLine.ExitCode.USAGE, exitCode);
+    // The shell runs the command and reports its failure (e.g. 127 for "command not found").
+    assertTrue(CommandLine.ExitCode.OK != exitCode);
   }
 
   @Test

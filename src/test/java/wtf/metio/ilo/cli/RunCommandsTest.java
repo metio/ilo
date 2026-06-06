@@ -70,6 +70,16 @@ class RunCommandsTest {
   }
 
   @Test
+  @DisplayName("treats a blank ILO_RC as unset and falls back to trust-gated auto-discovery")
+  void blankIloRcFallsBackToDiscovery(final uk.org.webcompere.systemstubs.environment.EnvironmentVariables environmentVariables) {
+    environmentVariables.set(EnvironmentVariables.ILO_RC.name(), "");
+    // The auto-discovery path runs (and consults the gate), unlike the explicit-ILO_RC path which would
+    // resolve the empty value to nothing; with the gate allowing, the project's .ilo.rc is found.
+    final var found = RunCommands.locate(testResources(RunCommands.class).resolve("root"), path -> true);
+    assertEquals(1, found.count());
+  }
+
+  @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("does not gate files specified explicitly via ILO_RC")
   void doesNotGateExplicitFiles(final uk.org.webcompere.systemstubs.environment.EnvironmentVariables environmentVariables) {

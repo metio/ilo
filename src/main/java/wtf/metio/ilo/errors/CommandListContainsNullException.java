@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 public final class CommandListContainsNullException extends BusinessException {
 
   public CommandListContainsNullException(final NullPointerException exception, final List<String> args) {
-    super(101, exception, args.stream().collect(Collectors.joining(", ", "[", "]")));
+    super(101, exception, "The generated command list contains a null entry - this is a bug in ilo! Command: "
+        + args.stream().collect(Collectors.joining(", ", "[", "]")));
   }
 
 }

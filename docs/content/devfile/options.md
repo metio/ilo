@@ -25,7 +25,7 @@ $ ilo devfile --component some-name
 $ ilo devfile
 ```
 
-By default, `--debug` is not enabled.
+By default, `--component` is not set, and `ilo` uses the first component it can open.
 
 ## `--debug`
 

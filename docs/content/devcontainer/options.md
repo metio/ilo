@@ -46,10 +46,10 @@ Each command may be a string (run through the container's shell), an array (run 
 
 | Supported | Not supported |
 | --- | --- |
-| `image`, `build` (`dockerfile`, `context`, `args`, `target`, `cacheFrom`) | `features` |
+| `image`, `build` (`dockerfile`, `context`, `args`, `target`, `cacheFrom`, `options`) | `features` |
 | `dockerComposeFile`, `service` | `customizations` (e.g. VS Code extensions/settings) |
-| `workspaceFolder`, `containerEnv`, `mounts`, `forwardPorts`, `appPort` | `secrets`, `hostRequirements` |
-| `containerUser`/`remoteUser`, `runArgs`, `init`, `privileged`, `capAdd`, `securityOpt` | `waitFor`, `userEnvProbe` |
+| `workspaceFolder`, `containerEnv`, `remoteEnv`, `mounts`, `forwardPorts`, `appPort` | `secrets`, `hostRequirements` |
+| `containerUser`/`remoteUser`, `runArgs`, `init`, `privileged`, `capAdd`, `securityOpt`, `userEnvProbe` | `waitFor` |
 | `initializeCommand`, `onCreateCommand`, `updateContentCommand`, `postCreateCommand`, `postStartCommand`, `postAttachCommand` | |
 | `overrideCommand` (set `false` to keep the image's own long-running process) | |
 

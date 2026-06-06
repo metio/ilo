@@ -33,6 +33,11 @@ import java.util.List;
  * requires the ability to write the file at exactly that instant, and an actor with that access could
  * simply have changed the file before the run — trust is a guard against unfamiliar project files, not
  * against a local attacker who already controls them.</p>
+ *
+ * <p>Trusting is a read-modify-write under no cross-process lock, so two ilo runs trusting different
+ * files at the same instant can lose one update. The atomic move keeps the store from ever being
+ * half-written; a lost entry is benign — that file is simply re-prompted on its next run (trust fails
+ * closed), so the store self-heals rather than granting anything it should not.</p>
  */
 public final class RcTrust {
 

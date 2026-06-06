@@ -5,7 +5,7 @@ menu: main
 weight: 110
 ---
 
-The `ilo shell` command can be used to run a single container either interactively (default) or in non-interactive mode (e.g. for CI builds). It can build an image, mount directories automatically, stop containers, remove images, and customize the build environment according to the needs of your project.
+The `ilo shell` command opens a shell in a reusable build-environment container, either interactively (default) or in non-interactive mode (e.g. for CI builds). It can build an image, mount directories automatically, keep the container around for fast reuse, remove images, and customize the build environment according to the needs of your project.
 
 ```console
 # open shell for local builds in default image with default image command
@@ -39,7 +39,9 @@ In order to exit the container either use `exit` or hit `Ctrl + d`:
 [you@hostname project-dir]$
 ```
 
-Once you have exited the container, `ilo` will automatically stop and remove it. In order to remove the image as well, specify the `--remove-image` flag:
+Once you have exited the container, `ilo` stops it but keeps it for reuse, so the next `ilo shell` in the same project resumes the same container instantly (any tools you installed and changes you made are still there). A reused container is one built from the exact same definition; changing the image, `Containerfile`, or run options creates a fresh one instead. See [how a session is reused](./options) for details.
+
+To instead discard the container and its image when you exit — restoring a clean slate on the next run — pass the `--remove-image` flag:
 
 ```console
 [you@hostname project-dir]$ ilo shell --remove-image openjdk:11

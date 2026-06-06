@@ -191,6 +191,14 @@ class ShellExpansionTest {
     }
 
     @Test
+    @DisplayName("emits an unsupported brace expression literally without executing an embedded command")
+    void bracedExpressionDoesNotExecuteInnerCommand() {
+      final var shell = StubShell.marking();
+      assertEquals("${A$(uname)}", shell.expand("${A$(uname)}"));
+      assertTrue(shell.commands.isEmpty(), shell.commands.toString());
+    }
+
+    @Test
     @DisplayName("keeps a value with no expandable construct unchanged")
     void constant() {
       final var shell = StubShell.marking();

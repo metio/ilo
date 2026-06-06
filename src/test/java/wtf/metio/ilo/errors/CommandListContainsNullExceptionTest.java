@@ -24,7 +24,9 @@ class CommandListContainsNullExceptionTest {
     final var exception = new CommandListContainsNullException(new NullPointerException(), values);
     assertAll("exception",
         () -> assertEquals(101, exception.getExitCode(), "exitCode"),
-        () -> assertEquals("[test, null]", exception.getMessage(), "message"));
+        () -> assertEquals(
+            "The generated command list contains a null entry - this is a bug in ilo! Command: [test, null]",
+            exception.getMessage(), "message"));
   }
 
 }

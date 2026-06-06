@@ -99,10 +99,18 @@ class DevcontainerOptionsMapperTest {
     }
 
     @Test
-    @DisplayName("forwards a host:port forwardPorts entry verbatim")
-    void shouldForwardHostPort() {
+    @DisplayName("keeps a numeric hostPort:containerPort forwardPorts entry verbatim")
+    void shouldKeepNumericHostPort() {
+      final var json = DevcontainerBuilder.builder().forwardPorts(List.of("8080:5432", "8080")).create();
+      assertIterableEquals(List.of("8080:5432", "8080:8080"), shellOptions(new DevcontainerOptions(), json).ports);
+    }
+
+    @Test
+    @DisplayName("drops a Compose-only service:port forwardPorts entry with a warning on the single-container path")
+    void shouldDropServicePort(final SystemErr systemErr) {
       final var json = DevcontainerBuilder.builder().forwardPorts(List.of("db:5432", "8080")).create();
-      assertIterableEquals(List.of("db:5432", "8080:8080"), shellOptions(new DevcontainerOptions(), json).ports);
+      assertIterableEquals(List.of("8080:8080"), shellOptions(new DevcontainerOptions(), json).ports);
+      assertTrue(systemErr.getText().contains("db:5432"), systemErr.getText());
     }
 
     @Test
@@ -219,13 +227,14 @@ class DevcontainerOptionsMapperTest {
     }
 
     @Test
-    @DisplayName("drops containerEnv entries with a null value instead of emitting NAME=null")
-    void shouldDropNullContainerEnv() {
+    @DisplayName("drops containerEnv entries with a null value and warns about them")
+    void shouldDropNullContainerEnv(final SystemErr systemErr) {
       final var env = new HashMap<String, String>();
       env.put("KEEP", "value");
       env.put("DROP", null);
       final var json = DevcontainerBuilder.builder().containerEnv(env).create();
       assertIterableEquals(List.of("KEEP=value"), shellOptions(new DevcontainerOptions(), json).variables);
+      assertTrue(systemErr.getText().contains("DROP"), systemErr.getText());
     }
 
     @Test
@@ -413,6 +422,18 @@ class DevcontainerOptionsMapperTest {
       final var json = DevcontainerBuilder.builder().build(build).create();
       assertIterableEquals(
           List.of("--build-arg", "VERSION=1.2.3", "--target", "builder", "--cache-from", "registry/image:cache"),
+          shellOptions(new DevcontainerOptions(), json).runtimeBuildOptions);
+    }
+
+    @Test
+    @DisplayName("appends build.options verbatim to the build options")
+    void shouldAppendBuildOptions() {
+      final var build = BuildBuilder.builder()
+          .options(List.of("--add-host=host.docker.internal:host-gateway"))
+          .create();
+      final var json = DevcontainerBuilder.builder().build(build).create();
+      assertIterableEquals(
+          List.of("--add-host=host.docker.internal:host-gateway"),
           shellOptions(new DevcontainerOptions(), json).runtimeBuildOptions);
     }
 
