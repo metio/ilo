@@ -25,7 +25,11 @@ abstract class DockerComposeLike implements ComposeCLI {
           fromList(expand.expand(options.runtimeOptions)),
           withPrefix("--file", expand.expand(options.file)),
           of("pull"),
-          fromList(expand.expand(options.runtimePullOptions)));
+          fromList(expand.expand(options.runtimePullOptions)),
+          // Scoped to the services this session brings up (matching 'up'), so a multi-service project's
+          // unrelated services are not pulled.
+          optional("", expand.expand(options.service)),
+          fromList(expand.expand(options.runServices)));
     }
     return List.of();
   }
@@ -39,7 +43,11 @@ abstract class DockerComposeLike implements ComposeCLI {
           fromList(expand.expand(options.runtimeOptions)),
           withPrefix("--file", expand.expand(options.file)),
           of("build"),
-          fromList(expand.expand(options.runtimeBuildOptions)));
+          fromList(expand.expand(options.runtimeBuildOptions)),
+          // Scoped to the services this session brings up (matching 'up'), so a multi-service project's
+          // unrelated services are not rebuilt.
+          optional("", expand.expand(options.service)),
+          fromList(expand.expand(options.runServices)));
     }
     return List.of();
   }
@@ -79,11 +87,11 @@ abstract class DockerComposeLike implements ComposeCLI {
         fromList(command));
   }
 
-  // Stops — but keeps — the attached service so the next 'up --detach' restarts it instead of
-  // recreating. Scoped to the session's own service: a bare 'compose stop' would stop the whole
-  // project, tearing down services another terminal (attached to a different service) is still using.
-  // With no service set it falls back to stopping the whole project, which is the intended behavior
-  // for an unscoped session.
+  // Stops — but keeps — the services this session started so the next 'up --detach' restarts them
+  // instead of recreating. Scoped to the attached service plus its run-services (exactly what
+  // 'createArguments' brought up): a bare 'compose stop' would stop the whole project, tearing down
+  // services another terminal is still using, while stopping only the attached service would leak the
+  // run-services. With no service set it falls back to stopping the whole project.
   @Override
   public final List<String> stopArguments(final ComposeOptions options, final String containerName) {
     final var expand = OSSupport.expander();
@@ -92,7 +100,8 @@ abstract class DockerComposeLike implements ComposeCLI {
         fromList(expand.expand(options.runtimeOptions)),
         withPrefix("--file", expand.expand(options.file)),
         of("stop"),
-        optional("", expand.expand(options.service)));
+        optional("", expand.expand(options.service)),
+        fromList(expand.expand(options.runServices)));
   }
 
   // Lists the attached service's processes so the session can tell whether another terminal is still

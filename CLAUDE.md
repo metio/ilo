@@ -42,7 +42,14 @@ mvn verify --define skipNativeBuild=false   # include the native image
 ```
 
 `mvn verify` is the canonical gate — it runs JUnit 5 tests, the ArchUnit
-architecture tests, and (in CI) PIT mutation testing with a 65% threshold.
+architecture tests, and JaCoCo coverage. The coverage gate is a 0.75 bundle
+instruction ratio plus `CLASS MISSEDCOUNT = 0` (every class must be touched):
+the ratio is below 1.0 on purpose because OS-gated code (`@EnabledOnOs(WINDOWS)`
+PowerShell paths, `@EnabledOnOs(LINUX/MAC)` expansion) is uncovered on whichever
+single OS the build runs on, so the per-class `MISSEDCOUNT = 0` rule plus PIT is
+what actually guards test quality. PIT mutation testing (65% threshold, currently
+~87%) runs in a dedicated CI job (`mutation` in `verify.yml`), not in `mvn verify`;
+run it locally with `mvn test-compile org.pitest:pitest-maven:mutationCoverage`.
 
 Do **not** add a `.ilo.rc` / `.ilo/ilo.rc` to this repo: `ilo` auto-loads those
 as argument files on *every* invocation in this directory, which would inject

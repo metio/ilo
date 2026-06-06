@@ -4,7 +4,6 @@
  */
 package wtf.metio.ilo.acceptance;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -82,7 +81,6 @@ class IloAcceptanceTest extends CLI_TCK {
   }
 
   @Test
-  @Disabled("negate does not work from tests?")
   @DisplayName("interactive mode can be negated")
   void shouldAllowToNegateInteractiveMode() {
     final var shell = parseShellCommand("shell", "--no-interactive");

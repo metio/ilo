@@ -60,6 +60,11 @@ abstract class ShellExpansion extends ParameterExpansion {
   // visible for testing
   final String expandTilde(final String value) {
     final var userHome = System.getProperty("user.home");
+    if (null == userHome || userHome.isBlank()) {
+      // No home directory is known (it can be absent in a native image); leave a leading '~' literal
+      // rather than crashing in Matcher.quoteReplacement(null).
+      return value;
+    }
     return value.replaceAll("(^|[:=])~(?=[/:" + tildeFollowers() + "]|$)", "$1" + Matcher.quoteReplacement(userHome));
   }
 

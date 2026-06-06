@@ -44,7 +44,7 @@ class ShellAcceptanceTest extends CLI_TCK {
 
   @ParameterizedTest
   @MethodSource("shellRuntimes")
-  @DisplayName("allows to disable mounting the project directory")
+  @DisplayName("allows to disable mounting the project directory via =false")
   void disableProjectDirMount(final String tool) {
     final var shell = parseShellCommand("shell", "--runtime", tool, "--mount-project-dir=false");
     assertAll("shell options",
@@ -70,7 +70,7 @@ class ShellAcceptanceTest extends CLI_TCK {
 
   @ParameterizedTest
   @MethodSource("shellRuntimes")
-  @DisplayName("allows to disable mounting the project directory")
+  @DisplayName("allows to disable mounting the project directory via --no-mount-project-dir")
   void negateProjectDirMount(final String tool) {
     final var shell = parseShellCommand("shell", "--runtime", tool, "--no-mount-project-dir");
     assertAll("shell options",
@@ -96,7 +96,7 @@ class ShellAcceptanceTest extends CLI_TCK {
 
   @ParameterizedTest
   @MethodSource("shellRuntimes")
-  @DisplayName("allows to run non-interactive")
+  @DisplayName("allows to run non-interactive via =false")
   void nonInteractive(final String tool) {
     final var shell = parseShellCommand("shell", "--runtime", tool, "--interactive=false");
     assertAll("shell options",
@@ -119,7 +119,7 @@ class ShellAcceptanceTest extends CLI_TCK {
 
   @ParameterizedTest
   @MethodSource("shellRuntimes")
-  @DisplayName("allows to run non-interactive")
+  @DisplayName("allows to run non-interactive via --no-interactive")
   void interactiveNegated(final String tool) {
     final var shell = parseShellCommand("shell", "--runtime", tool, "--no-interactive");
     assertAll("shell options",

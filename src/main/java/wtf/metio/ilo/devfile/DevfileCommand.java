@@ -104,7 +104,11 @@ public final class DevfileCommand implements Callable<Integer> {
   }
 
   private static boolean usesLocalDockerfile(final Component component) {
-    return Strings.isNotBlank(component.image().dockerfile().uri());
+    // imageName (the build's --tag) is required as well as the dockerfile uri; without it the component
+    // is not something ilo can open, so it falls through to the clear "no supported component" message
+    // rather than producing a build command with a null --tag.
+    return Strings.isNotBlank(component.image().dockerfile().uri())
+        && Strings.isNotBlank(component.image().imageName());
   }
 
   static ShellOptions mapOptions(final DevfileOptions options, final DevfileYaml devfile) {

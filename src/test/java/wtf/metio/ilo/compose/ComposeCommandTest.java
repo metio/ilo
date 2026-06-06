@@ -67,7 +67,7 @@ class ComposeCommandTest extends TestMethodSources {
     options.pull = true;
     compose.call();
     assertIterableEquals(List.of(
-        call(tool, "--file", YML, "pull"),
+        call(tool, "--file", YML, "pull", "dev"),
         call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
         call(tool, "--file", YML, "stop", "dev")), executor.executed());
@@ -81,7 +81,7 @@ class ComposeCommandTest extends TestMethodSources {
     options.build = true;
     compose.call();
     assertIterableEquals(List.of(
-        call(tool, "--file", YML, "build"),
+        call(tool, "--file", YML, "build", "dev"),
         call(tool, "--file", YML, "--file", OVERRIDE, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
         call(tool, "--file", YML, "stop", "dev")), executor.executed());
@@ -157,7 +157,7 @@ class ComposeCommandTest extends TestMethodSources {
     executor.exitCodes(0, 1);
     final var exitCode = compose.call();
     assertEquals(1, exitCode);
-    assertIterableEquals(List.of(call(tool, "--file", YML, "build")), executor.executed());
+    assertIterableEquals(List.of(call(tool, "--file", YML, "build", "dev")), executor.executed());
   }
 
   @ParameterizedTest
@@ -208,6 +208,17 @@ class ComposeCommandTest extends TestMethodSources {
     options.runtimeCleanupOptions = List.of("--volumes");
     compose.call();
     assertTrue(executor.executed().contains(call(tool, "--file", YML, "down", "--volumes")),
+        executor.executed().toString());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("stops the run-services it started, not just the attached service, so they don't leak")
+  void stopsRunServicesItStarted(final String runtime) {
+    final var tool = useRuntime(runtime);
+    options.runServices = List.of("db", "cache");
+    compose.call();
+    assertTrue(executor.executed().contains(call(tool, "--file", YML, "stop", "dev", "db", "cache")),
         executor.executed().toString());
   }
 

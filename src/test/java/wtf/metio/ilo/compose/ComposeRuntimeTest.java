@@ -142,10 +142,13 @@ class ComposeRuntimeTest {
   }
 
   @Test
-  @DisplayName("throws in case in case docker is not installed but specified")
+  @DisplayName("throws a runtime-specific message when docker is specified but unavailable")
   void throwsDockerCompose2() {
     assumeFalse(new DockerCompose2().exists());
-    assertThrows(NoMatchingRuntimeException.class, () -> ComposeRuntime.autoSelect(ComposeRuntime.DOCKER));
+    final var thrown = assertThrows(NoMatchingRuntimeException.class,
+        () -> ComposeRuntime.autoSelect(ComposeRuntime.DOCKER));
+    // Names the selected runtime rather than the generic "no matching runtime was found".
+    assertTrue(thrown.getMessage().contains("selected compose runtime 'docker'"), thrown.getMessage());
   }
 
 }

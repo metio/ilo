@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 final class DevcontainerOptionsMapper {
 
-  static ShellOptions shellOptions(final DevcontainerOptions options, final Devcontainer devcontainer) {
+  static ShellOptions shellOptions(final DevcontainerOptions options, final Devcontainer devcontainer, final Path devcontainerJson) {
     final var opts = new ShellOptions();
     opts.interactive = true;
     opts.missingVolumes = ShellVolumeBehavior.CREATE;
@@ -44,11 +44,21 @@ final class DevcontainerOptionsMapper {
     opts.updateRemoteUserUID = !Boolean.FALSE.equals(devcontainer.updateRemoteUserUID());
     opts.image = devcontainer.image();
     opts.workingDir = devcontainer.workspaceFolder();
-    opts.context = Optional.ofNullable(devcontainer.build())
-        .map(Build::context)
-        .orElse(".");
+    // build.dockerfile and build.context are relative to the devcontainer.json file, so they are
+    // resolved against its directory and made absolute: ilo runs the build from its own working
+    // directory, which is not necessarily where the devcontainer.json lives (e.g. a .devcontainer/
+    // subfolder), so a verbatim relative path would point at the wrong place.
+    final var baseDir = devcontainerJson.toAbsolutePath().getParent();
+    opts.context = baseDir.resolve(Optional.ofNullable(devcontainer.build())
+            .map(Build::context)
+            .filter(Strings::isNotBlank)
+            .orElse("."))
+        .normalize()
+        .toString();
     opts.containerfile = Optional.ofNullable(devcontainer.build())
         .map(Build::dockerfile)
+        .filter(Strings::isNotBlank)
+        .map(dockerfile -> baseDir.resolve(dockerfile).normalize().toString())
         .orElse("");
     opts.ports = ports(devcontainer);
     opts.variables = environment(devcontainer.containerEnv());
@@ -221,6 +231,8 @@ final class DevcontainerOptionsMapper {
         .toList();
     opts.service = devcontainer.service();
     opts.runServices = devcontainer.runServices();
+    opts.shell = options.shell;
+    opts.fresh = options.fresh;
     opts.debug = options.debug;
     opts.pull = options.pull;
     // The spec's shutdownAction defaults to stopping; only 'none' keeps the services up on exit.

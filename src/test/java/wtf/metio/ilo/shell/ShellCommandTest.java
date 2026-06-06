@@ -208,6 +208,36 @@ class ShellCommandTest extends TestMethodSources {
 
   @ParameterizedTest
   @MethodSource("dockerLikeRuntimes")
+  @DisplayName("does not validate missing volume directories when reusing an existing container")
+  void missingVolumesNotValidatedOnReuse(final String runtime) {
+    useRuntime(runtime);
+    options.missingVolumes = ShellVolumeBehavior.ERROR;
+    options.volumes = List.of("/ilo/definitely/missing/dir:/data");
+    executor.probeState(ContainerState.RUNNING);
+    // Reuse skips the create step, so the ERROR missing-volume check never runs and the session attaches
+    // instead of aborting on a directory that is irrelevant to an already-created container.
+    shell.call();
+    assertIterableEquals(List.of("exec", "stop"), operations());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
+  @DisplayName("skips --pull/--fresh recreation while another session is attached and attaches instead")
+  void freshSkippedWhileAnotherSessionAttached(final String runtime, final SystemErr systemErr) {
+    useRuntime(runtime);
+    options.pull = true;
+    // A process beyond the keepalive means another terminal is attached, so the container must not be
+    // force-removed and recreated out from under it.
+    executor.processesOutput("PID PPID COMMAND\n1 0 sh\n2 1 sleep\n42 0 bash\n");
+    executor.probeState(ContainerState.RUNNING);
+    shell.call();
+    // No 'rm'/'run' — ilo attaches to the existing container instead of recreating it, and warns.
+    assertIterableEquals(List.of("exec"), operations());
+    assertTrue(systemErr.getText().contains("--fresh/--pull"), systemErr.getText());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerLikeRuntimes")
   @DisplayName("warns that --remove-image is skipped while another session is attached")
   void removeImageSkippedWhileAttachedWarns(final String runtime, final SystemErr systemErr) {
     useRuntime(runtime);
