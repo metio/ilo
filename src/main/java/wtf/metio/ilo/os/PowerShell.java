@@ -37,6 +37,13 @@ final class PowerShell extends ShellExpansion {
     return false;
   }
 
+  @Override
+  String tildeFollowers() {
+    // On Windows '~\work' is the idiomatic form, so a backslash after the tilde also denotes home.
+    // The value is a regex character-class fragment, where a literal backslash is written '\\'.
+    return "\\\\";
+  }
+
   // visible for testing
   static String parameterCommand(final String parameter) {
     // 'parameter' is a POSIX-style reference such as "$HOME"; PowerShell reads an environment variable

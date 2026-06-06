@@ -34,6 +34,13 @@ abstract class ShellExpansion extends ParameterExpansion {
     return true;
   }
 
+  // Extra characters (besides '/' and ':') that may follow a leading '~' and still denote the home
+  // directory, as a regex character-class fragment. Empty for POSIX, where '\' is an ordinary filename
+  // character; PowerShell adds the Windows path separator so '~\work' expands.
+  String tildeFollowers() {
+    return "";
+  }
+
   /**
    * Expands a leading {@code ~} to the current user's home directory. Only a {@code ~} that begins a
    * path component — at the start of the value or right after a {@code :} or {@code =} separator —
@@ -47,7 +54,7 @@ abstract class ShellExpansion extends ParameterExpansion {
   // visible for testing
   final String expandTilde(final String value) {
     final var userHome = System.getProperty("user.home");
-    return value.replaceAll("(^|[:=])~(?=[/:]|$)", "$1" + Matcher.quoteReplacement(userHome));
+    return value.replaceAll("(^|[:=])~(?=[/:" + tildeFollowers() + "]|$)", "$1" + Matcher.quoteReplacement(userHome));
   }
 
   // The single expansion pass. Each branch consumes one construct from the ORIGINAL value and appends

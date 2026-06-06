@@ -14,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.properties.SystemProperties;
 
+import java.nio.file.Path;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,6 +26,15 @@ class PosixShellTest {
   @DisplayName("builds a quoted printf command so the parameter value is not word-split")
   void buildsQuotedParameterCommand() {
     assertEquals("printf '%s' \"$HOME\"", PosixShell.parameterCommand("$HOME"));
+  }
+
+  @Test
+  @DisplayName("does not treat a backslash after a tilde as a home-directory separator")
+  @ExtendWith(SystemStubsExtension.class)
+  void keepsBackslashTilde(final SystemProperties properties) {
+    properties.set("user.home", "/home/user");
+    final var shell = new PosixShell(Path.of("sh"));
+    assertEquals("~\\work", shell.expandTilde("~\\work"));
   }
 
   @Nested

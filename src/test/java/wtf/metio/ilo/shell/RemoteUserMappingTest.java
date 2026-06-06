@@ -7,20 +7,50 @@ package wtf.metio.ilo.shell;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.stream.SystemErr;
 import wtf.metio.ilo.os.OSSupport;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("RemoteUserMapping")
+@ExtendWith(SystemStubsExtension.class)
 class RemoteUserMappingTest {
 
   private static final boolean DOCKER = true;
   private static final boolean PODMAN = false;
   private static final boolean ROOTFUL = true;
   private static final boolean ENABLED = true;
+
+  @Nested
+  @DisplayName("host user arguments")
+  class HostUserArguments {
+
+    @Test
+    @DisplayName("requests the resolved numeric host UID and GID")
+    void numeric() {
+      assertIterableEquals(List.of("--user", "1000:1000"), RemoteUserMapping.hostUserArguments("1000:1000"));
+    }
+
+    @Test
+    @DisplayName("degrades to the runtime default when the host id is not numeric")
+    void nonNumeric(final SystemErr systemErr) {
+      // e.g. no shell present, so '$(id -u):$(id -g)' came back verbatim.
+      assertIterableEquals(List.of(), RemoteUserMapping.hostUserArguments("$(id -u):$(id -g)"));
+      assertTrue(systemErr.getText().contains("host user id"), systemErr.getText());
+    }
+
+    @Test
+    @DisplayName("degrades to the runtime default when the host id is blank")
+    void blank() {
+      assertIterableEquals(List.of(), RemoteUserMapping.hostUserArguments(""));
+    }
+  }
 
   @Nested
   @DisplayName("resolve")
