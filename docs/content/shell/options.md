@@ -183,17 +183,17 @@ By default, `--interactive` is enabled.
 
 ## `--missing-volumes`
 
-The `--missing-volumes` option controls how `ilo` should deal with non-existing local directories that you want to mount into the container. The default behavior is `CREATE` which creates the directory on the host machine before creating the container and mounting the new empty directory into it. Changing this option to `WARN` causes will result in a warning that a local directory cannot be mounted. `ilo` will still create the container, just not with that missing directory mounted. The `ERROR` option causes `ilo` to fail in case you specify a local directory to mount that does not exist. All three options are case-insensitive, e.g. use `create`, `CREATE`, or `CreATE`.
+The `--missing-volumes` option controls how `ilo` should deal with non-existing local directories that you want to mount into the container. The default behavior is `CREATE` which creates the directory on the host machine before creating the container and mounting the new empty directory into it. Changing this option to `WARN` results in a warning that a local directory cannot be mounted. `ilo` will still create the container, just not with that missing directory mounted. The `ERROR` option causes `ilo` to fail in case you specify a local directory to mount that does not exist. All three options are case-insensitive, e.g. use `create`, `CREATE`, or `CreATE`.
 
 ```console
 # create missing local directories
-$ ilo shell ----missing-volumes=CREATE
+$ ilo shell --missing-volumes=CREATE
 
 # warn on missing local directories
-$ ilo shell ----missing-volumes=WARN
+$ ilo shell --missing-volumes=WARN
 
 # error on missing local directories
-$ ilo shell ----missing-volumes=ERROR
+$ ilo shell --missing-volumes=ERROR
 ```
 
 ## `--mount-project-dir`
@@ -287,8 +287,8 @@ $ ilo shell --runtime podman
 # force to use docker
 $ ilo shell --runtime docker
 
-# force to use lxd
-$ ilo shell --runtime lxd
+# force to use nerdctl
+$ ilo shell --runtime nerdctl
 
 # auto select
 $ ilo shell

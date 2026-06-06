@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import picocli.CommandLine;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.properties.SystemProperties;
+import uk.org.webcompere.systemstubs.stream.SystemErr;
 import wtf.metio.ilo.devfile.DevfileYaml.Component;
 import wtf.metio.ilo.devfile.DevfileYaml.Container;
 import wtf.metio.ilo.devfile.DevfileYaml.Dockerfile;
@@ -105,7 +106,7 @@ class DevfileCommandTest {
 
   @Test
   @DisplayName("drops env entries with a null name or value instead of emitting null=… or …=null")
-  void shouldDropIncompleteEnv() {
+  void shouldDropIncompleteEnv(final SystemErr systemErr) {
     final var env = Arrays.asList(
         new Env("KEEP", "value"),
         new Env("NO_VALUE", null),
@@ -115,7 +116,9 @@ class DevfileCommandTest {
 
     final var shellOptions = DevfileCommand.mapOptions(new DevfileOptions(), devfile);
 
-    assertEquals(List.of("KEEP=value"), shellOptions.variables);
+    assertAll(
+        () -> assertEquals(List.of("KEEP=value"), shellOptions.variables),
+        () -> assertTrue(systemErr.getText().contains("NO_VALUE"), systemErr.getText()));
   }
 
   @Test
@@ -133,10 +136,25 @@ class DevfileCommandTest {
   }
 
   @Test
+  @DisplayName("maps dockerfile args to --build-arg, after any explicit runtime build options")
+  void shouldMapDockerfileArgs() {
+    final var devfile = devfile(new Component("image", emptyContainer(),
+        new Image("image:latest", new Dockerfile("Dockerfile", ".", List.of("FOO=bar", "BAZ=qux")))));
+    final var options = new DevfileOptions();
+    options.runtimeBuildOptions = List.of("--no-cache");
+
+    final var shellOptions = DevfileCommand.mapOptions(options, devfile);
+
+    assertEquals(
+        List.of("--build-arg", "FOO=bar", "--build-arg", "BAZ=qux", "--no-cache"),
+        shellOptions.runtimeBuildOptions);
+  }
+
+  @Test
   @DisplayName("defaults the build context to the project root when the dockerfile omits one")
   void shouldDefaultLocalDockerfileContextWhenAbsent() {
     final var devfile = devfile(new Component("image", emptyContainer(),
-        new Image("image:latest", new Dockerfile("Dockerfile", null))));
+        new Image("image:latest", new Dockerfile("Dockerfile", null, List.of()))));
 
     final var shellOptions = DevfileCommand.mapOptions(new DevfileOptions(), devfile);
 
@@ -147,7 +165,7 @@ class DevfileCommandTest {
   @DisplayName("defaults the build context to the project root when the dockerfile context is blank")
   void shouldDefaultLocalDockerfileContextWhenBlank() {
     final var devfile = devfile(new Component("image", emptyContainer(),
-        new Image("image:latest", new Dockerfile("Dockerfile", "   "))));
+        new Image("image:latest", new Dockerfile("Dockerfile", "   ", List.of()))));
 
     final var shellOptions = DevfileCommand.mapOptions(new DevfileOptions(), devfile);
 
@@ -158,7 +176,7 @@ class DevfileCommandTest {
   @DisplayName("keeps an explicit build context")
   void shouldKeepExplicitLocalDockerfileContext() {
     final var devfile = devfile(new Component("image", emptyContainer(),
-        new Image("image:latest", new Dockerfile("docker/Dockerfile", "subdir"))));
+        new Image("image:latest", new Dockerfile("docker/Dockerfile", "subdir", List.of()))));
 
     final var shellOptions = DevfileCommand.mapOptions(new DevfileOptions(), devfile);
 
@@ -266,13 +284,15 @@ class DevfileCommandTest {
   }
 
   @Test
-  @DisplayName("reports usage for a devfile without a supported component")
-  void shouldReportUsageForUnsupportedDevfile(final SystemProperties properties) throws Exception {
+  @DisplayName("reports usage and a clear message for a devfile without a supported component")
+  void shouldReportUsageForUnsupportedDevfile(final SystemProperties properties, final SystemErr systemErr) throws Exception {
     final var command = new DevfileCommand(shellOptions -> fail("the shell must not be opened"));
     command.options = optionsFor("maven");
     properties.set("user.dir", resourceDir("plain"));
 
-    assertEquals(CommandLine.ExitCode.USAGE, command.call());
+    assertAll(
+        () -> assertEquals(CommandLine.ExitCode.USAGE, command.call()),
+        () -> assertTrue(systemErr.getText().contains("ilo can open"), systemErr.getText()));
   }
 
   private static DevfileOptions optionsFor(final String component) {
@@ -295,7 +315,7 @@ class DevfileCommandTest {
   }
 
   private static Component dockerfileComponent(final String name, final String imageName, final String uri) {
-    return new Component(name, emptyContainer(), new Image(imageName, new Dockerfile(uri, ".")));
+    return new Component(name, emptyContainer(), new Image(imageName, new Dockerfile(uri, ".", List.of())));
   }
 
   private static Container emptyContainer() {
@@ -303,7 +323,7 @@ class DevfileCommandTest {
   }
 
   private static Image emptyImage() {
-    return new Image(null, new Dockerfile(null, null));
+    return new Image(null, new Dockerfile(null, null, List.of()));
   }
 
 }

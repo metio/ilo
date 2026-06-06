@@ -121,6 +121,13 @@ class ContainerProcessesTest {
   }
 
   @Test
+  @DisplayName("counts a session whose command merely contains the marker as a substring")
+  void sessionWithMarkerSubstringInCommand() {
+    // 'worker-2147483647' contains the marker but is not the keepalive's 'sleep 2147483647' token.
+    assertTrue(ContainerProcesses.hasSessions(HOST_PID_KEEPALIVE + "root 12399 12340 worker-2147483647\n"));
+  }
+
+  @Test
   @DisplayName("treats empty output as no session")
   void emptyOutput() {
     assertFalse(ContainerProcesses.hasSessions(""));

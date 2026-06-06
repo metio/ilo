@@ -13,7 +13,7 @@ import wtf.metio.ilo.cli.SessionLifecycle;
 import wtf.metio.ilo.compose.ComposeCommand;
 import wtf.metio.ilo.errors.DevcontainerJsonMissingException;
 import wtf.metio.ilo.errors.RuntimeIOException;
-import wtf.metio.ilo.os.ShellTokenizer;
+import wtf.metio.ilo.os.OSSupport;
 import wtf.metio.ilo.shell.ShellCLI;
 import wtf.metio.ilo.shell.ShellCommand;
 import wtf.metio.ilo.shell.ShellOptions;
@@ -89,6 +89,8 @@ public final class DevcontainerCommand implements Callable<Integer> {
       return command.call();
     }
 
+    System.err.println("ilo: this devcontainer.json declares neither an image, a build.dockerfile, nor a "
+        + "dockerComposeFile, so there is nothing for ilo to open.");
     return CommandLine.ExitCode.USAGE;
   }
 
@@ -261,7 +263,9 @@ public final class DevcontainerCommand implements Callable<Integer> {
   int runCommand(final Command command, final boolean debug) {
     try {
       if (Strings.isNotBlank(command.string())) {
-        return Executables.runAndWaitForExit(ShellTokenizer.tokenize(command.string()), debug);
+        // The devcontainer spec runs a string-form command "in a shell", so it is handed to the host
+        // shell rather than tokenized — otherwise variables, '~' and operators like '&&' would not work.
+        return Executables.runAndWaitForExit(OSSupport.shellCommand(command.string()), debug);
       }
       if (Objects.nonNull(command.array()) && !command.array().isEmpty()) {
         return Executables.runAndWaitForExit(command.array(), debug);

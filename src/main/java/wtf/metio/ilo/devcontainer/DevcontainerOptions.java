@@ -31,7 +31,7 @@ public final class DevcontainerOptions implements Options {
 
   @CommandLine.Option(
       names = {"--debug"},
-      description = "Show additional debug information."
+      description = "Print the runtime commands to stderr before executing them."
   )
   public boolean debug;
 

@@ -39,21 +39,42 @@ public final class OSSupport {
         .orElseGet(NoOpExpansion::new);
   }
 
+  /**
+   * Builds the command line that runs the given script through the host shell, so shell syntax — a
+   * variable, a {@code ~}, an operator like {@code &&} or {@code |} — is honored the way a real shell
+   * runs a command string. Falls back to tokenizing the script when the host has no detectable shell.
+   *
+   * @param script The shell command line to run.
+   * @return The argument list to hand to a process builder.
+   */
+  public static List<String> shellCommand(final String script) {
+    return posixShellBinary()
+        .map(path -> List.of(path.toString(), "-c", script))
+        .or(() -> powerShellBinary().map(path -> List.of(path.toString(), "-Command", script)))
+        .orElseGet(() -> ShellTokenizer.tokenize(script));
+  }
+
   // visible for testing
   static Optional<ParameterExpansion> posixShell() {
-    return Executables.of("bash")
-        .or(() -> Executables.of("zsh"))
-        .or(() -> Executables.of("sh"))
-        .map(Path::toAbsolutePath)
-        .map(PosixShell::new);
+    return posixShellBinary().map(PosixShell::new);
   }
 
   static Optional<ParameterExpansion> powerShell() {
+    return powerShellBinary().map(PowerShell::new);
+  }
+
+  private static Optional<Path> posixShellBinary() {
+    return Executables.of("bash")
+        .or(() -> Executables.of("zsh"))
+        .or(() -> Executables.of("sh"))
+        .map(Path::toAbsolutePath);
+  }
+
+  private static Optional<Path> powerShellBinary() {
     return Executables.of("pwsh.exe")
         .or(() -> Executables.of("powershell.exe"))
         .or(() -> Executables.of("pwsh"))
-        .map(Path::toAbsolutePath)
-        .map(PowerShell::new);
+        .map(Path::toAbsolutePath);
   }
 
   private OSSupport() {

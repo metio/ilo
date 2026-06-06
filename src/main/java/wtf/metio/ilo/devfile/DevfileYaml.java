@@ -37,7 +37,7 @@ record DevfileYaml(List<Component> components) {
   record Image(String imageName, Dockerfile dockerfile) {
   }
 
-  record Dockerfile(String uri, String buildContext) {
+  record Dockerfile(String uri, String buildContext, List<String> args) {
   }
 
 }

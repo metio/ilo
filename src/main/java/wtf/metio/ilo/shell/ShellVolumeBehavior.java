@@ -94,16 +94,35 @@ public enum ShellVolumeBehavior {
    */
   // visible for testing
   static boolean isBindMount(final String volume) {
+    if (isWindowsDrivePath(volume)) {
+      return true;
+    }
     final var separator = volume.indexOf(':');
     if (separator < 0) {
       return false;
     }
-    return volume.substring(0, separator).contains("/");
+    final var source = volume.substring(0, separator);
+    // A source with a path separator is a path; so is a bare '.'/'..' or a './'/'../' prefix — those
+    // are relative bind mounts a named-volume name (no separator) never is.
+    return source.contains("/") || ".".equals(source) || "..".equals(source)
+        || source.startsWith("./") || source.startsWith("../");
   }
 
   // visible for testing
   static String extractLocalPart(final String volume) {
+    if (isWindowsDrivePath(volume)) {
+      // 'C:\path:/container[:opts]': the source spans the drive letter and path up to the next ':'.
+      final var next = volume.indexOf(':', 2);
+      return next < 0 ? volume : volume.substring(0, next);
+    }
     return volume.split(":")[0];
+  }
+
+  // A 'C:\…' / 'C:/…' style source, whose first ':' is the drive separator rather than the
+  // source:target separator.
+  private static boolean isWindowsDrivePath(final String volume) {
+    return volume.length() >= 3 && Character.isLetter(volume.charAt(0)) && ':' == volume.charAt(1)
+        && ('\\' == volume.charAt(2) || '/' == volume.charAt(2));
   }
 
   abstract boolean handleMissingDirectory(Path directory);

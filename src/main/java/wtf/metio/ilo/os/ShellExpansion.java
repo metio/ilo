@@ -14,6 +14,12 @@ import java.util.regex.Matcher;
  * substitution, and a command's output is not re-evaluated for further expansion. An unbalanced
  * {@code $(} or {@code `}, and a {@code $} that does not introduce a name, are left untouched rather
  * than corrupted.
+ *
+ * <p>Two intentional limitations: there is no escape mechanism, so every {@code $}, backtick and
+ * leading {@code ~} is expanded and a value cannot carry one literally (a {@code \} is not treated as
+ * an escape — it stays part of the value, so Windows paths like {@code C:\Users} are preserved). And
+ * only a bare {@code ${NAME}} is expanded; a brace expression with a modifier such as
+ * {@code ${VAR:-default}} is passed through verbatim rather than evaluated.</p>
  */
 abstract class ShellExpansion extends ParameterExpansion {
 
@@ -76,11 +82,17 @@ abstract class ShellExpansion extends ParameterExpansion {
         index = close + 1;
       } else if ('$' == character && index + 1 < length && '{' == value.charAt(index + 1)) {
         final var end = value.indexOf('}', index + 2);
-        if (end < 0 || !isParameterName(value, index + 2, end)) {
+        if (end < 0) {
+          // no closing brace: leave the '$' literal and keep scanning after it
           result.append(character);
           index++;
-        } else {
+        } else if (isParameterName(value, index + 2, end)) {
           result.append(parameterValue("$" + value.substring(index + 2, end)));
+          index = end + 1;
+        } else {
+          // a brace expression ilo does not expand (e.g. '${VAR:-default}'): emit it literally as a
+          // whole, so an embedded '$(...)' inside it is not mistaken for a command substitution
+          result.append(value, index, end + 1);
           index = end + 1;
         }
       } else if ('$' == character && index + 1 < length && isNameStart(value.charAt(index + 1))) {

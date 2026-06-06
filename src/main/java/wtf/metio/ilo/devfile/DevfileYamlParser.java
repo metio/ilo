@@ -53,7 +53,8 @@ final class DevfileYamlParser {
   private static Container container(final JsonNode node) {
     return new Container(
         text(node, "image"),
-        node.path("mountSources").booleanValue(false),
+        // The devfile spec defaults mountSources to true, so an absent field mounts the project sources.
+        node.path("mountSources").booleanValue(true),
         text(node, "sourceMapping"),
         strings(node.path("command")),
         strings(node.path("args")),
@@ -65,7 +66,7 @@ final class DevfileYamlParser {
   }
 
   private static Dockerfile dockerfile(final JsonNode node) {
-    return new Dockerfile(text(node, "uri"), text(node, "buildContext"));
+    return new Dockerfile(text(node, "uri"), text(node, "buildContext"), strings(node.path("args")));
   }
 
   private static List<Env> envs(final JsonNode node) {

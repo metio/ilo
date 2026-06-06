@@ -339,6 +339,30 @@ class ExecutablesTest {
 
   @Test
   @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("captures combined output and the exit code")
+  void runAndCaptureReturnsOutputAndExitCode() {
+    final var result = Executables.runAndCapture(
+        java.time.Duration.ofSeconds(10), List.of("sh", "-c", "echo hello; exit 3"), false);
+    assertAll(
+        () -> assertEquals(3, result.exitCode()),
+        () -> assertEquals("hello\n", result.output()));
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("returns promptly when a backgrounded child holds stdout open after the command exits")
+  void runAndCaptureDoesNotHangOnHeldPipe() {
+    final var start = System.nanoTime();
+    final var result = Executables.runAndCapture(
+        java.time.Duration.ofMillis(300), List.of("sh", "-c", "echo hi; sleep 30 &"), false);
+    final var elapsedSeconds = (System.nanoTime() - start) / 1_000_000_000.0;
+    assertAll(
+        () -> assertEquals(0, result.exitCode(), "the command itself exited 0"),
+        () -> assertTrue(elapsedSeconds < 10, "should return within the drain grace, took " + elapsedSeconds + "s"));
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("removes only trailing newlines and keeps interior and leading whitespace")
   void runForExpansionTrimsOnlyTrailingNewlines() {
     assertEquals("  spaced value  ",

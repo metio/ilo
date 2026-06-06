@@ -80,16 +80,15 @@ public final class ContainerProcesses {
     return !isMainProcess(columns[pid], mainPid) && !isMainProcess(columns[ppid], mainPid);
   }
 
-  // The keepalive marker is matched only within the command column (and the columns after it, since a
-  // command line is itself whitespace-separated), so a session whose PID, elapsed time or any other
-  // field merely happens to equal the marker is not misread as the keepalive. When no command column is
-  // named, the whole row is used as a fallback.
+  // The keepalive marker is matched as a whole token within the command column (and the columns after
+  // it, since a command line is itself whitespace-separated), so neither a session whose PID/elapsed
+  // field equals the marker nor one whose command merely contains it as a substring (e.g.
+  // 'worker-2147483647') is misread as the keepalive. When no command column is named, every token of
+  // the row is checked as a fallback.
   private static boolean isKeepaliveCommand(final String[] columns, final int command) {
-    if (command < 0) {
-      return String.join(" ", columns).contains(Keepalive.SLEEP_SECONDS);
-    }
-    for (var index = command; index < columns.length; index++) {
-      if (columns[index].contains(Keepalive.SLEEP_SECONDS)) {
+    final var from = command < 0 ? 0 : command;
+    for (var index = from; index < columns.length; index++) {
+      if (Keepalive.SLEEP_SECONDS.equals(columns[index])) {
         return true;
       }
     }

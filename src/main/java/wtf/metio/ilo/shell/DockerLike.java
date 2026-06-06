@@ -4,6 +4,7 @@
  */
 package wtf.metio.ilo.shell;
 
+import wtf.metio.ilo.cli.Executables;
 import wtf.metio.ilo.cli.Keepalive;
 import wtf.metio.ilo.cli.Terminal;
 import wtf.metio.ilo.os.OSSupport;
@@ -11,6 +12,7 @@ import wtf.metio.ilo.utils.Strings;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.stream.Stream.of;
 import static wtf.metio.ilo.utils.Streams.*;
@@ -78,11 +80,7 @@ abstract class DockerLike implements ShellCLI {
     final var workingDir = Optional.ofNullable(options.workingDir)
         .filter(Strings::isNotBlank)
         .orElse(currentDir);
-    // An explicit workspace mount replaces the default project bind-mount entirely; otherwise the
-    // project directory is bind-mounted onto the working directory (with an SELinux relabel).
-    final var projectDir = Strings.isNotBlank(options.workspaceMount)
-        ? of("--mount", expand.expand(options.workspaceMount))
-        : maybe(options.mountProjectDir, "--volume", currentDir + ":" + workingDir + ":z");
+    final var projectDir = projectMount(options, currentDir, workingDir, expand);
     // picocli supplies a default, but a directly-constructed ShellOptions may leave this null.
     final var missingVolumes = Optional.ofNullable(options.missingVolumes).orElse(ShellVolumeBehavior.CREATE);
     return flatten(
@@ -108,6 +106,25 @@ abstract class DockerLike implements ShellCLI {
         maybe(options.overrideCommand, "-c", Keepalive.SCRIPT));
   }
 
+  // The mount that puts the project directory into the container. An explicit --workspace-mount replaces
+  // it entirely. Otherwise the project directory is bind-mounted onto the working directory: on POSIX
+  // hosts as 'source:target:z' (the ':z' relabels for SELinux), but on Windows via the explicit
+  // '--mount' fields, because a Windows source path contains a drive colon that the 'source:target'
+  // form would mis-parse.
+  private static Stream<String> projectMount(final ShellOptions options, final String currentDir,
+      final String workingDir, final OSSupport.Expander expand) {
+    if (Strings.isNotBlank(options.workspaceMount)) {
+      return of("--mount", expand.expand(options.workspaceMount));
+    }
+    if (!options.mountProjectDir) {
+      return Stream.empty();
+    }
+    if (Executables.isWindows()) {
+      return of("--mount", "type=bind,source=" + currentDir + ",target=" + workingDir);
+    }
+    return of("--volume", currentDir + ":" + workingDir + ":z");
+  }
+
   @Override
   public final List<String> startArguments(final ShellOptions options, final String containerName) {
     final var expand = OSSupport.expander();
@@ -121,11 +138,12 @@ abstract class DockerLike implements ShellCLI {
   public final List<String> attachArguments(final ShellOptions options, final String containerName) {
     final var expand = OSSupport.expander();
     final var shell = Strings.isNotBlank(options.shell) ? options.shell : "/bin/sh";
-    // Without an explicit command, attach the configured shell plus any shell arguments — userEnvProbe
-    // maps to '-l'/'-i' here so the user's login/interactive shell profile is sourced.
+    // An explicit command is passed verbatim — not host-expanded — so any variables, globs or '$(...)'
+    // in it resolve inside the container where they are meant to apply (matching the lifecycle exec
+    // path). Without one, attach the configured shell plus any shell arguments — userEnvProbe maps to
+    // '-l'/'-i' here so the user's login/interactive shell profile is sourced.
     final var command = Optional.ofNullable(options.commands)
         .filter(commands -> !commands.isEmpty())
-        .map(expand::expand)
         .orElseGet(() -> flatten(of(expand.expand(shell)), fromList(expand.expand(options.shellArguments))));
     return flatten(
         of(name()),

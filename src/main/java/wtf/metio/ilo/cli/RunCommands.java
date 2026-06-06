@@ -43,9 +43,11 @@ public final class RunCommands {
 
   // visible for testing
   static Stream<String> locate(final Path baseDirectory, final Predicate<? super Path> trustGate) {
-    if (System.getenv().containsKey(EnvironmentVariables.ILO_RC.name())) {
-      // Files named explicitly via ILO_RC are an opt-in by the user and are loaded as-is.
-      final var rcFiles = System.getenv().get(EnvironmentVariables.ILO_RC.name());
+    final var rcFiles = System.getenv().get(EnvironmentVariables.ILO_RC.name());
+    if (null != rcFiles && !rcFiles.isBlank()) {
+      // Files named explicitly via ILO_RC are an opt-in by the user and are loaded as-is. A blank value
+      // is treated as unset (rather than an accidental kill-switch), so auto-discovery still runs; use
+      // --no-rc to disable run command files entirely.
       final var files = rcFiles.split(",");
       return asArgumentFiles(readable(Arrays.stream(files).map(String::trim).map(baseDirectory::resolve)));
     }

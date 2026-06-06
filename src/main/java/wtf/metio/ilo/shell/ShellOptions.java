@@ -20,7 +20,7 @@ public final class ShellOptions implements Options {
 
   @CommandLine.Option(
       names = {"--debug"},
-      description = "Show additional debug information."
+      description = "Print the runtime commands to stderr before executing them."
   )
   public boolean debug;
 
@@ -178,13 +178,13 @@ public final class ShellOptions implements Options {
 
   @CommandLine.Option(
       names = {"--workspace-mount"},
-      description = "Override the default project bind-mount with an explicit '--mount' specification. Its target should match --working-dir."
+      description = "Override the default project bind-mount with an explicit '--mount' specification. Its target should match --working-dir. Takes precedence over --mount-project-dir/--no-mount-project-dir."
   )
   public String workspaceMount;
 
   @CommandLine.Option(
       names = {"--missing-volumes"},
-      description = "Specifies how missing local volume directories should be handles. Valid values: ${COMPLETION-CANDIDATES}",
+      description = "Specifies how missing local volume directories should be handled. Valid values: ${COMPLETION-CANDIDATES}",
       defaultValue = "CREATE"
   )
   public ShellVolumeBehavior missingVolumes;

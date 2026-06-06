@@ -130,8 +130,9 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
   }
 
   @Test
-  @DisplayName("mounts the project directory into the created container")
+  @DisplayName("mounts the project directory into the created container with a --volume on POSIX hosts")
   void createMountsProjectDir(final SystemProperties properties) {
+    properties.set("os.name", "Linux");
     properties.set("user.dir", "/some/folder");
     final var options = minimal();
     options.mountProjectDir = true;
@@ -139,6 +140,20 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     final var arguments = tool().createArguments(options, CONTAINER);
     assertEquals(
         String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=/some/folder --volume /some/folder:/some/folder:z --workdir /some/folder --env ILO_CONTAINER=true --entrypoint sh example:test -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER),
+        String.join(" ", arguments));
+  }
+
+  @Test
+  @DisplayName("mounts the project directory with --mount on Windows so the drive colon is not mis-parsed")
+  void createMountsProjectDirOnWindows(final SystemProperties properties) {
+    properties.set("os.name", "Windows 11");
+    properties.set("user.dir", "C:\\work\\proj");
+    final var options = minimal();
+    options.mountProjectDir = true;
+    options.workingDir = "/workspace";
+    final var arguments = tool().createArguments(options, CONTAINER);
+    assertEquals(
+        String.format("%s run --detach --name %s --label ilo.managed=true --label ilo.project=C:\\work\\proj --mount type=bind,source=C:\\work\\proj,target=/workspace --workdir /workspace --env ILO_CONTAINER=true --entrypoint sh example:test -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", name(), CONTAINER),
         String.join(" ", arguments));
   }
 
@@ -229,6 +244,16 @@ abstract class DockerLikeTCK extends CliToolTCK<ShellOptions, ShellCLI> {
     options.commands = List.of("/bin/bash", "-c", "whoami");
     final var arguments = tool().attachArguments(options, CONTAINER);
     assertEquals(String.format("%s exec %s /bin/bash -c whoami", name(), CONTAINER), String.join(" ", arguments));
+  }
+
+  @Test
+  @DisplayName("passes an explicit command verbatim, without host-expanding it")
+  void attachCommandIsNotHostExpanded() {
+    final var options = minimal();
+    options.commands = List.of("sh", "-c", "echo $HOME");
+    final var arguments = tool().attachArguments(options, CONTAINER);
+    // '$HOME' must reach the container literally, not be replaced by the host's home directory.
+    assertEquals(String.format("%s exec %s sh -c echo $HOME", name(), CONTAINER), String.join(" ", arguments));
   }
 
   @Test

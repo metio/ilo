@@ -45,8 +45,8 @@ public final class Executables {
         .findFirst();
   }
 
-  // visible for testing
-  static boolean isWindows() {
+  /** Whether ilo is running on a Windows host, decided from the {@code os.name} system property. */
+  public static boolean isWindows() {
     return System.getProperty("os.name", "").toLowerCase(Locale.ROOT).startsWith("windows");
   }
 
@@ -145,6 +145,16 @@ public final class Executables {
    * @return The exit code and captured combined output.
    */
   public static SessionLifecycle.CommandResult runAndCapture(final List<String> arguments, final boolean debug) {
+    return runAndCapture(CAPTURE_DRAIN_GRACE, arguments, debug);
+  }
+
+  // The command itself has no timeout (setup commands may legitimately run long), but once it has
+  // exited a backgrounded child can keep its stdout pipe open; draining is bounded by this grace so
+  // ilo returns the already-known exit code instead of blocking on the held pipe forever.
+  static final Duration CAPTURE_DRAIN_GRACE = Duration.ofSeconds(10);
+
+  // visible for testing
+  static SessionLifecycle.CommandResult runAndCapture(final Duration drainGrace, final List<String> arguments, final boolean debug) {
     if (null == arguments || arguments.isEmpty()) {
       return new SessionLifecycle.CommandResult(0, "");
     }
@@ -157,9 +167,24 @@ public final class Executables {
           .start();
       // Non-interactive: closing stdin gives the command an immediate EOF rather than the parent's.
       process.getOutputStream().close();
-      final var output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-      return new SessionLifecycle.CommandResult(process.waitFor(), output);
+      // Drain stdout on a separate daemon thread so a child that holds the pipe open after the command
+      // exits cannot block ilo forever; the result is published only once readAllBytes returns, so the
+      // main thread reads it only after the reader is done (or the grace lapses, leaving it empty).
+      final var captured = new AtomicReference<>("");
+      final var reader = new Thread(() -> {
+        try (final var stream = process.getInputStream()) {
+          captured.set(new String(stream.readAllBytes(), StandardCharsets.UTF_8));
+        } catch (final IOException _) {
+          // the stream is closed when the process is destroyed; nothing to capture
+        }
+      }, "ilo-capture-reader");
+      reader.setDaemon(true);
+      reader.start();
+      final var exitCode = process.waitFor();
+      reader.join(drainGrace.toMillis());
+      return new SessionLifecycle.CommandResult(exitCode, captured.get());
     } catch (final InterruptedException exception) {
+      Thread.currentThread().interrupt();
       throw new UnexpectedInterruptionException(exception);
     } catch (final UnsupportedOperationException exception) {
       throw new OperatingSystemNotSupportedException(exception);
