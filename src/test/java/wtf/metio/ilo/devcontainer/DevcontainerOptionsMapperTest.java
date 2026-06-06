@@ -11,14 +11,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.stream.SystemErr;
 import wtf.metio.devcontainer.BuildBuilder;
+import wtf.metio.devcontainer.Devcontainer;
 import wtf.metio.devcontainer.DevcontainerBuilder;
 import wtf.metio.devcontainer.Mount;
 import wtf.metio.devcontainer.MountObject;
 import wtf.metio.devcontainer.MountType;
 import wtf.metio.devcontainer.ShutdownAction;
 import wtf.metio.devcontainer.UserEnvProbe;
+import wtf.metio.ilo.shell.ShellOptions;
 import wtf.metio.ilo.shell.ShellVolumeBehavior;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -26,11 +29,20 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.composeOptions;
-import static wtf.metio.ilo.devcontainer.DevcontainerOptionsMapper.shellOptions;
 
 @DisplayName("DevcontainerOptionsMapper")
 @ExtendWith(SystemStubsExtension.class)
 class DevcontainerOptionsMapperTest {
+
+  // The fixed devcontainer.json location every shell-options test maps against, so build.dockerfile /
+  // build.context resolution has a deterministic, absolute base directory regardless of the test's CWD.
+  private static final Path DEVCONTAINER_JSON = Paths.get("/project/.devcontainer/devcontainer.json");
+
+  // Maps with the fixed json location; shadows the former static import so existing call sites are
+  // unchanged.
+  private static ShellOptions shellOptions(final DevcontainerOptions options, final Devcontainer devcontainer) {
+    return DevcontainerOptionsMapper.shellOptions(options, devcontainer, DEVCONTAINER_JSON);
+  }
 
   @Nested
   @DisplayName("shell options")
@@ -56,8 +68,11 @@ class DevcontainerOptionsMapperTest {
       assertEquals(json.image(), shellOptions.image);
     }
 
+    // The directory build paths are resolved against — the parent of the fixed devcontainer.json.
+    private static final Path BASE = DEVCONTAINER_JSON.toAbsolutePath().getParent();
+
     @Test
-    @DisplayName("maps the dockerFile field")
+    @DisplayName("resolves the dockerFile field against the devcontainer.json directory")
     void shouldMapDockerfile() {
       // given
       final var options = new DevcontainerOptions();
@@ -66,12 +81,12 @@ class DevcontainerOptionsMapperTest {
       // when
       final var shellOptions = shellOptions(options, json);
 
-      // then
-      assertEquals(json.build().dockerfile(), shellOptions.containerfile);
+      // then — not the verbatim "some.dockerfile", but resolved against the json's directory
+      assertEquals(BASE.resolve("some.dockerfile").toString(), shellOptions.containerfile);
     }
 
     @Test
-    @DisplayName("maps the context field")
+    @DisplayName("resolves the context field against the devcontainer.json directory")
     void shouldMapContext() {
       // given
       final var options = new DevcontainerOptions();
@@ -81,7 +96,23 @@ class DevcontainerOptionsMapperTest {
       final var shellOptions = shellOptions(options, json);
 
       // then
-      assertEquals(json.build().context(), shellOptions.context);
+      assertEquals(BASE.resolve("example").toString(), shellOptions.context);
+    }
+
+    @Test
+    @DisplayName("resolves a Dockerfile in a .devcontainer subfolder, not the project root")
+    void shouldResolveDockerfileInSubfolder() {
+      // The idiomatic layout: .devcontainer/devcontainer.json + .devcontainer/Dockerfile, context ".".
+      final var json = DevcontainerBuilder.builder()
+          .build(BuildBuilder.builder().dockerfile("Dockerfile").context(".").create())
+          .create();
+
+      final var shellOptions = shellOptions(new DevcontainerOptions(), json);
+
+      assertAll(
+          () -> assertEquals(BASE.resolve("Dockerfile").toString(), shellOptions.containerfile,
+              "the Dockerfile resolves next to the devcontainer.json, not in the working directory"),
+          () -> assertEquals(BASE.toString(), shellOptions.context, "context '.' resolves to the json's directory"));
     }
 
     @Test
@@ -156,7 +187,7 @@ class DevcontainerOptionsMapperTest {
     }
 
     @Test
-    @DisplayName("sets the default context in case none is specified")
+    @DisplayName("defaults the context to the devcontainer.json directory when none is specified")
     void shouldUseDefaultForMissingContext() {
       // given
       final var options = new DevcontainerOptions();
@@ -165,8 +196,8 @@ class DevcontainerOptionsMapperTest {
       // when
       final var shellOptions = shellOptions(options, json);
 
-      // then
-      assertEquals(".", shellOptions.context);
+      // then — the '.' default resolves to the json's directory
+      assertEquals(BASE.toString(), shellOptions.context);
     }
 
     @Test
@@ -480,6 +511,23 @@ class DevcontainerOptionsMapperTest {
 
       // then
       assertEquals(json.service(), composeOptions.service);
+    }
+
+    @Test
+    @DisplayName("propagates --shell to the compose session")
+    void shouldMapShell() {
+      final var options = new DevcontainerOptions();
+      options.shell = "/bin/zsh";
+      assertEquals("/bin/zsh",
+          composeOptions(options, DevcontainerBuilder.builder().create(), Paths.get(".")).shell);
+    }
+
+    @Test
+    @DisplayName("propagates --fresh to the compose session")
+    void shouldMapFresh() {
+      final var options = new DevcontainerOptions();
+      options.fresh = true;
+      assertTrue(composeOptions(options, DevcontainerBuilder.builder().create(), Paths.get(".")).fresh);
     }
 
     @Test

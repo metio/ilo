@@ -72,12 +72,17 @@ public final class DevcontainerCommand implements Callable<Integer> {
     }
 
     if (isComposeBased(devcontainer)) {
+      if (Strings.isBlank(devcontainer.service())) {
+        System.err.println("ilo: this compose-based devcontainer.json declares a dockerComposeFile but "
+            + "no 'service' to attach to; add a \"service\" entry.");
+        return CommandLine.ExitCode.USAGE;
+      }
       final var command = new ComposeCommand();
       command.options = composeOptions(options, devcontainer, json);
       return command.call();
     } else if (usesImageOrDockerfile(devcontainer)) {
       final var command = new ShellCommand();
-      final var shellOptions = shellOptions(options, devcontainer);
+      final var shellOptions = shellOptions(options, devcontainer, json);
       // A Dockerfile-only devcontainer declares no image name; give the build a stable tag to produce
       // and run from. An explicit image is kept as-is.
       shellOptions.image = imageTag(devcontainer, json);

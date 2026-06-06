@@ -47,14 +47,23 @@ public enum ComposeRuntime implements Runtime<ComposeCLI> {
    * @return The selected compose runtime.
    */
   public static ComposeCLI autoSelect(final ComposeRuntime preferred) {
-    return Optional.ofNullable(preferred)
+    // A forced (or ILO_COMPOSE_RUNTIME) choice must exist, or the run fails — never silently fall back
+    // to a different runtime than the user asked for. 'exists()' is checked exactly once per path here
+    // (the docker-compose-v2 probe spawns a subprocess, so the old trailing re-check was wasteful).
+    final var forced = Optional.ofNullable(preferred)
         .or(() -> Runtime.fromEnvironment(EnvironmentVariables.ILO_COMPOSE_RUNTIME.name(), values()))
+        .map(ComposeRuntime::cli);
+    if (forced.isPresent()) {
+      return forced
+          .filter(CliTool::exists)
+          .orElseThrow(() -> new NoMatchingRuntimeException("The selected compose runtime '"
+              + forced.get().name() + "' is not available on your system. Install it (for 'docker' that "
+              + "means the Docker Compose v2 plugin), or choose another with --runtime / ILO_COMPOSE_RUNTIME."));
+    }
+    return Arrays.stream(ComposeRuntime.values())
         .map(ComposeRuntime::cli)
-        .or(() -> Arrays.stream(ComposeRuntime.values())
-            .map(ComposeRuntime::cli)
-            .filter(CliTool::exists)
-            .findFirst())
         .filter(CliTool::exists)
+        .findFirst()
         .orElseThrow(NoMatchingRuntimeException::new);
   }
 

@@ -300,6 +300,13 @@ class ShellExpansionTest {
       properties.set("user.home", "C:\\Users\\me");
       assertEquals("C:\\Users\\me/work", shell.expandTilde("~/work"));
     }
+
+    @Test
+    @DisplayName("leaves a leading tilde literal when the home directory is unknown")
+    void unknownHome(final SystemProperties properties) {
+      properties.set("user.home", "");
+      assertEquals("~/work", shell.expandTilde("~/work"));
+    }
   }
 
 }

@@ -71,7 +71,17 @@ public final class ShellCommand implements Callable<Integer> {
     // '--pull' has to recreate the container: a reused container would never see the freshly pulled
     // image, so the flag would otherwise do nothing. A paused container is recreated too, since it
     // cannot be started.
-    final var fresh = options.fresh || options.pull || ContainerState.PAUSED == state;
+    final var wantsFresh = options.fresh || options.pull || ContainerState.PAUSED == state;
+    // Recreating removes the container, which would tear it out from under another terminal attached to
+    // the same running container. When that is the case, skip the recreate and attach to the existing
+    // container instead — recreating it later, once the other sessions have closed.
+    final var deferredForReuse = wantsFresh && ContainerState.RUNNING == state
+        && otherSessionsAttached(tool, containerName);
+    if (deferredForReuse) {
+      System.err.println("ilo: another session is attached to this container, so --fresh/--pull is "
+          + "skipped and ilo attaches to the existing one; close the other sessions and rerun to recreate it.");
+    }
+    final var fresh = wantsFresh && !deferredForReuse;
     final var creating = fresh || ContainerState.ABSENT == state;
     // A keep-id mapping pinned to the user's UID/GID needs the user's in-image IDs, read by probing the
     // image. That probe only matters when the container is created — a reused one already has them baked
@@ -83,7 +93,10 @@ public final class ShellCommand implements Callable<Integer> {
         fresh && ContainerState.ABSENT != state ? tool.removeArguments(options, containerName) : List.of(),
         tool.pullArguments(options),
         tool.buildArguments(options),
-        tool.createArguments(options, containerName),
+        // Only assemble the create command when the container is actually being created — the lifecycle
+        // executes it only then anyway, and assembling it has side effects (missing-volume handling
+        // creates/warns/errors), which must not fire on a plain reuse/attach.
+        creating ? tool.createArguments(options, containerName) : List.of(),
         tool.startArguments(options, containerName),
         tool.attachArguments(options, containerName),
         () -> teardown(tool, containerName));

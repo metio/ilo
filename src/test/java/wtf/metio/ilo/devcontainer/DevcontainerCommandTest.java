@@ -100,6 +100,23 @@ class DevcontainerCommandTest {
   }
 
   @Test
+  @ExtendWith(SystemStubsExtension.class)
+  @DisplayName("reports a clear message and USAGE when a compose-based devcontainer.json declares no service")
+  void warnsWhenComposeHasNoService(@TempDir final Path directory, final SystemProperties properties,
+      final SystemErr systemErr) throws Exception {
+    Files.writeString(directory.resolve("devcontainer.json"), "{\"dockerComposeFile\":[\"docker-compose.yml\"]}");
+    properties.set("user.dir", directory.toString());
+    final var command = new DevcontainerCommand();
+    command.options = new DevcontainerOptions();
+    command.options.locations = List.of("devcontainer.json");
+
+    final var exitCode = command.call();
+
+    assertEquals(CommandLine.ExitCode.USAGE, exitCode);
+    assertTrue(systemErr.getText().contains("service"), systemErr.getText());
+  }
+
+  @Test
   void shouldRunFailingStringCommand() {
     final var devcontainer = new DevcontainerCommand();
     final var command = Command.builder().string("sdlkfj").create();

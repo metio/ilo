@@ -37,6 +37,42 @@ jobs:
       - id: verify
         name: Verify Project
         run: mvn --batch-mode --define skipNativeBuild=false verify
+      - id: smoke
+        name: Smoke test the native binary
+        shell: bash
+        # Run the freshly built binary so a native-only failure (a missing reflection/resource
+        # registration) is caught here instead of shipping a binary that crashes on first run.
+        run: |
+          bin="target/ilo"; [ -f "target/ilo.exe" ] && bin="target/ilo.exe"
+          "$bin" --version
+          "$bin" --help
+  mutation:
+    name: Mutation tests (PIT)
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v6
+      - id: graal
+        name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: latest
+          java-version: 25
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - id: cache
+        name: Cache Maven Repository
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - id: mutation
+        name: Run Mutation Tests
+        # PIT is configured in pluginManagement but not bound to a phase, so it is invoked directly;
+        # the explicit threshold makes this a real gate regardless of the parent's configuration.
+        run: mvn --batch-mode test-compile org.pitest:pitest-maven:mutationCoverage -DmutationThreshold=65
   integration:
     name: Integration tests (Docker)
     runs-on: ubuntu-latest

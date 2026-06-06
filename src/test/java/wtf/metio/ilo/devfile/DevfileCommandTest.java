@@ -58,6 +58,13 @@ class DevfileCommandTest {
   }
 
   @Test
+  @DisplayName("rejects a dockerfile without an imageName (the build's --tag), explaining it rather than crashing")
+  void shouldNotSupportDockerfileWithoutImageName() {
+    final var devfile = devfile(dockerfileComponent("image", null, "Dockerfile"));
+    assertFalse(DevfileCommand.hasSupportedDevfileConfiguration(devfile, "image"));
+  }
+
+  @Test
   @DisplayName("rejects a component whose name does not match")
   void shouldNotSupportUnknownComponent() {
     final var devfile = devfile(containerComponent("container", "docker.io/library/maven:latest"));

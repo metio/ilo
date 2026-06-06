@@ -10,4 +10,8 @@ public final class NoMatchingRuntimeException extends BusinessException {
     super(107, null, "No matching runtime was found on your system. Select another runtime using '--runtime' or install your preferred runtime on your system.");
   }
 
+  public NoMatchingRuntimeException(final String message) {
+    super(107, null, message);
+  }
+
 }

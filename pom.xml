@@ -388,6 +388,12 @@
                         <configuration>
                             <imageName>ilo</imageName>
                             <mainClass>${ilo.mainClass}</mainClass>
+                            <!-- Fail the build rather than silently emitting a fallback image that needs
+                                 a JVM at runtime, so a missing reachability registration surfaces here
+                                 instead of crashing the shipped binary on first run. -->
+                            <buildArgs>
+                                <buildArg>--no-fallback</buildArg>
+                            </buildArgs>
                         </configuration>
                     </execution>
                 </executions>

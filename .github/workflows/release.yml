@@ -90,6 +90,16 @@ jobs:
           --define sign.keyPass=${{ secrets.GPG_SECRET_KEY_PASSWORD }}
           --define project.build.outputTimestamp=${{ needs.prepare.outputs.build_timestamp }}
           verify
+      - id: smoke
+        name: Smoke test the native binary
+        if: needs.prepare.outputs.commit_count > 0
+        shell: bash
+        # Run the freshly built binary so a native-only failure (a missing reflection/resource
+        # registration) fails the release here instead of shipping a binary that crashes on first run.
+        run: |
+          bin="target/ilo"; [ -f "target/ilo.exe" ] && bin="target/ilo.exe"
+          "$bin" --version
+          "$bin" --help
       - id: upload-java
         name: Upload JVM Artifact
         if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'

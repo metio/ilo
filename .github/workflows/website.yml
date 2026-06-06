@@ -26,7 +26,7 @@ jobs:
           hugo-version: 0.162.1
       - id: previous
         name: Get Last Release
-        run: echo "::set-output name=version::$(git describe --abbrev=0 --tags)"
+        run: echo "version=$(git describe --abbrev=0 --tags)" >> "$GITHUB_OUTPUT"
       - id: build
         name: Build Website
         run: hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs

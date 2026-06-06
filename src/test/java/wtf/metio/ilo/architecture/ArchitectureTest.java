@@ -28,17 +28,8 @@ public final class ArchitectureTest {
   @TestFactory
   @DisplayName("Global Rules")
   Stream<DynamicNode> globalRules() {
-    return Stream.of(CodingRules.class, StructureRules.class, LayerRules.class)
+    return Stream.of(CodingRules.class, StructureRules.class, LayerRules.class, DependencyRules.class)
         .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
-  }
-
-  @TestFactory
-  @DisplayName("Implementation Rules")
-  @Disabled
-  Stream<DynamicNode> implementationRules() {
-    return Stream.of();
-    //return Stream.of(CliRules.class, ErrorsRules.class, ToolsRules.class)
-    //  .map(clazz -> ArchUnitTests.in(clazz, rule -> rule.check(classes)));
   }
 
 }
