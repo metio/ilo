@@ -14,21 +14,25 @@ public final class ShellTokenizer {
   }
 
   /**
-   * Tokenizes the given String
+   * Tokenizes the given String into its argument tokens (no quoting applied).
    *
    * @param arguments A String containing one or more command-line style arguments to be tokenized.
-   * @return A list of parsed and properly escaped arguments.
+   * @return The argument tokens, with quotes and escapes interpreted and removed.
    */
   public static List<String> tokenize(final String arguments) {
     return tokenize(arguments, false);
   }
 
   /**
-   * Tokenizes the given String into String tokens.
+   * Tokenizes the given String into its argument tokens.
    *
    * @param arguments A String containing one or more command-line style arguments to be tokenized.
-   * @param stringify Whether to include escape special characters
-   * @return A list of parsed and properly escaped arguments.
+   * @param stringify When {@code true}, each token is wrapped in double quotes with {@code "} and
+   *                  {@code \} escaped and control characters rendered as escape sequences — i.e.
+   *                  Java/JSON-style string-literal quoting for display, <em>not</em> shell-safe
+   *                  quoting ({@code $} and {@code `} are left as-is, so the result must not be handed
+   *                  back to a shell for evaluation).
+   * @return The argument tokens, optionally string-literal quoted.
    */
   public static List<String> tokenize(final String arguments, final boolean stringify) {
     final var tokens = new Scanner(arguments).scan();

@@ -56,6 +56,7 @@ public final class ShellCommand implements Callable<Integer> {
 
   @Override
   public Integer call() {
+    warnIfNonInteractiveWithoutCommand(options);
     final var tool = executor.selectRuntime(options.runtime);
     // Resolve the file-ownership mapping (and, on rootful Docker, build the derived remap image) before
     // the container name is derived, so toggling it recreates the container rather than reusing one
@@ -88,6 +89,17 @@ public final class ShellCommand implements Callable<Integer> {
         () -> teardown(tool, containerName));
     return SessionLifecycle.run(steps, lifecycle.apply(tool, containerName),
         fresh, options.debug, executor.sessionExecutor(), state);
+  }
+
+  // A non-interactive attach with no command execs the shell with no stdin attached, so it reads EOF
+  // and exits immediately — a session that looks successful but does nothing. Warn so the user knows to
+  // pass a command. ('ilo shell' defaults --interactive to true, so this only fires on --no-interactive.)
+  // visible for testing
+  static void warnIfNonInteractiveWithoutCommand(final ShellOptions options) {
+    if (!options.interactive && (options.commands == null || options.commands.isEmpty())) {
+      System.err.println("ilo: --no-interactive was given without a command, so the shell starts with no "
+          + "input and exits immediately; pass a command to run inside the container.");
+    }
   }
 
   // Keeps only the container matching the current definition: removes this project's stopped

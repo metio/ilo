@@ -79,7 +79,7 @@ enum RemoteUserMapping {
     return switch (this) {
       case NONE, REMAP -> runAs(remoteUser);
       case KEEP_ID -> Stream.concat(Stream.of(keepId(remoteUid, remoteGid)), runAs(remoteUser).stream()).toList();
-      case HOST_USER -> List.of("--user", expand.expand("$(id -u):$(id -g)"));
+      case HOST_USER -> hostUserArguments(expand.expand("$(id -u):$(id -g)"));
     };
   }
 
@@ -109,8 +109,22 @@ enum RemoteUserMapping {
       // on podman/nerdctl too is harmless, since it just names the user the exec already inherits.
       case KEEP_ID -> List.of();
       case NONE, REMAP -> runAs(remoteUser);
-      case HOST_USER -> List.of("--user", expand.expand("$(id -u):$(id -g)"));
+      case HOST_USER -> hostUserArguments(expand.expand("$(id -u):$(id -g)"));
     };
+  }
+
+  // Runs the container as the bare host UID:GID. The ids come from the host shell ('$(id -u):$(id -g)');
+  // if that yields anything other than 'digits:digits' — 'id' is unavailable, or no shell is present so
+  // the expression comes back verbatim — the mapping degrades to letting the runtime pick the user, with
+  // a warning, rather than passing a malformed '--user' that the runtime would reject.
+  // visible for testing
+  static List<String> hostUserArguments(final String hostUserAndGroup) {
+    if (null != hostUserAndGroup && hostUserAndGroup.matches("\\d+:\\d+")) {
+      return List.of("--user", hostUserAndGroup);
+    }
+    System.err.println("ilo could not determine the host user id (got '" + hostUserAndGroup
+        + "'); the container runs as its default user, so files it creates may not be owned by you.");
+    return List.of();
   }
 
   // Runs the container as a named user; the root user is left to the runtime (rootless runtimes map it

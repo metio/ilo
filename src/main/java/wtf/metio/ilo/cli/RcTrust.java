@@ -26,6 +26,13 @@ import java.util.List;
  * by a host shell). A file is therefore only loaded after the user has trusted it. Trust binds the
  * file's absolute path to a hash of its content, so moving the file to another path or changing its
  * content revokes trust and forces a fresh decision.</p>
+ *
+ * <p>The trust check hashes the file's content and picocli then re-reads the same file to expand it as
+ * an argument file, so there is a narrow time-of-check/time-of-use window in which a local actor with
+ * write access could swap the content between the two reads. The window is accepted: exploiting it
+ * requires the ability to write the file at exactly that instant, and an actor with that access could
+ * simply have changed the file before the run — trust is a guard against unfamiliar project files, not
+ * against a local attacker who already controls them.</p>
  */
 public final class RcTrust {
 

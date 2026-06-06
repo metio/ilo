@@ -10,14 +10,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.stream.SystemErr;
+import wtf.metio.ilo.errors.RuntimeIOException;
 import wtf.metio.ilo.test.TestMethodSources;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("ComposeCommand")
 @ExtendWith(SystemStubsExtension.class)
@@ -192,6 +197,37 @@ class ComposeCommandTest extends TestMethodSources {
         call(tool, "--file", YML, "up", "--detach", "dev"),
         call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
         call(tool, "--file", YML, "stop")), executor.executed());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("warns that services will be stopped without the keepalive override")
+  void warnsWithoutOverride(final String runtime, final SystemErr systemErr) {
+    useRuntime(runtime);
+    options.overrideCommand = false;
+    compose.call();
+    assertTrue(systemErr.getText().contains("--keep-running"), systemErr.getText());
+  }
+
+  @ParameterizedTest
+  @MethodSource("dockerComposeLikeRuntimes")
+  @DisplayName("degrades to the unmanaged path when the keepalive override cannot be written")
+  void degradesWhenOverrideWriteFails(final String runtime, final SystemErr systemErr) {
+    final var failing = new ComposeCommand(executor, service -> {
+      throw new RuntimeIOException(new IOException("disk full"));
+    });
+    failing.options = options;
+    final var tool = useRuntime(runtime);
+
+    failing.call();
+
+    assertAll(
+        () -> assertTrue(systemErr.getText().contains("keepalive override"), systemErr.getText()),
+        // The services still come up, but without the override file layered onto the compose files.
+        () -> assertIterableEquals(List.of(
+            call(tool, "--file", YML, "up", "--detach", "dev"),
+            call(tool, "--file", YML, "exec", "-T", "dev", "/bin/sh"),
+            call(tool, "--file", YML, "stop")), executor.executed()));
   }
 
   @ParameterizedTest

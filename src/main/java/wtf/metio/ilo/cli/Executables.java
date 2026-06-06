@@ -253,12 +253,17 @@ public final class Executables {
     reader.setDaemon(true);
     reader.start();
 
+    final var deadline = System.nanoTime() + timeout.toNanos();
     try {
       if (!process.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS)) {
         process.destroyForcibly();
         throw new CommandTimedOutException(timeout.toSeconds(), String.join(" ", arguments));
       }
-      reader.join(timeout.toMillis());
+      // Drain whatever the process wrote before it exited, but only for the time left in the overall
+      // timeout — so the total wait stays bounded by 'timeout' rather than up to twice it. The floor of
+      // 1ms matters because join(0) would block forever.
+      final var remaining = Math.max(1L, (deadline - System.nanoTime()) / 1_000_000L);
+      reader.join(remaining);
     } catch (final InterruptedException exception) {
       process.destroyForcibly();
       Thread.currentThread().interrupt();

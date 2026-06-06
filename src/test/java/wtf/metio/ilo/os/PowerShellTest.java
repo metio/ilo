@@ -10,6 +10,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.extension.ExtendWith;
+import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
+import uk.org.webcompere.systemstubs.properties.SystemProperties;
+
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,6 +39,15 @@ class PowerShellTest {
         () -> assertFalse(command.startsWith("'"), command),
         // Environment variables are read through the 'env:' drive, not as plain '$USERNAME'.
         () -> assertTrue(command.contains("$env:USERNAME"), command));
+  }
+
+  @Test
+  @DisplayName("expands a leading tilde before a Windows backslash path")
+  @ExtendWith(SystemStubsExtension.class)
+  void expandsWindowsBackslashTilde(final SystemProperties properties) {
+    properties.set("user.home", "C:\\Users\\me");
+    final var shell = new PowerShell(Path.of("pwsh"));
+    assertEquals("C:\\Users\\me\\work", shell.expandTilde("~\\work"));
   }
 
   @Nested

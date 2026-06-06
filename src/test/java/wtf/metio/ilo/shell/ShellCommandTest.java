@@ -46,6 +46,34 @@ class ShellCommandTest extends TestMethodSources {
     return executor.executed().stream().map(arguments -> arguments.get(1)).toList();
   }
 
+  @Test
+  @DisplayName("warns when --no-interactive is given without a command")
+  void warnsOnNonInteractiveWithoutCommand(final SystemErr systemErr) {
+    final var nonInteractive = new ShellOptions();
+    nonInteractive.interactive = false;
+    ShellCommand.warnIfNonInteractiveWithoutCommand(nonInteractive);
+    assertTrue(systemErr.getText().contains("--no-interactive"), systemErr.getText());
+  }
+
+  @Test
+  @DisplayName("does not warn for a non-interactive run that has a command")
+  void doesNotWarnWithCommand(final SystemErr systemErr) {
+    final var withCommand = new ShellOptions();
+    withCommand.interactive = false;
+    withCommand.commands = List.of("make");
+    ShellCommand.warnIfNonInteractiveWithoutCommand(withCommand);
+    assertTrue(systemErr.getText().isEmpty(), systemErr.getText());
+  }
+
+  @Test
+  @DisplayName("does not warn for an interactive session")
+  void doesNotWarnWhenInteractive(final SystemErr systemErr) {
+    final var interactive = new ShellOptions();
+    interactive.interactive = true;
+    ShellCommand.warnIfNonInteractiveWithoutCommand(interactive);
+    assertTrue(systemErr.getText().isEmpty(), systemErr.getText());
+  }
+
   @ParameterizedTest
   @MethodSource("dockerLikeRuntimes")
   @DisplayName("creates and attaches when the container is absent")
