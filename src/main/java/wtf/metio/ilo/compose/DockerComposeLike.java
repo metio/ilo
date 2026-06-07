@@ -106,7 +106,7 @@ abstract class DockerComposeLike implements ComposeCLI {
     return flatten(
         of(name(), command()),
         fromList(expand.expand(options.runtimeOptions)),
-        withPrefix("--file", expand.expand(options.file)),
+        withPrefix(FILE, expand.expand(options.file)),
         of("stop"),
         optional("", expand.expand(options.service)),
         fromList(expand.expand(options.runServices)));
@@ -120,7 +120,7 @@ abstract class DockerComposeLike implements ComposeCLI {
     return flatten(
         of(name(), command()),
         fromList(expand.expand(options.runtimeOptions)),
-        withPrefix("--file", expand.expand(options.file)),
+        withPrefix(FILE, expand.expand(options.file)),
         of("top"),
         optional("", expand.expand(options.service)));
   }
@@ -134,7 +134,7 @@ abstract class DockerComposeLike implements ComposeCLI {
     return flatten(
         of(name(), command()),
         fromList(expand.expand(options.runtimeOptions)),
-        withPrefix("--file", expand.expand(options.file)),
+        withPrefix(FILE, expand.expand(options.file)),
         of("down"),
         fromList(expand.expand(options.runtimeCleanupOptions)));
   }

@@ -76,6 +76,57 @@
         <pit.mutationCoverage>65</pit.mutationCoverage>
         <pmd.skip>false</pmd.skip>
         <pgp.skip>true</pgp.skip>
+
+        <!-- SonarQube Cloud (sonarcloud.io). Analysis runs from CI via 'mvn sonar:sonar'; the
+             scanner reads these properties, so the exclusions below are version-controlled here
+             rather than in the UI. -->
+        <sonar.organization>metio</sonar.organization>
+        <sonar.projectKey>metio_ilo</sonar.projectKey>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+
+        <!-- Issue exclusions for rules whose findings are deliberate design choices, contract
+             requirements, or analyzer false positives. Each entry notes why; rules not listed
+             stay fully active. -->
+        <sonar.issue.ignore.multicriteria>logger,generics,debugfield,methodsource,publicfields,testinfra1,testinfra2,prose1,prose2,nestedtry,sleep,versionname,versionctor</sonar.issue.ignore.multicriteria>
+        <!-- S106: single-binary native-image CLI with no logging framework; stderr/stdout is the
+             user-facing output channel by design. -->
+        <sonar.issue.ignore.multicriteria.logger.ruleKey>java:S106</sonar.issue.ignore.multicriteria.logger.ruleKey>
+        <sonar.issue.ignore.multicriteria.logger.resourceKey>**/*</sonar.issue.ignore.multicriteria.logger.resourceKey>
+        <!-- S119: the model layer uses descriptive type-parameter names as a documented convention. -->
+        <sonar.issue.ignore.multicriteria.generics.ruleKey>java:S119</sonar.issue.ignore.multicriteria.generics.ruleKey>
+        <sonar.issue.ignore.multicriteria.generics.resourceKey>**/*</sonar.issue.ignore.multicriteria.generics.resourceKey>
+        <!-- S1845: the Options contract is debug(); the field it returns is named debug. -->
+        <sonar.issue.ignore.multicriteria.debugfield.ruleKey>java:S1845</sonar.issue.ignore.multicriteria.debugfield.ruleKey>
+        <sonar.issue.ignore.multicriteria.debugfield.resourceKey>**/*Options.java</sonar.issue.ignore.multicriteria.debugfield.resourceKey>
+        <!-- S1144: JUnit @MethodSource providers referenced by string name from subclasses. -->
+        <sonar.issue.ignore.multicriteria.methodsource.ruleKey>java:S1144</sonar.issue.ignore.multicriteria.methodsource.ruleKey>
+        <sonar.issue.ignore.multicriteria.methodsource.resourceKey>**/TestMethodSources.java</sonar.issue.ignore.multicriteria.methodsource.resourceKey>
+        <!-- S1104: fields public to match the picocli option-binding style; resolved programmatically. -->
+        <sonar.issue.ignore.multicriteria.publicfields.ruleKey>java:S1104</sonar.issue.ignore.multicriteria.publicfields.ruleKey>
+        <sonar.issue.ignore.multicriteria.publicfields.resourceKey>**/ShellOptions.java</sonar.issue.ignore.multicriteria.publicfields.resourceKey>
+        <!-- S2187: test-support classes (ArchUnit suite runner, reflection helper) with no @Test. -->
+        <sonar.issue.ignore.multicriteria.testinfra1.ruleKey>java:S2187</sonar.issue.ignore.multicriteria.testinfra1.ruleKey>
+        <sonar.issue.ignore.multicriteria.testinfra1.resourceKey>**/ArchUnitTests.java</sonar.issue.ignore.multicriteria.testinfra1.resourceKey>
+        <sonar.issue.ignore.multicriteria.testinfra2.ruleKey>java:S2187</sonar.issue.ignore.multicriteria.testinfra2.ruleKey>
+        <sonar.issue.ignore.multicriteria.testinfra2.resourceKey>**/ClassTests.java</sonar.issue.ignore.multicriteria.testinfra2.resourceKey>
+        <!-- S125: prose comments that contain code-like tokens, not commented-out code. -->
+        <sonar.issue.ignore.multicriteria.prose1.ruleKey>java:S125</sonar.issue.ignore.multicriteria.prose1.ruleKey>
+        <sonar.issue.ignore.multicriteria.prose1.resourceKey>**/RemoteUserMapping.java</sonar.issue.ignore.multicriteria.prose1.resourceKey>
+        <sonar.issue.ignore.multicriteria.prose2.ruleKey>java:S125</sonar.issue.ignore.multicriteria.prose2.ruleKey>
+        <sonar.issue.ignore.multicriteria.prose2.resourceKey>**/DockerTest.java</sonar.issue.ignore.multicriteria.prose2.resourceKey>
+        <!-- S1141: nested try does atomic temp-file cleanup-on-failure and reads clearly inline. -->
+        <sonar.issue.ignore.multicriteria.nestedtry.ruleKey>java:S1141</sonar.issue.ignore.multicriteria.nestedtry.ruleKey>
+        <sonar.issue.ignore.multicriteria.nestedtry.resourceKey>**/RcTrust.java</sonar.issue.ignore.multicriteria.nestedtry.resourceKey>
+        <!-- S2925: the test exercises the capture drain-grace timing, so the sleep is under test. -->
+        <sonar.issue.ignore.multicriteria.sleep.ruleKey>java:S2925</sonar.issue.ignore.multicriteria.sleep.ruleKey>
+        <sonar.issue.ignore.multicriteria.sleep.resourceKey>**/ExecutablesTest.java</sonar.issue.ignore.multicriteria.sleep.resourceKey>
+        <!-- S1700: VERSION is a conventional name for the single version constant. -->
+        <sonar.issue.ignore.multicriteria.versionname.ruleKey>java:S1700</sonar.issue.ignore.multicriteria.versionname.ruleKey>
+        <sonar.issue.ignore.multicriteria.versionname.resourceKey>**/version/Version.java</sonar.issue.ignore.multicriteria.versionname.resourceKey>
+        <!-- S1118: a private constructor would make the class uncoverable (VERSION inlines at compile
+             time), breaking the CLASS MISSEDCOUNT = 0 coverage gate. -->
+        <sonar.issue.ignore.multicriteria.versionctor.ruleKey>java:S1118</sonar.issue.ignore.multicriteria.versionctor.ruleKey>
+        <sonar.issue.ignore.multicriteria.versionctor.resourceKey>**/version/Version.java</sonar.issue.ignore.multicriteria.versionctor.resourceKey>
     </properties>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
