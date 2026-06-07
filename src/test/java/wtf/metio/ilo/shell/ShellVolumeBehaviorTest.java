@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.stream.SystemErr;
@@ -21,8 +23,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @DisplayName("ShellVolumeBehavior")
 @ExtendWith(SystemStubsExtension.class)
@@ -106,36 +110,21 @@ class ShellVolumeBehaviorTest {
     assertTrue(ok, "Existing directory was not ignored");
   }
 
-  @Test
-  @DisplayName("extract local directory")
-  void shouldExtractLocalDirectory() {
-    final var mount = "/local/directory:/container/directory";
-    final var localPart = ShellVolumeBehavior.extractLocalPart(mount);
-    assertEquals("/local/directory", localPart);
+  // The Windows drive path checks that a 'C:\...' source is not split on its drive colon.
+  @ParameterizedTest(name = "{0}")
+  @DisplayName("extracts the host directory from a mount directive")
+  @MethodSource("mountDirectives")
+  void shouldExtractLocalDirectory(final String mount, final String expectedLocalPart) {
+    assertEquals(expectedLocalPart, ShellVolumeBehavior.extractLocalPart(mount));
   }
 
-  @Test
-  @DisplayName("extract local directory in a mount directive using a SEL label")
-  void shouldExtractLocalDirectoryWithSelLabel() {
-    final var mount = "/local/directory:/container/directory:Z";
-    final var localPart = ShellVolumeBehavior.extractLocalPart(mount);
-    assertEquals("/local/directory", localPart);
-  }
-
-  @Test
-  @DisplayName("extract local directory from a Windows drive path without splitting on the drive colon")
-  void shouldExtractWindowsDriveLocalDirectory() {
-    final var mount = "C:\\Users\\me:/container:ro";
-    final var localPart = ShellVolumeBehavior.extractLocalPart(mount);
-    assertEquals("C:\\Users\\me", localPart);
-  }
-
-  @Test
-  @DisplayName("extract local directory in a mount directive without a container path")
-  void shouldExtractLocalDirectoryWithoutContainerPath() {
-    final var mount = "/local/directory";
-    final var localPart = ShellVolumeBehavior.extractLocalPart(mount);
-    assertEquals("/local/directory", localPart);
+  static Stream<Arguments> mountDirectives() {
+    return Stream.of(
+        arguments("/local/directory:/container/directory", "/local/directory"),
+        arguments("/local/directory:/container/directory:Z", "/local/directory"),
+        arguments("C:\\Users\\me:/container:ro", "C:\\Users\\me"),
+        arguments("/local/directory", "/local/directory")
+    );
   }
 
   @ParameterizedTest

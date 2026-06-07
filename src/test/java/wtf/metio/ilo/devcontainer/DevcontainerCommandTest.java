@@ -11,6 +11,8 @@ import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import picocli.CommandLine;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.properties.SystemProperties;
@@ -20,6 +22,7 @@ import wtf.metio.devcontainer.Command;
 import wtf.metio.devcontainer.DevcontainerBuilder;
 import wtf.metio.devcontainer.Mount;
 import wtf.metio.devcontainer.UserEnvProbe;
+import wtf.metio.ilo.cli.Executables;
 import wtf.metio.ilo.shell.Docker;
 import wtf.metio.ilo.shell.ShellOptions;
 
@@ -30,6 +33,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionException;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -39,38 +43,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DevcontainerCommandTest {
 
-  @Test
-  void shouldRunEmptyStringCommand() {
+  @ParameterizedTest(name = "{0}")
+  @DisplayName("runs a string command through the host shell and reports success")
+  @MethodSource("runnableStringCommands")
+  void shouldRunStringCommand(final String commandString) {
     final var devcontainer = new DevcontainerCommand();
-    final var command = Command.builder().string("").create();
-    final var exitCode = devcontainer.runCommand(command, false);
-    assertEquals(CommandLine.ExitCode.OK, exitCode);
+    final var command = Command.builder().string(commandString).create();
+    assertEquals(CommandLine.ExitCode.OK, devcontainer.runCommand(command, false));
   }
 
-  @Test
-  @EnabledOnOs({OS.LINUX, OS.MAC})
-  void shouldRunStringCommand() {
-    final var devcontainer = new DevcontainerCommand();
-    final var command = Command.builder().string("ls").create();
-    final var exitCode = devcontainer.runCommand(command, false);
-    assertEquals(CommandLine.ExitCode.OK, exitCode);
-  }
-
-  @Test
-  @EnabledOnOs(OS.WINDOWS)
-  void shouldRunStringCommandWindows() {
-    final var devcontainer = new DevcontainerCommand();
-    final var command = Command.builder().string("dir").create();
-    final var exitCode = devcontainer.runCommand(command, false);
-    assertEquals(CommandLine.ExitCode.OK, exitCode);
-  }
-
-  @Test
-  void shouldRunComplexStringCommand() {
-    final var devcontainer = new DevcontainerCommand();
-    final var command = Command.builder().string("echo foo='bar'").create();
-    final var exitCode = devcontainer.runCommand(command, false);
-    assertEquals(CommandLine.ExitCode.OK, exitCode);
+  static Stream<String> runnableStringCommands() {
+    // The empty and quoted-echo strings run on every platform; the third is the host's directory
+    // listing command, so a real shell invocation is still exercised wherever the suite runs.
+    return Stream.of("", "echo foo='bar'", Executables.isWindows() ? "dir" : "ls");
   }
 
   @Test
