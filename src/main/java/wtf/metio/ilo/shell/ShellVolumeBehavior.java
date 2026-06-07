@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static wtf.metio.ilo.utils.Streams.filter;
 import static wtf.metio.ilo.utils.Streams.fromList;
 
@@ -70,7 +69,7 @@ public enum ShellVolumeBehavior {
   public List<String> handleLocalDirectories(final List<String> volumes) {
     return filter(fromList(volumes))
         .filter(this::handleLocalDirectory)
-        .collect(toList());
+        .toList();
   }
 
   private boolean handleLocalDirectory(final String volume) {

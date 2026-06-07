@@ -31,9 +31,10 @@ public final class Terminal {
     }
     try {
       return (boolean) Console.class.getMethod("isTerminal").invoke(console);
-    } catch (final NoSuchMethodException unavailableBeforeJava22) {
+    } catch (final NoSuchMethodException _) {
+      // Console.isTerminal() arrived in Java 22; on an older runtime assume an interactive terminal.
       return true;
-    } catch (final ReflectiveOperationException unexpected) {
+    } catch (final ReflectiveOperationException _) {
       return false;
     }
   }

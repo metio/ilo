@@ -88,7 +88,7 @@ final class RemoteUser {
     try {
       RemoteUserImage.rewrite(options, hostUid, hostGid);
       return RemoteUserMapping.REMAP;
-    } catch (final RuntimeIOException exception) {
+    } catch (final RuntimeIOException _) {
       warn("ilo: could not prepare the remap image; running as your host UID/GID instead so project "
           + "files stay owned by you.");
       return RemoteUserMapping.HOST_USER;
