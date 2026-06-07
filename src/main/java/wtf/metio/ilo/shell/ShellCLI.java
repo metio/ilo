@@ -4,12 +4,48 @@
  */
 package wtf.metio.ilo.shell;
 
+import wtf.metio.ilo.cli.ContainerState;
 import wtf.metio.ilo.model.CliTool;
 
 import java.util.List;
 import java.util.function.Function;
 
 public interface ShellCLI extends CliTool<ShellOptions> {
+
+  /**
+   * Reports the container's state by running its probe command line and interpreting the output. The
+   * docker family pre-filters the listing to one container and emits a bare state word, so the default
+   * delegates to {@link ContainerState#fromProbe}; a runtime whose listing cannot be filtered or
+   * templated (Apple's {@code container}) overrides this to select and read the entry itself.
+   *
+   * @param options       The options to use.
+   * @param containerName The reused name of the session's container.
+   * @param capture       Runs a command line and returns its standard output.
+   * @return The observed state.
+   */
+  default ContainerState probeState(final ShellOptions options, final String containerName,
+      final Function<List<String>, String> capture) {
+    return ContainerState.fromProbe(capture.apply(probeArguments(options, containerName)));
+  }
+
+  /**
+   * Lists the names of this project's stale (stopped, ilo-managed) containers to remove. The docker
+   * family filters server-side and prints one name per line, so the default splits that output; a
+   * runtime that cannot filter its listing (Apple's {@code container}) overrides this to select the
+   * entries itself.
+   *
+   * @param options    The options to use.
+   * @param projectDir The absolute project directory, matched against the {@code ilo.project} label.
+   * @param capture    Runs a command line and returns its standard output.
+   * @return The names of this project's stale containers.
+   */
+  default List<String> staleContainers(final ShellOptions options, final String projectDir,
+      final Function<List<String>, String> capture) {
+    return capture.apply(staleContainersArguments(options, projectDir)).lines()
+        .map(String::strip)
+        .filter(name -> !name.isBlank())
+        .toList();
+  }
 
   /**
    * Resolves how this runtime aligns the container user with the host user so files written into the

@@ -4,7 +4,6 @@
  */
 package wtf.metio.ilo.model;
 
-import wtf.metio.ilo.cli.ContainerState;
 import wtf.metio.ilo.cli.Executables;
 import wtf.metio.ilo.cli.SessionLifecycle;
 
@@ -43,21 +42,13 @@ public interface CliExecutor<RUNTIME extends Runtime<CLI>, CLI extends CliTool<O
 
   /**
    * Runs a command and returns its captured standard output, used to query the runtime (e.g. to list
-   * the containers that belong to a project).
+   * the containers that belong to a project, or to probe a container's state).
    *
    * @param arguments The command line to run.
    * @return The trimmed standard output.
    */
   default String capture(final List<String> arguments) {
     return Executables.runAndReadOutput(arguments.toArray(new String[0]));
-  }
-
-  /**
-   * @return A probe that reports a container's state by running its probe command line and
-   * interpreting the captured output.
-   */
-  default SessionLifecycle.Probe probe() {
-    return arguments -> ContainerState.fromProbe(Executables.runAndReadOutput(arguments.toArray(new String[0])));
   }
 
 }

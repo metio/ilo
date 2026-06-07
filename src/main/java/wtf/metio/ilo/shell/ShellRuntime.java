@@ -16,7 +16,8 @@ public enum ShellRuntime implements Runtime<ShellCLI> {
 
   PODMAN(new Podman(), "podman", "p"),
   NERDCTL(new Nerdctl(), "nerdctl", "n"),
-  DOCKER(new Docker(), "docker", "d");
+  DOCKER(new Docker(), "docker", "d"),
+  CONTAINER(new Container(), "container", "c");
 
   private final ShellCLI cli;
   private final String[] aliases;

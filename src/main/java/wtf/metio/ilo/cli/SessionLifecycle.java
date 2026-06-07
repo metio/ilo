@@ -51,12 +51,6 @@ public final class SessionLifecycle {
   public record CommandResult(int exitCode, String output) {
   }
 
-  /** Observes the current container state by running and interpreting the probe command line. */
-  @FunctionalInterface
-  public interface Probe {
-    ContainerState state(List<String> probeArguments);
-  }
-
   /**
    * The command lines for each step of a session. Any list may be empty, in which case that step is
    * skipped (e.g. {@code pull}/{@code build} for an image that needs neither).

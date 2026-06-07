@@ -290,6 +290,9 @@ $ ilo shell --runtime docker
 # force to use nerdctl
 $ ilo shell --runtime nerdctl
 
+# force to use Apple's container (macOS only)
+$ ilo shell --runtime container
+
 # auto select
 $ ilo shell
 ```

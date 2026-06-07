@@ -37,21 +37,32 @@ public abstract class TestCliExecutor<RUNTIME extends Runtime<CLI>, CLI extends 
   }
 
   @Override
-  public final SessionLifecycle.Probe probe() {
-    return _ -> probeState;
-  }
-
-  @Override
   public final String capture(final List<String> arguments) {
-    // The session captures three listings: a 'top' command lists processes, an 'inspect' reports the
-    // main process PID, and anything else (the 'ps' sweep) lists container names.
+    // The session captures four kinds of listing: a 'top' command lists processes, an 'inspect' reports
+    // the main process PID, a state probe (a name-filtered listing) reports the container's state, and
+    // the stale sweep (a label-filtered listing) lists container names.
     if (arguments.contains("top")) {
       return processesOutput;
     }
     if (arguments.contains("inspect")) {
       return inspectOutput;
     }
+    if (arguments.stream().anyMatch(argument -> argument.startsWith("name="))) {
+      return probeStateWord();
+    }
     return captureOutput;
+  }
+
+  // The probe captures a runtime's state word and ContainerState.fromProbe maps it back, so the state
+  // set via probeState() round-trips through the same path the production code now uses (capture()
+  // rather than a canned probe).
+  private String probeStateWord() {
+    return switch (probeState) {
+      case ABSENT -> "";
+      case RUNNING -> "running";
+      case PAUSED -> "paused";
+      case STOPPED -> "exited";
+    };
   }
 
   /** Controls the container state the next session sees. */

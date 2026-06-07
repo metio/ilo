@@ -63,7 +63,7 @@ class ShellRuntimeTest {
   @Test
   @DisplayName("supports multiple runtimes")
   void shouldSupportMultipleRuntimes() {
-    assertEquals(3, values().length);
+    assertEquals(4, values().length);
   }
 
   @Test
