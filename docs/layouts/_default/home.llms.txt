@@ -1,0 +1,24 @@
+{{- /* Generates /llms-full.txt: the substantive docs concatenated as markdown for LLMs.
+       Sections are emitted in a fixed order; each section page is followed by its child pages
+       by weight. Page bodies use .RawContent (markdown without front matter). */ -}}
+# ilo — full documentation
+
+> The complete ilo documentation ({{ site.BaseURL }}) concatenated for LLMs. For a concise link index see {{ "llms.txt" | absURL }}.
+{{ range $section := (slice "usage" "shell" "compose" "devcontainer" "devfile") }}
+{{- with site.GetPage $section }}
+{{- template "ilo-llms-page" . }}
+{{- range .RegularPages.ByWeight }}
+{{- template "ilo-llms-page" . }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- define "ilo-llms-page" }}
+
+---
+
+# {{ .Title }}
+
+Source: {{ .Permalink }}
+
+{{ .RawContent }}
+{{- end }}

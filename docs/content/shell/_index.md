@@ -13,22 +13,22 @@ The `ilo shell` command opens a shell in a reusable build-environment container,
 [root@container project-dir]#
 
 # use custom image
-[you@hostname project-dir]$ ilo shell maven:latest
+[you@hostname project-dir]$ ilo shell docker.io/library/maven:latest
 [root@container project-dir]#
 
 # use custom command
-[you@hostname project-dir]$ ilo shell openjdk:11 jshell
+[you@hostname project-dir]$ ilo shell docker.io/library/eclipse-temurin:21 jshell
 [root@container project-dir]#
 
 # run command non-interactive
-[you@hostname project-dir]$ ilo shell --no-interactive openjdk:11 mvn verify
+[you@hostname project-dir]$ ilo shell --no-interactive docker.io/library/maven:latest mvn verify
 [you@hostname project-dir]$
 ```
 
 `ilo shell` will delegate most of its work to one of the supported [runtimes](./runtimes). In order to override the default command of your image, specify the command you want to execute just after the image, like this:
 
 ```console
-[you@hostname project-dir]$ ilo shell openjdk:11 /bin/bash
+[you@hostname project-dir]$ ilo shell docker.io/library/eclipse-temurin:21 /bin/bash
 [root@container project-dir]#
 ```
 
@@ -44,14 +44,14 @@ Once you have exited the container, `ilo` stops it but keeps it for reuse, so th
 To instead discard the container and its image when you exit — restoring a clean slate on the next run — pass the `--remove-image` flag:
 
 ```console
-[you@hostname project-dir]$ ilo shell --remove-image openjdk:11
+[you@hostname project-dir]$ ilo shell --remove-image docker.io/library/eclipse-temurin:21
 [root@container project-dir]# exit
 ```
 
 In order to pull an image first before opening a new shell, use the `--pull` flag like this:
 
 ```console
-[you@hostname project-dir]$ ilo shell --pull openjdk:latest
+[you@hostname project-dir]$ ilo shell --pull docker.io/library/eclipse-temurin:latest
 [root@container project-dir]#
 ```
 
