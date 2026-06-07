@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: The ilo Authors
+# SPDX-License-Identifier: 0BSD
+
+name: Verify Examples
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'docs/content/shell/examples.md'
+      - 'skills/ilo/**'
+      - '.github/scripts/**'
+      - '.github/workflows/cache-examples.yml'
+jobs:
+  cache-examples:
+    name: Verify documented examples
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v6
+      - id: graal
+        name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: latest
+          java-version: 25
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - id: cache
+        name: Cache Maven Repository
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - id: build
+        name: Build the native binary
+        run: mvn --batch-mode --define skipNativeBuild=false -DskipTests package
+      - id: examples
+        name: Verify cache examples
+        # ubuntu-latest ships rootless Podman, which ilo auto-selects. The script drives the real
+        # binary against every documented image, asserting the tool is invocable, honors its cache
+        # env var, and can read/write /cache — so a broken or renamed example fails the build.
+        run: ILO=target/ilo bash .github/scripts/verify-cache-examples.sh
+      - id: compose
+        name: Verify compose example
+        # ilo compose auto-selects 'docker compose' (v2), present on ubuntu-latest. This asserts the
+        # documented multi-service setup works: a companion database comes up alongside the dev service
+        # and is reachable from it — ilo's core "complete local dev environment" feature.
+        run: ILO=target/ilo bash .github/scripts/verify-compose-example.sh

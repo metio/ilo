@@ -1,0 +1,22 @@
+{
+  "name": "metio",
+  "owner": {
+    "name": "The ilo Authors"
+  },
+  "description": "Plugins from metio.wtf — reproducible build environments and developer tooling.",
+  "plugins": [
+    {
+      "name": "ilo",
+      "source": "./",
+      "description": "Teach Claude to manage reproducible build environments with the ilo CLI.",
+      "homepage": "https://ilo.projects.metio.wtf/",
+      "license": "0BSD",
+      "keywords": [
+        "ilo",
+        "containers",
+        "reproducible-builds",
+        "build-environments"
+      ]
+    }
+  ]
+}
