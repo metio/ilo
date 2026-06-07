@@ -1,23 +1,20 @@
 # SPDX-FileCopyrightText: The ilo Authors
 # SPDX-License-Identifier: 0BSD
 
-name: SonarQube Cloud
+name: Warm Caches
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+permissions:
+  contents: read
 jobs:
-  sonar:
-    name: Analyze
+  warm-maven:
+    name: Warm Maven cache
     runs-on: ubuntu-latest
     steps:
       - id: checkout
         name: Clone Git Repository
         uses: actions/checkout@v6
-        with:
-          # Sonar needs full history to assign blame and compute the new-code period.
-          fetch-depth: 0
       - id: graal
         name: Set up GraalVM
         uses: graalvm/setup-graalvm@v1
@@ -34,12 +31,10 @@ jobs:
           restore-keys: |
             maven-${{ github.job }}-
             maven-
-      - id: analyze
-        name: Build and Analyze
-        # 'verify' produces the coverage execution data and 'jacoco:report' the XML the scanner
-        # imports; the native build stays skipped (its default). Project key, organization and the
-        # issue exclusions come from the pom.
-        run: mvn --batch-mode verify org.jacoco:jacoco-maven-plugin:report sonar:sonar
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - id: resolve
+        name: Resolve dependencies
+        # Runs on the default branch only, so its cache is readable by every PR. The Maven repository is
+        # OS-independent (pure-Java jars), so this single run seeds the shared base cache that each PR job
+        # — on any OS — restores through the "maven-" restore-key prefix, fetching only its job-specific
+        # delta. The integration profile is included so its extra dependencies are part of the base.
+        run: mvn --batch-mode -Pintegration dependency:go-offline

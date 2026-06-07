@@ -31,10 +31,10 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ github.job }}-${{ hashFiles('**/pom.xml') }}
+          key: maven-${{ github.job }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven-${{ github.job }}-
-            ${{ runner.os }}-maven-
+            maven-${{ github.job }}-
+            maven-
       - id: verify
         name: Verify Project
         run: mvn --batch-mode --define skipNativeBuild=false verify
@@ -66,10 +66,10 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ github.job }}-${{ hashFiles('**/pom.xml') }}
+          key: maven-${{ github.job }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven-${{ github.job }}-
-            ${{ runner.os }}-maven-
+            maven-${{ github.job }}-
+            maven-
       - id: mutation
         name: Run Mutation Tests
         # PIT is configured in pluginManagement but not bound to a phase, so it is invoked directly;
@@ -94,10 +94,10 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ github.job }}-${{ hashFiles('**/pom.xml') }}
+          key: maven-${{ github.job }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven-${{ github.job }}-
-            ${{ runner.os }}-maven-
+            maven-${{ github.job }}-
+            maven-
       - id: integration
         name: Run Integration Tests
         # ubuntu-latest ships rootful Docker and rootless Podman; require both runtimes' tests to
