@@ -8,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
 import uk.org.webcompere.systemstubs.properties.SystemProperties;
 
@@ -150,43 +152,23 @@ class ShellExpansionTest {
       assertIterableEquals(List.of("$a_1"), shell.parameters);
     }
 
-    @Test
-    @DisplayName("leaves a dollar that does not introduce a name literal")
-    void dollarWithoutName() {
+    // Names at the edges of the allowed character ranges: 'z'/'A'/'Z' as the leading letter and '0'/'9'
+    // as a following digit, pinning the inclusive bounds of isNameStart and isNameChar.
+    @ParameterizedTest
+    @DisplayName("expands a parameter whose name uses the boundary characters of the allowed ranges")
+    @ValueSource(strings = {"$z", "$A", "$Z", "$a0", "$a9"})
+    void nameWithBoundaryCharacters(final String reference) {
       final var shell = StubShell.marking();
-      assertEquals("$5 and $", shell.expand("$5 and $"));
-      assertTrue(shell.parameters.isEmpty(), shell.parameters.toString());
+      assertEquals("[p:" + reference + "]", shell.expand(reference));
+      assertIterableEquals(List.of(reference), shell.parameters);
     }
 
-    @Test
-    @DisplayName("leaves an unterminated braced reference literal")
-    void bracedUnterminated() {
+    @ParameterizedTest
+    @DisplayName("leaves a dollar or brace expression that is not a valid reference literal")
+    @ValueSource(strings = {"$5 and $", "${HOME", "${}", "${1bad}", "${a-b}"})
+    void leavesParameterExpressionLiteral(final String input) {
       final var shell = StubShell.marking();
-      assertEquals("${HOME", shell.expand("${HOME"));
-      assertTrue(shell.parameters.isEmpty(), shell.parameters.toString());
-    }
-
-    @Test
-    @DisplayName("leaves an empty braced reference literal")
-    void bracedEmpty() {
-      final var shell = StubShell.marking();
-      assertEquals("${}", shell.expand("${}"));
-      assertTrue(shell.parameters.isEmpty(), shell.parameters.toString());
-    }
-
-    @Test
-    @DisplayName("leaves a braced reference whose name starts with a digit literal")
-    void bracedInvalidStart() {
-      final var shell = StubShell.marking();
-      assertEquals("${1bad}", shell.expand("${1bad}"));
-      assertTrue(shell.parameters.isEmpty(), shell.parameters.toString());
-    }
-
-    @Test
-    @DisplayName("leaves a braced reference containing an invalid character literal")
-    void bracedInvalidChar() {
-      final var shell = StubShell.marking();
-      assertEquals("${a-b}", shell.expand("${a-b}"));
+      assertEquals(input, shell.expand(input));
       assertTrue(shell.parameters.isEmpty(), shell.parameters.toString());
     }
 
