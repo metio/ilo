@@ -34,6 +34,7 @@ import java.util.concurrent.CompletionException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DevcontainerCommandTest {
@@ -122,7 +123,7 @@ class DevcontainerCommandTest {
     final var command = Command.builder().string("sdlkfj").create();
     final var exitCode = devcontainer.runCommand(command, false);
     // The shell runs the command and reports its failure (e.g. 127 for "command not found").
-    assertTrue(CommandLine.ExitCode.OK != exitCode);
+    assertNotEquals(CommandLine.ExitCode.OK, exitCode);
   }
 
   @Test
@@ -249,7 +250,7 @@ class DevcontainerCommandTest {
         .create();
     final var exitCode = devcontainer.runCommand(command, false);
     // The shell runs the command and reports its failure (e.g. 127 for "command not found").
-    assertTrue(CommandLine.ExitCode.OK != exitCode);
+    assertNotEquals(CommandLine.ExitCode.OK, exitCode);
   }
 
   @Test

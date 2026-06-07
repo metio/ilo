@@ -25,8 +25,9 @@ class CliExecutorTest {
 
     };
 
+    final var command = List.of("some", "command");
     Assertions.assertThrows(RuntimeIOException.class,
-        () -> executor.execute(List.of("some", "command"), false));
+        () -> executor.execute(command, false));
   }
 
   @Test

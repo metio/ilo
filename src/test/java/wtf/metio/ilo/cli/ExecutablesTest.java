@@ -249,14 +249,14 @@ class ExecutablesTest {
 
   @Test
   @DisplayName("recognizes a Windows host")
-  void recognizesWindows(final SystemProperties properties) throws Exception {
+  void recognizesWindows(final SystemProperties properties) {
     properties.set("os.name", "Windows 11");
     assertTrue(Executables.isWindows());
   }
 
   @Test
   @DisplayName("recognizes a non-Windows host")
-  void recognizesNonWindows(final SystemProperties properties) throws Exception {
+  void recognizesNonWindows(final SystemProperties properties) {
     properties.set("os.name", "Linux");
     assertFalse(Executables.isWindows());
   }

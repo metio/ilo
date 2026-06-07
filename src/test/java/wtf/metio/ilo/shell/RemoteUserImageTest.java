@@ -18,6 +18,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -136,7 +137,7 @@ class RemoteUserImageTest {
     void distinct() {
       final var one = RemoteUserImage.containerfile("python:3", null, "vscode", "1000", "1000");
       final var two = RemoteUserImage.containerfile("python:3", null, "vscode", "1001", "1001");
-      assertTrue(!RemoteUserImage.tag(one).equals(RemoteUserImage.tag(two)));
+      assertNotEquals(RemoteUserImage.tag(one), RemoteUserImage.tag(two));
     }
   }
 
@@ -146,7 +147,7 @@ class RemoteUserImageTest {
 
     @Test
     @DisplayName("points an image-based environment at a generated containerfile and derived tag")
-    void imageBased() throws Exception {
+    void imageBased() {
       final var options = new ShellOptions();
       options.image = "python:3";
       options.remoteUser = "vscode";

@@ -16,6 +16,9 @@ import static wtf.metio.ilo.utils.Streams.*;
 
 abstract class DockerComposeLike implements ComposeCLI {
 
+  // '--file' names a compose file; it is repeated before each file the step passes.
+  private static final String FILE = "--file";
+
   @Override
   public final List<String> pullArguments(final ComposeOptions options) {
     if (options.pull) {
@@ -23,7 +26,7 @@ abstract class DockerComposeLike implements ComposeCLI {
       return flatten(
           of(name(), command()),
           fromList(expand.expand(options.runtimeOptions)),
-          withPrefix("--file", expand.expand(options.file)),
+          withPrefix(FILE, expand.expand(options.file)),
           of("pull"),
           fromList(expand.expand(options.runtimePullOptions)),
           // Scoped to the services this session brings up (matching 'up'), so a multi-service project's
@@ -41,7 +44,7 @@ abstract class DockerComposeLike implements ComposeCLI {
       return flatten(
           of(name(), command()),
           fromList(expand.expand(options.runtimeOptions)),
-          withPrefix("--file", expand.expand(options.file)),
+          withPrefix(FILE, expand.expand(options.file)),
           of("build"),
           fromList(expand.expand(options.runtimeBuildOptions)),
           // Scoped to the services this session brings up (matching 'up'), so a multi-service project's
@@ -65,7 +68,7 @@ abstract class DockerComposeLike implements ComposeCLI {
     return flatten(
         of(name(), command()),
         fromList(expand.expand(options.runtimeOptions)),
-        withPrefix("--file", expand.expand(composeFiles)),
+        withPrefix(FILE, expand.expand(composeFiles)),
         of("up", "--detach"),
         fromList(expand.expand(options.runtimeRunOptions)),
         optional("", expand.expand(options.service)),

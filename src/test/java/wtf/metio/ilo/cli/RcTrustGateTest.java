@@ -78,14 +78,14 @@ class RcTrustGateTest {
     final var rc = Files.writeString(directory.resolve(".ilo.rc"), "shell\n");
     final var store = directory.resolve("trusted-rc");
     final var changedFlags = new java.util.ArrayList<Boolean>();
-    final RcTrustGate.TrustPrompt record = (path, changed) -> {
+    final RcTrustGate.TrustPrompt prompt = (path, changed) -> {
       changedFlags.add(changed);
       return true;
     };
 
-    new RcTrustGate(store, record).test(rc);          // first encounter: brand new
+    new RcTrustGate(store, prompt).test(rc);          // first encounter: brand new
     Files.writeString(rc, "shell\n--volume\n$(evil)\n");
-    new RcTrustGate(store, record).test(rc);          // same path, different content
+    new RcTrustGate(store, prompt).test(rc);          // same path, different content
 
     assertEquals(java.util.List.of(false, true), changedFlags);
   }

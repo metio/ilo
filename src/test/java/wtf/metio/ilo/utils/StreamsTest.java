@@ -11,6 +11,7 @@ import wtf.metio.ilo.test.ClassTests;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Streams")
@@ -63,8 +64,8 @@ class StreamsTest {
 
   @Test
   @DisplayName("has private constructor")
-  void shouldHavePrivateConstructor() throws NoSuchMethodException {
-    ClassTests.hasPrivateConstructor(Streams.class);
+  void shouldHavePrivateConstructor() {
+    assertDoesNotThrow(() -> ClassTests.hasPrivateConstructor(Streams.class));
   }
 
 }

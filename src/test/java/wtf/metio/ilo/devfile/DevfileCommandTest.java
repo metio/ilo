@@ -251,12 +251,13 @@ class DevfileCommandTest {
   @DisplayName("fails to map a devfile without any supported component")
   void shouldFailWithoutSupportedComponent() {
     final var devfile = devfile(new Component("volume", emptyContainer(), emptyImage()));
-    assertThrows(NoSuchElementException.class, () -> DevfileCommand.mapOptions(new DevfileOptions(), devfile));
+    final var options = new DevfileOptions();
+    assertThrows(NoSuchElementException.class, () -> DevfileCommand.mapOptions(options, devfile));
   }
 
   @Test
   @DisplayName("runs the shell options derived from a supported devfile")
-  void shouldRunSupportedDevfile(final SystemProperties properties) throws Exception {
+  void shouldRunSupportedDevfile(final SystemProperties properties) {
     final var captured = new AtomicReference<ShellOptions>();
     final var command = new DevfileCommand(shellOptions -> {
       captured.set(shellOptions);
@@ -274,7 +275,7 @@ class DevfileCommandTest {
 
   @Test
   @DisplayName("opens a shell for the first supported component when none is requested")
-  void shouldRunFirstSupportedComponentWhenNoneRequested(final SystemProperties properties) throws Exception {
+  void shouldRunFirstSupportedComponentWhenNoneRequested(final SystemProperties properties) {
     final var captured = new AtomicReference<ShellOptions>();
     final var command = new DevfileCommand(shellOptions -> {
       captured.set(shellOptions);
@@ -292,7 +293,7 @@ class DevfileCommandTest {
 
   @Test
   @DisplayName("reports usage and a clear message for a devfile without a supported component")
-  void shouldReportUsageForUnsupportedDevfile(final SystemProperties properties, final SystemErr systemErr) throws Exception {
+  void shouldReportUsageForUnsupportedDevfile(final SystemProperties properties, final SystemErr systemErr) {
     final var command = new DevfileCommand(shellOptions -> fail("the shell must not be opened"));
     command.options = optionsFor("maven");
     properties.set("user.dir", resourceDir("plain"));

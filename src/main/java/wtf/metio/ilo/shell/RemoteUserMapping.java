@@ -42,6 +42,9 @@ enum RemoteUserMapping {
    */
   REMAP;
 
+  // '--user' runs the container or exec as the given user, as 'name', 'uid', or 'uid:gid'.
+  private static final String USER = "--user";
+
   /**
    * Picks the mapping for a runtime and container user. The {@code rootfulDocker} flag is only
    * consulted for Docker; podman and nerdctl are always treated as their rootless selves.
@@ -120,7 +123,7 @@ enum RemoteUserMapping {
   // visible for testing
   static List<String> hostUserArguments(final String hostUserAndGroup) {
     if (null != hostUserAndGroup && hostUserAndGroup.matches("\\d+:\\d+")) {
-      return List.of("--user", hostUserAndGroup);
+      return List.of(USER, hostUserAndGroup);
     }
     System.err.println("ilo could not determine the host user id (got '" + hostUserAndGroup
         + "'); the container runs as its default user, so files it creates may not be owned by you.");
@@ -130,7 +133,7 @@ enum RemoteUserMapping {
   // Runs the container as a named user; the root user is left to the runtime (rootless runtimes map it
   // to the host) or, on rootful Docker, to {@link #HOST_USER}.
   private static List<String> runAs(final String remoteUser) {
-    return isRoot(remoteUser) ? List.of() : List.of("--user", remoteUser);
+    return isRoot(remoteUser) ? List.of() : List.of(USER, remoteUser);
   }
 
   private static boolean isRoot(final String remoteUser) {
