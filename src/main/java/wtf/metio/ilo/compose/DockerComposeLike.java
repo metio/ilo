@@ -86,7 +86,7 @@ abstract class DockerComposeLike implements ComposeCLI {
     return flatten(
         of(name(), command()),
         fromList(expand.expand(options.runtimeOptions)),
-        withPrefix("--file", expand.expand(options.file)),
+        withPrefix(FILE, expand.expand(options.file)),
         of("exec"),
         // Disable the pseudo-TTY unless ilo is attached to a real terminal; otherwise an interactive
         // attach in a non-interactive session (e.g. CI) would fail with "the input device is not a TTY".
