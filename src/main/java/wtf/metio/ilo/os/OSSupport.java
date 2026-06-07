@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static java.util.stream.Collectors.toList;
 import static wtf.metio.ilo.utils.Streams.filter;
 import static wtf.metio.ilo.utils.Streams.fromList;
 
@@ -98,7 +97,7 @@ public final class OSSupport {
     public List<String> expand(final List<String> values) {
       return filter(fromList(values))
           .map(this::expand)
-          .collect(toList());
+          .toList();
     }
 
     public String expand(final String value) {

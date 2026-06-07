@@ -106,7 +106,7 @@ public final class RcTrust {
   private static void move(final Path temp, final Path store) throws IOException {
     try {
       Files.move(temp, store, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
-    } catch (final AtomicMoveNotSupportedException unsupported) {
+    } catch (final AtomicMoveNotSupportedException _) {
       Files.move(temp, store, StandardCopyOption.REPLACE_EXISTING);
     }
   }

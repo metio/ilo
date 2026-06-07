@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static java.util.function.Predicate.not;
-import static java.util.stream.Collectors.toList;
 
 /**
  * Utility class that interacts with executables found on the host machine.
@@ -65,7 +64,7 @@ public final class Executables {
     if (windows && !hasExtension(tool)) {
       return extensions.stream()
           .map(extension -> tool + extension)
-          .collect(toList());
+          .toList();
     }
     return List.of(tool);
   }
@@ -87,7 +86,7 @@ public final class Executables {
     return Arrays.stream(raw.split(";"))
         .map(String::trim)
         .filter(not(String::isBlank))
-        .collect(toList());
+        .toList();
   }
 
   // visible for testing
