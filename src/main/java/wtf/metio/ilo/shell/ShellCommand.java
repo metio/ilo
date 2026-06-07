@@ -67,7 +67,7 @@ public final class ShellCommand implements Callable<Integer> {
     sweepStaleContainers(tool, projectDir, containerName);
     // Probe the container state once and reuse it for every decision below as well as the session run,
     // rather than probing again inside the lifecycle.
-    final var state = executor.probe().state(tool.probeArguments(options, containerName));
+    final var state = tool.probeState(options, containerName, executor::capture);
     // '--pull' has to recreate the container: a reused container would never see the freshly pulled
     // image, so the flag would otherwise do nothing. A paused container is recreated too, since it
     // cannot be started.
@@ -119,9 +119,8 @@ public final class ShellCommand implements Callable<Integer> {
   // containers left behind by earlier configurations, so changing the image, Containerfile, or run
   // options recreates rather than reuses — without leaving the old containers piling up.
   private void sweepStaleContainers(final ShellCLI tool, final String projectDir, final String keep) {
-    executor.capture(tool.staleContainersArguments(options, projectDir)).lines()
-        .map(String::strip)
-        .filter(name -> !name.isBlank() && !name.equals(keep))
+    tool.staleContainers(options, projectDir, executor::capture).stream()
+        .filter(name -> !name.equals(keep))
         .forEach(name -> executor.execute(tool.removeArguments(options, name), options.debug));
   }
 

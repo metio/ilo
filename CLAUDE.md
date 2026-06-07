@@ -12,8 +12,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 `ilo` is a small CLI that manages reproducible build environments by wrapping a
 container runtime (Podman, nerdctl, or Docker). `ilo shell` opens an
 (interactive) shell inside a container built from your project's image or
-`Containerfile`. It is a single-binary tool (picocli + GraalVM native image),
-written in Java 21.
+`Containerfile`; `ilo compose` does the same backed by a compose file, and
+`ilo devcontainer` / `ilo devfile` build on those by reading a `devcontainer.json`
+or `devfile.yaml` and injecting its lifecycle commands. It is a single-binary tool
+(picocli + GraalVM native image), written in Java 25.
 
 This repository is the source of `ilo` itself, and it dogfoods `ilo` to build
 itself — see the `dev/` RC files below.
@@ -65,31 +67,70 @@ Flow of a command (`ilo shell ...`):
 2. **`cli.RunCommands`** — locates RC files: `$ILO_RC` (comma-separated) if set,
    otherwise `.ilo/ilo.rc` then `.ilo.rc`. `shouldAddRunCommands` suppresses this
    for `--version`, `--help`, `generate-completion`, and `--no-rc`.
-3. **`shell.ShellCommand`** — the only real subcommand. Holds `ShellOptions`
-   (a picocli `@Mixin`), delegates to a `ShellExecutor`.
-4. **`shell.ShellRuntime`** — enum of `PODMAN` / `NERDCTL` / `DOCKER`.
-   `autoSelect` picks the forced runtime, else `$ILO_SHELL_RUNTIME`, else the
-   first runtime whose executable `exists()` on `PATH`.
-5. **`cli.CommandLifecycle.run`** — runs four steps in order: **pull → build →
-   run → cleanup**, each producing a command line and an exit code. Stops early
-   on the first non-zero code; otherwise returns the max exit code.
-6. **`shell.DockerLike`** — shared `pull/build/run/cleanup` argument assembly for
-   all three Docker-compatible runtimes (`Podman`/`Nerdctl`/`Docker` mostly just
-   supply `name()`). Build args are emitted only when a `--containerfile` is set;
-   pull only when `--pull` and no containerfile; cleanup only when `--rm-image`.
+3. **`shell.ShellCommand`** — the canonical subcommand. Holds `ShellOptions`
+   (a picocli `@Mixin`), delegates to a `ShellExecutor`. The other subcommands are
+   `compose.ComposeCommand` (a peer base command) and the composite commands
+   `devcontainer.DevcontainerCommand` / `devfile.DevfileCommand`, which parse a
+   `devcontainer.json` / `devfile.yaml` and drive a shell session with the file's
+   lifecycle commands injected via `ShellCommand.lifecycle(...)`.
+4. **`shell.ShellRuntime`** — enum of `PODMAN` / `NERDCTL` / `DOCKER` / `CONTAINER`
+   (the last is Apple's macOS-only `container`). `autoSelect` picks the forced
+   runtime, else `$ILO_SHELL_RUNTIME`, else the first runtime whose executable
+   `exists()` on `PATH`, in that enum order.
+5. **`cli.SessionLifecycle.run`** — drives a *persistent-container* session, not a
+   one-shot `run --rm`: a long-lived container is reused across invocations. The
+   container state (from a `probe`) selects the path — **absent** → pull → build →
+   create → `onCreate`/`onStart` lifecycle; **stopped** → start → `onStart`
+   lifecycle; **running** → attach directly. Every run then executes the `onAttach`
+   lifecycle, the interactive **attach**, and a lazily-computed **teardown**
+   (usually `stop`, keeping the container for fast resume next time; `remove` +
+   image `cleanup` under `--remove-image`; nothing while another terminal is still
+   attached). Each step is a command line + exit code; a phase stops at the first
+   non-zero code. `ShellCommand.call` assembles the `Steps`/`Lifecycle` and probes
+   the state; `--fresh`/`--pull` force a clean-slate recreate.
+6. **`shell.DockerLike`** — base for the Docker-flag-compatible runtimes
+   (`Podman`/`Nerdctl`/`Docker` mostly just supply `name()`). It emits the full
+   session vocabulary: `pull`, `build`, `probe` (`ps --filter`), `remove`
+   (`rm --force`), `create` (`run --detach` with `ilo.*` labels), `start`, `attach`
+   (`exec`), `stop`, `cleanup` (`rmi`), plus `staleContainers` (`ps` by label),
+   `processes` (`top`) and `mainPid` (`inspect`) for the session ref-counting. Build
+   args are emitted only when a `--containerfile` is set; pull only when `--pull` and
+   no containerfile; cleanup only when `--remove-image`. The genuinely-identical
+   `build`/`create`/`attach`/`exec` assembly lives in `shell.ShellArguments` (a
+   stateless helper) so the non-Docker-compatible `shell.Container` (Apple's
+   `container`) can reuse it without extending `DockerLike`: that runtime
+   implements `ShellCLI` directly because its CLI diverges — image verbs are
+   namespaced (`image pull`/`image delete`), `list` has no `--filter`/Go-template
+   `--format` (so probe/stale parse `list --format json` via `cli.ContainerListing`),
+   and it has no `top`/inspect-PID (so session ref-counting is unsupported: single
+   terminal only). The probe/stale interpretation is overridable per runtime via the
+   `probeState`/`staleContainers` seams on `ShellCLI`.
 
 ### Key packages (`src/main/java/wtf/metio/ilo/`)
 
-- **`model`** — the generic CLI abstraction: `CliTool<OPTIONS>` (defines the four
-  lifecycle argument lists + `exists()`), `CliExecutor`, `Options`, `Runtime`.
-  New command families plug in by implementing these.
-- **`shell`** — the `shell` command and its runtimes/options.
+- **`model`** — the generic CLI abstraction: `CliTool<OPTIONS>` (defines the
+  per-step argument lists for the persistent-container session — `pull`, `build`,
+  `probe`, `remove`, `create`, `start`, `attach`, `stop`, `cleanup`, most with an
+  empty-list default — plus `name()`/`exists()`), `CliExecutor`, `Options`,
+  `Runtime`. New command families plug in by implementing these.
+- **`shell`** — the `shell` command, its runtimes (`ShellRuntime`; the `DockerLike`
+  subclasses `Podman`/`Nerdctl`/`Docker`, plus `Container` implementing `ShellCLI`
+  directly), the shared `ShellArguments` assembly, and `ShellOptions`.
+- **`compose`** — the `compose` command: a peer base command driving a session
+  from a compose file.
+- **`devcontainer`** / **`devfile`** — composite commands that parse a
+  `devcontainer.json` / `devfile.yaml` and run a shell session with the file's
+  lifecycle commands injected.
 - **`os`** — host-shell parameter expansion. `OSSupport.expand` runs option
   values through the real shell so `${VAR}` / `$(cmd)` are expanded the way the
   user expects: `PosixShell` (bash/zsh/sh) or `PowerShell` (pwsh), falling back
-  to `NoOpExpansion`. Applied to nearly every option in `DockerLike`.
+  to `NoOpExpansion`. Applied to nearly every option during shell argument assembly
+  (`DockerLike`/`Container`/`ShellArguments`).
 - **`cli`** — `Executables` (locate/run binaries on `PATH`), `RunCommands`,
-  `EnvironmentVariables`, `CommandLifecycle`.
+  `EnvironmentVariables`, and the session machinery: `SessionLifecycle` (the
+  persistent-container orchestrator), `ContainerState`, `ContainerNaming`,
+  `ContainerProcesses`, `ContainerListing` (parses Apple `container`'s
+  `list --format json`), `Keepalive`, `Terminal`.
 - **`errors`** — all checked failure modes extend `BusinessException`; `ExitCodes`
   maps them to process exit codes and `PrintingExceptionHandler` renders them.
   Throw a specific `BusinessException` subtype rather than a generic exception
@@ -103,9 +144,12 @@ Flow of a command (`ilo shell ...`):
 ### Architecture tests
 
 `src/test/java/.../architecture/` uses ArchUnit and runs as part of `mvn verify`.
-`LayerRules` defines the layered architecture (`cli`, `shell`, `model`, `errors`,
-`utils`, …) and restricts who may access `model`. If you add a package or move a
-dependency, expect these to gate it. Test helpers live in `.../test/` (TCKs like
+`LayerRules` defines the layered architecture — `Application` (`wtf.metio.ilo`),
+`CompositeCommands` (`devcontainer`, `devfile`), `BaseCommands` (`compose`,
+`shell`), `Model`, `OS`, `CLI`, `Errors`, `Utils`, `Version` — and restricts who
+may access each layer (e.g. composites may use base commands, base commands may
+not reach into composites). If you add a package or move a dependency, expect these
+to gate it. Test helpers live in `.../test/` (TCKs like
 `CliToolTCK`, `TestCliExecutor`, `TestResources`); acceptance tests in
 `.../acceptance/` drive the real `CommandLine`.
 

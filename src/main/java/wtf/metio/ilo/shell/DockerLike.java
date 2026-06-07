@@ -5,8 +5,6 @@
 package wtf.metio.ilo.shell;
 
 import wtf.metio.ilo.cli.Executables;
-import wtf.metio.ilo.cli.Keepalive;
-import wtf.metio.ilo.cli.Terminal;
 import wtf.metio.ilo.os.OSSupport;
 import wtf.metio.ilo.utils.Strings;
 
@@ -23,8 +21,6 @@ abstract class DockerLike implements ShellCLI {
   private static final String FILTER = "--filter";
   // '--format' takes a Go-template that selects which container fields a query prints.
   private static final String FORMAT = "--format";
-  // '--env' sets an environment variable on the container ('create') or an exec'd process.
-  private static final String ENV = "--env";
 
   @Override
   public final List<String> pullArguments(final ShellOptions options) {
@@ -42,18 +38,7 @@ abstract class DockerLike implements ShellCLI {
 
   @Override
   public final List<String> buildArguments(final ShellOptions options) {
-    if (Strings.isNotBlank(options.containerfile)) {
-      final var expand = OSSupport.expander();
-      return flatten(
-          of(name()),
-          fromList(expand.expand(options.runtimeOptions)),
-          of("build", "--file", expand.expand(options.containerfile)),
-          fromList(expand.expand(options.runtimeBuildOptions)),
-          maybe(options.pull, "--pull"),
-          of("--tag", expand.expand(options.image)),
-          of(expand.expand(options.context)));
-    }
-    return List.of();
+    return ShellArguments.build(name(), options);
   }
 
   @Override
@@ -84,30 +69,8 @@ abstract class DockerLike implements ShellCLI {
     final var workingDir = Optional.ofNullable(options.workingDir)
         .filter(Strings::isNotBlank)
         .orElse(currentDir);
-    final var projectDir = projectMount(options, currentDir, workingDir, expand);
-    // picocli supplies a default, but a directly-constructed ShellOptions may leave this null.
-    final var missingVolumes = Optional.ofNullable(options.missingVolumes).orElse(ShellVolumeBehavior.CREATE);
-    return flatten(
-        of(name()),
-        fromList(expand.expand(options.runtimeOptions)),
-        of("run", "--detach", "--name", containerName),
-        // Label the container so it can be found and cleaned up later, e.g.
-        // 'docker ps --all --filter label=ilo.managed'.
-        of("--label", "ilo.managed=true", "--label", "ilo.project=" + currentDir),
-        fromList(expand.expand(options.runtimeRunOptions)),
-        projectDir,
-        of("--workdir", workingDir),
-        of(ENV, "ILO_CONTAINER=true"),
-        withPrefix(ENV, expand.expand(options.variables)),
-        optional("--hostname", expand.expand(options.hostname)),
-        withPrefix("--publish", expand.expand(options.ports)),
-        withPrefix("--volume", missingVolumes.handleLocalDirectories(expand.expand(options.volumes))),
-        fromList(options.userMapping.createArguments(options.remoteUser, options.remoteUid, options.remoteGid, expand)),
-        // With the override on, the keepalive replaces the image's entrypoint and command; with it
-        // off, neither is set and the image's own long-running process keeps the container alive.
-        maybe(options.overrideCommand, "--entrypoint", Keepalive.ENTRYPOINT),
-        of(expand.expand(options.image)),
-        maybe(options.overrideCommand, "-c", Keepalive.SCRIPT));
+    return ShellArguments.create(name(), options, containerName,
+        projectMount(options, currentDir, workingDir, expand).toList());
   }
 
   // The mount that puts the project directory into the container. An explicit --workspace-mount replaces
@@ -140,43 +103,12 @@ abstract class DockerLike implements ShellCLI {
 
   @Override
   public final List<String> attachArguments(final ShellOptions options, final String containerName) {
-    final var expand = OSSupport.expander();
-    final var shell = Strings.isNotBlank(options.shell) ? options.shell : "/bin/sh";
-    // An explicit command is passed verbatim — not host-expanded — so any variables, globs or '$(...)'
-    // in it resolve inside the container where they are meant to apply (matching the lifecycle exec
-    // path). Without one, attach the configured shell plus any shell arguments — userEnvProbe maps to
-    // '-l'/'-i' here so the user's login/interactive shell profile is sourced.
-    final var command = Optional.ofNullable(options.commands)
-        .filter(commands -> !commands.isEmpty())
-        .orElseGet(() -> flatten(of(expand.expand(shell)), fromList(expand.expand(options.shellArguments))));
-    return flatten(
-        of(name()),
-        fromList(expand.expand(options.runtimeOptions)),
-        of("exec"),
-        // remoteEnv applies to processes the tool runs in the container — the interactive shell here —
-        // so it is set on 'exec', not baked onto the container like --env.
-        withPrefix(ENV, expand.expand(options.remoteVariables)),
-        fromList(options.userMapping.execArguments(options.remoteUser, expand)),
-        maybe(options.interactive, "--interactive"),
-        // A pseudo-TTY is only allocated when ilo is attached to a real terminal; otherwise an
-        // interactive attach in a non-interactive session (e.g. CI) would fail with "the input
-        // device is not a TTY".
-        maybe(options.interactive && Terminal.isInteractive(), "--tty"),
-        of(containerName),
-        fromList(command));
+    return ShellArguments.attach(name(), options, containerName);
   }
 
   @Override
   public final List<String> execArguments(final ShellOptions options, final String containerName, final List<String> command) {
-    final var expand = OSSupport.expander();
-    return flatten(
-        of(name()),
-        fromList(expand.expand(options.runtimeOptions)),
-        of("exec"),
-        // Lifecycle commands run as remote processes too, so they see remoteEnv as well.
-        withPrefix(ENV, expand.expand(options.remoteVariables)),
-        of(containerName),
-        fromList(command));
+    return ShellArguments.exec(name(), options, containerName, command);
   }
 
   @Override
