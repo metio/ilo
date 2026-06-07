@@ -28,7 +28,7 @@ final class PosixShell extends ShellExpansion {
 
   @Override
   String parameterValue(final String reference) {
-    return Executables.runForExpansion("/usr/bin/env", shellBinary.toString(), "-c", parameterCommand(reference));
+    return Executables.runForExpansion(shellBinary.toString(), "-c", parameterCommand(reference));
   }
 
   // visible for testing

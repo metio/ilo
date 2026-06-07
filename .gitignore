@@ -19,3 +19,6 @@ ilo.iml
 .m2/
 .claude/scheduled_tasks.lock
 .claude/settings.local.json
+
+# Claude code-review reports
+.claude/reviews/

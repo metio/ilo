@@ -56,11 +56,16 @@ abstract class DockerComposeLike implements ComposeCLI {
   // stopped ones on later runs, so it serves as both the create and the start step of a session.
   @Override
   public final List<String> createArguments(final ComposeOptions options, final String containerName) {
+    return createArguments(options, options.file);
+  }
+
+  @Override
+  public final List<String> createArguments(final ComposeOptions options, final List<String> composeFiles) {
     final var expand = OSSupport.expander();
     return flatten(
         of(name(), command()),
         fromList(expand.expand(options.runtimeOptions)),
-        withPrefix("--file", expand.expand(options.file)),
+        withPrefix("--file", expand.expand(composeFiles)),
         of("up", "--detach"),
         fromList(expand.expand(options.runtimeRunOptions)),
         optional("", expand.expand(options.service)),
