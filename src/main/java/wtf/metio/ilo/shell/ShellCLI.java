@@ -75,6 +75,17 @@ public interface ShellCLI extends CliTool<ShellOptions> {
   }
 
   /**
+   * Whether this runtime's {@code run} accepts {@code --hostname}. Apple's {@code container} has no
+   * such flag, so it overrides this to {@code false} and a configured hostname is dropped (with a
+   * warning) rather than emitted as an unsupported flag.
+   *
+   * @return Whether {@code --hostname} is supported on container creation.
+   */
+  default boolean supportsHostname() {
+    return true;
+  }
+
+  /**
    * Builds a non-interactive {@code exec} into the running container, used to run an in-container
    * lifecycle command. The command is passed verbatim — it is not expanded on the host, so any
    * variables or globs in it are resolved inside the container where they are meant to apply.

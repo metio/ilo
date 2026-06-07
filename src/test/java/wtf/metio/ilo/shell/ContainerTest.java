@@ -153,17 +153,48 @@ class ContainerTest extends CliToolTCK<ShellOptions, ShellCLI> {
   }
 
   @Test
-  @DisplayName("sets the hostname, env vars and ports on the created container")
+  @DisplayName("sets env vars and ports on the created container")
   void createWithExtras(final SystemProperties properties) {
     properties.set("user.dir", "/work");
     final var options = minimal();
     options.workingDir = "some/dir";
-    options.hostname = "host";
     options.variables = List.of("KEY=value");
     options.ports = List.of("8080:80");
     assertEquals(
-        String.format("container run --detach --name %s --label ilo.managed=true --label ilo.project=/work --workdir some/dir --env ILO_CONTAINER=true --env KEY=value --hostname host --publish 8080:80 --entrypoint sh example:test -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", NAME),
+        String.format("container run --detach --name %s --label ilo.managed=true --label ilo.project=/work --workdir some/dir --env ILO_CONTAINER=true --env KEY=value --publish 8080:80 --entrypoint sh example:test -c trap 'exit 0' TERM INT; while true; do sleep 2147483647 & wait $!; done", NAME),
         String.join(" ", tool().createArguments(options, NAME)));
+  }
+
+  @Test
+  @DisplayName("does not support --hostname")
+  void doesNotSupportHostname() {
+    assertFalse(tool().supportsHostname());
+  }
+
+  @Test
+  @DisplayName("never maps users through a user namespace, since 'run' has no --userns")
+  void remoteUserMappingAvoidsUserns() {
+    // The default mapping would pick KEEP_ID (--userns=keep-id) for a non-root user; this runtime maps
+    // ownership in its VM instead, like Docker Desktop, so it stays NONE.
+    assertEquals(RemoteUserMapping.NONE, tool().remoteUserMapping(true, "node", _ -> ""));
+    assertEquals(RemoteUserMapping.NONE, tool().remoteUserMapping(true, "root", _ -> ""));
+    assertEquals(RemoteUserMapping.NONE, tool().remoteUserMapping(false, "node", _ -> ""));
+  }
+
+  @Test
+  @DisplayName("does not support a UID-pinned keep-id namespace")
+  void doesNotSupportKeepIdUid() {
+    assertFalse(tool().supportsKeepIdUid());
+  }
+
+  @Test
+  @DisplayName("drops a configured hostname instead of emitting the unsupported flag")
+  void createDropsHostname(final SystemProperties properties) {
+    properties.set("user.dir", "/work");
+    final var options = minimal();
+    options.workingDir = "some/dir";
+    options.hostname = "host";
+    assertFalse(String.join(" ", tool().createArguments(options, NAME)).contains("--hostname"));
   }
 
   @Test

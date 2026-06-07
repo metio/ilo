@@ -41,6 +41,25 @@ public final class Container implements ShellCLI {
     return "container";
   }
 
+  // 'container run' has no --hostname flag (confirmed on macOS 26), so a configured hostname is
+  // dropped with a warning instead of emitted.
+  @Override
+  public boolean supportsHostname() {
+    return false;
+  }
+
+  // Apple's container is a VM-based runtime like Docker Desktop, whose filesystem layer maps
+  // bind-mount ownership, and 'run' has no '--userns' (only '-u/--user', '--uid', '--gid'). So no UID
+  // remapping is applied: the container runs as the image's user (by name) and host ownership is left
+  // to the runtime — the same NONE mapping ilo uses for rootless Docker / Docker Desktop. Emitting the
+  // default KEEP_ID mapping's '--userns=keep-id' here would make 'container run' fail outright.
+  // OPEN: whether macOS bind-mount ownership actually lands on the host user is unverified on hardware.
+  @Override
+  public RemoteUserMapping remoteUserMapping(final boolean enabled, final String remoteUser,
+      final Function<List<String>, String> capture) {
+    return RemoteUserMapping.NONE;
+  }
+
   @Override
   public List<String> pullArguments(final ShellOptions options) {
     if (options.pull && Strings.isBlank(options.containerfile)) {
@@ -93,9 +112,8 @@ public final class Container implements ShellCLI {
     final var workingDir = Optional.ofNullable(options.workingDir)
         .filter(Strings::isNotBlank)
         .orElse(currentDir);
-    // OPEN: confirm '--hostname' is supported; it is only emitted when the user sets one.
     return ShellArguments.create(name(), options, containerName,
-        projectMount(options, currentDir, workingDir, expand));
+        projectMount(options, currentDir, workingDir, expand), supportsHostname());
   }
 
   // The project mount. An explicit --workspace-mount replaces it. Otherwise the project directory is
