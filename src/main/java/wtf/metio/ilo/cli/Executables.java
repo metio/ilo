@@ -215,6 +215,33 @@ public final class Executables {
     return run(timeout, arguments).output().strip();
   }
 
+  // A presence probe (is an optional plugin/tool installed?) answers quickly when healthy, so a longer
+  // wait means the target is missing, broken, or hanging. This bounds it tighter than the expansion
+  // timeout so a stuck probe (e.g. 'docker compose version' against an unresponsive daemon) cannot stall
+  // ilo for the full default timeout.
+  static final Duration PROBE_TIMEOUT = Duration.ofSeconds(10);
+
+  /**
+   * Reads a command's output for a best-effort presence probe. Unlike {@link #runAndReadOutput} it never
+   * throws: a probe that times out or whose binary cannot be started yields no output, so a missing,
+   * broken, or hanging target reads as simply absent rather than aborting the run.
+   *
+   * @param arguments The probe command line to run.
+   * @return The command's output, or an empty string if it could not be run to completion.
+   */
+  public static String probeOutput(final String... arguments) {
+    return probeOutput(PROBE_TIMEOUT, arguments);
+  }
+
+  // visible for testing
+  static String probeOutput(final Duration timeout, final String... arguments) {
+    try {
+      return runAndReadOutput(timeout, arguments);
+    } catch (final CommandTimedOutException | RuntimeIOException exception) {
+      return "";
+    }
+  }
+
   /**
    * Runs a host-shell expansion command (command substitution or parameter expansion) and returns its
    * output with trailing newlines removed — matching how a shell's {@code $(...)} trims — while, unlike

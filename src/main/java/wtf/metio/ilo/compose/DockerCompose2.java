@@ -28,8 +28,10 @@ public final class DockerCompose2 extends DockerComposeLike {
     // The 'docker' binary alone is not enough — the Compose V2 plugin must be installed, or every
     // 'docker compose …' fails. Probing 'docker compose version' lets auto-selection fall through to
     // docker-compose (V1) or podman-compose instead of hard-failing with "compose is not a docker
-    // command". The probe writes nothing to stdout when the plugin is missing.
-    return super.exists() && !Executables.runAndReadOutput(name(), command(), "version").isBlank();
+    // command". The probe is best-effort: the plugin writes nothing to stdout when missing, and a
+    // 'docker' whose daemon hangs (so 'docker compose version' never returns) reads as absent rather
+    // than stalling the run — or, in tests, aborting it with a timeout error.
+    return super.exists() && !Executables.probeOutput(name(), command(), "version").isBlank();
   }
 
 }

@@ -332,6 +332,35 @@ class ExecutablesTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("probeOutput returns a healthy probe's output")
+  void probeOutputReturnsOutput() {
+    assertEquals("present", Executables.probeOutput(java.time.Duration.ofSeconds(10), "sh", "-c", "echo present"));
+  }
+
+  @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
+  @DisplayName("probeOutput treats a hanging probe as absent instead of throwing")
+  void probeOutputSwallowsTimeout() {
+    final var start = System.nanoTime();
+    assertEquals("", Executables.probeOutput(java.time.Duration.ofMillis(300), "sh", "-c", "sleep 30"));
+    final var elapsedSeconds = (System.nanoTime() - start) / 1_000_000_000.0;
+    assertTrue(elapsedSeconds < 10, "should return promptly, took " + elapsedSeconds + "s");
+  }
+
+  @Test
+  @DisplayName("probeOutput treats an unstartable probe as absent instead of throwing")
+  void probeOutputSwallowsMissingBinary() {
+    assertEquals("", Executables.probeOutput(java.time.Duration.ofSeconds(10), "ilo-no-such-binary-xyz"));
+  }
+
+  @Test
+  @DisplayName("probeOutput applies a bounded default timeout")
+  void probeOutputDefaultTimeout() {
+    assertEquals("", Executables.probeOutput("ilo-no-such-binary-xyz"));
+  }
+
+  @Test
   @DisplayName("captures nothing for empty expansion arguments instead of throwing")
   void runForExpansionCapturesNothingForEmptyArguments() {
     assertEquals("", Executables.runForExpansion());
