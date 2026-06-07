@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: The ilo Authors
+# SPDX-License-Identifier: 0BSD
+
+name: SonarQube Cloud
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  sonar:
+    name: Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: Clone Git Repository
+        uses: actions/checkout@v6
+        with:
+          # Sonar needs full history to assign blame and compute the new-code period.
+          fetch-depth: 0
+      - id: graal
+        name: Set up GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: latest
+          java-version: 25
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - id: cache
+        name: Cache Maven Repository
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - id: analyze
+        name: Build and Analyze
+        # 'verify' produces the coverage execution data and 'jacoco:report' the XML the scanner
+        # imports; the native build stays skipped (its default). Project key, organization and the
+        # issue exclusions come from the pom.
+        run: mvn --batch-mode verify org.jacoco:jacoco-maven-plugin:report sonar:sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
