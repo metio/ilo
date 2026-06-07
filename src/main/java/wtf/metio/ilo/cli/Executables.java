@@ -237,7 +237,7 @@ public final class Executables {
   static String probeOutput(final Duration timeout, final String... arguments) {
     try {
       return runAndReadOutput(timeout, arguments);
-    } catch (final CommandTimedOutException | RuntimeIOException exception) {
+    } catch (final CommandTimedOutException | RuntimeIOException _) {
       return "";
     }
   }
