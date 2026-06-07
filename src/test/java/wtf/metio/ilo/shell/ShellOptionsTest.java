@@ -13,6 +13,7 @@ import wtf.metio.ilo.test.ClassTests;
 
 import java.lang.reflect.Modifier;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,8 +23,8 @@ class ShellOptionsTest {
 
   @Test
   @DisplayName("has default constructor")
-  void shouldHaveDefaultConstructor() throws NoSuchMethodException {
-    ClassTests.hasDefaultConstructor(ShellOptions.class);
+  void shouldHaveDefaultConstructor() {
+    assertDoesNotThrow(() -> ClassTests.hasDefaultConstructor(ShellOptions.class));
   }
 
   @ParameterizedTest

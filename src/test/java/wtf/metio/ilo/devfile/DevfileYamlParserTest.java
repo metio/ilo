@@ -122,7 +122,8 @@ class DevfileYamlParserTest {
   @Test
   @DisplayName("reports a parsing failure for a malformed devfile")
   void shouldRejectMalformedYaml() {
-    assertThrows(JsonParsingException.class, () -> parseDevfile(findYamlIn("malformed")));
+    final var malformed = findYamlIn("malformed");
+    assertThrows(JsonParsingException.class, () -> parseDevfile(malformed));
   }
 
   @Test

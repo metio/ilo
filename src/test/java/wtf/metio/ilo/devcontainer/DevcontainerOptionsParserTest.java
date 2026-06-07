@@ -26,12 +26,13 @@ class DevcontainerOptionsParserTest extends TestMethodSources {
 
     @Override
     public void run() {
+      // never executed: this command exists only so picocli can bind and parse the options
     }
 
   }
 
   @Test
-  public void defaultValues() {
+  void defaultValues() {
     final var command = parseCommandOptions();
     assertAll(
         () -> assertNull(command.options.shellRuntime, "shellRuntime"),
@@ -65,313 +66,313 @@ class DevcontainerOptionsParserTest extends TestMethodSources {
   }
 
   @Test
-  public void debug() {
+  void debug() {
     final var command = parseCommandOptions("--debug");
     assertTrue(command.options.debug, "debug");
   }
 
   @Test
-  public void debugTrue() {
+  void debugTrue() {
     final var command = parseCommandOptions("--debug=true");
     assertTrue(command.options.debug, "debug");
   }
 
   @Test
-  public void debugFalse() {
+  void debugFalse() {
     final var command = parseCommandOptions("--debug=false");
     assertFalse(command.options.debug, "debug");
   }
 
   @Test
-  public void pull() {
+  void pull() {
     final var command = parseCommandOptions("--pull");
     assertTrue(command.options.pull, "pull");
   }
 
   @Test
-  public void pullTrue() {
+  void pullTrue() {
     final var command = parseCommandOptions("--pull=true");
     assertTrue(command.options.pull, "pull");
   }
 
   @Test
-  public void pullFalse() {
+  void pullFalse() {
     final var command = parseCommandOptions("--pull=false");
     assertFalse(command.options.pull, "pull");
   }
 
   @Test
-  public void removeImage() {
+  void removeImage() {
     final var command = parseCommandOptions("--remove-image");
     assertTrue(command.options.removeImage, "removeImage");
   }
 
   @Test
-  public void removeImageTrue() {
+  void removeImageTrue() {
     final var command = parseCommandOptions("--remove-image=true");
     assertTrue(command.options.removeImage, "removeImage");
   }
 
   @Test
-  public void removeImageFalse() {
+  void removeImageFalse() {
     final var command = parseCommandOptions("--remove-image=false");
     assertFalse(command.options.removeImage, "removeImage");
   }
 
   @Test
-  public void mountProjectDir() {
+  void mountProjectDir() {
     final var command = parseCommandOptions("--mount-project-dir");
     assertTrue(command.options.mountProjectDir, "mountProjectDir");
   }
 
   @Test
-  public void mountProjectDirTrue() {
+  void mountProjectDirTrue() {
     final var command = parseCommandOptions("--mount-project-dir=true");
     assertTrue(command.options.mountProjectDir, "mountProjectDir");
   }
 
   @Test
-  public void mountProjectDirFalse() {
+  void mountProjectDirFalse() {
     final var command = parseCommandOptions("--mount-project-dir=false");
     assertFalse(command.options.mountProjectDir, "mountProjectDir");
   }
 
   @Test
-  public void mountProjectDirNegated() {
+  void mountProjectDirNegated() {
     final var command = parseCommandOptions("--no-mount-project-dir");
     assertFalse(command.options.mountProjectDir, "mountProjectDir");
   }
 
   @Test
-  public void mountProjectDirNegatedTrue() {
+  void mountProjectDirNegatedTrue() {
     final var command = parseCommandOptions("--no-mount-project-dir=true");
     assertFalse(command.options.mountProjectDir, "mountProjectDir");
   }
 
   @Test
-  public void mountProjectDirNegatedFalse() {
+  void mountProjectDirNegatedFalse() {
     final var command = parseCommandOptions("--no-mount-project-dir=false");
     assertTrue(command.options.mountProjectDir, "mountProjectDir");
   }
 
   @Test
-  public void executeInitializeCommand() {
+  void executeInitializeCommand() {
     final var command = parseCommandOptions("--execute-initialize-command");
     assertTrue(command.options.executeInitializeCommand, "executeInitializeCommand");
   }
 
   @Test
-  public void executeInitializeCommandTrue() {
+  void executeInitializeCommandTrue() {
     final var command = parseCommandOptions("--execute-initialize-command=true");
     assertTrue(command.options.executeInitializeCommand, "executeInitializeCommand");
   }
 
   @Test
-  public void executeInitializeCommandFalse() {
+  void executeInitializeCommandFalse() {
     final var command = parseCommandOptions("--execute-initialize-command=false");
     assertFalse(command.options.executeInitializeCommand, "executeInitializeCommand");
   }
 
   @Test
-  public void executeInitializeCommandNegated() {
+  void executeInitializeCommandNegated() {
     final var command = parseCommandOptions("--no-execute-initialize-command");
     assertFalse(command.options.executeInitializeCommand, "executeInitializeCommand");
   }
 
   @Test
-  public void executeInitializeCommandNegatedTrue() {
+  void executeInitializeCommandNegatedTrue() {
     final var command = parseCommandOptions("--no-execute-initialize-command=true");
     assertFalse(command.options.executeInitializeCommand, "executeInitializeCommand");
   }
 
   @Test
-  public void executeInitializeCommandNegatedFalse() {
+  void executeInitializeCommandNegatedFalse() {
     final var command = parseCommandOptions("--no-execute-initialize-command=false");
     assertTrue(command.options.executeInitializeCommand, "executeInitializeCommand");
   }
 
   @Test
-  public void executeOnCreateCommand() {
+  void executeOnCreateCommand() {
     final var command = parseCommandOptions("--execute-on-create-command");
     assertTrue(command.options.executeOnCreateCommand, "executeOnCreateCommand");
   }
 
   @Test
-  public void executeOnCreateCommandTrue() {
+  void executeOnCreateCommandTrue() {
     final var command = parseCommandOptions("--execute-on-create-command=true");
     assertTrue(command.options.executeOnCreateCommand, "executeOnCreateCommand");
   }
 
   @Test
-  public void executeOnCreateCommandFalse() {
+  void executeOnCreateCommandFalse() {
     final var command = parseCommandOptions("--execute-on-create-command=false");
     assertFalse(command.options.executeOnCreateCommand, "executeOnCreateCommand");
   }
 
   @Test
-  public void executeOnCreateCommandNegated() {
+  void executeOnCreateCommandNegated() {
     final var command = parseCommandOptions("--no-execute-on-create-command");
     assertFalse(command.options.executeOnCreateCommand, "executeOnCreateCommand");
   }
 
   @Test
-  public void executeOnCreateCommandNegatedTrue() {
+  void executeOnCreateCommandNegatedTrue() {
     final var command = parseCommandOptions("--no-execute-on-create-command=true");
     assertFalse(command.options.executeOnCreateCommand, "executeOnCreateCommand");
   }
 
   @Test
-  public void executeOnCreateCommandNegatedFalse() {
+  void executeOnCreateCommandNegatedFalse() {
     final var command = parseCommandOptions("--no-execute-on-create-command=false");
     assertTrue(command.options.executeOnCreateCommand, "executeOnCreateCommand");
   }
 
   @Test
-  public void executeUpdateContentCommand() {
+  void executeUpdateContentCommand() {
     final var command = parseCommandOptions("--execute-update-content-command");
     assertTrue(command.options.executeUpdateContentCommand, "executeUpdateContentCommand");
   }
 
   @Test
-  public void executeUpdateContentCommandTrue() {
+  void executeUpdateContentCommandTrue() {
     final var command = parseCommandOptions("--execute-update-content-command=true");
     assertTrue(command.options.executeUpdateContentCommand, "executeUpdateContentCommand");
   }
 
   @Test
-  public void executeUpdateContentCommandFalse() {
+  void executeUpdateContentCommandFalse() {
     final var command = parseCommandOptions("--execute-update-content-command=false");
     assertFalse(command.options.executeUpdateContentCommand, "executeUpdateContentCommand");
   }
 
   @Test
-  public void executeUpdateContentCommandNegated() {
+  void executeUpdateContentCommandNegated() {
     final var command = parseCommandOptions("--no-execute-update-content-command");
     assertFalse(command.options.executeUpdateContentCommand, "executeUpdateContentCommand");
   }
 
   @Test
-  public void executeUpdateContentCommandNegatedTrue() {
+  void executeUpdateContentCommandNegatedTrue() {
     final var command = parseCommandOptions("--no-execute-update-content-command=true");
     assertFalse(command.options.executeUpdateContentCommand, "executeUpdateContentCommand");
   }
 
   @Test
-  public void executeUpdateContentCommandNegatedFalse() {
+  void executeUpdateContentCommandNegatedFalse() {
     final var command = parseCommandOptions("--no-execute-update-content-command=false");
     assertTrue(command.options.executeUpdateContentCommand, "executeUpdateContentCommand");
   }
 
   @Test
-  public void executePostCreateCommand() {
+  void executePostCreateCommand() {
     final var command = parseCommandOptions("--execute-post-create-command");
     assertTrue(command.options.executePostCreateCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostCreateCommandTrue() {
+  void executePostCreateCommandTrue() {
     final var command = parseCommandOptions("--execute-post-create-command=true");
     assertTrue(command.options.executePostCreateCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostCreateCommandFalse() {
+  void executePostCreateCommandFalse() {
     final var command = parseCommandOptions("--execute-post-create-command=false");
     assertFalse(command.options.executePostCreateCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostCreateCommandNegated() {
+  void executePostCreateCommandNegated() {
     final var command = parseCommandOptions("--no-execute-post-create-command");
     assertFalse(command.options.executePostCreateCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostCreateCommandNegatedTrue() {
+  void executePostCreateCommandNegatedTrue() {
     final var command = parseCommandOptions("--no-execute-post-create-command=true");
     assertFalse(command.options.executePostCreateCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostCreateCommandNegatedFalse() {
+  void executePostCreateCommandNegatedFalse() {
     final var command = parseCommandOptions("--no-execute-post-create-command=false");
     assertTrue(command.options.executePostCreateCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostStartCommand() {
+  void executePostStartCommand() {
     final var command = parseCommandOptions("--execute-post-start-command");
     assertTrue(command.options.executePostStartCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostStartCommandTrue() {
+  void executePostStartCommandTrue() {
     final var command = parseCommandOptions("--execute-post-start-command=true");
     assertTrue(command.options.executePostStartCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostStartCommandFalse() {
+  void executePostStartCommandFalse() {
     final var command = parseCommandOptions("--execute-post-start-command=false");
     assertFalse(command.options.executePostStartCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostStartCommandNegated() {
+  void executePostStartCommandNegated() {
     final var command = parseCommandOptions("--no-execute-post-start-command");
     assertFalse(command.options.executePostStartCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostStartCommandNegatedTrue() {
+  void executePostStartCommandNegatedTrue() {
     final var command = parseCommandOptions("--no-execute-post-start-command=true");
     assertFalse(command.options.executePostStartCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostStartCommandNegatedFalse() {
+  void executePostStartCommandNegatedFalse() {
     final var command = parseCommandOptions("--no-execute-post-start-command=false");
     assertTrue(command.options.executePostStartCommand, "executePostCreateCommand");
   }
 
   @Test
-  public void executePostAttachCommand() {
+  void executePostAttachCommand() {
     final var command = parseCommandOptions("--execute-post-attach-command");
     assertTrue(command.options.executePostAttachCommand, "executePostAttachCommand");
   }
 
   @Test
-  public void executePostAttachCommandTrue() {
+  void executePostAttachCommandTrue() {
     final var command = parseCommandOptions("--execute-post-attach-command=true");
     assertTrue(command.options.executePostAttachCommand, "executePostAttachCommand");
   }
 
   @Test
-  public void executePostAttachCommandFalse() {
+  void executePostAttachCommandFalse() {
     final var command = parseCommandOptions("--execute-post-attach-command=false");
     assertFalse(command.options.executePostAttachCommand, "executePostAttachCommand");
   }
 
   @Test
-  public void executePostAttachCommandNegated() {
+  void executePostAttachCommandNegated() {
     final var command = parseCommandOptions("--no-execute-post-attach-command");
     assertFalse(command.options.executePostAttachCommand, "executePostAttachCommand");
   }
 
   @Test
-  public void executePostAttachCommandNegatedTrue() {
+  void executePostAttachCommandNegatedTrue() {
     final var command = parseCommandOptions("--no-execute-post-attach-command=true");
     assertFalse(command.options.executePostAttachCommand, "executePostAttachCommand");
   }
 
   @Test
-  public void executePostAttachCommandNegatedFalse() {
+  void executePostAttachCommandNegatedFalse() {
     final var command = parseCommandOptions("--no-execute-post-attach-command=false");
     assertTrue(command.options.executePostAttachCommand, "executePostAttachCommand");
   }
 
   @Test
-  public void locations() {
+  void locations() {
     final var command = parseCommandOptions("test.json", "another.txt");
     assertIterableEquals(List.of("test.json", "another.txt"), command.options.locations, "locations");
   }

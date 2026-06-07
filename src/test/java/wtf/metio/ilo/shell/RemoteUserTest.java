@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -110,7 +111,7 @@ class RemoteUserTest {
     RemoteUser.resolve(new Docker(), options, CAPTURE);
     assertEquals(RemoteUserMapping.REMAP, options.userMapping);
     assertTrue(options.image.startsWith("ilo-remote-user:"), options.image);
-    assertTrue(options.containerfile != null, "a derived containerfile is generated");
+    assertNotNull(options.containerfile, "a derived containerfile is generated");
   }
 
   @Test

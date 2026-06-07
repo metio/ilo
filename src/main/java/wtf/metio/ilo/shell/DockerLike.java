@@ -21,6 +21,10 @@ abstract class DockerLike implements ShellCLI {
 
   // The runtimes restrict 'ps' output to containers matching the value that follows each '--filter'.
   private static final String FILTER = "--filter";
+  // '--format' takes a Go-template that selects which container fields a query prints.
+  private static final String FORMAT = "--format";
+  // '--env' sets an environment variable on the container ('create') or an exec'd process.
+  private static final String ENV = "--env";
 
   @Override
   public final List<String> pullArguments(final ShellOptions options) {
@@ -61,7 +65,7 @@ abstract class DockerLike implements ShellCLI {
     return flatten(
         of(name()),
         fromList(expand.expand(options.runtimeOptions)),
-        of("ps", "--all", FILTER, nameFilter, "--format", "{{.State}}"));
+        of("ps", "--all", FILTER, nameFilter, FORMAT, "{{.State}}"));
   }
 
   @Override
@@ -93,8 +97,8 @@ abstract class DockerLike implements ShellCLI {
         fromList(expand.expand(options.runtimeRunOptions)),
         projectDir,
         of("--workdir", workingDir),
-        of("--env", "ILO_CONTAINER=true"),
-        withPrefix("--env", expand.expand(options.variables)),
+        of(ENV, "ILO_CONTAINER=true"),
+        withPrefix(ENV, expand.expand(options.variables)),
         optional("--hostname", expand.expand(options.hostname)),
         withPrefix("--publish", expand.expand(options.ports)),
         withPrefix("--volume", missingVolumes.handleLocalDirectories(expand.expand(options.volumes))),
@@ -151,7 +155,7 @@ abstract class DockerLike implements ShellCLI {
         of("exec"),
         // remoteEnv applies to processes the tool runs in the container — the interactive shell here —
         // so it is set on 'exec', not baked onto the container like --env.
-        withPrefix("--env", expand.expand(options.remoteVariables)),
+        withPrefix(ENV, expand.expand(options.remoteVariables)),
         fromList(options.userMapping.execArguments(options.remoteUser, expand)),
         maybe(options.interactive, "--interactive"),
         // A pseudo-TTY is only allocated when ilo is attached to a real terminal; otherwise an
@@ -170,7 +174,7 @@ abstract class DockerLike implements ShellCLI {
         fromList(expand.expand(options.runtimeOptions)),
         of("exec"),
         // Lifecycle commands run as remote processes too, so they see remoteEnv as well.
-        withPrefix("--env", expand.expand(options.remoteVariables)),
+        withPrefix(ENV, expand.expand(options.remoteVariables)),
         of(containerName),
         fromList(command));
   }
@@ -185,7 +189,7 @@ abstract class DockerLike implements ShellCLI {
         fromList(expand.expand(options.runtimeOptions)),
         of("ps", "--all", FILTER, "label=ilo.project=" + projectDir),
         staleStatuses().stream().flatMap(status -> of(FILTER, "status=" + status)),
-        of("--format", "{{.Names}}"));
+        of(FORMAT, "{{.Names}}"));
   }
 
   // The non-running states swept on reuse. 'dead' (a container whose removal failed) is a Docker-only
@@ -212,7 +216,7 @@ abstract class DockerLike implements ShellCLI {
     return flatten(
         of(name()),
         fromList(expand.expand(options.runtimeOptions)),
-        of("inspect", "--format", "{{.State.Pid}}", containerName));
+        of("inspect", FORMAT, "{{.State.Pid}}", containerName));
   }
 
   @Override

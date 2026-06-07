@@ -14,7 +14,7 @@ import wtf.metio.ilo.test.ArchUnitTests;
 import java.util.stream.Stream;
 
 @DisplayName("Architecture")
-public final class ArchitectureTest {
+final class ArchitectureTest {
 
   private static JavaClasses classes;
 

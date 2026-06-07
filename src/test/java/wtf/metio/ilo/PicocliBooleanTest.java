@@ -9,7 +9,7 @@ import picocli.CommandLine;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PicocliBooleanTest {
+class PicocliBooleanTest {
 
   @CommandLine.Command
   static class TestCommand implements Runnable {
@@ -52,12 +52,13 @@ public class PicocliBooleanTest {
 
     @Override
     public void run() {
+      // never executed: this command exists only so picocli can bind and parse the options
     }
 
   }
 
   @Test
-  public void optionNotSpecified() {
+  void optionNotSpecified() {
     final var command = new TestCommand();
     new CommandLine(command).parseArgs();
     assertAll(
@@ -70,7 +71,7 @@ public class PicocliBooleanTest {
   }
 
   @Test
-  public void optionSpecifiedWithoutValue() {
+  void optionSpecifiedWithoutValue() {
     final var command = new TestCommand();
     new CommandLine(command).parseArgs("--interactive", "--autonomous", "--daemon", "--human", "--wanted");
     assertAll(
@@ -83,7 +84,7 @@ public class PicocliBooleanTest {
   }
 
   @Test
-  public void optionSpecifiedWithBooleanTrue() {
+  void optionSpecifiedWithBooleanTrue() {
     final var command = new TestCommand();
     new CommandLine(command).parseArgs("--interactive=true", "--autonomous=true", "--daemon=true", "--human=true", "--wanted=true");
     assertAll(
@@ -96,7 +97,7 @@ public class PicocliBooleanTest {
   }
 
   @Test
-  public void optionSpecifiedWithBooleanFalse() {
+  void optionSpecifiedWithBooleanFalse() {
     final var command = new TestCommand();
     new CommandLine(command).parseArgs("--interactive=false", "--autonomous=false", "--daemon=false", "--human=false", "--wanted=false");
     assertAll(
@@ -109,7 +110,7 @@ public class PicocliBooleanTest {
   }
 
   @Test
-  public void optionSpecifiedWithNegatedForm() {
+  void optionSpecifiedWithNegatedForm() {
     final var command = new TestCommand();
     new CommandLine(command).parseArgs("--no-interactive", "--no-autonomous", "--no-daemon", "--no-human", "--no-wanted");
     assertAll(
@@ -122,7 +123,7 @@ public class PicocliBooleanTest {
   }
 
   @Test
-  public void optionSpecifiedWithNegatedFormUsingBooleanTrue() {
+  void optionSpecifiedWithNegatedFormUsingBooleanTrue() {
     final var command = new TestCommand();
     new CommandLine(command).parseArgs("--no-interactive=true", "--no-autonomous=true", "--no-daemon=true", "--no-human=true", "--no-wanted=true");
     assertAll(
@@ -135,7 +136,7 @@ public class PicocliBooleanTest {
   }
 
   @Test
-  public void optionSpecifiedWithNegatedFormUsingBooleanFalse() {
+  void optionSpecifiedWithNegatedFormUsingBooleanFalse() {
     final var command = new TestCommand();
     new CommandLine(command).parseArgs("--no-interactive=false", "--no-autonomous=false", "--no-daemon=false", "--no-human=false", "--no-wanted=false");
     assertAll(

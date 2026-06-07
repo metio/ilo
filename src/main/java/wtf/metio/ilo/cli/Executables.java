@@ -119,6 +119,7 @@ public final class Executables {
     try {
       return new ProcessBuilder(arguments).inheritIO().start().waitFor();
     } catch (final InterruptedException exception) {
+      Thread.currentThread().interrupt();
       throw new UnexpectedInterruptionException(exception);
     } catch (final UnsupportedOperationException exception) {
       throw new OperatingSystemNotSupportedException(exception);

@@ -184,8 +184,9 @@ class ShellVolumeBehaviorTest {
   @Test
   @DisplayName("still manages a bind mount source")
   void stillManagesBindMount() {
+    final var volumes = List.of("/no/such/host/path:/work");
     assertThrows(LocalDirectoryDoesNotExistException.class,
-        () -> ShellVolumeBehavior.ERROR.handleLocalDirectories(List.of("/no/such/host/path:/work")));
+        () -> ShellVolumeBehavior.ERROR.handleLocalDirectories(volumes));
   }
 
   @Test

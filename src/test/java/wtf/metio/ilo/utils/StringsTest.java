@@ -10,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import wtf.metio.ilo.test.ClassTests;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -46,8 +47,8 @@ class StringsTest {
 
   @Test
   @DisplayName("has private constructor")
-  void shouldHavePrivateConstructor() throws NoSuchMethodException {
-    ClassTests.hasPrivateConstructor(Strings.class);
+  void shouldHavePrivateConstructor() {
+    assertDoesNotThrow(() -> ClassTests.hasPrivateConstructor(Strings.class));
   }
 
 }
