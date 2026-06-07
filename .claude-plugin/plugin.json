@@ -1,0 +1,24 @@
+{
+  "name": "ilo",
+  "displayName": "ilo",
+  "description": "Run builds, tests, and tooling inside reproducible containerized dev environments with the ilo CLI (shell, compose, devcontainer, devfile).",
+  "author": {
+    "name": "The ilo Authors",
+    "url": "https://github.com/metio/ilo"
+  },
+  "homepage": "https://ilo.projects.metio.wtf/",
+  "repository": "https://github.com/metio/ilo",
+  "license": "0BSD",
+  "keywords": [
+    "ilo",
+    "containers",
+    "reproducible-builds",
+    "build-environments",
+    "podman",
+    "docker",
+    "nerdctl",
+    "devcontainer",
+    "devfile",
+    "compose"
+  ]
+}

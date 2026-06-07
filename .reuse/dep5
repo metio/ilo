@@ -22,3 +22,11 @@ License: 0BSD
 Files: src/test/resources/*
 Copyright: The ilo Authors
 License: 0BSD
+
+Files: .claude-plugin/*
+Copyright: The ilo Authors
+License: 0BSD
+
+Files: skills/*
+Copyright: The ilo Authors
+License: 0BSD

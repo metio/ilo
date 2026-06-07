@@ -22,3 +22,4 @@ ilo.iml
 
 # Claude code-review reports
 .claude/reviews/
+.config/
