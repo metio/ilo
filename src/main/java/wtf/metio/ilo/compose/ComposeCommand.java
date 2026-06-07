@@ -117,15 +117,9 @@ public final class ComposeCommand implements Callable<Integer> {
     if (!managed) {
       return tool.createArguments(options, COMPOSE_PROJECT);
     }
-    final var baseFiles = options.file;
-    final var withOverride = new ArrayList<>(Optional.ofNullable(baseFiles).orElseGet(List::of));
+    final var withOverride = new ArrayList<>(Optional.ofNullable(options.file).orElseGet(List::of));
     withOverride.add(overrideFile);
-    options.file = withOverride;
-    try {
-      return tool.createArguments(options, COMPOSE_PROJECT);
-    } finally {
-      options.file = baseFiles;
-    }
+    return tool.createArguments(options, withOverride);
   }
 
   // With the keepalive as the service's PID 1, any other process in its container is another open
