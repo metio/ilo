@@ -2,4 +2,4 @@ shell
 --pull
 --no-interactive
 ghcr.io/gohugoio/hugo:v0.162.1
---minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
+hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs

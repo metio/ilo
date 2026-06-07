@@ -6,6 +6,8 @@ package wtf.metio.ilo.compose;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import wtf.metio.ilo.errors.NoMatchingRuntimeException;
@@ -73,7 +75,12 @@ class ComposeRuntimeTest {
     assertEquals("podman-compose", ComposeRuntime.values()[2].cli().name());
   }
 
+  // Evaluating the Compose V2 probe ('docker compose version') is unreliable on the Windows CI runner —
+  // the docker CLI there hangs/answers inconsistently, so DockerCompose2.exists() flips between calls.
+  // These tests run only where the probe is stable: Linux (plugin present, fast) and macOS (docker
+  // absent, deterministically false). This matches the OS-gating used for the shell-expansion tests.
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("docker is the first choice")
   void autoSelectDocker() {
     assumeTrue(new DockerCompose2().exists());
@@ -81,6 +88,7 @@ class ComposeRuntimeTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("docker-compose is the second choice")
   void autoSelectDockerCompose() {
     assumeFalse(new DockerCompose2().exists());
@@ -89,6 +97,7 @@ class ComposeRuntimeTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("podman-compose is the third choice")
   void autoSelectPodmanCompose() {
     assumeFalse(new DockerCompose2().exists());
@@ -112,6 +121,7 @@ class ComposeRuntimeTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("can force to use docker")
   void forceDockerCompose2() {
     assumeTrue(new DockerCompose2().exists());
@@ -119,6 +129,7 @@ class ComposeRuntimeTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("throws in case there are no compose runtimes available")
   void throwsWithoutAnyRuntime() {
     assumeFalse(new DockerCompose().exists());

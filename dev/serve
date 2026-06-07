@@ -3,4 +3,4 @@ shell
 --no-interactive
 --publish=1313:1313
 ghcr.io/gohugoio/hugo:v0.162.1
-server --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
+hugo server --bind 0.0.0.0 --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs

@@ -1,0 +1,11 @@
+{{- /* Project override of the theme's head/links.html: identical to the theme's, plus a link to
+       /llms.txt. The link lives here (not in the shared metio theme) because the LLMS output format
+       and llms.txt are ilo-specific — other sites using the theme do not publish them. */ -}}
+<link href="{{ .Page.Permalink }}" rel="canonical">
+<link href="{{ "/atom.xml" | absURL }}" rel="alternate" title="{{ .Site.Title }} Atom" type="application/atom+xml">
+<link href="{{ "/index.xml" | absURL }}" rel="alternate" title="{{ .Site.Title }} RSS" type="application/rss+xml">
+<link href="{{ "/sitemap.xml" | absURL }}" rel="sitemap" title="{{ .Site.Title }} Sitemap" type="application/xml">
+<link rel="author" href="{{ "/humans.txt" | absURL }}" />
+<link rel="alternate" type="application/rdf+xml" title="FOAF" href="{{ "/foaf.rdf" | absURL }}">
+<link rel="alternate" type="text/plain" title="llms.txt" href="{{ "/llms.txt" | absURL }}">
+<link rel="license" href="https://creativecommons.org/publicdomain/zero/1.0/">

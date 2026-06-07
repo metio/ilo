@@ -402,11 +402,14 @@ By default, `--shell-arg` adds no arguments. The arguments are ignored when you 
 
 ## `--volume`
 
-The `--volume` option can be used to mount additional volumes into your container.
+The `--volume` option can be used to mount additional volumes into your container —
+typically a dependency cache. Pair it with the tool's own cache-directory variable so
+the cache is written to the mounted location; see [Examples](../examples) for the
+per-tool variables.
 
 ```console
-# mount extra volume
-$ ilo shell --volume $HOME/.m2/repository:/root/.m2/repository:z
+# mount a host directory as the dependency cache
+$ ilo shell --volume ${XDG_CACHE_HOME:-$HOME/.cache}/maven:/cache:z --env MAVEN_ARGS=-Dmaven.repo.local=/cache docker.io/library/maven:latest
 
 # do not mount extra volume
 $ ilo shell

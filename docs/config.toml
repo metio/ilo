@@ -10,9 +10,21 @@ defaultContentLanguage = "en"
 enableInlineShortcodes = true
 
 [outputs]
-  home = [ "HTML", "RSS", "ATOM", "HUMANS", "FOAF"]
+  home = [ "HTML", "RSS", "ATOM", "HUMANS", "FOAF", "LLMS"]
   section = ["HTML", "RSS", "ATOM"]
   term = ["HTML", "RSS", "ATOM"]
+
+# Generates /llms-full.txt — the documentation concatenated for LLMs. The text/plain media type is
+# defined by the theme (it also backs humans.txt). The curated index lives at static/llms.txt.
+[outputFormats.LLMS]
+  name = "LLMS"
+  mediaType = "text/plain"
+  baseName = "llms-full"
+  isPlainText = true
+  isHTML = false
+  noUgly = true
+  permalinkable = false
+  notAlternative = true
 
 [params]
   mainSections = ["community", "contributors", "integration", "metrics", "shell", "usage"]

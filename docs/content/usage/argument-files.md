@@ -17,7 +17,7 @@ In order to share the same options/commands across your team, `ilo` supports arg
 # write argument file
 $ cat some/folder/your-arguments
 shell
-node:latest
+docker.io/library/node:latest
 /bin/bash
 
 # use argument file
@@ -29,12 +29,12 @@ The argument file in the above example specified all commands and options on a n
 ```console
 # write argument file
 $ cat some/other/your-arguments
-shell node:latest /bin/bash
+shell docker.io/library/node:latest /bin/bash
 
 # write argument file
 $ cat some/more/of/your-arguments
 shell
-node:latest /bin/bash
+docker.io/library/node:latest /bin/bash
 
 # use argument file
 $ ilo @some/other/your-arguments
@@ -63,7 +63,7 @@ $ ilo @first @second
 You can mix argument files with regular CLI options as well:
 
 ```console
-$ ilo shell @default-shell openjdk:11
+$ ilo shell @default-shell docker.io/library/eclipse-temurin:21
 ```
 
 The argument file used by `ilo` developers can be seen [here](https://github.com/metio/ilo/blob/main/dev/env) and is used by calling `ilo @dev/env`.

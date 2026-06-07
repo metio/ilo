@@ -31,9 +31,9 @@ By default `ilo compose` will look for a `docker-compose.yml` file in the curren
 version: "3.8"
 services:
   redis:
-    image: redis:latest
+    image: docker.io/library/redis:latest
   dev:
-    image: openjdk:11
+    image: docker.io/library/eclipse-temurin:21
     command: /bin/bash         # custom command
     volumes:
       - .:/some/where          # mount project directory

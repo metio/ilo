@@ -20,7 +20,7 @@ As an example, consider the following Containerfile that is based on the officia
 ```console
 # write some Containerfile
 $ cat your.containerfile
-FROM maven:3-openjdk-11-slim
+FROM docker.io/library/maven:latest
 
 RUN apt-get update && apt-get install hugo -y
 ```
