@@ -153,6 +153,7 @@ class ComposeRuntimeTest {
   }
 
   @Test
+  @EnabledOnOs({OS.LINUX, OS.MAC})
   @DisplayName("throws a runtime-specific message when docker is specified but unavailable")
   void throwsDockerCompose2() {
     assumeFalse(new DockerCompose2().exists());
