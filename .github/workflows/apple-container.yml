@@ -1,0 +1,110 @@
+# SPDX-FileCopyrightText: The ilo Authors
+# SPDX-License-Identifier: 0BSD
+
+# Tier-1 verification for the Apple 'container' runtime: assert that the CLI surface ilo's
+# 'shell.Container' / 'cli.ContainerListing' depend on still exists. Help text is produced by the
+# CLI's argument parser and needs neither 'container system start' nor a booted VM, so it runs on a
+# GitHub-hosted runner. Actually running a container is impossible here: hosted macOS runners are M1
+# and GitHub disables nested virtualization, so Virtualization.framework cannot boot the Linux guest.
+# The 'OPEN' items that need real output ('list --format json' field paths, 'exec … ps' liveness)
+# therefore require bare-metal Apple silicon (M3+) and are out of scope for this job.
+name: Apple container CLI
+on:
+  # Weekly run catches upstream flag/verb drift even without ilo changes.
+  schedule:
+    - cron: "23 6 * * 1"
+  workflow_dispatch:
+  # Run on PRs only when the runtime that makes these assumptions changes.
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "src/main/java/wtf/metio/ilo/shell/Container.java"
+      - "src/main/java/wtf/metio/ilo/shell/ShellArguments.java"
+      - "src/main/java/wtf/metio/ilo/cli/ContainerListing.java"
+      - ".github/workflows/apple-container.yml"
+permissions:
+  contents: read
+jobs:
+  cli-surface:
+    name: Verify Apple container CLI surface
+    # The .pkg targets macOS 26 (Tahoe); the chip is still M1, which is fine for help-only checks.
+    runs-on: macos-26
+    steps:
+      - id: install
+        name: Install Apple container
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release download --repo apple/container --pattern '*.pkg' --dir "$RUNNER_TEMP"
+          pkg=$(ls "$RUNNER_TEMP"/*.pkg | head -1)
+          echo "Installing $pkg"
+          sudo installer -pkg "$pkg" -target /
+          export PATH="/usr/local/bin:$PATH"
+          container --version
+      - id: surface
+        name: Assert the CLI contract ilo relies on
+        run: |
+          set -euo pipefail
+          export PATH="/usr/local/bin:$PATH"
+
+          # assert "<help command>" "<grep -E pattern>" "<why ilo needs it>"
+          # Requires the help command to succeed AND the pattern to appear, so a removed subcommand
+          # (non-zero exit) fails just like a removed flag.
+          assert() {
+            local help="$1" pat="$2" why="$3" out rc=0
+            out=$($help 2>&1) || rc=$?
+            if [ "$rc" -ne 0 ]; then
+              echo "::error::Apple container drift: '$help' failed (exit $rc) — $why"
+              echo "$out" | sed 's/^/    /'
+              exit 1
+            fi
+            if ! grep -Eq -- "$pat" <<<"$out"; then
+              echo "::error::Apple container drift: '$pat' missing from '$help' — $why"
+              echo "$out" | sed 's/^/    /'
+              exit 1
+            fi
+            echo "ok: $help  ⊇  $pat   ($why)"
+          }
+
+          # create() — 'run' flags
+          assert "container run --help"    '(^|\s)--detach(\s|,|$)'     "create uses run --detach"
+          assert "container run --help"    '(^|\s)--name(\s|,|$)'       "create names the container"
+          assert "container run --help"    '(^|\s)--label(\s|,|$)'      "probe/stale find containers by ilo.* labels"
+          assert "container run --help"    '(^|\s)--volume(\s|,|$)'     "project and user volumes"
+          assert "container run --help"    '(^|\s)--env(\s|,|$)'        "ILO_CONTAINER and --variables"
+          assert "container run --help"    '(^|\s)--workdir(\s|,|$)'    "working directory"
+          assert "container run --help"    '(^|\s)--entrypoint(\s|,|$)' "keepalive entrypoint override"
+          assert "container run --help"    '(^|\s)--publish(\s|,|$)'    "port forwarding"
+          # Confirmed on macOS 26: 'container run' has NO --hostname flag (networking is --network
+          # only), so ilo's Container runtime drops the option with a warning rather than emitting an
+          # unsupported flag. Alert — without failing — if upstream ever adds it, so we can wire it in.
+          if container run --help 2>&1 | grep -Eq -- '(^|\s)--hostname(\s|,|$)'; then
+            echo "::warning::apple/container now supports 'run --hostname'; wire it into Container.supportsHostname()"
+          fi
+
+          # attach() / exec() — 'exec' flags
+          assert "container exec --help"   '(^|\s)--interactive(\s|,|$)' "interactive attach"
+          assert "container exec --help"   '(^|\s)--tty(\s|,|$)'         "TTY attach"
+          assert "container exec --help"   '(^|\s)--env(\s|,|$)'         "remoteEnv on exec"
+
+          # build()
+          assert "container build --help"  '(^|\s)--file(\s|,|$)'       "build --file <containerfile>"
+          assert "container build --help"  '(^|\s)--tag(\s|,|$)'        "build --tag <image>"
+          assert "container build --help"  '(^|\s)--pull(\s|,|$)'       "build --pull refreshes the base image"
+
+          # probe() / staleContainers() — listing
+          assert "container list --help"   '(^|\s)--all(\s|,|$)'        "probe/stale list --all"
+          # Only the flag is asserted here; that 'json' is a valid --format value (and its field
+          # layout) is an OPEN item verified against real output on bare-metal Apple silicon.
+          assert "container list --help"   '(^|\s)--format(\s|,|$)'     "probe/stale use list --format json"
+
+          # removeArguments() / cleanupArguments() — namespaced image verbs and forced delete
+          assert "container delete --help" '(^|\s)--force(\s|,|$)'      "remove uses delete --force"
+          assert "container image --help"  '(^|\s)pull(\s|,|$)'         "pull uses 'container image pull'"
+          assert "container image --help"  '(^|\s)delete(\s|,|$)'       "cleanup uses 'container image delete'"
+
+          # stopArguments() — confirm the subcommand exists (help succeeds and names itself)
+          assert "container stop --help"   '(^|\s)stop(\s|,|$)'         "teardown stops the container"
+
+          echo "All Apple container CLI assumptions hold."

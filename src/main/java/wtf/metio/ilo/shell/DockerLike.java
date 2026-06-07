@@ -70,7 +70,7 @@ abstract class DockerLike implements ShellCLI {
         .filter(Strings::isNotBlank)
         .orElse(currentDir);
     return ShellArguments.create(name(), options, containerName,
-        projectMount(options, currentDir, workingDir, expand).toList());
+        projectMount(options, currentDir, workingDir, expand).toList(), supportsHostname());
   }
 
   // The mount that puts the project directory into the container. An explicit --workspace-mount replaces

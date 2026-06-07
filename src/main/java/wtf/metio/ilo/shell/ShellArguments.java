@@ -43,7 +43,7 @@ final class ShellArguments {
   }
 
   static List<String> create(final String name, final ShellOptions options, final String containerName,
-      final List<String> projectMount) {
+      final List<String> projectMount, final boolean supportsHostname) {
     final var expand = OSSupport.expander();
     final var currentDir = System.getProperty("user.dir");
     final var workingDir = Optional.ofNullable(options.workingDir)
@@ -51,6 +51,10 @@ final class ShellArguments {
         .orElse(currentDir);
     // picocli supplies a default, but a directly-constructed ShellOptions may leave this null.
     final var missingVolumes = Optional.ofNullable(options.missingVolumes).orElse(ShellVolumeBehavior.CREATE);
+    final var hostname = expand.expand(options.hostname);
+    if (Strings.isNotBlank(hostname) && !supportsHostname) {
+      System.err.println("ilo: " + name + " does not support --hostname; ignoring '" + hostname + "'");
+    }
     return flatten(
         of(name),
         fromList(expand.expand(options.runtimeOptions)),
@@ -63,7 +67,7 @@ final class ShellArguments {
         of("--workdir", workingDir),
         of(ENV, "ILO_CONTAINER=true"),
         withPrefix(ENV, expand.expand(options.variables)),
-        optional("--hostname", expand.expand(options.hostname)),
+        maybe(supportsHostname && Strings.isNotBlank(hostname), "--hostname", hostname),
         withPrefix("--publish", expand.expand(options.ports)),
         withPrefix("--volume", missingVolumes.handleLocalDirectories(expand.expand(options.volumes))),
         fromList(options.userMapping.createArguments(options.remoteUser, options.remoteUid, options.remoteGid, expand)),
