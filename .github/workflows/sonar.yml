@@ -7,10 +7,18 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+# Cancel superseded analyses on the same branch; a newer push makes an in-flight Sonar run obsolete.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+# Analysis only reads the checkout; Sonar auth is via SONAR_TOKEN, not the GITHUB_TOKEN.
+permissions:
+  contents: read
 jobs:
   sonar:
     name: Analyze
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - id: checkout
         name: Clone Git Repository

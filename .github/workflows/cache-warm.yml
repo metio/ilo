@@ -11,6 +11,7 @@ jobs:
   warm-maven:
     name: Warm Maven cache
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - id: checkout
         name: Clone Git Repository

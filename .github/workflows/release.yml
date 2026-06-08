@@ -6,10 +6,14 @@ on:
   schedule:
     - cron:  45 3 * * MON
   workflow_dispatch:
+# Default to read-only; only the release job below is granted contents: write to publish the release.
+permissions:
+  contents: read
 jobs:
   prepare:
     name: Prepare Release
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       commit_count: ${{ steps.commits.outputs.count }}
       release_version: ${{ steps.release.outputs.version }}
@@ -24,23 +28,43 @@ jobs:
           fetch-depth: 0
       - id: last_release
         name: Fetch last release info
-        run: echo "tag=$(gh release view --json tagName --jq '.tagName')" >> $GITHUB_OUTPUT
+        # Capture into a variable on its own line so a failing 'gh' aborts the step instead of writing
+        # an empty tag (which would silently corrupt the commit count and version gating below).
+        run: |
+          set -euo pipefail
+          tag=$(gh release view --json tagName --jq '.tagName')
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: commits
         name: Count Commits
-        run: echo "count=$(git rev-list --count ${{ steps.last_release.outputs.tag }}..HEAD -- src/main/java pom.xml)" >> $GITHUB_OUTPUT
+        env:
+          PREVIOUS_TAG: ${{ steps.last_release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          count=$(git rev-list --count "${PREVIOUS_TAG}..HEAD" -- src/main/java pom.xml)
+          echo "count=$count" >> "$GITHUB_OUTPUT"
       - id: release
         name: Create Release Version
         if: steps.commits.outputs.count > 0
-        run: echo "version=$(date +'%Y.%-m.%-d')" >> $GITHUB_OUTPUT
+        run: |
+          set -euo pipefail
+          version=$(date +'%Y.%-m.%-d')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
       - name: Build Timestamp
         id: timestamp
-        run: echo "iso8601=$(date --utc --iso-8601=seconds)" >> $GITHUB_OUTPUT
+        run: |
+          set -euo pipefail
+          iso8601=$(date --utc --iso-8601=seconds)
+          echo "iso8601=$iso8601" >> "$GITHUB_OUTPUT"
   build:
     name: Build on ${{ matrix.os }}
     needs: prepare
+    # Gate the whole job so no runner is provisioned on weeks without qualifying commits, and a future
+    # step added without its own guard cannot run unconditionally.
+    if: needs.prepare.outputs.commit_count > 0
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
     strategy:
       matrix:
         os:
@@ -50,11 +74,9 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        if: needs.prepare.outputs.commit_count > 0
         uses: actions/checkout@v6
       - id: graal
         name: GraalVM Setup
-        if: needs.prepare.outputs.commit_count > 0
         uses: graalvm/setup-graalvm@v1
         with:
           distribution: graalvm-community
@@ -62,7 +84,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: cache
         name: Cache Maven Repository
-        if: needs.prepare.outputs.commit_count > 0
         uses: actions/cache@v5
         with:
           path: ~/.m2/repository
@@ -72,14 +93,12 @@ jobs:
             maven-
       - id: gpg
         name: GPG Key
-        if: needs.prepare.outputs.commit_count > 0
         uses: timheuer/base64-to-file@v2.0
         with:
           fileName: signing.key.asc
           fileDir: ${{ github.workspace}}
           encodedString: ${{ secrets.GPG_SECRET_KEY_BASE64 }}
       - id: verify
-        if: needs.prepare.outputs.commit_count > 0
         name: Verify Project
         run: >
           mvn
@@ -93,7 +112,6 @@ jobs:
           verify
       - id: smoke
         name: Smoke test the native binary
-        if: needs.prepare.outputs.commit_count > 0
         shell: bash
         # Run the freshly built binary so a native-only failure (a missing reflection/resource
         # registration) fails the release here instead of shipping a binary that crashes on first run.
@@ -103,28 +121,28 @@ jobs:
           "$bin" --help
       - id: upload-java
         name: Upload JVM Artifact
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
+        if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
           name: jvm
           path: ./target/ilo-*-jvm*
       - id: upload-linux
         name: Upload Linux Artifact
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Linux'
+        if: runner.os == 'Linux'
         uses: actions/upload-artifact@v6
         with:
           name: linux
           path: ./target/ilo-*-linux*
       - id: upload-mac
         name: Upload Mac Artifact
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'macOS'
+        if: runner.os == 'macOS'
         uses: actions/upload-artifact@v6
         with:
           name: mac
           path: ./target/ilo-*-mac*
       - id: upload-windows
         name: Upload Windows Artifact
-        if: needs.prepare.outputs.commit_count > 0 && runner.os == 'Windows'
+        if: runner.os == 'Windows'
         uses: actions/upload-artifact@v6
         with:
           name: windows
@@ -132,25 +150,24 @@ jobs:
   release:
     name: GitHub Release
     needs: [prepare, build]
+    if: needs.prepare.outputs.commit_count > 0
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write
     steps:
       - id: checkout
         name: Clone Git Repository
-        if: needs.prepare.outputs.commit_count > 0
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - id: download
         name: Download Artifacts
-        if: needs.prepare.outputs.commit_count > 0
         uses: actions/download-artifact@v8
         with:
           path: artifacts
       - id: create_release
         name: Create Release
-        if: needs.prepare.outputs.commit_count > 0
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ needs.prepare.outputs.release_version }}
@@ -159,6 +176,9 @@ jobs:
           draft: false
           prerelease: false
           generate_release_notes: true
+          # Fail the release if any expected asset is missing rather than publishing an incomplete set;
+          # the upload steps use globs, so a filename diverging from release_version would otherwise pass.
+          fail_on_unmatched_files: true
           files: |
             artifacts/jvm/ilo-${{ needs.prepare.outputs.release_version }}-jvm.tar.gz
             artifacts/jvm/ilo-${{ needs.prepare.outputs.release_version }}-jvm.tar.gz.asc

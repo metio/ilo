@@ -5,10 +5,18 @@ name: Verify Commits
 on:
   pull_request:
     branches: [ main ]
+# Cancel superseded runs on the same branch so rapid pushes don't keep stale 3-OS native builds alive.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+# These jobs run untrusted PR code; the token needs only read access to the checkout.
+permissions:
+  contents: read
 jobs:
   verify:
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
     strategy:
       matrix:
         os:
@@ -50,6 +58,7 @@ jobs:
   mutation:
     name: Mutation tests (PIT)
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - id: checkout
         name: Clone Git Repository
@@ -78,6 +87,7 @@ jobs:
   integration:
     name: Integration tests (Docker)
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - id: checkout
         name: Clone Git Repository
