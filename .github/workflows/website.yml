@@ -23,22 +23,16 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
+        # Shallow clone: the Hugo site does not use Git info, so full history is unnecessary.
         uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
       - id: hugo
         name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: 0.162.1
-      - id: previous
-        name: Get Last Release
-        run: echo "version=$(git describe --abbrev=0 --tags)" >> "$GITHUB_OUTPUT"
       - id: build
         name: Build Website
         run: hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
-        env:
-          ILO_RELEASE: ${{ steps.previous.outputs.version }}
       - id: htmltest
         name: Run htmltest
         # Pinned to an immutable commit SHA: the action's only tag is an old RC, so it is otherwise

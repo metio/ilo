@@ -100,6 +100,10 @@ jobs:
           encodedString: ${{ secrets.GPG_SECRET_KEY_BASE64 }}
       - id: verify
         name: Verify Project
+        # The signing passphrase goes through SIGN_KEY_PASS (which the sign plugin reads with priority)
+        # rather than a -D property, so it is not exposed in the runner's process table.
+        env:
+          SIGN_KEY_PASS: ${{ secrets.GPG_SECRET_KEY_PASSWORD }}
         run: >
           mvn
           --batch-mode
@@ -107,7 +111,6 @@ jobs:
           --define revision=${{ needs.prepare.outputs.release_version }}
           --define skipNativeBuild=false
           --define sign.keyFile=signing.key.asc
-          --define sign.keyPass=${{ secrets.GPG_SECRET_KEY_PASSWORD }}
           --define project.build.outputTimestamp=${{ needs.prepare.outputs.build_timestamp }}
           verify
       - id: smoke
