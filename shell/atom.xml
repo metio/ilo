@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.162.1">Hugo</generator><title type="html">ilo shell on ilo</title><link href="https://ilo.projects.metio.wtf/shell/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/shell/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/shell/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2026-06-08T09:14:05+00:00</updated><author><name>metio.wtf</name><email>https://metio.groups.io/g/main/topics</email></author><id>https://ilo.projects.metio.wtf/shell/</id><entry><title type="html">Examples</title><link href="https://ilo.projects.metio.wtf/shell/examples/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/shell/examples/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The following examples show how <code>ilo shell</code> can be used to cache a build tool&rsquo;s
+downloaded dependencies across runs, so they are not re-downloaded every time.</p>
+<h2 id="caching-dependencies">Caching dependencies</h2>
+<p>Persisting a tool&rsquo;s download cache means mounting a host directory into the
+container. The <strong>robust, image-agnostic</strong> way is to mount one host directory at a
+fixed container path (<code>/cache</code> below) and point the tool&rsquo;s cache there with its own
+environment variable — rather than mounting onto the image&rsquo;s default cache location.
+Default locations vary between images and, because most current official images run
+as a <strong>non-root</strong> user (e.g. <code>docker.io/library/maven:latest</code> runs as <code>ubuntu</code>, not <code>root</code>, with its
+repo under <code>/home/ubuntu</code>), mounting onto <code>/root/...</code> is usually both the wrong path
+and unwritable.</p>
+<p><code>ilo</code> keeps the cached files owned by <strong>you</strong> on the host
+(<code>--update-remote-user-uid</code>, on by default), so the cache stays usable from the host
+too. See <a href="../../usage/file-ownership">File Ownership</a>.</p>
+<p>All rows use the same mount; pick the image that carries your toolchain — <strong>always
+in long-form</strong> (<code>docker.io/library/golang:latest</code>, not <code>golang:latest</code>; short names
+resolve differently under Podman/Fedora, long-form works everywhere) — and add the
+tool&rsquo;s cache environment variable:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="go">--volume ${XDG_CACHE_HOME:-$HOME/.cache}/&lt;tool&gt;:/cache:z
+</span></span></span></code></pre></div><table>
+	<thead>
+			<tr>
+					<th>Tool / ecosystem</th>
+					<th>Image (long-form)</th>
+					<th>Add this to point the cache at <code>/cache</code></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Maven</td>
+					<td><code>docker.io/library/maven:latest</code></td>
+					<td><code>--env MAVEN_ARGS=-Dmaven.repo.local=/cache</code></td>
+			</tr>
+			<tr>
+					<td>Gradle</td>
+					<td><code>docker.io/library/gradle:latest</code></td>
+					<td><code>--env GRADLE_USER_HOME=/cache</code></td>
+			</tr>
+			<tr>
+					<td>Cargo (Rust)</td>
+					<td><code>docker.io/library/rust:latest</code></td>
+					<td><code>--env CARGO_HOME=/cache</code></td>
+			</tr>
+			<tr>
+					<td>Go</td>
+					<td><code>docker.io/library/golang:latest</code></td>
+					<td><code>--env GOMODCACHE=/cache/mod --env GOCACHE=/cache/build</code></td>
+			</tr>
+			<tr>
+					<td>npm</td>
+					<td><code>docker.io/library/node:latest</code></td>
+					<td><code>--env npm_config_cache=/cache</code></td>
+			</tr>
+			<tr>
+					<td>pip</td>
+					<td><code>docker.io/library/python:latest</code></td>
+					<td><code>--env PIP_CACHE_DIR=/cache</code></td>
+			</tr>
+			<tr>
+					<td>uv (Python)</td>
+					<td><code>ghcr.io/astral-sh/uv:python3.13-bookworm-slim</code></td>
+					<td><code>--env UV_CACHE_DIR=/cache</code></td>
+			</tr>
+			<tr>
+					<td>Composer (PHP)</td>
+					<td><code>docker.io/library/composer:latest</code></td>
+					<td><code>--env COMPOSER_CACHE_DIR=/cache</code></td>
+			</tr>
+			<tr>
+					<td>NuGet (.NET)</td>
+					<td><code>mcr.microsoft.com/dotnet/sdk:latest</code></td>
+					<td><code>--env NUGET_PACKAGES=/cache</code></td>
+			</tr>
+			<tr>
+					<td>Deno</td>
+					<td><code>docker.io/denoland/deno:latest</code></td>
+					<td><code>--env DENO_DIR=/cache</code></td>
+			</tr>
+			<tr>
+					<td>Bundler (Ruby)</td>
+					<td><code>docker.io/library/ruby:latest</code></td>
+					<td><code>--env GEM_HOME=/cache</code></td>
+			</tr>
+			<tr>
+					<td>Bun (JS/TS)</td>
+					<td><code>docker.io/oven/bun:latest</code></td>
+					<td><code>--env BUN_INSTALL_CACHE_DIR=/cache</code></td>
+			</tr>
+			<tr>
+					<td>Dart</td>
+					<td><code>docker.io/library/dart:latest</code></td>
+					<td><code>--env PUB_CACHE=/cache</code></td>
+			</tr>
+			<tr>
+					<td>Elixir (Mix/Hex)</td>
+					<td><code>docker.io/library/elixir:latest</code></td>
+					<td><code>--env MIX_HOME=/cache --env HEX_HOME=/cache</code></td>
+			</tr>
+			<tr>
+					<td>Haskell (Cabal)</td>
+					<td><code>docker.io/library/haskell:latest</code></td>
+					<td><code>--env CABAL_DIR=/cache</code></td>
+			</tr>
+			<tr>
+					<td>Julia</td>
+					<td><code>docker.io/library/julia:latest</code></td>
+					<td><code>--env JULIA_DEPOT_PATH=/cache</code></td>
+			</tr>
+	</tbody>
+</table>
+<p>Tools not bundled in a base image follow the same pattern once installed: enable
+Yarn/pnpm with <code>corepack enable</code>, or install Poetry in your <code>Containerfile</code>, then
+point that tool&rsquo;s own cache-dir environment variable (<code>YARN_CACHE_FOLDER</code>,
+<code>POETRY_CACHE_DIR</code>, …) at <code>/cache</code>. An image that runs as <code>root</code> (e.g.
+<code>docker.io/library/gradle:latest</code>) is the exception on a host whose rootless runtime
+defaults to a <code>keep-id</code> user namespace: its cache is written under a sub-UID, so the
+container reuses it fine but it is not owned by your user and you cannot manage it
+from the host. The fix is to run the image as its non-root user with
+<code>--remote-user &lt;name&gt;</code>, which maps to you, so the cache is owned by you. See
+<a href="../../usage/file-ownership">File Ownership</a>.</p>
+<h2 id="full-examples">Full examples</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> Maven
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="go">    --volume ${XDG_CACHE_HOME:-$HOME/.cache}/maven:/cache:z \
+</span></span></span><span class="line"><span class="cl"><span class="go">    --env MAVEN_ARGS=-Dmaven.repo.local=/cache \
+</span></span></span><span class="line"><span class="cl"><span class="go">    docker.io/library/maven:latest mvn verify
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> Go
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="go">    --volume ${XDG_CACHE_HOME:-$HOME/.cache}/go:/cache:z \
+</span></span></span><span class="line"><span class="cl"><span class="go">    --env GOMODCACHE=/cache/mod --env GOCACHE=/cache/build \
+</span></span></span><span class="line"><span class="cl"><span class="go">    docker.io/library/golang:latest go test ./...
+</span></span></span></code></pre></div><p>Or bake the mount and environment variable into an
+<a href="../../usage/argument-files">argument file</a> (or <code>.ilo.rc</code>), one argument per line,
+so every call is just <code>ilo &lt;command&gt;</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="go">shell
+</span></span></span><span class="line"><span class="cl"><span class="go">--volume ${XDG_CACHE_HOME:-$HOME/.cache}/cargo:/cache:z
+</span></span></span><span class="line"><span class="cl"><span class="go">--env CARGO_HOME=/cache
+</span></span></span><span class="line"><span class="cl"><span class="go">docker.io/library/rust:latest
+</span></span></span></code></pre></div><p>If you prefer to mount onto the image&rsquo;s native cache path instead, first confirm
+where that image keeps it (<code>ilo shell &lt;image&gt; sh -c 'echo $HOME; id'</code>) — it is
+image-specific.</p>
+<h2 id="caching-tools-without-a-dedicated-cache-variable">Caching tools without a dedicated cache variable</h2>
+<p>Some toolchains keep their caches under <code>$HOME</code>, or in several places with no single
+cache-dir variable. These need a full invocation rather than a table row.</p>
+<p><strong>Swift</strong> keeps its package cache under <code>$HOME</code> (<code>~/.cache/org.swift.swiftpm</code>,
+<code>~/.swiftpm</code>), so redirect <code>HOME</code> to the mount:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="go">    --volume ${XDG_CACHE_HOME:-$HOME/.cache}/swift:/cache:z --env HOME=/cache \
+</span></span></span><span class="line"><span class="cl"><span class="go">    docker.io/library/swift:latest swift build
+</span></span></span></code></pre></div><p><strong>Clojure</strong>&rsquo;s git dependencies honor <code>GITLIBS</code>, but its Maven local repository has
+no environment variable (the JVM derives it from the passwd home, not <code>HOME</code>), so
+set it on the command line with <code>-Sdeps</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="go">    --volume ${XDG_CACHE_HOME:-$HOME/.cache}/clojure:/cache:z --env GITLIBS=/cache/gitlibs \
+</span></span></span><span class="line"><span class="cl"><span class="go">    docker.io/library/clojure:latest \
+</span></span></span><span class="line"><span class="cl"><span class="go">    clojure -Sdeps &#39;{:mvn/local-repo &#34;/cache/m2&#34;}&#39; -P
+</span></span></span></code></pre></div><p>Maven deps land in <code>/cache/m2</code>, git deps in <code>/cache/gitlibs</code>.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/shell" term="shell" label="shell"/><category scheme="https://ilo.projects.metio.wtf/tags/examples" term="examples" label="examples"/></entry><entry><title type="html">Options</title><link href="https://ilo.projects.metio.wtf/shell/options/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/devcontainer/options/?utm_source=atom_feed" rel="related" type="text/html" title="Options"/><link href="https://ilo.projects.metio.wtf/devfile/options/?utm_source=atom_feed" rel="related" type="text/html" title="Options"/><link href="https://ilo.projects.metio.wtf/compose/options/?utm_source=atom_feed" rel="related" type="text/html" title="Options"/><id>https://ilo.projects.metio.wtf/shell/options/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p>The <code>ilo shell</code> command can be configured with the following command line options. From your terminal, use <code>ilo shell --help</code> to get a list of all options, and their default values.</p>
+<h2 id="how-a-session-is-reused">How a session is reused</h2>
+<p><code>ilo shell</code> keeps your container between runs. The first time you run it in a project, <code>ilo</code> builds (or pulls) the image and <strong>creates</strong> a long-lived container. When you exit, the container is <strong>stopped but kept</strong>. The next time you run <code>ilo shell</code> in the same project with the same image, <code>ilo</code> simply <strong>starts</strong> that container again and attaches to it — so it comes up instantly and anything you installed inside it is still there.</p>
+<p>The container is named <code>ilo-&lt;project&gt;-&lt;hash&gt;</code> (for example <code>ilo-my-project-1a2b3c4d5e6f</code>). The hash covers everything that defines the container — the project path, the image, the build inputs <strong>including your <code>Containerfile</code>&rsquo;s contents</strong>, and the run options (<code>--env</code>, <code>--volume</code>, <code>--publish</code>, <code>--working-dir</code>, runtime options, …). So if you edit the <code>Containerfile</code>, change the image, or add an <code>--env</code>, <code>ilo</code> builds a <strong>fresh</strong> container automatically; leave the definition unchanged and it reuses the existing one. Only the current container is kept — <code>ilo</code> removes this project&rsquo;s earlier, stopped containers so they do not pile up. Containers are labelled <code>ilo.managed=true</code> and <code>ilo.project=&lt;dir&gt;</code>, so you can also find them yourself with <code>docker ps --all --filter label=ilo.managed</code>.</p>
+<p>Use <a href="#--fresh"><code>--fresh</code></a> when you want a clean slate even though nothing changed — to re-pull a <code>latest</code> image, or to reset a container whose state has drifted — or <a href="#--remove-image"><code>--remove-image</code></a> to remove the container and its image entirely when you exit.</p>
+<p>You can attach several terminals to the same running container — just run <code>ilo shell</code> again with the same options and it joins the existing one. <code>ilo</code> keeps the container running until the <strong>last</strong> session exits, so leaving one terminal never interrupts the others; only the final one to leave stops the container. This is automatic — there is nothing to enable.</p>
+<p>Your project directory is mounted into the container read-write. With <code>ilo</code>&rsquo;s default rootless Podman runtime, files written inside the container are owned by <em>you</em> on the host even when the image runs as <code>root</code>; on Docker it takes one extra step. See <a href="../../usage/file-ownership">File Ownership</a> for the details.</p>
+<h2 id="--context"><code>--context</code></h2>
+<p>The <code>--context</code> option allows to specify the context when building an image with <code>--containerfile</code>/<code>--dockerfile</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom context
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --context ./local/folder
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify context
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--context</code> is set to <code>.</code> (the current directory).</p>
+<h2 id="--containerfile--dockerfile"><code>--containerfile</code>/<code>--dockerfile</code></h2>
+<p>The <code>--containerfile</code>/<code>--dockerfile</code> option can be used to specify a local <code>Containerfile</code>/<code>Dockerfile</code>. Specifying such a file will cause <code>ilo</code> to build your image first, and then open a shell into a container based on that image.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom Containerfile
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --containerfile some/where/your.containerfile
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify Containerfile
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--containerfile</code>/<code>--dockerfile</code> is not set to any value.</p>
+<h2 id="--debug"><code>--debug</code></h2>
+<p>The <code>--debug</code> option toggles whether <code>ilo</code> should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from <code>ilo</code> and just use your preferred runtime instead.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> print runtime commands
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --debug
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not print runtime commands
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --debug<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--debug</code> is not enabled.</p>
+<h2 id="--env"><code>--env</code></h2>
+<p>The <code>--env</code> option can be used to specify environment variables for your container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --env <span class="nv">key</span><span class="o">=</span>value
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--env</code> does not set any environment variables.</p>
+<h2 id="--fresh"><code>--fresh</code></h2>
+<p>The <code>--fresh</code> option discards the reused container and starts from a clean slate. <code>ilo</code> removes any existing container for this project and image, then rebuilds and recreates it from scratch. Use it when you want to start over — for example after the container&rsquo;s state has drifted, or to force a rebuild against an updated <code>Containerfile</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> discard the reused container and recreate it
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --fresh
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> reuse the existing container <span class="o">(</span>default<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--fresh</code> is not enabled.</p>
+<h2 id="--keep-running"><code>--keep-running</code></h2>
+<p>The <code>--keep-running</code> option leaves the container running after the last session exits, instead of stopping it. <code>ilo</code> keeps the container for reuse either way, but with this flag it stays <em>running</em> — so background processes inside it keep going and the next attach is instant. This mirrors a <code>devcontainer.json</code> <a href="https://containers.dev/implementors/json_reference/"><code>shutdownAction</code></a> of <code>none</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> leave the container running on <span class="nb">exit</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --keep-running
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> stop the container on exit, keeping it <span class="k">for</span> reuse <span class="o">(</span>default<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--keep-running</code> is not enabled. An explicit <a href="#--remove-image"><code>--remove-image</code></a> still removes the container on exit.</p>
+<h2 id="--override-command"><code>--override-command</code></h2>
+<p>To keep the container around for reuse, <code>ilo</code> needs it to stay running between sessions. By default it injects a small keepalive as the container&rsquo;s entrypoint and command — so the container stays up regardless of the image&rsquo;s own entrypoint — and <code>exec</code>s your shell into it. This needs a shell and <code>sleep</code> in the image, which practically every distribution and dev image has (including BusyBox/Alpine).</p>
+<p>For images that already run a long-lived process of their own (a server, or a <code>CMD [&quot;sleep&quot;, &quot;infinity&quot;]</code>), use <code>--no-override-command</code> to leave the image&rsquo;s entrypoint and command in place and rely on that process to keep the container alive instead.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> inject the keepalive <span class="o">(</span>default<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> keep the image<span class="err">&#39;</span>s own entrypoint/command running instead
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-override-command
+</span></span></code></pre></div><p>By default, <code>--override-command</code> is enabled. Minimal images without a shell (<code>scratch</code>, distroless) need <code>--no-override-command</code> together with an image that stays running on its own.</p>
+<h2 id="--update-remote-user-uid"><code>--update-remote-user-uid</code></h2>
+<p>Aligns the container user&rsquo;s UID and GID with <strong>your</strong> host user, so files created in the mounted project stay owned by you instead of by the container user (often <code>root</code>, or a fixed non-root user). This mirrors the devcontainer specification&rsquo;s <a href="https://containers.dev/implementors/json_reference/"><code>updateRemoteUserUID</code></a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> align the container user with your host user <span class="o">(</span>the default<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell image:test
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> align a specific user
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --remote-user node image:test
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> leave the container user exactly as the image defines it
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-update-remote-user-uid image:test
+</span></span></code></pre></div><p><code>--update-remote-user-uid</code> is <strong>enabled by default</strong>. <code>--remote-user</code> names the container user to run as and align; when it is omitted, <code>ilo</code> reads the image&rsquo;s configured user (falling back to <code>root</code>). <code>ilo</code> then applies whatever the selected runtime needs:</p>
+<ul>
+<li><strong>Rootless Podman/nerdctl</strong> — a <code>--userns=keep-id</code> user namespace for a non-root user, pinned to that user&rsquo;s UID/GID so it works even when your host UID differs; nothing for <code>root</code>, which the runtime already maps to you.</li>
+<li><strong>Rootful Docker</strong> — for a non-root user, a small derived image that remaps that user&rsquo;s UID/GID to yours (so it keeps its name, home and shell, on the container and every <code>exec</code>); for a <code>root</code> image, the bare host <code>--user &lt;uid&gt;:&lt;gid&gt;</code>.</li>
+<li><strong>Rootless Docker / Docker Desktop</strong> — nothing; the runtime (or its VM) already maps ownership.</li>
+</ul>
+<p>Because the default does nothing exactly where the runtime already maps you, leaving it on is safe. Pass <code>--no-update-remote-user-uid</code> when you want the container user left untouched. See <a href="../../usage/file-ownership">File Ownership</a> for the full picture.</p>
+<h2 id="--hostname"><code>--hostname</code></h2>
+<p>The <code>--hostname</code> option can be used to set the hostname of your container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> <span class="nb">set</span> hostname
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --hostname you.home.arpa
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not <span class="nb">set</span> hostname
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--hostname</code> is not set to any value.</p>
+<h2 id="--interactive"><code>--interactive</code></h2>
+<p>The <code>--interactive</code> option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> run interactively
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --interactive
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> run non-interactive
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-interactive
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --interactive<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> run interactively
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--interactive</code> is enabled.</p>
+<h2 id="--missing-volumes"><code>--missing-volumes</code></h2>
+<p>The <code>--missing-volumes</code> option controls how <code>ilo</code> should deal with non-existing local directories that you want to mount into the container. The default behavior is <code>CREATE</code> which creates the directory on the host machine before creating the container and mounting the new empty directory into it. Changing this option to <code>WARN</code> results in a warning that a local directory cannot be mounted. <code>ilo</code> will still create the container, just not with that missing directory mounted. The <code>ERROR</code> option causes <code>ilo</code> to fail in case you specify a local directory to mount that does not exist. All three options are case-insensitive, e.g. use <code>create</code>, <code>CREATE</code>, or <code>CreATE</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> create missing <span class="nb">local</span> directories
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --missing-volumes<span class="o">=</span>CREATE
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> warn on missing <span class="nb">local</span> directories
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --missing-volumes<span class="o">=</span>WARN
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> error on missing <span class="nb">local</span> directories
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --missing-volumes<span class="o">=</span>ERROR
+</span></span></code></pre></div><h2 id="--mount-project-dir"><code>--mount-project-dir</code></h2>
+<p>The <code>--mount-project-dir</code> option can be used to toggle whether the current directory should be mounted into the container. The location inside the container is specified with <code>--working-dir</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> mount current directory into container
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --mount-project-dir
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not mount directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-mount-project-dir
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --mount-project-dir<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> mount directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--mount-project-dir</code> is enabled.</p>
+<h2 id="--publish"><code>--publish</code></h2>
+<p>The <code>--publish</code> option can be used to publish ports of your container to your local system.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> binds your <span class="nb">local</span> <span class="m">8080</span> port to port <span class="m">80</span> of the container
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --publish 8080:80
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not expose any ports
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--publish</code> does not exposes any ports.</p>
+<h2 id="--pull"><code>--pull</code></h2>
+<p>The <code>--pull</code> option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a <code>latest</code> tag for their image. The image will only be pulled in case the registry contains a newer image than locally available. Because a reused container would never see the freshly pulled image, <code>--pull</code> also recreates the container (like <a href="#--fresh"><code>--fresh</code></a>) so the new image takes effect.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> pull image before opening shell
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --pull
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not pull image before opening shell
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-pull
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --pull<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not pull image before opening shell
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--pull</code> is not enabled.</p>
+<h2 id="--remote-env"><code>--remote-env</code></h2>
+<p>The <code>--remote-env</code> option sets environment variables for processes <code>ilo</code> runs <em>inside</em> the container — the interactive shell and any lifecycle commands — as opposed to <a href="#--env"><code>--env</code></a>, which bakes the variable onto the container itself. Because the variables are applied on <code>exec</code>, changing them takes effect on the next attach without recreating the container. This mirrors the devcontainer specification&rsquo;s <a href="https://containers.dev/implementors/json_reference/"><code>remoteEnv</code></a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> <span class="nb">set</span> a variable <span class="k">for</span> the interactive shell
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --remote-env <span class="nv">EDITOR</span><span class="o">=</span>vim
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="nb">set</span> it on the container instead
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --env <span class="nv">EDITOR</span><span class="o">=</span>vim
+</span></span></code></pre></div><p>By default, <code>--remote-env</code> does not set any environment variables.</p>
+<h2 id="--remove-image"><code>--remove-image</code></h2>
+<p>The <code>--remove-image</code> option opts out of container reuse: after you close your shell, or the non-interactive command finishes, <code>ilo</code> removes the container <strong>and</strong> its image from your local system instead of keeping them. This restores the clean-slate-every-run behavior and is especially useful in combination with <code>--containerfile</code>/<code>--dockerfile</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> remove the container and its image after the shell is closed
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --remove-image
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> keep the container and image <span class="k">for</span> reuse <span class="o">(</span>default<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --no-remove-image
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --remove-image<span class="o">=</span><span class="nb">false</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--remove-image</code> is not enabled, so the container and image are kept for reuse.</p>
+<h2 id="--runtime"><code>--runtime</code></h2>
+<p>The <code>--runtime</code> option can be used to force the usage of a specific runtime. See <a href="../runtimes">runtimes</a> for details.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> force to use podman
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime podman
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> force to use docker
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime docker
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> force to use nerdctl
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime nerdctl
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> force to use Apple<span class="err">&#39;</span>s container <span class="o">(</span>macOS only<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime container
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> auto <span class="k">select</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><h2 id="--runtime-option"><code>--runtime-option</code></h2>
+<p>The <code>--runtime-option</code> option can be specified multiple times and contains options for the underlying runtime.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-option<span class="o">=</span>--remote
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-option<span class="o">=</span>--remote --runtime-option<span class="o">=</span>--syslog
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-option</code> is set to an empty array.</p>
+<h2 id="--runtime-pull-option"><code>--runtime-pull-option</code></h2>
+<p>The <code>--runtime-pull-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>pull</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-pull-option<span class="o">=</span>--all-tags
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-pull-option<span class="o">=</span>--all-tags --runtime-pull-option<span class="o">=</span>--quiet
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-pull-option</code> is set to an empty array.</p>
+<h2 id="--runtime-build-option"><code>--runtime-build-option</code></h2>
+<p>The <code>--runtime-build-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>build</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-build-option<span class="o">=</span>--squash
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-build-option<span class="o">=</span>--squash --runtime-build-option<span class="o">=</span>--no-cache
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-build-option</code> is set to an empty array.</p>
+<h2 id="--runtime-run-option"><code>--runtime-run-option</code></h2>
+<p>The <code>--runtime-run-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>run</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-run-option<span class="o">=</span>--privileged
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-run-option<span class="o">=</span>--privileged --runtime-run-option<span class="o">=</span>--replace
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-run-option</code> is set to an empty array.</p>
+<h2 id="--runtime-cleanup-option"><code>--runtime-cleanup-option</code></h2>
+<p>The <code>--runtime-cleanup-option</code> can be specified multiple times and contains options for the runtimes&rsquo; <code>rmi</code> command.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom option<span class="o">(</span>s<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-cleanup-option<span class="o">=</span>--force
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime-cleanup-option<span class="o">=</span>--force --runtime-cleanup-option<span class="o">=</span>--all
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not specify custom option
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--runtime-cleanup-option</code> is set to an empty array.</p>
+<h2 id="--shell"><code>--shell</code></h2>
+<p>The <code>--shell</code> option sets the shell that <code>ilo</code> runs when you attach to the container interactively without giving an explicit command. Because the container is reused and entered with <code>exec</code>, <code>ilo</code> has to name a shell to start; pick one your image actually ships.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> attach with bash
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --shell /bin/bash
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> attach with the default POSIX shell
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--shell</code> is <code>/bin/sh</code>, which exists on practically every image. When you pass a command to run instead of an interactive session (for example <code>ilo shell my-image ls -la</code>), that command is used and <code>--shell</code> is ignored.</p>
+<h2 id="--shell-arg"><code>--shell-arg</code></h2>
+<p>The <code>--shell-arg</code> option passes extra arguments to the interactive shell (repeat it for several). The most common use is <code>-l</code> (login) and <code>-i</code> (interactive) so the shell sources the user&rsquo;s profile (<code>/etc/profile</code>, <code>~/.bash_profile</code>, <code>~/.bashrc</code>, …). This is how <code>ilo devcontainer</code> honors the devcontainer specification&rsquo;s <a href="https://containers.dev/implementors/json_reference/"><code>userEnvProbe</code></a>: <code>loginInteractiveShell</code> becomes <code>-l -i</code>, <code>loginShell</code> becomes <code>-l</code>, <code>interactiveShell</code> becomes <code>-i</code>, and <code>none</code> adds nothing.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> start a login + interactive shell so profiles are sourced
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --shell /bin/bash --shell-arg -l --shell-arg -i
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> default: the shell is started with no extra arguments
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--shell-arg</code> adds no arguments. The arguments are ignored when you pass an explicit command, and the chosen <a href="#--shell"><code>--shell</code></a> must understand them (a minimal <code>/bin/sh</code> may reject <code>-l</code>).</p>
+<h2 id="--volume"><code>--volume</code></h2>
+<p>The <code>--volume</code> option can be used to mount additional volumes into your container —
+typically a dependency cache. Pair it with the tool&rsquo;s own cache-directory variable so
+the cache is written to the mounted location; see <a href="../examples">Examples</a> for the
+per-tool variables.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> mount a host directory as the dependency cache
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --volume <span class="si">${</span><span class="nv">XDG_CACHE_HOME</span><span class="k">:-</span><span class="nv">$HOME</span><span class="p">/.cache</span><span class="si">}</span>/maven:/cache:z --env <span class="nv">MAVEN_ARGS</span><span class="o">=</span>-Dmaven.repo.local<span class="o">=</span>/cache docker.io/library/maven:latest
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> <span class="k">do</span> not mount extra volume
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--volume</code> does not mount any extra volumes.</p>
+<h2 id="--working-dir"><code>--working-dir</code></h2>
+<p>The <code>--working-dir</code> option can be used to set the working directory inside your container.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> specify custom working directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --working-dir /project/dir
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use current directory
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--working-dir</code> uses the current directory on the host machine in order to have the same paths on the host and in the container.</p>
+<h2 id="--workspace-mount"><code>--workspace-mount</code></h2>
+<p>The <code>--workspace-mount</code> option replaces the default project bind-mount with an explicit <code>--mount</code> specification. Normally <code>ilo</code> bind-mounts the current directory onto <a href="#--working-dir"><code>--working-dir</code></a>; pass <code>--workspace-mount</code> when you need full control over how the project is mounted (for example a named volume, or different mount options). Its target should match <code>--working-dir</code>. This mirrors the devcontainer specification&rsquo;s <a href="https://containers.dev/implementors/json_reference/"><code>workspaceMount</code></a>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> mount the project through a named volume
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --workspace-mount <span class="nv">type</span><span class="o">=</span>volume,source<span class="o">=</span>project,target<span class="o">=</span>/workspace --working-dir /workspace
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> bind-mount the current directory <span class="o">(</span>default<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell
+</span></span></code></pre></div><p>By default, <code>--workspace-mount</code> is not set and the current directory is bind-mounted.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/shell" term="shell" label="shell"/><category scheme="https://ilo.projects.metio.wtf/tags/options" term="options" label="options"/></entry><entry><title type="html">Runtimes</title><link href="https://ilo.projects.metio.wtf/shell/runtimes/?utm_source=atom_feed" rel="alternate" type="text/html"/><link href="https://ilo.projects.metio.wtf/compose/runtimes/?utm_source=atom_feed" rel="related" type="text/html" title="Runtimes"/><id>https://ilo.projects.metio.wtf/shell/runtimes/</id><published>2020-04-13T00:00:00+00:00</published><updated>2020-04-13T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo shell</code> by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the <code>--runtime</code> flag or set the <code>ILO_SHELL_RUNTIME</code> environment variable in your system. The <code>--runtime</code> flag overwrites the environment variable.</p>
+<h2 id="docker">Docker</h2>
+<p>Force <code>ilo</code> to use <a href="https://www.docker.com/">docker</a> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime docker
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use <span class="nb">alias</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime d
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> <span class="nv">ILO_SHELL_RUNTIME</span><span class="o">=</span>docker ilo shell
+</span></span></code></pre></div><h2 id="nerdctl">nerdctl</h2>
+<p>Force <code>ilo</code> to use <a href="https://github.com/containerd/nerdctl">nerdctl</a> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime nerdctl
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use <span class="nb">alias</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime n
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> <span class="nv">ILO_SHELL_RUNTIME</span><span class="o">=</span>nerdctl ilo shell
+</span></span></code></pre></div><h2 id="podman">Podman</h2>
+<p>Force <code>ilo</code> to use <a href="https://podman.io/">podman</a> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime podman
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use <span class="nb">alias</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime p
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> <span class="nv">ILO_SHELL_RUNTIME</span><span class="o">=</span>podman ilo shell
+</span></span></code></pre></div><h2 id="apple-container">Apple Container</h2>
+<p>Force <code>ilo</code> to use Apple&rsquo;s <a href="https://github.com/apple/container">container</a> like this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime container
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use <span class="nb">alias</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ilo shell --runtime c
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> use env variable
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> <span class="nv">ILO_SHELL_RUNTIME</span><span class="o">=</span>container ilo shell
+</span></span></code></pre></div><p>This runtime runs on macOS only (Apple silicon, macOS 26 or newer) and needs its services started once per boot with <code>container system start</code>; <code>ilo</code> does not start them for you.</p>
+<p>A single shell works as expected. Sharing one container across several terminals at once is not supported: this runtime exposes no way to tell whether another terminal still has the container open, so the first session to exit stops it. Pass <code>--keep-running-on-exit</code> while a second terminal is open to keep the container alive.</p>
+<h2 id="auto-selection">Auto Selection</h2>
+<p>If not otherwise specified, <code>ilo</code> always picks runtimes in this order, depending on which are available on your system:</p>
+<ol>
+<li>podman</li>
+<li>nerdctl</li>
+<li>docker</li>
+<li>container (macOS only)</li>
+</ol>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/shell" term="shell" label="shell"/><category scheme="https://ilo.projects.metio.wtf/tags/runtime" term="runtime" label="runtime"/><category scheme="https://ilo.projects.metio.wtf/tags/docker" term="docker" label="docker"/><category scheme="https://ilo.projects.metio.wtf/tags/podman" term="podman" label="podman"/><category scheme="https://ilo.projects.metio.wtf/tags/nerdctl" term="nerdctl" label="nerdctl"/><category scheme="https://ilo.projects.metio.wtf/tags/container" term="container" label="container"/></entry></feed>

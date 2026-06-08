@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://gohugo.io/" version="0.162.1">Hugo</generator><title type="html">Skill on ilo</title><link href="https://ilo.projects.metio.wtf/tags/skill/" rel="alternate" type="text/html" title="html"/><link href="https://ilo.projects.metio.wtf/tags/skill/index.xml" rel="alternate" type="application/rss+xml" title="rss"/><link href="https://ilo.projects.metio.wtf/tags/skill/atom.xml" rel="self" type="application/atom+xml" title="atom"/><updated>2026-06-08T09:14:05+00:00</updated><author><name>metio.wtf</name><email>https://metio.groups.io/g/main/topics</email></author><id>https://ilo.projects.metio.wtf/tags/skill/</id><entry><title type="html">Claude Skill</title><link href="https://ilo.projects.metio.wtf/usage/claude-skill/?utm_source=atom_feed" rel="alternate" type="text/html"/><id>https://ilo.projects.metio.wtf/usage/claude-skill/</id><published>2026-06-07T00:00:00+00:00</published><updated>2026-06-07T00:00:00+00:00</updated><content type="html"><![CDATA[<p><code>ilo</code> ships a <a href="https://claude.com/claude-code">Claude Code</a> skill that teaches the
+assistant how to run builds, tests, and other tooling <strong>inside</strong> your <code>ilo</code>-managed
+build environment instead of on the host. Once installed, Claude recognizes that a
+project uses <code>ilo</code> — from a <code>.ilo.rc</code>, <code>dev/</code> argument files, a <code>Containerfile</code>, a
+<code>devcontainer.json</code>, a <code>devfile.yaml</code>, or a compose file — and reaches for <code>ilo</code>
+automatically when a command needs a toolchain the host does not have.</p>
+<p>The skill is distributed as a plugin hosted in the <code>ilo</code> repository, so installing
+it needs nothing more than <code>git</code> and a Claude Code client.</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li><a href="https://docs.claude.com/en/docs/claude-code">Claude Code</a> (the CLI, desktop, or
+IDE client). Skills are a Claude Code feature; the claude.ai web app has no skill
+installation flow.</li>
+<li>The <code>ilo</code> binary on your <code>PATH</code> — see <a href="../install">Install</a>.</li>
+</ul>
+<h2 id="install">Install</h2>
+<p>Add the marketplace once, then install the plugin:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> add the metio marketplace <span class="o">(</span>hosted in the ilo repository<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="go">/plugin marketplace add metio/ilo
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> install the ilo skill from it
+</span></span><span class="line"><span class="cl"><span class="go">/plugin install ilo@metio
+</span></span></span></code></pre></div><p><code>metio</code> is the marketplace and <code>ilo</code> is the plugin, so the install reference is
+<code>ilo@metio</code>. After installing, the skill activates on its own whenever it is
+relevant — you do not type a command to invoke it.</p>
+<h2 id="what-it-does">What it does</h2>
+<p>With the skill installed, Claude will:</p>
+<ul>
+<li>run build/test/tooling commands through <code>ilo</code> (for example <code>ilo @dev/build</code>, or an
+ad-hoc <code>ilo go test ./...</code> when a project has an <code>.rc</code> file) instead of on the
+host;</li>
+<li>prefer non-interactive runs suited to automation;</li>
+<li>consult <code>ilo --help</code> / <code>ilo &lt;subcommand&gt; --help</code> as the source of truth for the
+exact flags your installed version supports.</li>
+</ul>
+<p><code>Bash(ilo *)</code> is pre-approved by the skill, so <code>ilo</code> invocations run without a
+permission prompt. Everything else still goes through Claude Code&rsquo;s normal
+permission flow.</p>
+<h2 id="updating">Updating</h2>
+<p>Refresh the marketplace cache, then reinstall to move an already-installed plugin
+to the latest version:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> pull the latest marketplace contents
+</span></span><span class="line"><span class="cl"><span class="go">/plugin marketplace update metio
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> reinstall to pick up the new version
+</span></span><span class="line"><span class="cl"><span class="go">/plugin install ilo@metio
+</span></span></span></code></pre></div><p>Alternatively, enable auto-update for the <code>metio</code> marketplace in the <code>/plugin</code> UI
+(or set <code>&quot;autoUpdate&quot;: true</code> for it in your settings) and Claude Code keeps the
+plugin current for you.</p>
+<p>Because the skill is distributed separately from the <code>ilo</code> binary, it documents the
+stable command surface and defers to <code>ilo --help</code> for version-specific details — so
+it keeps working even when your installed <code>ilo</code> is a little ahead of or behind the
+skill.</p>
+]]></content><category scheme="https://ilo.projects.metio.wtf/categories/usage" term="usage" label="usage"/><category scheme="https://ilo.projects.metio.wtf/tags/claude" term="claude" label="claude"/><category scheme="https://ilo.projects.metio.wtf/tags/skill" term="skill" label="skill"/><category scheme="https://ilo.projects.metio.wtf/tags/plugin" term="plugin" label="plugin"/><category scheme="https://ilo.projects.metio.wtf/tags/agent" term="agent" label="agent"/></entry></feed>
