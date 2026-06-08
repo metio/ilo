@@ -24,11 +24,16 @@ on:
       - ".github/workflows/apple-container.yml"
 permissions:
   contents: read
+# Cancel superseded runs on the same branch so rapid pushes don't keep premium macOS runners alive.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   cli-surface:
     name: Verify Apple container CLI surface
     # The .pkg targets macOS 26 (Tahoe); the chip is still M1, which is fine for help-only checks.
     runs-on: macos-26
+    timeout-minutes: 20
     steps:
       - id: install
         name: Install Apple container

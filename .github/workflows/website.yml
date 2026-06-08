@@ -10,9 +10,16 @@ on:
       - main
     paths:
       - docs/**
+# Read-only by default so a compromised build/link-check step can't reach a write-scoped token; the
+# deploy job is granted exactly the contents: write that pushing to the gh-pages branch requires.
+permissions:
+  contents: read
 jobs:
   website:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
     steps:
       - id: checkout
         name: Clone Git Repository
@@ -34,7 +41,9 @@ jobs:
           ILO_RELEASE: ${{ steps.previous.outputs.version }}
       - id: htmltest
         name: Run htmltest
-        uses: wjdp/htmltest-action@master
+        # Pinned to an immutable commit SHA: the action's only tag is an old RC, so it is otherwise
+        # consumed from the mutable 'master' branch. This is master HEAD (2023-03-28); Dependabot bumps it.
+        uses: wjdp/htmltest-action@31be84a95c860a331e0cf9a99f71e3eb39d2f86b
         with:
           config: ./docs/htmltest.yml
       - id: deploy

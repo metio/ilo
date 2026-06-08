@@ -10,10 +10,18 @@ on:
       - 'skills/ilo/**'
       - '.github/scripts/**'
       - '.github/workflows/cache-examples.yml'
+# Cancel superseded runs on the same branch so rapid docs/skill pushes don't stack native builds.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+# Runs untrusted PR code; the token needs only read access to the checkout.
+permissions:
+  contents: read
 jobs:
   cache-examples:
     name: Verify documented examples
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - id: checkout
         name: Clone Git Repository
