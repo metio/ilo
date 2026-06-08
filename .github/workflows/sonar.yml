@@ -2,10 +2,10 @@
 # SPDX-License-Identifier: 0BSD
 
 name: SonarQube Cloud
+# Main-branch analysis only: it establishes the new-code baseline. Pull-request analysis runs inside
+# verify.yml, reusing that job's test run so the PR scan is not a second full build.
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 # Cancel superseded analyses on the same branch; a newer push makes an in-flight Sonar run obsolete.
 concurrency:
