@@ -17,7 +17,7 @@
     <parent>
         <groupId>wtf.metio.maven</groupId>
         <artifactId>maven-parent</artifactId>
-        <version>2026.5.29</version>
+        <version>2026.6.12</version>
     </parent>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
