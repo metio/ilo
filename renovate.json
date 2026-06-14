@@ -2,5 +2,35 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>metio/renovate-config"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Tie the JDK feature version (the Maven global.jdkVersion compiler property and every setup-graalvm java-version input) to the GraalVM Community native-image image tag. The image tag IS the JDK feature version GraalVM ships native-image for, so the JDK only advances to a version that can still produce native binaries.",
+      "managerFilePatterns": [
+        "/^pom\\.xml$/",
+        "/^\\.github/workflows/.+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "<global\\.jdkVersion>(?<currentValue>\\d+)</global\\.jdkVersion>",
+        "java-version:\\s*['\"]?(?<currentValue>\\d+)['\"]?"
+      ],
+      "depNameTemplate": "ghcr.io/graalvm/native-image-community",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Bump the JDK version (pom + workflows) together with the GraalVM Containerfile base image in one coordinated PR, restricted to whole-number JDK feature releases (the image's major tags) so floating/variant tags like 'latest' or 'muslib-*' are never selected.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/graalvm/native-image-community"
+      ],
+      "groupName": "GraalVM and JDK",
+      "allowedVersions": "/^\\d+$/"
+    }
   ]
 }
