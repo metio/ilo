@@ -36,7 +36,7 @@ jobs:
       - id: htmltest
         name: Run htmltest
         # Pinned to an immutable commit SHA: the action's only tag is an old RC, so it is otherwise
-        # consumed from the mutable 'master' branch. This is master HEAD (2023-03-28); Dependabot bumps it.
+        # consumed from the mutable 'master' branch. This is master HEAD (2023-03-28); Renovate bumps it.
         uses: wjdp/htmltest-action@31be84a95c860a331e0cf9a99f71e3eb39d2f86b
         with:
           config: ./docs/htmltest.yml

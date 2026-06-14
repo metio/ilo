@@ -60,15 +60,10 @@ jobs:
           "$bin" --help
       - id: sonar
         name: SonarQube analysis
-        # Linux-only, and skipped on PRs that cannot read SONAR_TOKEN: fork PRs (secret withheld from
-        # untrusted code) and Dependabot PRs (secrets live in a separate Dependabot store, so the Actions
-        # secret resolves empty and analysis fails with "Project not found"). Reuses the test run and
+        # Linux-only, and skipped on fork PRs (which cannot read SONAR_TOKEN). Reuses the test run and
         # coverage data the verify step already produced, so the PR scan adds no second build. The
         # push-to-main analysis (the new-code baseline this decoration compares against) lives in sonar.yml.
-        if: >-
-          runner.os == 'Linux'
-          && github.event.pull_request.head.repo.fork == false
-          && github.actor != 'dependabot[bot]'
+        if: runner.os == 'Linux' && github.event.pull_request.head.repo.fork == false
         run: mvn --batch-mode org.jacoco:jacoco-maven-plugin:report sonar:sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
