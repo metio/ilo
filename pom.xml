@@ -71,7 +71,7 @@
         <!-- picocli, its annotation processor and the man-page generator must move together. -->
         <picocli.version>4.7.7</picocli.version>
         <!-- Byte Buddy and its agent must move together. -->
-        <byte-buddy.version>1.18.10</byte-buddy.version>
+        <byte-buddy.version>1.18.10-jdk5</byte-buddy.version>
 
         <pit.mutationCoverage>65</pit.mutationCoverage>
         <pmd.skip>false</pmd.skip>
