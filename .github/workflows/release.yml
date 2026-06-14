@@ -125,28 +125,28 @@ jobs:
       - id: upload-java
         name: Upload JVM Artifact
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: jvm
           path: ./target/ilo-*-jvm*
       - id: upload-linux
         name: Upload Linux Artifact
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: linux
           path: ./target/ilo-*-linux*
       - id: upload-mac
         name: Upload Mac Artifact
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: mac
           path: ./target/ilo-*-mac*
       - id: upload-windows
         name: Upload Windows Artifact
         if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: windows
           path: ./target/ilo-*-windows*
