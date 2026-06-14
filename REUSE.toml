@@ -1,0 +1,21 @@
+version = 1
+
+[[annotations]]
+path = [
+    "dev/**",
+    ".github/**",
+    ".idea/**",
+    "src/test/resources/**",
+    ".claude-plugin/**",
+    "skills/**",
+    "renovate.json",
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The ilo Authors"
+SPDX-License-Identifier = "0BSD"
+
+[[annotations]]
+path = "docs/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The ilo Authors"
+SPDX-License-Identifier = "CC0-1.0"
