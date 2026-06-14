@@ -372,6 +372,43 @@ the complete, version-accurate list and defaults, use `ilo <subcommand> --help`.
 Run `ilo <subcommand> --help` for the full list, or read `references/commands.md`
 for a fuller cheatsheet.
 
+## Recurring env vars and flags belong in `.ilo.rc`
+
+`--env KEY=value` sets an environment variable inside the container. When a build
+needs the same variable on **every** run, set it once in `.ilo.rc` instead of
+prefixing each command with it. For example, rather than repeating
+
+```console
+ilo bash -c 'GOSUMDB=off go test ./...'
+```
+
+add the variable to `.ilo.rc` once and let every command inherit it:
+
+```
+shell
+--containerfile dev/Containerfile
+--volume ${XDG_CACHE_HOME:-$HOME/.cache}/go:/cache:z
+--env GOMODCACHE=/cache/mod
+--env GOCACHE=/cache/build
+--env GOSUMDB=off
+dev/my-project:latest
+```
+
+```console
+ilo go test ./...     # GOSUMDB=off and the cache mounts applied automatically
+```
+
+The same holds for any flag that belongs on every run (`--volume`, `--publish`,
+`--remote-user`, …): put it in `.ilo.rc` rather than retyping it.
+
+**But edit `.ilo.rc` deliberately — each change costs an approval.** Editing the
+file re-triggers ilo's trust prompt: the next interactive run requires you to
+re-approve the rc file before it is loaded (and a non-interactive run silently
+skips an untrusted file — see *Notes & cautions* below). So only add an env var or
+flag you are confident you will need for **all** containers and runs in this
+project, and when several are needed, add them in a single edit rather than one at
+a time — fewer edits mean fewer manual approvals.
+
 ## Notes & cautions
 
 - **rc files run host shell expansion.** `.ilo.rc` / `.ilo/ilo.rc` are discovered
