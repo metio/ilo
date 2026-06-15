@@ -8,9 +8,9 @@ FROM ghcr.io/graalvm/native-image-community:25
 # Install Maven
 ENV MAVEN_HOME /usr/share/maven
 
-COPY --from=docker.io/library/maven:3-eclipse-temurin-21 ${MAVEN_HOME} ${MAVEN_HOME}
-COPY --from=docker.io/library/maven:3-eclipse-temurin-21 /usr/local/bin/mvn-entrypoint.sh /usr/local/bin/mvn-entrypoint.sh
-COPY --from=docker.io/library/maven:3-eclipse-temurin-21 /usr/share/maven/ref/settings-docker.xml /usr/share/maven/ref/settings-docker.xml
+COPY --from=docker.io/library/maven:3-eclipse-temurin-21@sha256:d7e7f57407437c014571f1ad5a9955f03fc3edcb1d964067ef351fa38e798665 ${MAVEN_HOME} ${MAVEN_HOME}
+COPY --from=docker.io/library/maven:3-eclipse-temurin-21@sha256:d7e7f57407437c014571f1ad5a9955f03fc3edcb1d964067ef351fa38e798665 /usr/local/bin/mvn-entrypoint.sh /usr/local/bin/mvn-entrypoint.sh
+COPY --from=docker.io/library/maven:3-eclipse-temurin-21@sha256:d7e7f57407437c014571f1ad5a9955f03fc3edcb1d964067ef351fa38e798665 /usr/share/maven/ref/settings-docker.xml /usr/share/maven/ref/settings-docker.xml
 
 RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
