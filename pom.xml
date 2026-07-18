@@ -193,7 +193,7 @@
         <dependency>
             <groupId>wtf.metio.devcontainer</groupId>
             <artifactId>devcontainer.java</artifactId>
-            <version>2026.7.13200646</version>
+            <version>2026.7.15171852</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
