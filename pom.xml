@@ -193,7 +193,7 @@
         <dependency>
             <groupId>wtf.metio.devcontainer</groupId>
             <artifactId>devcontainer.java</artifactId>
-            <version>2026.7.15171852</version>
+            <version>2026.7.20081211</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -288,7 +288,7 @@
                 <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
-                    <version>1.25.7</version>
+                    <version>1.25.8</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.pitest</groupId>
