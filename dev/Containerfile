@@ -3,7 +3,7 @@
 # native-image-community bundles the native-image tool alongside the JDK (graalvm-community no
 # longer does for JDK 23+), which the native build needs.
 
-FROM ghcr.io/graalvm/native-image-community:25
+FROM ghcr.io/graalvm/native-image-community:25@sha256:0d936f32bb8acb5bc60c41b33e05f064d7a6aaf36b726538296c54949bd4a3c0
 
 # Install Maven
 ENV MAVEN_HOME /usr/share/maven
