@@ -1,0 +1,2104 @@
+# ilo — full documentation
+
+> The complete ilo documentation (https://ilo.projects.metio.wtf/) concatenated for LLMs. For a concise link index see https://ilo.projects.metio.wtf/llms.txt.
+
+
+---
+
+# Usage
+
+Source: https://ilo.projects.metio.wtf/usage/
+
+
+Make sure that `ilo` is [installed](./install) in your PATH or otherwise accessible from your terminal. The following subcommands are currently available:
+
+## ilo shell
+
+The `ilo shell` command can be used to run a single container either in interactive mode (default) or non-interactive mode (e.g. for CI builds).
+
+```console
+[you@hostname project-dir]$ ilo shell
+[root@container project-dir]#
+```
+
+Take a look at more detailed information [here](../shell).
+
+## ilo compose
+
+The `ilo compose` command can be used for more complex build environments using [compose](https://compose-spec.io/) files. Use this command in case your project requires e.g. a database in order to be build.
+
+```console
+[you@hostname project-dir]$ ilo compose
+[root@container project-dir]#
+```
+
+Take a look at more detailed information [here](../compose).
+
+## ilo devcontainer
+
+The `ilo devcontainer` command uses a [devcontainer](https://containers.dev/) environment.
+
+```console
+[you@hostname project-dir]$ ilo devcontainer
+[root@container project-dir]#
+```
+
+Take a look at more detailed information [here](../devcontainer).
+
+## ilo devfile
+
+The `ilo devfile` command uses a [devfile](https://devfile.io/) environment.
+
+```console
+[you@hostname project-dir]$ ilo devfile
+[root@container project-dir]#
+```
+
+Take a look at more detailed information [here](../devfile).
+
+
+---
+
+# Claude Skill
+
+Source: https://ilo.projects.metio.wtf/usage/claude-skill/
+
+
+`ilo` ships a [Claude Code](https://claude.com/claude-code) skill that teaches the
+assistant how to run builds, tests, and other tooling **inside** your `ilo`-managed
+build environment instead of on the host. Once installed, Claude recognizes that a
+project uses `ilo` — from a `.ilo.rc`, `dev/` argument files, a `Containerfile`, a
+`devcontainer.json`, a `devfile.yaml`, or a compose file — and reaches for `ilo`
+automatically when a command needs a toolchain the host does not have.
+
+The skill is distributed as a plugin hosted in the `ilo` repository, so installing
+it needs nothing more than `git` and a Claude Code client.
+
+## Requirements
+
+- [Claude Code](https://docs.claude.com/en/docs/claude-code) (the CLI, desktop, or
+  IDE client). Skills are a Claude Code feature; the claude.ai web app has no skill
+  installation flow.
+- The `ilo` binary on your `PATH` — see [Install](../install).
+
+## Install
+
+Add the marketplace once, then install the plugin:
+
+```console
+# add the metio marketplace (hosted in the ilo repository)
+/plugin marketplace add metio/ilo
+
+# install the ilo skill from it
+/plugin install ilo@metio
+```
+
+`metio` is the marketplace and `ilo` is the plugin, so the install reference is
+`ilo@metio`. After installing, the skill activates on its own whenever it is
+relevant — you do not type a command to invoke it.
+
+## What it does
+
+With the skill installed, Claude will:
+
+- run build/test/tooling commands through `ilo` (for example `ilo @dev/build`, or an
+  ad-hoc `ilo go test ./...` when a project has an `.rc` file) instead of on the
+  host;
+- prefer non-interactive runs suited to automation;
+- consult `ilo --help` / `ilo <subcommand> --help` as the source of truth for the
+  exact flags your installed version supports.
+
+`Bash(ilo *)` is pre-approved by the skill, so `ilo` invocations run without a
+permission prompt. Everything else still goes through Claude Code's normal
+permission flow.
+
+## Updating
+
+Refresh the marketplace cache, then reinstall to move an already-installed plugin
+to the latest version:
+
+```console
+# pull the latest marketplace contents
+/plugin marketplace update metio
+
+# reinstall to pick up the new version
+/plugin install ilo@metio
+```
+
+Alternatively, enable auto-update for the `metio` marketplace in the `/plugin` UI
+(or set `"autoUpdate": true` for it in your settings) and Claude Code keeps the
+plugin current for you.
+
+Because the skill is distributed separately from the `ilo` binary, it documents the
+stable command surface and defers to `ilo --help` for version-specific details — so
+it keeps working even when your installed `ilo` is a little ahead of or behind the
+skill.
+
+
+---
+
+# File Ownership
+
+Source: https://ilo.projects.metio.wtf/usage/file-ownership/
+
+
+`ilo` mounts your project directory into the container read-write, so the build tools inside the container (compilers, package managers, …) work on your real source and the artifacts they produce land back in your working directory. The natural question is: when something inside the container creates or edits a file, **who owns it on the host?** Many build images run as `root`, and you do not want to end up with root-owned files in your checkout that you then need `sudo` to delete.
+
+The good news is that with `ilo`'s default runtime this just works — and where it does not, it is a property of the *container runtime*, not of `ilo`.
+
+## Rootless Podman (recommended)
+
+On Linux `ilo` selects [Podman](https://podman.io/) first, and rootless Podman runs the container inside a **user namespace** that maps the container's `root` (UID 0) to *your* host user.
+
+**Images that run as `root` (e.g. `gcc`, `gradle`, and most `Containerfile`-based images): there is nothing to do.** The container is `root` *inside* — so it can write the image's root-owned caches and tools under `/root` — while those writes map to *your* UID *outside*, so files in your project are owned by **you**. This "root inside, you outside" mapping is exactly what makes a container-based build environment pleasant, and it is the default.
+
+**Images that run as a fixed non-root user** — increasingly the norm for official images (recent `maven`, `node`, `rust`, `golang`, and `python` images all run as a non-root user) — need a little help. Without it, their writes land on the host under a high "phantom" sub-UID (from your `/etc/subuid` range) that you cannot easily edit or delete. `ilo` handles this for you: [`--update-remote-user-uid`](../../shell/options#--update-remote-user-uid) is **on by default** and maps that user back to yourself with a [`--userns=keep-id`](https://docs.podman.io/en/latest/markdown/podman-run.1.html#userns-mode) user namespace pinned to that user's own UID/GID — so it works even when your host UID is not the same as the image's. It reads the image's user automatically, or you can name it with `--remote-user`:
+
+```console
+$ ilo shell my-nonroot-image
+```
+
+You *can* instead set `userns = "keep-id"` globally in `containers.conf`, but be aware that makes **every** container run as your non-root user — which removes the "root inside" benefit above and can break images that genuinely need `root`. Prefer the default, which only maps the user when the image actually needs it.
+
+## What `:z` does (and does not) do
+
+When it mounts your project directory, `ilo` appends `:z` to the volume. That is purely an **SELinux** relabel so the container is *allowed* to access the directory on systems like Fedora and RHEL — it has nothing to do with UID ownership. The two concerns are independent: `:z` grants access, the user namespace decides ownership.
+
+## Docker
+
+The Docker daemon runs as real `root` and does **not** remap UIDs for bind mounts by default, so a container running as `root` writes host files owned by `root`.
+
+The clean fix is to **run Docker in [rootless mode](https://docs.docker.com/engine/security/rootless/)**, which gives you the same user-namespace mapping as rootless Podman — the problem then disappears the same way, with no per-command flags.
+
+If you cannot use rootless Docker, `ilo` aligns ownership for you: [`--update-remote-user-uid`](../../shell/options#--update-remote-user-uid) is **on by default**. Because `ilo` runs your work by `exec`ing into a long-lived container, the mapping applies to **both** the container *and* every `exec` (a raw `--runtime-run-option=--user=…` would only cover the container's main process, not the shell you actually work in). For an image with a non-root user, `ilo` builds a small derived image that remaps that user's UID/GID to yours, so it keeps its name, home and shell while writing files you own. If that image can't be remapped (it lacks `usermod`/`groupmod`, e.g. a stripped-down Alpine or distroless base), `ilo` falls back to running as your host `--user <uid>:<gid>` so your files stay yours anyway — and tells you it did. For an image that runs as `root`, `ilo` instead runs it as your host `--user <uid>:<gid>`; the trade-off there is that the process is no longer `root`, so paths the image keeps under `/root` may not be writable — point such tools at a writable location (your mounted working directory, a `$HOME` you own, or a dedicated cache volume), or use rootless Docker, which keeps `root` working while still mapping ownership. Pass `--no-update-remote-user-uid` to opt out entirely.
+
+## Not mounting at all
+
+If a particular run should not touch your working directory, pass [`--no-mount-project-dir`](../../shell/options#--mount-project-dir) to skip the mount entirely.
+
+
+---
+
+# Argument Files
+
+Source: https://ilo.projects.metio.wtf/usage/argument-files/
+
+
+In order to share the same options/commands across your team, `ilo` supports argument files which contain the options for your project, e.g. which image you are using. Argument files are just plain text files and both name and location can be chosen at will. In order to use an argument file, you have to add **@** in front of the file name: `ilo @file-name`.
+
+```console
+# write argument file
+$ cat some/folder/your-arguments
+shell
+docker.io/library/node:latest
+/bin/bash
+
+# use argument file
+$ ilo @some/folder/your-arguments
+```
+
+The argument file in the above example specified all commands and options on a new line, however you could write them all in a single line (or a mixture of both) as well:
+
+```console
+# write argument file
+$ cat some/other/your-arguments
+shell docker.io/library/node:latest /bin/bash
+
+# write argument file
+$ cat some/more/of/your-arguments
+shell
+docker.io/library/node:latest /bin/bash
+
+# use argument file
+$ ilo @some/other/your-arguments
+$ ilo @some/more/of/your-arguments
+```
+
+**Important**: In case your option contains a whitespace, you have to either put the entire option with its value in single/double quotes or use a whitespace between option and value like this:
+
+```console
+# quote the entire option
+"--runtime-option=some option here"
+
+# quote the value
+--runtime-option "some option here"
+
+# THIS WON'T WORK
+--runtime-option="some option here"
+```
+
+You can use multiple arguments files which are evaluated in-order, e.g like this:
+
+```console
+$ ilo @first @second
+```
+
+You can mix argument files with regular CLI options as well:
+
+```console
+$ ilo shell @default-shell docker.io/library/eclipse-temurin:21
+```
+
+The argument file used by `ilo` developers can be seen [here](https://github.com/metio/ilo/blob/main/dev/env) and is used by calling `ilo @dev/env`.
+
+## RC Files
+
+In order to simplify/automate its usage, `ilo` will look for [run command](https://en.wikipedia.org/wiki/Run_commands) files in the following locations:
+
+1. `.ilo/ilo.rc`
+2. `.ilo.rc`
+
+**Each** file found will be added in-order as an argument file to your invocation of `ilo` **before** any other options you specify in your terminal. You can change the locations to check by specifying the `ILO_RC` environment variable. Multiple locations can be given by separating them with a comma like this:
+
+```console
+$ export ILO_RC=some-file.rc,another-one.rc
+$ ilo ...
+```
+
+In order to disable loading `.rc` files entirely, specify `--no-rc` in the command line before the actual `ilo` subcommand, like this:
+
+```console
+# do not load .rc files
+$ ilo --no-rc shell ...
+$ ilo --no-rc compose ...
+$ ilo --no-rc devcontainer ...
+$ ilo --no-rc devfile ...
+$ ilo --no-rc @some-argument-file ...
+```
+
+### Trusting RC files
+
+A `.rc` file can set any option, and option values are expanded by a host shell —
+so command substitution like `$(...)` inside a `.rc` file runs on your machine
+when `ilo` loads it. Because `.ilo/ilo.rc` and `.ilo.rc` are discovered
+automatically from the current directory, `ilo` only loads such a file after you
+have trusted it. The first time `ilo` finds an untrusted file it asks:
+
+```console
+$ ilo shell
+ilo found an untrusted run command file: /path/to/project/.ilo.rc
+Loading it lets it run arbitrary commands on your machine.
+Trust and load this file from now on? [y/N]
+```
+
+Answering yes records the file in the trust store and loads it; from then on it
+loads without asking. Trust is bound to the file's absolute path and a hash of
+its content, so moving the file or changing its content asks again. When a file
+you trusted before has changed, the prompt says so, so you know why you are being
+asked again:
+
+```console
+$ ilo shell
+ilo: the run command file /path/to/project/.ilo.rc has changed since you trusted it.
+Re-trusting it lets the new content run arbitrary commands on your machine.
+Trust and load this file from now on? [y/N]
+```
+
+In a non-interactive session (for example CI) an untrusted file is **not** loaded.
+
+The trust store lives at `$XDG_CONFIG_HOME/ilo/trusted-rc` (or
+`~/.config/ilo/trusted-rc`); set the `ILO_TRUST_FILE` environment variable to use
+a different location. Files you point to explicitly with `ILO_RC` are treated as
+your own choice and are loaded without a trust prompt.
+
+
+---
+
+# Autocomplete
+
+Source: https://ilo.projects.metio.wtf/usage/autocomplete/
+
+
+The `ilo generate-completion` command generates autocompletion configuration for shells such as [bash](https://www.gnu.org/software/bash/) and [zsh](https://www.zsh.org/).
+
+Once enabled you can use the `<TAB>` key to autocomplete ilo commands and their options:
+
+```console
+# autocomplete commands
+$ ilo s<TAB>
+$ ilo shell
+
+# autocomplete options
+$ ilo shell --re<TAB>
+$ ilo shell --remove-image
+```
+
+## bash
+
+In order to integrate autocompletion into [bash](https://www.gnu.org/software/bash/), follow these steps:
+
+1. Create or edit `~/.bashrc`.
+2. Add the following line
+    ```shell
+    source <(ilo generate-completion)
+    ```
+3. Reload your shell (or create a new one)
+
+## zsh
+
+In order to integrate autocompletion into [zsh](https://www.zsh.org/), follow these steps:
+
+1. Create or edit `$ZDOTDIR/.zshrc`.
+2. Add the following line
+    ```shell
+    source <(ilo generate-completion)
+    ```
+3. Reload your shell (or create a new one)
+
+
+---
+
+# Automate
+
+Source: https://ilo.projects.metio.wtf/usage/autoenv/
+
+
+In order to simplify the usage of `ilo`, consider using `autoenv`-like tooling. These tools all allow you to just enter a directory and will automatically call `ilo` for you like this:
+
+```console
+[you@hostname ~]$ cd path/to/your/project
+[root@container project-dir]#
+```
+
+As soon as you enter the directory of your project, these tools will call `ilo` which in turn will open your build environment for you.
+
+## autoenv
+
+In order to use [autoenv](https://github.com/inishchith/autoenv), first [install it](https://github.com/inishchith/autoenv#install) and then place a `.env` file in the root of your project which contains `ilo` and its arguments as its contents.
+
+```console
+[you@hostname project-dir]$ cat .env
+ilo @build-env
+```
+
+## direnv
+
+In order to use [direnv](https://direnv.net/), first [install it](https://direnv.net/#basic-installation) and then place a `.envrc` file in the root of your project which contains `ilo` and its arguments as its contents.
+
+```console
+[you@hostname project-dir]$ cat .envrc
+ilo @build-env
+```
+
+## envrc-rs
+
+In order to use [envrc-rs](https://github.com/roxma/envrc-rs), first [install it](https://github.com/roxma/envrc-rs#install) and then place a `.envrc` file in the root of your project which contains `ilo` and its arguments as its contents.
+
+```console
+[you@hostname project-dir]$ cat .envrc
+ilo @build-env
+```
+
+## smartcd
+
+In order to use [smartcd](https://github.com/cxreg/smartcd), first [install it](https://github.com/cxreg/smartcd#ok-how-do-i-use-it), enter the root directory of your project and then call `smartcd edit enter` which will open an editor to write a script to execute whenever you enter your project directory. Use something like `ilo @build-env` as the script.
+
+```console
+[you@hostname project-dir]$ cat ~/.smartcd/scripts/path/to/project-dir/bash_enter
+ilo @build-env
+```
+
+## zsh-autoenv
+
+In order to use [zsh-autoenv](https://github.com/Tarrasch/zsh-autoenv), first [install it](https://github.com/Tarrasch/zsh-autoenv#installation) and then place a `.autoenv.zsh` file in the root of your project which contains `ilo` and its arguments as its contents.
+
+```console
+[you@hostname project-dir]$ cat .autoenv.zsh
+ilo @build-env
+```
+
+## tmuxp
+
+In order to use [tmuxp](https://github.com/tmux-python/tmuxp), first [install it](https://github.com/tmux-python/tmuxp#installation) and then create a new configuration in `${XDG_CONFIG_HOME}/tmuxp`:
+
+```console
+[you@hostname project-dir]$ cat ${XDG_CONFIG_HOME}/tmuxp/your-project.yml
+session_name: your-project
+windows:
+- window_name: dev window
+  shell_command_before:
+    - cd ~/path/to/your/project
+  panes:
+    - shell_command:
+        - ilo @build-env
+```
+
+## teamocil
+
+In order to use [teamocil](https://github.com/remi/teamocil), first [install it](https://github.com/remi/teamocil#installation) and then create a new configuration in `~/.teamocil`:
+
+```console
+[you@hostname project-dir]$ cat ~/.teamocil/your-project.yml
+windows:
+  - name: your-project
+    root: ~/path/to/your/project
+    panes:
+      - ilo @build-env
+```
+
+## tmuxifier
+
+In order to use [tmuxifier](https://github.com/jimeh/tmuxifier), first [install it](https://github.com/jimeh/tmuxifier#installation) and then create a new configuration in `$TMUXIFIER_LAYOUT_PATH`:
+
+```console
+[you@hostname project-dir]$ cat $TMUXIFIER_LAYOUT_PATH/your-project.sh
+window_root "~/path/to/your/project"
+new_window "Your Project"
+split_v 20
+run_cmd "ilo @build-env"
+split_h 60
+select_pane 0
+```
+
+## tmuxinator
+
+In order to use [tmuxinator](https://github.com/tmuxinator/tmuxinator), first [install it](https://github.com/tmuxinator/tmuxinator#installation) and then create a new configuration in `~/.config/tmuxinator`:
+
+```console
+[you@hostname project-dir]$ cat ~/.config/tmuxinator/your-project.yml
+name: your-project
+root: ~/path/to/your/project
+windows:
+  - your_project:
+      panes:
+        - ilo @build-env
+```
+
+## dmux
+
+In order to use [dmux](https://github.com/zdcthomas/dmux), first [install it](https://github.com/zdcthomas/dmux#installation) and then create your configuration in `${XDG_CONFIG_HOME}/dmux/dmux.conf.{file_type}`:
+
+```console
+[you@hostname project-dir]$ cat ${XDG_CONFIG_HOME}/dmux/dmux.conf.toml
+[your-project]
+number_of_panes = 2
+session_name = "Your Project"
+commands = ["ilo @build-env"]
+```
+
+## airmux
+
+In order to use [airmux](https://github.com/dermoumi/airmux), first [install it](https://github.com/dermoumi/airmux#installation) and then create a new configuration in `${XDG_CONFIG_HOME}/airmux`:
+
+```console
+[you@hostname project-dir]$ cat ${XDG_CONFIG_HOME}/airmux/your-project.yml
+name: your-project
+root: ~/path/to/your/project
+windows:
+  - your_project:
+      panes:
+        - command: ilo @build-env
+```
+
+## smug
+
+In order to use [smug](https://github.com/ivaaaan/smug), first [install it](https://github.com/ivaaaan/smug#installation) and then create a new configuration in `${XDG_CONFIG_HOME}/smug`:
+
+```console
+[you@hostname project-dir]$ cat ${XDG_CONFIG_HOME}/smug/your-project.yml
+session: your-project
+root: ~/path/to/your/project
+windows:
+  - name: your_project
+    commands:
+      - ilo @build-env
+```
+
+
+---
+
+# Build Environments
+
+Source: https://ilo.projects.metio.wtf/usage/build-envs/
+
+
+`ilo` allows you to define your build environment either in a [Containerfile/Dockerfile](https://docs.docker.com/engine/reference/builder/) or any other [OCI Image](https://github.com/opencontainers/image-spec/blob/master/spec.md) compliant way. In contrast to [toolbx](https://containertoolbx.org/), `ilo` relies on immutable containers which makes it easier to share those images across your team. `ilo` uses the same mechanism to define build environments that developers are already using to define their application run environments. Therefore, onboarding and adapting container based build environments should be easy for most teams.
+
+As an example, consider the following Containerfile that is based on the official [Maven image](https://hub.docker.com/_/maven) and extends that with another binary ([hugo](https://gohugo.io/) in this case).
+
+```console
+# write some Containerfile
+$ cat your.containerfile
+FROM docker.io/library/maven:latest
+
+RUN apt-get update && apt-get install hugo -y
+```
+
+This image can be build just like any other image with your typical tooling, e.g. using [podman](https://podman.io/):
+
+```console
+$ podman build --tag your.image:your.tag --file your.containerfile path/to/build/context
+```
+
+The idea behind `ilo` is that you use this image to start a container that mounts your project directory and is able to execute any command that you are using to build/test/package your project.
+
+Take a look at the detailed instructions for [ilo shell](../../shell), [ilo compose](../../compose), [ilo devcontainer](../../devcontainer), and [ilo devfile](../../devfile) for details on how to use your created image.
+
+
+---
+
+# Install
+
+Source: https://ilo.projects.metio.wtf/usage/install/
+
+
+Prebuilt binaries of `ilo` are available for each published release at:
+
+- https://github.com/metio/ilo/releases
+
+Download the package for your operating system and put the `ilo` binary in your `$PATH`. Use the JVM variant in case your operating system is not directly supported.
+
+## Huber
+
+In case you are using [huber](https://github.com/innobead/huber), execute the following commands to install `ilo` on Linux/Mac/Windows:
+
+```console
+$ huber repo add remote-repo --url https://github.com/metio/ilo
+$ huber install ilo
+```
+
+
+---
+
+# ilo shell
+
+Source: https://ilo.projects.metio.wtf/shell/
+
+
+The `ilo shell` command opens a shell in a reusable build-environment container, either interactively (default) or in non-interactive mode (e.g. for CI builds). It can build an image, mount directories automatically, keep the container around for fast reuse, remove images, and customize the build environment according to the needs of your project.
+
+```console
+# open shell for local builds in default image with default image command
+[you@hostname project-dir]$ ilo shell
+[root@container project-dir]#
+
+# use custom image
+[you@hostname project-dir]$ ilo shell docker.io/library/maven:latest
+[root@container project-dir]#
+
+# use custom command
+[you@hostname project-dir]$ ilo shell docker.io/library/eclipse-temurin:21 jshell
+[root@container project-dir]#
+
+# run command non-interactive
+[you@hostname project-dir]$ ilo shell --no-interactive docker.io/library/maven:latest mvn verify
+[you@hostname project-dir]$
+```
+
+`ilo shell` will delegate most of its work to one of the supported [runtimes](./runtimes). In order to override the default command of your image, specify the command you want to execute just after the image, like this:
+
+```console
+[you@hostname project-dir]$ ilo shell docker.io/library/eclipse-temurin:21 /bin/bash
+[root@container project-dir]#
+```
+
+In order to exit the container either use `exit` or hit `Ctrl + d`:
+
+```console
+[root@container project-dir]# exit
+[you@hostname project-dir]$
+```
+
+Once you have exited the container, `ilo` stops it but keeps it for reuse, so the next `ilo shell` in the same project resumes the same container instantly (any tools you installed and changes you made are still there). A reused container is one built from the exact same definition; changing the image, `Containerfile`, or run options creates a fresh one instead. See [how a session is reused](./options) for details.
+
+To instead discard the container and its image when you exit — restoring a clean slate on the next run — pass the `--remove-image` flag:
+
+```console
+[you@hostname project-dir]$ ilo shell --remove-image docker.io/library/eclipse-temurin:21
+[root@container project-dir]# exit
+```
+
+In order to pull an image first before opening a new shell, use the `--pull` flag like this:
+
+```console
+[you@hostname project-dir]$ ilo shell --pull docker.io/library/eclipse-temurin:latest
+[root@container project-dir]#
+```
+
+In case you want to use a local `Containerfile`/`Dockerfile`, use the `--containerfile`/`--dockerfile` flag like this:
+
+```console
+[you@hostname project-dir]$ ilo shell --containerfile your.containerfile your.image:latest
+[root@container project-dir]#
+```
+
+The resulting image name will be `your.image:latest`. Take a look at all available [options](./options) or use `ilo shell --help` to get a list of all options, and their default values. In order to simplify handling of long command line options, consider using [argument files](../usage/argument-files).
+
+
+---
+
+# Examples
+
+Source: https://ilo.projects.metio.wtf/shell/examples/
+
+
+The following examples show how `ilo shell` can be used to cache a build tool's
+downloaded dependencies across runs, so they are not re-downloaded every time.
+
+## Caching dependencies
+
+Persisting a tool's download cache means mounting a host directory into the
+container. The **robust, image-agnostic** way is to mount one host directory at a
+fixed container path (`/cache` below) and point the tool's cache there with its own
+environment variable — rather than mounting onto the image's default cache location.
+Default locations vary between images and, because most current official images run
+as a **non-root** user (e.g. `docker.io/library/maven:latest` runs as `ubuntu`, not `root`, with its
+repo under `/home/ubuntu`), mounting onto `/root/...` is usually both the wrong path
+and unwritable.
+
+`ilo` keeps the cached files owned by **you** on the host
+(`--update-remote-user-uid`, on by default), so the cache stays usable from the host
+too. See [File Ownership](../../usage/file-ownership).
+
+All rows use the same mount; pick the image that carries your toolchain — **always
+in long-form** (`docker.io/library/golang:latest`, not `golang:latest`; short names
+resolve differently under Podman/Fedora, long-form works everywhere) — and add the
+tool's cache environment variable:
+
+```console
+--volume ${XDG_CACHE_HOME:-$HOME/.cache}/<tool>:/cache:z
+```
+
+| Tool / ecosystem | Image (long-form) | Add this to point the cache at `/cache` |
+| --- | --- | --- |
+| Maven | `docker.io/library/maven:latest` | `--env MAVEN_ARGS=-Dmaven.repo.local=/cache` |
+| Gradle | `docker.io/library/gradle:latest` | `--env GRADLE_USER_HOME=/cache` |
+| Cargo (Rust) | `docker.io/library/rust:latest` | `--env CARGO_HOME=/cache` |
+| Go | `docker.io/library/golang:latest` | `--env GOMODCACHE=/cache/mod --env GOCACHE=/cache/build` |
+| npm | `docker.io/library/node:latest` | `--env npm_config_cache=/cache` |
+| pip | `docker.io/library/python:latest` | `--env PIP_CACHE_DIR=/cache` |
+| uv (Python) | `ghcr.io/astral-sh/uv:python3.13-bookworm-slim` | `--env UV_CACHE_DIR=/cache` |
+| Composer (PHP) | `docker.io/library/composer:latest` | `--env COMPOSER_CACHE_DIR=/cache` |
+| NuGet (.NET) | `mcr.microsoft.com/dotnet/sdk:latest` | `--env NUGET_PACKAGES=/cache` |
+| Deno | `docker.io/denoland/deno:latest` | `--env DENO_DIR=/cache` |
+| Bundler (Ruby) | `docker.io/library/ruby:latest` | `--env GEM_HOME=/cache` |
+| Bun (JS/TS) | `docker.io/oven/bun:latest` | `--env BUN_INSTALL_CACHE_DIR=/cache` |
+| Dart | `docker.io/library/dart:latest` | `--env PUB_CACHE=/cache` |
+| Elixir (Mix/Hex) | `docker.io/library/elixir:latest` | `--env MIX_HOME=/cache --env HEX_HOME=/cache` |
+| Haskell (Cabal) | `docker.io/library/haskell:latest` | `--env CABAL_DIR=/cache` |
+| Julia | `docker.io/library/julia:latest` | `--env JULIA_DEPOT_PATH=/cache` |
+
+Tools not bundled in a base image follow the same pattern once installed: enable
+Yarn/pnpm with `corepack enable`, or install Poetry in your `Containerfile`, then
+point that tool's own cache-dir environment variable (`YARN_CACHE_FOLDER`,
+`POETRY_CACHE_DIR`, …) at `/cache`. An image that runs as `root` (e.g.
+`docker.io/library/gradle:latest`) is the exception on a host whose rootless runtime
+defaults to a `keep-id` user namespace: its cache is written under a sub-UID, so the
+container reuses it fine but it is not owned by your user and you cannot manage it
+from the host. The fix is to run the image as its non-root user with
+`--remote-user <name>`, which maps to you, so the cache is owned by you. See
+[File Ownership](../../usage/file-ownership).
+
+## Full examples
+
+```console
+# Maven
+$ ilo shell \
+    --volume ${XDG_CACHE_HOME:-$HOME/.cache}/maven:/cache:z \
+    --env MAVEN_ARGS=-Dmaven.repo.local=/cache \
+    docker.io/library/maven:latest mvn verify
+
+# Go
+$ ilo shell \
+    --volume ${XDG_CACHE_HOME:-$HOME/.cache}/go:/cache:z \
+    --env GOMODCACHE=/cache/mod --env GOCACHE=/cache/build \
+    docker.io/library/golang:latest go test ./...
+```
+
+Or bake the mount and environment variable into an
+[argument file](../../usage/argument-files) (or `.ilo.rc`), one argument per line,
+so every call is just `ilo <command>`:
+
+```console
+shell
+--volume ${XDG_CACHE_HOME:-$HOME/.cache}/cargo:/cache:z
+--env CARGO_HOME=/cache
+docker.io/library/rust:latest
+```
+
+If you prefer to mount onto the image's native cache path instead, first confirm
+where that image keeps it (`ilo shell <image> sh -c 'echo $HOME; id'`) — it is
+image-specific.
+
+## Caching tools without a dedicated cache variable
+
+Some toolchains keep their caches under `$HOME`, or in several places with no single
+cache-dir variable. These need a full invocation rather than a table row.
+
+**Swift** keeps its package cache under `$HOME` (`~/.cache/org.swift.swiftpm`,
+`~/.swiftpm`), so redirect `HOME` to the mount:
+
+```console
+$ ilo shell \
+    --volume ${XDG_CACHE_HOME:-$HOME/.cache}/swift:/cache:z --env HOME=/cache \
+    docker.io/library/swift:latest swift build
+```
+
+**Clojure**'s git dependencies honor `GITLIBS`, but its Maven local repository has
+no environment variable (the JVM derives it from the passwd home, not `HOME`), so
+set it on the command line with `-Sdeps`:
+
+```console
+$ ilo shell \
+    --volume ${XDG_CACHE_HOME:-$HOME/.cache}/clojure:/cache:z --env GITLIBS=/cache/gitlibs \
+    docker.io/library/clojure:latest \
+    clojure -Sdeps '{:mvn/local-repo "/cache/m2"}' -P
+```
+
+Maven deps land in `/cache/m2`, git deps in `/cache/gitlibs`.
+
+
+---
+
+# Options
+
+Source: https://ilo.projects.metio.wtf/shell/options/
+
+
+The `ilo shell` command can be configured with the following command line options. From your terminal, use `ilo shell --help` to get a list of all options, and their default values.
+
+## How a session is reused
+
+`ilo shell` keeps your container between runs. The first time you run it in a project, `ilo` builds (or pulls) the image and **creates** a long-lived container. When you exit, the container is **stopped but kept**. The next time you run `ilo shell` in the same project with the same image, `ilo` simply **starts** that container again and attaches to it — so it comes up instantly and anything you installed inside it is still there.
+
+The container is named `ilo-<project>-<hash>` (for example `ilo-my-project-1a2b3c4d5e6f`). The hash covers everything that defines the container — the project path, the image, the build inputs **including your `Containerfile`'s contents**, and the run options (`--env`, `--volume`, `--publish`, `--working-dir`, runtime options, …). So if you edit the `Containerfile`, change the image, or add an `--env`, `ilo` builds a **fresh** container automatically; leave the definition unchanged and it reuses the existing one. Only the current container is kept — `ilo` removes this project's earlier, stopped containers so they do not pile up. Containers are labelled `ilo.managed=true` and `ilo.project=<dir>`, so you can also find them yourself with `docker ps --all --filter label=ilo.managed`.
+
+Use [`--fresh`](#--fresh) when you want a clean slate even though nothing changed — to re-pull a `latest` image, or to reset a container whose state has drifted — or [`--remove-image`](#--remove-image) to remove the container and its image entirely when you exit.
+
+You can attach several terminals to the same running container — just run `ilo shell` again with the same options and it joins the existing one. `ilo` keeps the container running until the **last** session exits, so leaving one terminal never interrupts the others; only the final one to leave stops the container. This is automatic — there is nothing to enable.
+
+Your project directory is mounted into the container read-write. With `ilo`'s default rootless Podman runtime, files written inside the container are owned by *you* on the host even when the image runs as `root`; on Docker it takes one extra step. See [File Ownership](../../usage/file-ownership) for the details.
+
+## `--context`
+
+The `--context` option allows to specify the context when building an image with `--containerfile`/`--dockerfile`.
+
+```console
+# specify custom context
+$ ilo shell --context ./local/folder
+
+# do not specify context
+$ ilo shell
+```
+
+By default, `--context` is set to `.` (the current directory).
+
+## `--containerfile`/`--dockerfile`
+
+The `--containerfile`/`--dockerfile` option can be used to specify a local `Containerfile`/`Dockerfile`. Specifying such a file will cause `ilo` to build your image first, and then open a shell into a container based on that image.
+
+```console
+# specify custom Containerfile
+$ ilo shell --containerfile some/where/your.containerfile
+
+# do not specify Containerfile
+$ ilo shell
+```
+
+By default, `--containerfile`/`--dockerfile` is not set to any value.
+
+## `--debug`
+
+The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
+
+```console
+# print runtime commands
+$ ilo shell --debug
+
+# do not print runtime commands
+$ ilo shell --debug=false
+$ ilo shell
+```
+
+By default, `--debug` is not enabled.
+
+## `--env`
+
+The `--env` option can be used to specify environment variables for your container.
+
+```console
+# specify env variable
+$ ilo shell --env key=value
+
+# do not specify env variable
+$ ilo shell
+```
+
+By default, `--env` does not set any environment variables.
+
+## `--fresh`
+
+The `--fresh` option discards the reused container and starts from a clean slate. `ilo` removes any existing container for this project and image, then rebuilds and recreates it from scratch. Use it when you want to start over — for example after the container's state has drifted, or to force a rebuild against an updated `Containerfile`.
+
+```console
+# discard the reused container and recreate it
+$ ilo shell --fresh
+
+# reuse the existing container (default)
+$ ilo shell
+```
+
+By default, `--fresh` is not enabled.
+
+## `--keep-running`
+
+The `--keep-running` option leaves the container running after the last session exits, instead of stopping it. `ilo` keeps the container for reuse either way, but with this flag it stays *running* — so background processes inside it keep going and the next attach is instant. This mirrors a `devcontainer.json` [`shutdownAction`](https://containers.dev/implementors/json_reference/) of `none`.
+
+```console
+# leave the container running on exit
+$ ilo shell --keep-running
+
+# stop the container on exit, keeping it for reuse (default)
+$ ilo shell
+```
+
+By default, `--keep-running` is not enabled. An explicit [`--remove-image`](#--remove-image) still removes the container on exit.
+
+## `--override-command`
+
+To keep the container around for reuse, `ilo` needs it to stay running between sessions. By default it injects a small keepalive as the container's entrypoint and command — so the container stays up regardless of the image's own entrypoint — and `exec`s your shell into it. This needs a shell and `sleep` in the image, which practically every distribution and dev image has (including BusyBox/Alpine).
+
+For images that already run a long-lived process of their own (a server, or a `CMD ["sleep", "infinity"]`), use `--no-override-command` to leave the image's entrypoint and command in place and rely on that process to keep the container alive instead.
+
+```console
+# inject the keepalive (default)
+$ ilo shell
+
+# keep the image's own entrypoint/command running instead
+$ ilo shell --no-override-command
+```
+
+By default, `--override-command` is enabled. Minimal images without a shell (`scratch`, distroless) need `--no-override-command` together with an image that stays running on its own.
+
+## `--update-remote-user-uid`
+
+Aligns the container user's UID and GID with **your** host user, so files created in the mounted project stay owned by you instead of by the container user (often `root`, or a fixed non-root user). This mirrors the devcontainer specification's [`updateRemoteUserUID`](https://containers.dev/implementors/json_reference/).
+
+```console
+# align the container user with your host user (the default)
+$ ilo shell image:test
+
+# align a specific user
+$ ilo shell --remote-user node image:test
+
+# leave the container user exactly as the image defines it
+$ ilo shell --no-update-remote-user-uid image:test
+```
+
+`--update-remote-user-uid` is **enabled by default**. `--remote-user` names the container user to run as and align; when it is omitted, `ilo` reads the image's configured user (falling back to `root`). `ilo` then applies whatever the selected runtime needs:
+
+- **Rootless Podman/nerdctl** — a `--userns=keep-id` user namespace for a non-root user, pinned to that user's UID/GID so it works even when your host UID differs; nothing for `root`, which the runtime already maps to you.
+- **Rootful Docker** — for a non-root user, a small derived image that remaps that user's UID/GID to yours (so it keeps its name, home and shell, on the container and every `exec`); for a `root` image, the bare host `--user <uid>:<gid>`.
+- **Rootless Docker / Docker Desktop** — nothing; the runtime (or its VM) already maps ownership.
+
+Because the default does nothing exactly where the runtime already maps you, leaving it on is safe. Pass `--no-update-remote-user-uid` when you want the container user left untouched. See [File Ownership](../../usage/file-ownership) for the full picture.
+
+## `--hostname`
+
+The `--hostname` option can be used to set the hostname of your container.
+
+```console
+# set hostname
+$ ilo shell --hostname you.home.arpa
+
+# do not set hostname
+$ ilo shell
+```
+
+By default, `--hostname` is not set to any value.
+
+## `--interactive`
+
+The `--interactive` option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).
+
+```console
+# run interactively
+$ ilo shell --interactive
+
+# run non-interactive
+$ ilo shell --no-interactive
+$ ilo shell --interactive=false
+
+# run interactively
+$ ilo shell
+```
+
+By default, `--interactive` is enabled.
+
+## `--missing-volumes`
+
+The `--missing-volumes` option controls how `ilo` should deal with non-existing local directories that you want to mount into the container. The default behavior is `CREATE` which creates the directory on the host machine before creating the container and mounting the new empty directory into it. Changing this option to `WARN` results in a warning that a local directory cannot be mounted. `ilo` will still create the container, just not with that missing directory mounted. The `ERROR` option causes `ilo` to fail in case you specify a local directory to mount that does not exist. All three options are case-insensitive, e.g. use `create`, `CREATE`, or `CreATE`.
+
+```console
+# create missing local directories
+$ ilo shell --missing-volumes=CREATE
+
+# warn on missing local directories
+$ ilo shell --missing-volumes=WARN
+
+# error on missing local directories
+$ ilo shell --missing-volumes=ERROR
+```
+
+## `--mount-project-dir`
+
+The `--mount-project-dir` option can be used to toggle whether the current directory should be mounted into the container. The location inside the container is specified with `--working-dir`.
+
+```console
+# mount current directory into container
+$ ilo shell --mount-project-dir
+
+# do not mount directory
+$ ilo shell --no-mount-project-dir
+$ ilo shell --mount-project-dir=false
+
+# mount directory
+$ ilo shell
+```
+
+By default, `--mount-project-dir` is enabled.
+
+## `--publish`
+
+The `--publish` option can be used to publish ports of your container to your local system.
+
+```console
+# binds your local 8080 port to port 80 of the container
+$ ilo shell --publish 8080:80
+
+# do not expose any ports
+$ ilo shell
+```
+
+By default, `--publish` does not exposes any ports.
+
+## `--pull`
+
+The `--pull` option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only be pulled in case the registry contains a newer image than locally available. Because a reused container would never see the freshly pulled image, `--pull` also recreates the container (like [`--fresh`](#--fresh)) so the new image takes effect.
+
+```console
+# pull image before opening shell
+$ ilo shell --pull
+
+# do not pull image before opening shell
+$ ilo shell --no-pull
+$ ilo shell --pull=false
+
+# do not pull image before opening shell
+$ ilo shell
+```
+
+By default, `--pull` is not enabled.
+
+## `--remote-env`
+
+The `--remote-env` option sets environment variables for processes `ilo` runs *inside* the container — the interactive shell and any lifecycle commands — as opposed to [`--env`](#--env), which bakes the variable onto the container itself. Because the variables are applied on `exec`, changing them takes effect on the next attach without recreating the container. This mirrors the devcontainer specification's [`remoteEnv`](https://containers.dev/implementors/json_reference/).
+
+```console
+# set a variable for the interactive shell
+$ ilo shell --remote-env EDITOR=vim
+
+# set it on the container instead
+$ ilo shell --env EDITOR=vim
+```
+
+By default, `--remote-env` does not set any environment variables.
+
+## `--remove-image`
+
+The `--remove-image` option opts out of container reuse: after you close your shell, or the non-interactive command finishes, `ilo` removes the container **and** its image from your local system instead of keeping them. This restores the clean-slate-every-run behavior and is especially useful in combination with `--containerfile`/`--dockerfile`.
+
+```console
+# remove the container and its image after the shell is closed
+$ ilo shell --remove-image
+
+# keep the container and image for reuse (default)
+$ ilo shell --no-remove-image
+$ ilo shell --remove-image=false
+$ ilo shell
+```
+
+By default, `--remove-image` is not enabled, so the container and image are kept for reuse.
+
+## `--runtime`
+
+The `--runtime` option can be used to force the usage of a specific runtime. See [runtimes](../runtimes) for details.
+
+```console
+# force to use podman
+$ ilo shell --runtime podman
+
+# force to use docker
+$ ilo shell --runtime docker
+
+# force to use nerdctl
+$ ilo shell --runtime nerdctl
+
+# force to use Apple's container (macOS only)
+$ ilo shell --runtime container
+
+# auto select
+$ ilo shell
+```
+
+## `--runtime-option`
+
+The `--runtime-option` option can be specified multiple times and contains options for the underlying runtime.
+
+```console
+# specify custom option(s)
+$ ilo shell --runtime-option=--remote
+$ ilo shell --runtime-option=--remote --runtime-option=--syslog
+
+# do not specify custom option
+$ ilo shell
+```
+
+By default, `--runtime-option` is set to an empty array.
+
+## `--runtime-pull-option`
+
+The `--runtime-pull-option` can be specified multiple times and contains options for the runtimes' `pull` command.
+
+```console
+# specify custom option(s)
+$ ilo shell --runtime-pull-option=--all-tags
+$ ilo shell --runtime-pull-option=--all-tags --runtime-pull-option=--quiet
+
+# do not specify custom option
+$ ilo shell
+```
+
+By default, `--runtime-pull-option` is set to an empty array.
+
+## `--runtime-build-option`
+
+The `--runtime-build-option` can be specified multiple times and contains options for the runtimes' `build` command.
+
+```console
+# specify custom option(s)
+$ ilo shell --runtime-build-option=--squash
+$ ilo shell --runtime-build-option=--squash --runtime-build-option=--no-cache
+
+# do not specify custom option
+$ ilo shell
+```
+
+By default, `--runtime-build-option` is set to an empty array.
+
+## `--runtime-run-option`
+
+The `--runtime-run-option` can be specified multiple times and contains options for the runtimes' `run` command.
+
+```console
+# specify custom option(s)
+$ ilo shell --runtime-run-option=--privileged
+$ ilo shell --runtime-run-option=--privileged --runtime-run-option=--replace
+
+# do not specify custom option
+$ ilo shell
+```
+
+By default, `--runtime-run-option` is set to an empty array.
+
+## `--runtime-cleanup-option`
+
+The `--runtime-cleanup-option` can be specified multiple times and contains options for the runtimes' `rmi` command.
+
+```console
+# specify custom option(s)
+$ ilo shell --runtime-cleanup-option=--force
+$ ilo shell --runtime-cleanup-option=--force --runtime-cleanup-option=--all
+
+# do not specify custom option
+$ ilo shell
+```
+
+By default, `--runtime-cleanup-option` is set to an empty array.
+
+## `--shell`
+
+The `--shell` option sets the shell that `ilo` runs when you attach to the container interactively without giving an explicit command. Because the container is reused and entered with `exec`, `ilo` has to name a shell to start; pick one your image actually ships.
+
+```console
+# attach with bash
+$ ilo shell --shell /bin/bash
+
+# attach with the default POSIX shell
+$ ilo shell
+```
+
+By default, `--shell` is `/bin/sh`, which exists on practically every image. When you pass a command to run instead of an interactive session (for example `ilo shell my-image ls -la`), that command is used and `--shell` is ignored.
+
+## `--shell-arg`
+
+The `--shell-arg` option passes extra arguments to the interactive shell (repeat it for several). The most common use is `-l` (login) and `-i` (interactive) so the shell sources the user's profile (`/etc/profile`, `~/.bash_profile`, `~/.bashrc`, …). This is how `ilo devcontainer` honors the devcontainer specification's [`userEnvProbe`](https://containers.dev/implementors/json_reference/): `loginInteractiveShell` becomes `-l -i`, `loginShell` becomes `-l`, `interactiveShell` becomes `-i`, and `none` adds nothing.
+
+```console
+# start a login + interactive shell so profiles are sourced
+$ ilo shell --shell /bin/bash --shell-arg -l --shell-arg -i
+
+# default: the shell is started with no extra arguments
+$ ilo shell
+```
+
+By default, `--shell-arg` adds no arguments. The arguments are ignored when you pass an explicit command, and the chosen [`--shell`](#--shell) must understand them (a minimal `/bin/sh` may reject `-l`).
+
+## `--volume`
+
+The `--volume` option can be used to mount additional volumes into your container —
+typically a dependency cache. Pair it with the tool's own cache-directory variable so
+the cache is written to the mounted location; see [Examples](../examples) for the
+per-tool variables.
+
+```console
+# mount a host directory as the dependency cache
+$ ilo shell --volume ${XDG_CACHE_HOME:-$HOME/.cache}/maven:/cache:z --env MAVEN_ARGS=-Dmaven.repo.local=/cache docker.io/library/maven:latest
+
+# do not mount extra volume
+$ ilo shell
+```
+
+By default, `--volume` does not mount any extra volumes.
+
+## `--working-dir`
+
+The `--working-dir` option can be used to set the working directory inside your container.
+
+```console
+# specify custom working directory
+$ ilo shell --working-dir /project/dir
+
+# use current directory
+$ ilo shell
+```
+
+By default, `--working-dir` uses the current directory on the host machine in order to have the same paths on the host and in the container.
+
+## `--workspace-mount`
+
+The `--workspace-mount` option replaces the default project bind-mount with an explicit `--mount` specification. Normally `ilo` bind-mounts the current directory onto [`--working-dir`](#--working-dir); pass `--workspace-mount` when you need full control over how the project is mounted (for example a named volume, or different mount options). Its target should match `--working-dir`. This mirrors the devcontainer specification's [`workspaceMount`](https://containers.dev/implementors/json_reference/).
+
+```console
+# mount the project through a named volume
+$ ilo shell --workspace-mount type=volume,source=project,target=/workspace --working-dir /workspace
+
+# bind-mount the current directory (default)
+$ ilo shell
+```
+
+By default, `--workspace-mount` is not set and the current directory is bind-mounted.
+
+
+---
+
+# Runtimes
+
+Source: https://ilo.projects.metio.wtf/shell/runtimes/
+
+
+`ilo shell` by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the `--runtime` flag or set the `ILO_SHELL_RUNTIME` environment variable in your system. The `--runtime` flag overwrites the environment variable.
+
+## Docker
+
+Force `ilo` to use [docker](https://www.docker.com/) like this:
+
+```console
+$ ilo shell --runtime docker
+
+# use alias
+$ ilo shell --runtime d
+
+# use env variable
+$ ILO_SHELL_RUNTIME=docker ilo shell
+```
+
+## nerdctl
+
+Force `ilo` to use [nerdctl](https://github.com/containerd/nerdctl) like this:
+
+```console
+$ ilo shell --runtime nerdctl
+
+# use alias
+$ ilo shell --runtime n
+
+# use env variable
+$ ILO_SHELL_RUNTIME=nerdctl ilo shell
+```
+
+## Podman
+
+Force `ilo` to use [podman](https://podman.io/) like this:
+
+```console
+$ ilo shell --runtime podman
+
+# use alias
+$ ilo shell --runtime p
+
+# use env variable
+$ ILO_SHELL_RUNTIME=podman ilo shell
+```
+
+## Apple Container
+
+Force `ilo` to use Apple's [container](https://github.com/apple/container) like this:
+
+```console
+$ ilo shell --runtime container
+
+# use alias
+$ ilo shell --runtime c
+
+# use env variable
+$ ILO_SHELL_RUNTIME=container ilo shell
+```
+
+This runtime runs on macOS only (Apple silicon, macOS 26 or newer) and needs its services started once per boot with `container system start`; `ilo` does not start them for you.
+
+A single shell works as expected. Sharing one container across several terminals at once is not supported: this runtime exposes no way to tell whether another terminal still has the container open, so the first session to exit stops it. Pass `--keep-running-on-exit` while a second terminal is open to keep the container alive.
+
+## Auto Selection
+
+If not otherwise specified, `ilo` always picks runtimes in this order, depending on which are available on your system:
+
+1. podman
+2. nerdctl
+3. docker
+4. container (macOS only)
+
+
+---
+
+# ilo compose
+
+Source: https://ilo.projects.metio.wtf/compose/
+
+
+The `ilo compose` command allows interacting with complex build environments, e.g. your project requires a database in order to be build. It integrates with widely used [tools](./runtimes) such as [docker-compose](https://docs.docker.com/compose/) in order to re-use your existing setup as much as possible.
+
+```console
+# use docker-compose.yml in current directory
+[you@hostname project-dir]$ ilo compose
+[root@container project-dir]#
+
+# use custom location
+[you@hostname project-dir]$ ilo compose --file /some/other/file.yml
+[root@container project-dir]#
+
+# use specific service as your dev environment
+[you@hostname project-dir]$ ilo compose postgres
+[root@container project-dir]#
+
+# use custom service and custom command
+[you@hostname project-dir]$ ilo compose postgres /bin/bash
+[root@container project-dir]#
+```
+
+By default `ilo compose` will look for a `docker-compose.yml` file in the current directory and use the `dev` service to launch your new shell. The following `docker-compose.yml` file shows what a simple setup with Redis and OpenJDK 11 looks like:
+
+```yaml
+version: "3.8"
+services:
+  redis:
+    image: docker.io/library/redis:latest
+  dev:
+    image: docker.io/library/eclipse-temurin:21
+    command: /bin/bash         # custom command
+    volumes:
+      - .:/some/where          # mount project directory
+    working_dir: /some/where   # set working directory inside container
+    depends_on:
+      - redis                  # auto-start build dependencies
+```
+
+In order to exit the container either use exit or hit Ctrl + d:
+
+```console
+[root@container project-dir]# exit
+[you@hostname project-dir]$
+```
+
+In case you want images to be pulled first, specify the `--pull` flag like this:
+
+```console
+[you@hostname project-dir]$ ilo compose --pull
+[root@container project-dir]#
+```
+
+If you want to force (re-)building your container images first, use the `--build` flag like this:
+
+```console
+[you@hostname project-dir]$ ilo compose --build
+[root@container project-dir]#
+```
+
+Non-interactive CI builds can use `--no-interactive` like this:
+
+```console
+[you@hostname project-dir]$ ilo compose --no-interactive dev mvn verify
+[you@hostname project-dir]$
+```
+
+Take a look at all available [options](./options) or use `ilo compose --help` to get a list of all options, and their default values. In order to simplify handling of long command line options, consider using [argument files](../usage/argument-files).
+
+
+---
+
+# Options
+
+Source: https://ilo.projects.metio.wtf/compose/options/
+
+
+The `ilo compose` command can be configured with the following command line options. From your terminal, use `ilo compose --help` to get a list of all options, and their default values.
+
+## How a session is reused
+
+`ilo compose` keeps your services running between runs. It brings the services up in the background (`up --detach`) and then enters the selected service with `exec`. When you exit, the services are **stopped but kept**, so the next run starts them again instead of recreating them — and anything written inside them persists.
+
+When you want a clean slate, use [`--fresh`](#--fresh) to tear the services down (`down`) and recreate them on the next run.
+
+## `--build`
+
+The `--build` option can be used to build images before opening a new shell. Use this option in case you rely on local Dockerfiles.
+
+```console
+# build images before opening shell
+$ ilo compose --build
+
+# do not build images before opening shell
+$ ilo compose --build=false
+
+# do not build images before opening shell
+$ ilo compose
+```
+
+By default, `--build` is not enabled.
+
+## `--fresh`
+
+The `--fresh` option discards the reused services and starts from a clean slate. `ilo` tears the services down (the equivalent of `compose down`) before bringing them back up, so the containers are recreated instead of restarted.
+
+```console
+# recreate the services from scratch
+$ ilo compose --fresh
+
+# reuse the running services (default)
+$ ilo compose
+```
+
+By default, `--fresh` is not enabled.
+
+## `--keep-running`
+
+The `--keep-running` option leaves the services running after the last session exits, instead of stopping them. Use it when you want the compose project to keep running in the background between `ilo compose` sessions. This mirrors a `devcontainer.json` [`shutdownAction`](https://containers.dev/implementors/json_reference/) of `none`.
+
+```console
+# leave the services running on exit
+$ ilo compose --keep-running
+
+# stop the services on exit (default)
+$ ilo compose
+```
+
+By default, `--keep-running` is not enabled.
+
+## `--run-service`
+
+The `--run-service` option brings up additional services alongside the one you attach to (repeat it for several). By default `ilo compose` brings up the attached service and its dependencies; use `--run-service` to also start services that are not dependencies. This mirrors the devcontainer specification's [`runServices`](https://containers.dev/implementors/json_reference/).
+
+```console
+# attach to 'dev' and also start 'db' and 'cache'
+$ ilo compose dev --run-service db --run-service cache
+
+# attach to 'dev' and its dependencies only (default)
+$ ilo compose dev
+```
+
+By default, `--run-service` brings up no extra services.
+
+## `--override-command`
+
+So the attached service stays available for reuse across terminals, `ilo` runs it with a small keepalive (layered onto your compose file as an override, without editing it) and `exec`s into it. The services are then stopped only when the **last** attached session exits — so opening `ilo compose` from several terminals never interrupts the others, and there is no flag to manage. This needs a shell and `sleep` in the service's image, which practically every image has.
+
+For a service that already runs a long-lived process of its own, use `--no-override-command` to leave its compose-defined command in place and rely on that process instead; with the override off the services are stopped when you exit.
+
+```console
+# run the service with a keepalive, last session out stops it (default)
+$ ilo compose
+
+# keep the service's own command from the compose file instead
+$ ilo compose --no-override-command
+```
+
+By default, `--override-command` is enabled.
+
+## `--shell`
+
+The `--shell` option sets the shell that `ilo` runs when it attaches to the selected service without an explicit command. Because the service is entered with `exec`, `ilo` has to name a shell to start; pick one the service image actually ships.
+
+```console
+# attach with bash
+$ ilo compose --shell /bin/bash
+
+# attach with the default POSIX shell
+$ ilo compose
+```
+
+By default, `--shell` is `/bin/sh`. When you pass a command to run instead (for example `ilo compose dev ls -la`), that command is used and `--shell` is ignored.
+
+## `--debug`
+
+The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
+
+```console
+# print runtime commands
+$ ilo compose --debug
+
+# do not print runtime commands
+$ ilo compose --debug=false
+$ ilo compose
+```
+
+By default, `--debug` is not enabled.
+
+## `--file`
+
+The `--file` option can be used to specify the file that contains your container definitions, e.g. a `docker-compose.yml` file.
+
+```console
+# use custom location
+$ ilo compose --file /path/to/some/file.yaml
+
+# use default location
+$ ilo compose
+```
+
+By default, `--file` is set to `docker-compose.yml`.
+
+## `--interactive`
+
+The `--interactive` option can be used to control whether you want an interactive session (default) or just want to execute a single command (e.g. during CI builds).
+
+```console
+# run interactively
+$ ilo compose --interactive
+
+# run non-interactive
+$ ilo compose --no-interactive
+$ ilo compose --interactive=false
+
+# run interactively
+$ ilo compose
+```
+
+By default, `--interactive` is enabled.
+
+## `--pull`
+
+The `--pull` option can be used to pull images before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only pulled in case the registry contains a newer image than locally available.
+
+```console
+# pull image before opening shell
+$ ilo compose --pull
+
+# do not pull image before opening shell
+$ ilo compose --pull=false
+
+# do not pull image before opening shell
+$ ilo compose
+```
+
+By default, `--pull` is not enabled.
+
+## `--runtime`
+
+The `--runtime` option can be used to force the usage of a specific runtime. See [runtimes](../runtimes) for details.
+
+```console
+# force to use docker-compose
+$ ilo compose --runtime docker-compose
+
+# force to use podman-compose
+$ ilo compose --runtime podman-compose
+
+# auto select
+$ ilo compose
+```
+
+## `--runtime-option`
+
+The `--runtime-option` option can be specified multiple times and contains options for the underlying runtime.
+
+```console
+# specify custom option(s)
+$ ilo compose --runtime-option=--no-ansi
+$ ilo compose --runtime-option=--no-ansi --runtime-option=--tls
+
+# do not specify custom option
+$ ilo compose
+```
+
+By default, `--runtime-option` is set to an empty array.
+
+## `--runtime-pull-option`
+
+The `--runtime-pull-option` can be specified multiple times and contains options for the runtimes' `pull` command.
+
+```console
+# specify custom option(s)
+$ ilo compose --runtime-pull-option=--ignore-pull-failures
+$ ilo compose --runtime-pull-option=--ignore-pull-failures --runtime-pull-option=--quiet
+
+# do not specify custom option
+$ ilo compose
+```
+
+By default, `--runtime-pull-option` is set to an empty array.
+
+## `--runtime-build-option`
+
+The `--runtime-build-option` can be specified multiple times and contains options for the runtimes' `build` command.
+
+```console
+# specify custom option(s)
+$ ilo compose --runtime-build-option=--compress
+$ ilo compose --runtime-build-option=--compress --runtime-build-option=--no-cache
+
+# do not specify custom option
+$ ilo compose
+```
+
+By default, `--runtime-build-option` is set to an empty array.
+
+## `--runtime-run-option`
+
+The `--runtime-run-option` can be specified multiple times and contains options for the runtimes' `run` command.
+
+```console
+# specify custom option(s)
+$ ilo compose --runtime-run-option=--no-deps
+$ ilo compose --runtime-run-option=--no-deps --runtime-run-option=--use-aliases
+
+# do not specify custom option
+$ ilo compose
+```
+
+By default, `--runtime-run-option` is set to an empty array.
+
+## `--runtime-cleanup-option`
+
+The `--runtime-cleanup-option` can be specified multiple times and contains options for the runtimes' cleanup command, e.g. `down` for `docker-compose`.
+
+```console
+# specify custom option(s)
+$ ilo compose --runtime-cleanup-option=--remove-orphans
+$ ilo compose --runtime-cleanup-option=--remove-orphans --runtime-cleanup-option=--volumes
+
+# do not specify custom option
+$ ilo compose
+```
+
+By default, `--runtime-cleanup-option` is set to an empty array.
+
+
+---
+
+# Runtimes
+
+Source: https://ilo.projects.metio.wtf/compose/runtimes/
+
+
+`ilo compose` by default searches your local system for supported runtimes. In order to force the usage of a specific runtime, use the `--runtime` flag or set the `ILO_COMPOSE_RUNTIME` environment variable in your system. The `--runtime` flag overwrites the environment variable.
+
+Auto-selection prefers Docker Compose v2 (`docker compose`), then `docker-compose` (v1), then `podman-compose` — and only picks Docker Compose v2 when the plugin is actually installed. Note that this differs from `ilo shell`, which prefers Podman, so on a host with both Docker and Podman the two commands may pick different runtimes; pass `--runtime` (or use `--debug` to see the exact command, including which runtime was chosen) if you want them aligned.
+
+## docker-compose
+
+Force `ilo` to use [docker-compose](https://docs.docker.com/compose/) like this:
+
+```console
+$ ilo compose --runtime docker-compose
+
+# use alias
+$ ilo compose --runtime dc
+
+# use env variable
+$ ILO_COMPOSE_RUNTIME=docker-compose ilo compose
+```
+
+## podman-compose
+
+Force `ilo` to use [podman-compose](https://github.com/containers/podman-compose) like this:
+
+```console
+$ ilo compose --runtime podman-compose
+
+# use alias
+$ ilo compose --runtime pc
+
+# use env variable
+$ ILO_COMPOSE_RUNTIME=podman-compose ilo compose
+```
+
+## docker
+
+Force `ilo` to use [docker](https://www.docker.com/) in [compose v2 mode](https://docs.docker.com/compose/cli-command/) like this:
+
+```console
+$ ilo compose --runtime docker
+
+# use alias
+$ ilo compose --runtime d
+
+# use env variable
+$ ILO_COMPOSE_RUNTIME=docker ilo compose
+```
+
+## Auto Selection
+
+If not otherwise specified, `ilo` always picks runtimes in this order, depending on which are available on your system:
+
+1. docker-compose
+2. podman-compose
+3. docker
+
+
+---
+
+# ilo devcontainer
+
+Source: https://ilo.projects.metio.wtf/devcontainer/
+
+
+The `devcontainer` command allows interacting with [devcontainers](https://containers.dev/) as used by [Visual Studio Code](https://code.visualstudio.com/), [GitHub Codespaces](https://docs.github.com/en/codespaces/overview), and a growing list of [other tools](https://containers.dev/supporting).
+
+Make sure to specify `your.image.here:some-tag` as the image in your `devcontainer.json` file. Take a look at the [reference documentation](https://containers.dev/implementors/json_reference/) for all available options for that JSON file.
+
+```console
+# open shell in devcontainer
+[you@hostname project-dir]$ ilo devcontainer
+[root@container project-dir]#
+```
+
+`ilo` will automatically try the following locations for your `devcontainer.json` file relative to your current directory:
+
+1. `.devcontainer/devcontainer.json`
+2. `.devcontainer.json`
+
+In case you want to load/use a different location for your `devconatiner.json` file, specify one or more locations like this:
+
+```console
+# use custom locations
+[you@hostname project-dir]$ ilo devcontainer some-where-local.json /an/absolute/path/appears.json
+```
+
+The first location that actually exists and can be read by the current user will be used.
+
+Take a look at all available [options](./options) or use `ilo devcontainer --help` to get a list of all options, and their default values. In order to simplify handling of long command line options, consider using [argument files](../usage/argument-files).
+
+
+---
+
+# Options
+
+Source: https://ilo.projects.metio.wtf/devcontainer/options/
+
+
+The `ilo devcontainer` command reads a `devcontainer.json` (it looks for `.devcontainer/devcontainer.json` and `.devcontainer.json`, in that order) and opens a shell in the environment it describes. It can be configured with the following command line options. From your terminal, use `ilo devcontainer --help` to get a list of all options, and their default values.
+
+## How a session works
+
+`ilo devcontainer` keeps your container between runs, just like [`ilo shell`](../../shell/options#how-a-session-is-reused):
+
+1. **First run:** `ilo` builds (or pulls) the image described by `image`/`build`, **creates** a long-lived container, and runs the creation lifecycle commands once.
+2. **Later runs:** `ilo` **starts** the same container again and attaches to it. The creation lifecycle commands are *not* run again — only the start- and attach-time ones.
+3. **On exit:** the container is **stopped but kept**, so the next run resumes it.
+
+Editing your `devcontainer.json` — the image, build inputs (including a referenced `Containerfile`), the run configuration, or a lifecycle command such as `postCreateCommand` — makes `ilo` build a fresh container automatically and re-run the creation lifecycle, because the file's contents are part of the container's identity. So your edits are picked up on the next run without any extra flag. Use [`--fresh`](#--fresh) when you want that even though nothing changed (for example to re-pull a `latest` image or reset a container whose state has drifted), or [`--remove-image`](#--remove-image) to remove the container and image entirely when you exit.
+
+If the `devcontainer.json` uses `dockerComposeFile`, `ilo` delegates to [`ilo compose`](../../compose/options) instead and brings the services up the same way.
+
+## Lifecycle commands
+
+`ilo` runs the [lifecycle scripts](https://containers.dev/implementors/spec/#lifecycle) from your `devcontainer.json` around the session:
+
+| Property | When it runs | Where |
+| --- | --- | --- |
+| `initializeCommand` | before the container is created | on your **host** |
+| `onCreateCommand` | once, when the container is created | in the container |
+| `updateContentCommand` | once, when the container is created | in the container |
+| `postCreateCommand` | once, when the container is created | in the container |
+| `postStartCommand` | every time the container is started | in the container |
+| `postAttachCommand` | every time you attach | in the container |
+
+Each command may be a string (run through the container's shell), an array (run directly), or an object of named commands. Object entries run one after another. Every lifecycle command can be turned off with its [`--execute-…-command`](#--execute-initialize-command) flag.
+
+## Supported and unsupported
+
+`ilo` is a small wrapper around your container runtime, so it supports the parts of the specification that map onto running a container, and deliberately ignores the parts that belong to a full IDE integration.
+
+| Supported | Not supported |
+| --- | --- |
+| `image`, `build` (`dockerfile`, `context`, `args`, `target`, `cacheFrom`, `options`) | `features` |
+| `dockerComposeFile`, `service` | `customizations` (e.g. VS Code extensions/settings) |
+| `workspaceFolder`, `containerEnv`, `remoteEnv`, `mounts`, `forwardPorts`, `appPort` | `secrets`, `hostRequirements` |
+| `containerUser`/`remoteUser`, `runArgs`, `init`, `privileged`, `capAdd`, `securityOpt`, `userEnvProbe` | `waitFor` |
+| `initializeCommand`, `onCreateCommand`, `updateContentCommand`, `postCreateCommand`, `postStartCommand`, `postAttachCommand` | |
+| `overrideCommand` (set `false` to keep the image's own long-running process) | |
+
+If you rely on `features` or editor `customizations`, use the [official `@devcontainers/cli`](https://github.com/devcontainers/cli) for those parts — `ilo` will not error on them, it simply does not act on them.
+
+## `--debug`
+
+The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
+
+```console
+# print runtime commands
+$ ilo devcontainer --debug
+
+# do not print runtime commands
+$ ilo devcontainer --debug=false
+$ ilo devcontainer
+```
+
+By default, `--debug` is not enabled.
+
+## `--mount-project-dir`
+
+The `--mount-project-dir` option can be used to toggle whether the current directory should be mounted into the container.
+
+```console
+# mount current directory into container
+$ ilo devcontainer --mount-project-dir
+
+# do not mount directory
+$ ilo devcontainer --no-mount-project-dir
+$ ilo devcontainer --mount-project-dir=false
+
+# mount directory
+$ ilo devcontainer
+```
+
+By default, `--mount-project-dir` is enabled.
+
+## `--pull`
+
+The `--pull` option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only pulled in case the registry contains a newer image than locally available.
+
+```console
+# pull image before opening shell
+$ ilo devcontainer --pull
+
+# do not pull image before opening shell
+$ ilo devcontainer --no-pull
+$ ilo devcontainer --pull=false
+
+# do not pull image before opening shell
+$ ilo devcontainer
+```
+
+By default, `--pull` is not enabled.
+
+## `--remove-image`
+
+The `--remove-image` option opts out of container reuse: after you close your shell, `ilo` removes the container **and** its image instead of keeping them. The next run then rebuilds from scratch and re-runs the creation lifecycle.
+
+```console
+# remove the container and its image after the shell is closed
+$ ilo devcontainer --remove-image
+
+# keep the container and image for reuse (default)
+$ ilo devcontainer --no-remove-image
+$ ilo devcontainer --remove-image=false
+$ ilo devcontainer
+```
+
+By default, `--remove-image` is not enabled, so the container and image are kept for reuse.
+
+## `--fresh`
+
+The `--fresh` option discards the reused container and starts from a clean slate: `ilo` removes the existing container, rebuilds and recreates it, and re-runs the creation lifecycle (`onCreateCommand`, `updateContentCommand`, `postCreateCommand`). Use it to start over after the container's state has drifted, or to pick up changes to your `devcontainer.json`.
+
+```console
+# discard the reused container and recreate it
+$ ilo devcontainer --fresh
+
+# reuse the existing container (default)
+$ ilo devcontainer
+```
+
+By default, `--fresh` is not enabled.
+
+## `--shell`
+
+The `--shell` option sets the shell that `ilo` runs when you attach to the container. Because the container is reused and entered with `exec`, `ilo` has to name a shell to start.
+
+```console
+# attach with sh
+$ ilo devcontainer --shell /bin/sh
+
+# attach with bash (default)
+$ ilo devcontainer
+```
+
+By default, `--shell` is `/bin/bash`, since devcontainer images conventionally ship bash. Point it at another shell if your image does not.
+
+## `--execute-initialize-command`
+
+The `--execute-…-command` flags toggle each [lifecycle command](#lifecycle-commands) individually. There is one for every stage:
+
+- `--execute-initialize-command` — run `initializeCommand` on the host before the container is created.
+- `--execute-on-create-command` — run `onCreateCommand` when the container is created.
+- `--execute-update-content-command` — run `updateContentCommand` when the container is created.
+- `--execute-post-create-command` — run `postCreateCommand` when the container is created.
+- `--execute-post-start-command` — run `postStartCommand` every time the container is started.
+- `--execute-post-attach-command` — run `postAttachCommand` every time you attach.
+
+```console
+# skip the postCreateCommand (e.g. to attach faster while debugging)
+$ ilo devcontainer --no-execute-post-create-command
+
+# skip the initializeCommand
+$ ilo devcontainer --execute-initialize-command=false
+
+# run every lifecycle command (default)
+$ ilo devcontainer
+```
+
+By default, every `--execute-…-command` flag is enabled, so all lifecycle commands present in your `devcontainer.json` run.
+
+## `--compose-runtime` / `-C`
+
+The `--compose-runtime` option can be used to force the usage of a specific [compose runtime](../../compose/runtimes).
+
+```console
+# force to use podman-compose
+$ ilo devcontainer --compose-runtime podman-compose
+
+# force to use docker-compose
+$ ilo devcontainer --compose-runtime docker-compose
+
+# auto select
+$ ilo devcontainer
+```
+
+In case no `--compose-runtime` is specified, `ilo devcontainer` will automatically select one of the runtimes installed on your local system and prefers `docker-compose` over `podman-compose`.
+
+## `--shell-runtime` / `-S`
+
+The `--shell-runtime` option can be used to force the usage of a specific [shell runtime](../../shell/runtimes).
+
+```console
+# force to use podman
+$ ilo devcontainer --shell-runtime podman
+
+# force to use docker
+$ ilo devcontainer --shell-runtime docker
+
+# force to use nerdctl
+$ ilo devcontainer --shell-runtime nerdctl
+
+# auto select
+$ ilo devcontainer
+```
+
+
+---
+
+# ilo devfile
+
+Source: https://ilo.projects.metio.wtf/devfile/
+
+
+The `devfile` command allows interacting with [devfile](https://devfile.io/) as used by [odo](https://odo.dev/) and others.
+
+```console
+# open shell using devfile
+[you@hostname project-dir]$ ilo devfile
+[root@container project-dir]#
+```
+
+`ilo` will automatically try the following locations for your `devfile.yaml` file relative to your current directory:
+
+1. `devfile.yaml`
+2. `.devfile.yaml`
+
+In case you want to load/use a different location for your `devfile.yaml` file, specify one or more locations like this:
+
+```console
+# use custom locations
+[you@hostname project-dir]$ ilo devfile some-where-local.yaml /an/absolute/path/appears.yaml
+```
+
+The first location that actually exists and can be read by the current user will be used.
+
+Take a look at all available [options](./options) or use `ilo devfile --help` to get a list of all options, and their default values. In order to simplify handling of long command line options, consider using [argument files](../usage/argument-files).
+
+
+---
+
+# Options
+
+Source: https://ilo.projects.metio.wtf/devfile/options/
+
+
+The `ilo devfile` command can be configured with the following command line options. From your terminal, use `ilo devfile --help` to get a list of all options, and their default values.
+
+## `--component`
+
+The `--component` option can be used to tell `ilo` which devfile component to use. At the moment only `container` and `image` components are supported.
+
+```console
+# use specified component
+$ ilo devfile --component some-name
+
+# auto-select component
+$ ilo devfile
+```
+
+By default, `--component` is not set, and `ilo` uses the first component it can open.
+
+## `--debug`
+
+The `--debug` option toggles whether `ilo` should print the runtime commands into your terminal before executing them. This can be useful in case you want to move away from `ilo` and just use your preferred runtime instead.
+
+```console
+# print runtime commands
+$ ilo devfile --debug
+
+# do not print runtime commands
+$ ilo devfile --debug=false
+$ ilo devfile
+```
+
+By default, `--debug` is not enabled.
+
+## `--pull`
+
+The `--pull` option can be used to pull the specified image before opening a new shell. This is especially useful for teams using a `latest` tag for their image. The image will only pulled in case the registry contains a newer image than locally available.
+
+```console
+# pull image before opening shell
+$ ilo devfile --pull
+
+# do not pull image before opening shell
+$ ilo devfile --no-pull
+$ ilo devfile --pull=false
+
+# do not pull image before opening shell
+$ ilo devfile
+```
+
+By default, `--pull` is not enabled.
+
+## `--remove-image`
+
+The `--remove-image` option causes `ilo` to remove the specified image from your local system after you close your shell, or the non-interactive commands finishes.
+
+```console
+# remove image after shell was closed
+$ ilo devfile --remove-image
+
+# do not remove image
+$ ilo devfile --no-remove-image
+$ ilo devfile --remove-image=false
+$ ilo devfile
+```
+
+By default, `--remove-image` is not enabled.
+
+## `--runtime`
+
+The `--runtime` option can be used to force the usage of a specific [shell runtime](../../shell/runtimes).
+
+```console
+# force to use podman
+$ ilo devfile --runtime podman
+
+# force to use docker
+$ ilo devfile --runtime docker
+
+# force to use nerdctl
+$ ilo devfile --runtime nerdctl
+
+# auto select
+$ ilo devfile
+```
+
+## `--runtime-option`
+
+The `--runtime-option` option can be specified multiple times and contains options for the underlying runtime.
+
+```console
+# specify custom option(s)
+$ ilo devfile --runtime-option=--remote
+$ ilo devfile --runtime-option=--remote --runtime-option=--syslog
+
+# do not specify custom option
+$ ilo devfile
+```
+
+By default, `--runtime-option` is set to an empty array.
+
+## `--runtime-pull-option`
+
+The `--runtime-pull-option` can be specified multiple times and contains options for the runtimes' `pull` command.
+
+```console
+# specify custom option(s)
+$ ilo devfile --runtime-pull-option=--all-tags
+$ ilo devfile --runtime-pull-option=--all-tags --runtime-pull-option=--quiet
+
+# do not specify custom option
+$ ilo devfile
+```
+
+By default, `--runtime-pull-option` is set to an empty array.
+
+## `--runtime-build-option`
+
+The `--runtime-build-option` can be specified multiple times and contains options for the runtimes' `build` command.
+
+```console
+# specify custom option(s)
+$ ilo devfile --runtime-build-option=--squash
+$ ilo devfile --runtime-build-option=--squash --runtime-build-option=--no-cache
+
+# do not specify custom option
+$ ilo devfile
+```
+
+By default, `--runtime-build-option` is set to an empty array.
+
+## `--runtime-run-option`
+
+The `--runtime-run-option` can be specified multiple times and contains options for the runtimes' `run` command.
+
+```console
+# specify custom option(s)
+$ ilo devfile --runtime-run-option=--privileged
+$ ilo devfile --runtime-run-option=--privileged --runtime-run-option=--replace
+
+# do not specify custom option
+$ ilo devfile
+```
+
+By default, `--runtime-run-option` is set to an empty array.
+
+## `--runtime-cleanup-option`
+
+The `--runtime-cleanup-option` can be specified multiple times and contains options for the runtimes' `rmi` command.
+
+```console
+# specify custom option(s)
+$ ilo devfile --runtime-cleanup-option=--force
+$ ilo devfile --runtime-cleanup-option=--force --runtime-cleanup-option=--all
+
+# do not specify custom option
+$ ilo devfile
+```
+
+By default, `--runtime-cleanup-option` is set to an empty array.
+
