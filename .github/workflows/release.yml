@@ -77,7 +77,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - id: graal
         name: GraalVM Setup
-        uses: graalvm/setup-graalvm@0def53c0fd8534bc13416c9469f5be45265824fd # v1
+        uses: graalvm/setup-graalvm@0426e2e191540e8514dff98dc52a5f5146a2a276 # v1
         with:
           distribution: graalvm-community
           java-version: 25
@@ -171,7 +171,7 @@ jobs:
           path: artifacts
       - id: create_release
         name: Create Release
-        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v3
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3
         with:
           tag_name: ${{ needs.prepare.outputs.release_version }}
           name: ${{ needs.prepare.outputs.release_version }}
