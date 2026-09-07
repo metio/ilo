@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Examples on ilo</title><link>https://ilo.projects.metio.wtf/tags/examples/</link><description>Recent content in Examples on ilo</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 13 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://ilo.projects.metio.wtf/tags/examples/index.xml" rel="self" type="application/rss+xml"/><item><title>Examples</title><link>https://ilo.projects.metio.wtf/shell/examples/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/shell/examples/</guid><description>&lt;p&gt;The following examples show how &lt;code&gt;ilo shell&lt;/code&gt; can be used to cache a build tool&amp;rsquo;s
+downloaded dependencies across runs, so they are not re-downloaded every time.&lt;/p&gt;
+&lt;h2 id="caching-dependencies"&gt;Caching dependencies&lt;/h2&gt;
+&lt;p&gt;Persisting a tool&amp;rsquo;s download cache means mounting a host directory into the
+container. The &lt;strong&gt;robust, image-agnostic&lt;/strong&gt; way is to mount one host directory at a
+fixed container path (&lt;code&gt;/cache&lt;/code&gt; below) and point the tool&amp;rsquo;s cache there with its own
+environment variable — rather than mounting onto the image&amp;rsquo;s default cache location.
+Default locations vary between images and, because most current official images run
+as a &lt;strong&gt;non-root&lt;/strong&gt; user (e.g. &lt;code&gt;docker.io/library/maven:latest&lt;/code&gt; runs as &lt;code&gt;ubuntu&lt;/code&gt;, not &lt;code&gt;root&lt;/code&gt;, with its
+repo under &lt;code&gt;/home/ubuntu&lt;/code&gt;), mounting onto &lt;code&gt;/root/...&lt;/code&gt; is usually both the wrong path
+and unwritable.&lt;/p&gt;</description></item></channel></rss>
