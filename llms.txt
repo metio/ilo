@@ -1,0 +1,45 @@
+# ilo
+
+> ilo manages reproducible, containerized development environments by wrapping a container runtime (Podman, nerdctl, Docker, or Apple's container). `ilo shell` opens a development shell in a container built from your project's image or Containerfile; `ilo compose` backs it with a compose file (e.g. to add a database); `ilo devcontainer` and `ilo devfile` read a `devcontainer.json` or `devfile.yaml`. ilo reuses a persistent container across runs and maps file ownership so files written in the container stay owned by you on the host.
+
+ilo is a single self-contained binary (no runtime dependencies) for Linux, macOS, and Windows. Project home: https://ilo.projects.metio.wtf/ — source: https://github.com/metio/ilo
+
+## Getting started
+
+- [Usage overview](https://ilo.projects.metio.wtf/usage/): the four subcommands and when to use each
+- [Install](https://ilo.projects.metio.wtf/usage/install/): prebuilt binaries and the huber package manager
+- [Build environments](https://ilo.projects.metio.wtf/usage/build-envs/): defining your environment with an image or a Containerfile
+
+## Commands
+
+- [ilo shell](https://ilo.projects.metio.wtf/shell/): run a single reusable container from an image or Containerfile
+- [ilo shell options](https://ilo.projects.metio.wtf/shell/options/): every flag, defaults, and how container reuse works
+- [ilo shell examples](https://ilo.projects.metio.wtf/shell/examples/): per-language dependency-cache recipes (Maven, Gradle, Cargo, Go, npm, …)
+- [ilo shell runtimes](https://ilo.projects.metio.wtf/shell/runtimes/): selecting Podman, nerdctl, Docker, or Apple's container
+- [ilo compose](https://ilo.projects.metio.wtf/compose/): multi-service environments (e.g. a database) from a compose file
+- [ilo compose options](https://ilo.projects.metio.wtf/compose/options/): compose flags and service selection
+- [ilo compose runtimes](https://ilo.projects.metio.wtf/compose/runtimes/): Docker Compose, podman-compose, nerdctl
+- [ilo devcontainer](https://ilo.projects.metio.wtf/devcontainer/): use a `devcontainer.json`
+- [ilo devcontainer options](https://ilo.projects.metio.wtf/devcontainer/options/): supported fields and flags
+- [ilo devfile](https://ilo.projects.metio.wtf/devfile/): use a `devfile.yaml`
+- [ilo devfile options](https://ilo.projects.metio.wtf/devfile/options/): supported fields and flags
+
+## Configuration & workflow
+
+- [Argument files & RC files](https://ilo.projects.metio.wtf/usage/argument-files/): share options via `@`-files and trusted `.ilo.rc` files
+- [Automate](https://ilo.projects.metio.wtf/usage/autoenv/): open the environment automatically with direnv/autoenv and friends
+- [Autocomplete](https://ilo.projects.metio.wtf/usage/autocomplete/): bash/zsh shell completion
+- [File ownership](https://ilo.projects.metio.wtf/usage/file-ownership/): how host/container UID mapping keeps files owned by you
+
+## For AI agents
+
+- [Claude skill](https://ilo.projects.metio.wtf/usage/claude-skill/): install the ilo skill for Claude Code (`/plugin marketplace add metio/ilo` then `/plugin install ilo@metio`)
+- [SKILL.md (raw)](https://raw.githubusercontent.com/metio/ilo/main/skills/ilo/SKILL.md): how to drive ilo non-interactively, in one file
+- [Command cheatsheet (raw)](https://raw.githubusercontent.com/metio/ilo/main/skills/ilo/references/commands.md): subcommands, flags, and dependency-cache recipes
+
+## Optional
+
+- [llms-full.txt](https://ilo.projects.metio.wtf/llms-full.txt): the documentation above concatenated into a single file
+- [Alternatives](https://ilo.projects.metio.wtf/community/alternatives/): how ilo compares to similar tools
+- [Getting help](https://ilo.projects.metio.wtf/community/help/): where to ask questions and report issues
+- [Contributing](https://ilo.projects.metio.wtf/contributors/): building ilo and contributing changes
