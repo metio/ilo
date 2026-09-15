@@ -29,7 +29,7 @@ jobs:
         name: Setup Hugo
         uses: peaceiris/actions-hugo@2752ce1d29631191ea3f27c23495fa06139a5b78 # v3
         with:
-          hugo-version: 0.162.1
+          hugo-version: 0.166.0
       - id: build
         name: Build Website
         run: hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
