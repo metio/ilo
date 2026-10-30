@@ -47,23 +47,3 @@ native-image: ##@hacking Create a native image using GraalVM
 .PHONY: clean
 clean: ##@hacking Clean build artifacts
 	mvn clean
-
-.PHONY: ilo-build
-ilo-build: ##@hacking Build everything with ilo
-	ilo @dev/build
-
-.PHONY: ilo-native
-ilo-native: ##@hacking Create a native image using GraalVM with ilo
-	ilo @dev/native
-
-.PHONY: ilo-env
-ilo-env: ##@hacking Open a new development environment with ilo
-	ilo @dev/env
-
-.PHONY: ilo-website
-ilo-website: ##@hacking Build the website with ilo
-	ilo @dev/website
-
-.PHONY: ilo-serve
-ilo-serve: ##@hacking Serve the website locally with ilo
-	ilo @dev/serve

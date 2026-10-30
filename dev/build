@@ -1,8 +1,0 @@
-shell
---pull
---no-interactive
---containerfile dev/Containerfile
---volume ${XDG_CACHE_HOME}/maven:/cache:z
---env MAVEN_ARGS=-Dmaven.repo.local=/cache
-dev/ilo:latest
-mvn verify

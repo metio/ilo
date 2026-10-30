@@ -66,7 +66,16 @@ You can mix argument files with regular CLI options as well:
 $ ilo shell @default-shell docker.io/library/eclipse-temurin:21
 ```
 
-The argument file used by `ilo` developers can be seen [here](https://github.com/metio/ilo/blob/main/dev/env) and is used by calling `ilo @dev/env`.
+An argument file that opens a shell in a GraalVM image with a shared Maven cache looks like this, and is used by calling `ilo @dev/env`:
+
+```
+shell
+--pull
+--volume ${XDG_CACHE_HOME}/maven:/cache:z
+--env MAVEN_ARGS=-Dmaven.repo.local=/cache
+ghcr.io/graalvm/native-image-community:25
+bash
+```
 
 ## RC Files
 

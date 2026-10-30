@@ -17,16 +17,13 @@ tags:
 
 - [git](https://git-scm.com/) to fetch the [source code](../git-mirrors) of `ilo`
 
-## ilo Setup
+## breto Setup
 
-You can use `ilo` to build `ilo`! Make sure your system has the following:
-
-- [ilo](../../usage/install) to open the reproducible build environment for `ilo` itself
-- One of the [runtimes](../../shell/runtimes) that `ilo shell` supports.
+[breto](https://github.com/metio/breto) installs the JDK, Maven and hugo at the versions named in `.breto.edn`.
 
 ## Manual Setup
 
-In case you do not have `ilo` installed on your system, install the following manually:
+Without breto, install the following manually:
 
 - [Java JDK](https://jdk.java.net/) to compile the code
 - [Maven](https://maven.apache.org/) to build the project
@@ -35,30 +32,22 @@ In case you do not have `ilo` installed on your system, install the following ma
 
 ## Building
 
-### Using ilo
-
-In case you have `ilo` installed, call this:
+### Using breto
 
 ```console
-# open a shell with a pre-defined build environment
-$ ilo @dev/env
-
-# build the project
-$ ilo @dev/build
-
-# build native executable
-$ ilo @dev/native
+# put the build tools on PATH
+$ eval "$(breto env)"
 
 # build website
-$ ilo @dev/website
+$ breto run website
 
 # serve website
-$ ilo @dev/serve
+$ breto run serve
 ```
 
-### Without ilo
+### Using Maven
 
-In order to build `ilo` without having `ilo` installed call:
+Build the project with Maven:
 
 ```console
 # build the project

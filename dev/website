@@ -1,5 +1,0 @@
-shell
---pull
---no-interactive
-ghcr.io/gohugoio/hugo:v0.162.1
-hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs

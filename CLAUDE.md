@@ -17,25 +17,18 @@ container runtime (Podman, nerdctl, or Docker). `ilo shell` opens an
 or `devfile.yaml` and injecting its lifecycle commands. It is a single-binary tool
 (picocli + GraalVM native image), written in Java 25.
 
-This repository is the source of `ilo` itself, and it dogfoods `ilo` to build
-itself — see the `dev/` RC files below.
+This repository is the source of `ilo` itself.
 
 ## Build & test
 
-This machine has no JDK/Maven/Hugo installed; `ilo` (a native binary) is on
-`PATH` and everything builds inside the `metio/devcontainers-graalvm` container.
-The `dev/` files are `ilo` argument files invoked with the `@` prefix:
+`.breto.edn` installs GraalVM 25, Maven and Hugo; inside `breto env`:
 
 ```console
-ilo @dev/env       # interactive bash shell in the GraalVM devcontainer
-ilo @dev/build     # mvn verify (compile + all tests, skips native build)
-ilo @dev/native    # mvn verify -Dwith the native executable
-ilo @dev/serve     # hugo dev server for docs/ at http://localhost:1313
-ilo @dev/website   # build the docs/ site
+breto run website   # build the docs/ site
+breto run serve     # hugo dev server for docs/ at http://localhost:1313
 ```
 
-The underlying Maven commands (run them inside `ilo @dev/env` to iterate, e.g.
-on a single test):
+The Maven commands:
 
 ```console
 mvn verify                          # full verification, native build skipped
@@ -55,7 +48,7 @@ run it locally with `mvn test-compile org.pitest:pitest-maven:mutationCoverage`.
 
 Do **not** add a `.ilo.rc` / `.ilo/ilo.rc` to this repo: `ilo` auto-loads those
 as argument files on *every* invocation in this directory, which would inject
-unwanted args into the build commands above. Use the explicit `@dev/...` files.
+unwanted args into every ilo run here.
 
 ## Architecture
 

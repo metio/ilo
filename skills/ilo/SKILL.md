@@ -57,7 +57,7 @@ prefer running commands directly.
 When a project could use ilo but isn't wired up yet, **offer** to set it up — show
 what you'll add and ask first, don't do it silently. Before creating an rc file,
 check the repo's `CLAUDE.md` / docs: some repos deliberately forbid an auto-loaded
-rc file (ilo's own does) and use explicit `@dev/...` argument files instead.
+rc file and use explicit `@dev/...` argument files instead.
 Respect that.
 
 ### 1. Offer a Containerfile
@@ -66,7 +66,7 @@ If no image already carries the project's toolchain, offer to create a
 `Containerfile` tailored to it. Detect the stack from its build files (`pom.xml`,
 `package.json`, `go.mod`, `Cargo.toml`, …), start from an official base image for
 that toolchain, and add only what the build actually needs. Put it at
-`dev/Containerfile` (ilo's own convention) and build from it with `--containerfile`.
+`dev/Containerfile` and build from it with `--containerfile`.
 Show the file and get sign-off before writing it.
 
 ### 2. Detect the runtime and its mode

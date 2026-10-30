@@ -1,0 +1,8 @@
+;; SPDX-FileCopyrightText: The ilo Authors
+;; SPDX-License-Identifier: 0BSD
+
+{:packages ["@graalvm" "@maven" "@docs"]
+ :commands {"website" {:run ["hugo" "--minify" "--printI18nWarnings" "--printPathWarnings" "--printUnusedTemplates" "--source" "docs"]
+                       :description "Build the site into docs/public"}
+            "serve" {:run ["hugo" "server" "--minify" "--printI18nWarnings" "--printPathWarnings" "--printUnusedTemplates" "--source" "docs"]
+                     :description "Serve the site with live reload"}}}
