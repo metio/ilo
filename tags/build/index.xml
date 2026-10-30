@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Build on ilo</title><link>https://ilo.projects.metio.wtf/tags/build/</link><description>Recent content in Build on ilo</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 13 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://ilo.projects.metio.wtf/tags/build/index.xml" rel="self" type="application/rss+xml"/><item><title>Build Environments</title><link>https://ilo.projects.metio.wtf/usage/build-envs/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/usage/build-envs/</guid><description>&lt;p&gt;&lt;code&gt;ilo&lt;/code&gt; allows you to define your build environment either in a &lt;a href="https://docs.docker.com/engine/reference/builder/"&gt;Containerfile/Dockerfile&lt;/a&gt; or any other &lt;a href="https://github.com/opencontainers/image-spec/blob/master/spec.md"&gt;OCI Image&lt;/a&gt; compliant way. In contrast to &lt;a href="https://containertoolbx.org/"&gt;toolbx&lt;/a&gt;, &lt;code&gt;ilo&lt;/code&gt; relies on immutable containers which makes it easier to share those images across your team. &lt;code&gt;ilo&lt;/code&gt; uses the same mechanism to define build environments that developers are already using to define their application run environments. Therefore, onboarding and adapting container based build environments should be easy for most teams.&lt;/p&gt;</description></item><item><title>Building</title><link>https://ilo.projects.metio.wtf/contributors/building/</link><pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate><guid>https://ilo.projects.metio.wtf/contributors/building/</guid><description>&lt;p&gt;&lt;code&gt;ilo&lt;/code&gt; requires a certain set of software installed on your system in order to be built.&lt;/p&gt;
+&lt;h2 id="prerequisites"&gt;Prerequisites&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://git-scm.com/"&gt;git&lt;/a&gt; to fetch the &lt;a href="../git-mirrors"&gt;source code&lt;/a&gt; of &lt;code&gt;ilo&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="breto-setup"&gt;breto Setup&lt;/h2&gt;
+&lt;p&gt;&lt;a href="https://github.com/metio/breto"&gt;breto&lt;/a&gt; installs the JDK, Maven and hugo at the versions named in &lt;code&gt;.breto.edn&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="manual-setup"&gt;Manual Setup&lt;/h2&gt;
+&lt;p&gt;Without breto, install the following manually:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://jdk.java.net/"&gt;Java JDK&lt;/a&gt; to compile the code&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://maven.apache.org/"&gt;Maven&lt;/a&gt; to build the project&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://gohugo.io/"&gt;hugo&lt;/a&gt; in order to create the website&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.graalvm.org/"&gt;GraalVM&lt;/a&gt; to build a native executable&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="building"&gt;Building&lt;/h2&gt;
+&lt;h3 id="using-breto"&gt;Using breto&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-console" data-lang="console"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;#&lt;/span&gt; put the build tools on PATH
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; &lt;span class="nb"&gt;eval&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;breto env&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;#&lt;/span&gt; build website
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; breto run website
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;#&lt;/span&gt; serve website
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="gp"&gt;$&lt;/span&gt; breto run serve
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id="using-maven"&gt;Using Maven&lt;/h3&gt;
+&lt;p&gt;Build the project with Maven:&lt;/p&gt;</description></item></channel></rss>
