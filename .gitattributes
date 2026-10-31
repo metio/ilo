@@ -18,6 +18,7 @@
 *.properties    text
 *.txt           text
 *.yml           text
+*.yaml          text
 *.html          text
 *.xml           text
 *.rc            text
