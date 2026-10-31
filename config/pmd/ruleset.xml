@@ -9,8 +9,8 @@ SPDX-License-Identifier: 0BSD
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
 
   <description>
-    Focused, low-noise rules for ilo: dead code, unnecessary imports, and cognitive complexity
-    (the metric SonarQube also reports). Kept deliberately small so violations stay actionable.
+    Focused, low-noise rules for ilo: dead code, unnecessary imports, and cognitive complexity.
+    Kept deliberately small so violations stay actionable.
   </description>
 
   <rule ref="category/java/codestyle.xml/UnnecessaryImport"/>

@@ -26,10 +26,7 @@ jobs:
     steps:
       - id: checkout
         name: Clone Git Repository
-        # Full history so the Linux leg's SonarQube analysis can assign blame and compute the new-code period.
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          fetch-depth: 0
       - id: graal
         name: Set up GraalVM
         uses: graalvm/setup-graalvm@0def53c0fd8534bc13416c9469f5be45265824fd # v1
@@ -58,16 +55,6 @@ jobs:
           bin="target/ilo"; [ -f "target/ilo.exe" ] && bin="target/ilo.exe"
           "$bin" --version
           "$bin" --help
-      - id: sonar
-        name: SonarQube analysis
-        # Linux-only, and skipped on fork PRs (which cannot read SONAR_TOKEN). Reuses the test run and
-        # coverage data the verify step already produced, so the PR scan adds no second build. The
-        # push-to-main analysis (the new-code baseline this decoration compares against) lives in sonar.yml.
-        if: runner.os == 'Linux' && github.event.pull_request.head.repo.fork == false
-        run: mvn --batch-mode org.jacoco:jacoco-maven-plugin:report sonar:sonar
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   mutation:
     name: Mutation tests (PIT)
     runs-on: ubuntu-latest
