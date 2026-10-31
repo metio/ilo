@@ -1,27 +1,19 @@
 # SPDX-FileCopyrightText: The ilo Authors
 # SPDX-License-Identifier: 0BSD
 
-# EditorConfig is awesome: https://EditorConfig.org
-
 # top-most EditorConfig file
 root = true
 
-# global rules for all fies
+# global rules for all files
 [*]
 charset = utf-8
 indent_style = space
+indent_size = 4
 trim_trailing_whitespace = true
+insert_final_newline = true
 
-# Makefile use tabs by convention
+# Makefiles use tabs by convention
 [Makefile]
 indent_style = tab
-
-# Java files use smaller indention because I like that
-[*.java]
-indent_size = 2
-insert_final_newline = true
-
-# XML files use larger indention
-[*.xml]
-indent_size = 4
-insert_final_newline = true
+[*.mk]
+indent_style = tab

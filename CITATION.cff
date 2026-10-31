@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: The ilo Authors
+# SPDX-License-Identifier: 0BSD
+
+cff-version: 1.2.0
+title: ilo
+message: If you use this software, please cite it as below.
+type: software
+authors:
+- family-names: Hoß
+  given-names: Sebastian
+  email: seb@hoß.de
+url: https://github.com/metio/ilo/
+license: 0BSD
+keywords:
+  - build
+  - build-environment
+  - cli
+  - devcontainer
+  - docker
+  - environment
+  - nerdctl
+  - podman
+  - reproducible
+  - shell
