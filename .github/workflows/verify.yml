@@ -13,7 +13,7 @@ concurrency:
 permissions:
   contents: read
 jobs:
-  verify:
+  build:
     name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 45
@@ -116,3 +116,16 @@ jobs:
         env:
           ILO_IT_DOCKER: "true"
           ILO_IT_PODMAN: "true"
+  verify:
+    name: Verify
+    needs: [build, mutation, integration]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify every job succeeded or skipped
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: |
+          bad=$(echo "$NEEDS" | jq -r 'to_entries[] | select(.value.result != "success" and .value.result != "skipped") | "\(.key)=\(.value.result)"')
+          [ -z "$bad" ] || { echo "::error::$bad"; exit 1; }
