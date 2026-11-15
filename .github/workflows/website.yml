@@ -9,6 +9,11 @@ on:
     branches:
       - main
     paths:
+      - .github/workflows/website.yml
+      - docs/**
+  pull_request:
+    paths:
+      - .github/workflows/website.yml
       - docs/**
 # Read-only by default so a compromised build/link-check step can't reach a write-scoped token; the
 # deploy job is granted exactly the contents: write that pushing to the gh-pages branch requires.
@@ -16,35 +21,10 @@ permissions:
   contents: read
 jobs:
   website:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    name: Website
+    uses: metio/ci/.github/workflows/hugo.yml@92eaf0dff9859e52fbbc3f07c7f9eb832b31ea3b # 2026.11.15155907
     permissions:
       contents: write
-    steps:
-      - id: checkout
-        name: Clone Git Repository
-        # Shallow clone: the Hugo site does not use Git info, so full history is unnecessary.
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - id: hugo
-        name: Setup Hugo
-        uses: peaceiris/actions-hugo@2752ce1d29631191ea3f27c23495fa06139a5b78 # v3
-        with:
-          hugo-version: 0.169.0
-      - id: build
-        name: Build Website
-        run: hugo --minify --printI18nWarnings --printPathWarnings --printUnusedTemplates --source docs
-      - id: htmltest
-        name: Run htmltest
-        # Pinned to an immutable commit SHA: the action's only tag is an old RC, so it is otherwise
-        # consumed from the mutable 'master' branch. This is master HEAD (2023-03-28); Renovate bumps it.
-        uses: wjdp/htmltest-action@31be84a95c860a331e0cf9a99f71e3eb39d2f86b
-        with:
-          config: ./docs/htmltest.yml
-      - id: deploy
-        name: Deploy Website
-        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/public
-          force_orphan: true
-          cname: ilo.projects.metio.wtf
+    with:
+      source: docs
+      cname: ilo.projects.metio.wtf
