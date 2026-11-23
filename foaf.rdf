@@ -1,0 +1,22 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:foaf="http://xmlns.com/foaf/0.1/">
+  <foaf:PersonalProfileDocument rdf:about="">
+    <foaf:maker rdf:resource="#sebhoss" />
+    <foaf:primaryTopic rdf:resource="ilo" />
+  </foaf:PersonalProfileDocument>
+
+  <foaf:Project rdf:ID="ilo">
+    <foaf:name>ilo</foaf:name>
+    <foaf:homepage rdf:resource="https://ilo.projects.metio.wtf/" />
+  </foaf:Project>
+
+  
+  <foaf:Person rdf:ID="sebhoss">
+    <foaf:name>Sebastian Hoß</foaf:name>
+    <foaf:title>Contributor</foaf:title>
+    <foaf:givenname>Sebastian</foaf:givenname>
+    <foaf:family_name>Hoß</foaf:family_name>
+    <foaf:mbox rdf:resource="mailto:seb@hoß.de" />
+    <foaf:homepage rdf:resource="https://seb.people.metio.wtf" />
+  </foaf:Person>
+  
+</rdf:RDF>
