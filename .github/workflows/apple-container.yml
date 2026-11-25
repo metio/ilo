@@ -3,9 +3,12 @@
 
 # Tier-1 verification for the Apple 'container' runtime: assert that the CLI surface ilo's
 # 'shell.Container' / 'cli.ContainerListing' depend on still exists. Help text is produced by the
-# CLI's argument parser and needs neither 'container system start' nor a booted VM, so it runs on a
-# GitHub-hosted runner. Actually running a container is impossible here: hosted macOS runners are M1
-# and GitHub disables nested virtualization, so Virtualization.framework cannot boot the Linux guest.
+# CLI's argument parser and needs no booted VM, so it runs on a GitHub-hosted runner. 'build' and
+# 'builder' are CLI plugins since apple/container 1.6.0, and the CLI finds plugins by asking the
+# API server, so 'container build --help' fails with "Plugins are unavailable" unless
+# 'container system start' has run first. Actually running a container is impossible here: hosted
+# macOS runners are M1 and GitHub disables nested virtualization, so Virtualization.framework cannot
+# boot the Linux guest.
 # The 'OPEN' items that need real output ('list --format json' field paths, 'exec … ps' liveness)
 # therefore require bare-metal Apple silicon (M3+) and are out of scope for this job.
 name: Apple container CLI
@@ -47,6 +50,14 @@ jobs:
           sudo installer -pkg "$pkg" -target /
           export PATH="/usr/local/bin:$PATH"
           container --version
+      - id: start
+        name: Start the container system services
+        # Skipping the kernel install keeps the job from downloading a kernel it cannot boot here.
+        run: |
+          set -euo pipefail
+          export PATH="/usr/local/bin:$PATH"
+          container system start --disable-kernel-install --timeout 60
+          container system status
       - id: surface
         name: Assert the CLI contract ilo relies on
         run: |
